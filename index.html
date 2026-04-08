@@ -413,6 +413,88 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .ed-month { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--olive); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.85; margin-bottom: 3px; }
 .ed-title { font-family: 'EB Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--ink); }
 .ed-creative { font-size: 0.85rem; color: var(--ink-mid); font-style: italic; margin-top: 2px; }
+.ed-location { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-low); margin-top: 6px; }
+
+/* ── TEAM ── */
+.team-intro {
+  padding-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--rule-mid);
+}
+.team-intro p {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.05rem; font-style: italic;
+  color: var(--ink-mid); line-height: 1.85; max-width: 560px;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--rule-mid);
+  border: 1px solid var(--rule-mid);
+}
+.team-card {
+  background: var(--canvas);
+  padding: 1.75rem 1.5rem 1.5rem;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background 0.2s;
+  position: relative;
+}
+.team-card:hover { background: var(--paper); }
+.team-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: transparent;
+  transition: background 0.2s;
+}
+.team-card:hover::before { background: var(--olive); }
+.team-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400; font-size: 1.05rem;
+  color: var(--ink); letter-spacing: -0.02em; line-height: 1.2;
+}
+.team-role {
+  font-family: 'Fragment Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--olive); opacity: 0.8; margin-top: 2px;
+}
+.team-photo {
+  width: 100%; aspect-ratio: 3/4;
+  background: var(--card);
+  border: 1px solid var(--rule-mid);
+  margin-bottom: 1rem;
+  overflow: hidden; position: relative;
+}
+.team-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block;
+  filter: brightness(0.94) saturate(0.78);
+  transition: filter 0.3s;
+}
+.team-card:hover .team-photo img { filter: brightness(0.88) saturate(0.70); }
+.team-photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; inset: 0;
+}
+.team-photo-placeholder span {
+  font-family: 'Fragment Mono', monospace;
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-low);
+}
+
+/* Mia & Llucca duo card */
+.team-card-duo { gap: 1rem; }
+.team-duo-names {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 600px) {
+  .team-card-duo { grid-column: span 1 !important; }
+}
 .ed-divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 2.5rem; }
 .ed-divider::before, .ed-divider::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
 .ed-divider span { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); letter-spacing: 0.15em; text-transform: uppercase; }
@@ -528,6 +610,7 @@ footer {
 .sp-tier { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); opacity: 0.70; }
 .sp-name { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.2; }
 .sp-desc { font-size: 0.82rem; font-style: italic; color: var(--ink-mid); line-height: 1.5; margin-top: 2px; }
+.sp-location { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.08em; color: var(--ink-low); margin-top: 3px; }
 .sp-url { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--olive); opacity: 0.55; text-decoration: none; transition: opacity 0.2s; margin-top: 4px; letter-spacing: 0.04em; }
 .sp-url:hover { opacity: 1; }
 .sp-card.pres { background: var(--olive-ghost); border-left: 2px solid var(--olive-dim); }
@@ -635,6 +718,7 @@ footer {
   <button class="active" onclick="showTab('rsvp',this)">Upcoming event</button>
   <button onclick="showTab('content',this)">The archive</button>
   <button onclick="showTab('notify',this)">Stay informed</button>
+  <button onclick="showTab('team',this)">The team</button>
   <button onclick="showTab('admin',this)">Guest records</button>
 </nav>
 
@@ -644,14 +728,16 @@ footer {
   <div id="tab-rsvp" class="section active">
     <div class="event-block">
       <div class="event-masthead">
-        <span class="ev-no">Life Thru Food &nbsp;/&nbsp; Edition 04</span>
-        <span class="ev-date">Saturday, April 19 &middot; 2025</span>
-        <h2>Spring<br>Awakening</h2>
-        <p class="ev-credit">Inspired by <em>Nadia Waheed</em> &mdash; painter</p>
+        <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 04</span>
+        <span class="ev-date">Sunday, April 26 &middot; 2026</span>
+        <h2>Nadia Waheed</h2>
+        <p class="ev-discipline">Painter</p>
+        <p class="ev-location-ref">Location: Tribeca</p>
       </div>
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">7:30 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Dinner</span><span class="ev-cell-val">8:00 pm</span></div>
+
         <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val">Tribeca</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val">$120</span></div>
       </div>
@@ -756,10 +842,9 @@ footer {
         <div class="form-field">
           <label for="c-edition">Edition</label>
           <select id="c-edition">
-            <option value="04">No. 04 — April 2025 / Nadia Waheed</option>
-            <option value="03">No. 03 — March 2025 / Tariku Shiferaw</option>
-            <option value="02">No. 02 — February 2025 / Firelei Báez</option>
-            <option value="01">No. 01 — January 2025 / Harold Mendez</option>
+            <option value="03">Vol. 03 — Georgia Janelle / Early Terrible, LES</option>
+            <option value="02">Vol. 02 — Yuseph Kim / Two Bridges Pub</option>
+            <option value="01">Vol. 01 — Taylar Herman / Two Bridges Apartment</option>
           </select>
         </div>
         <div class="form-field">
@@ -838,6 +923,73 @@ footer {
     </div>
   </div>
 
+  <!-- TEAM -->
+  <div id="tab-team" class="section">
+    <div class="team-intro">
+      <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
+    </div>
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/Micho_Profile.jpg" alt="Micho Hanna">
+        </div>
+        <div class="team-name">Micho Hanna</div>
+        <div class="team-role">Chef / Producer</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/Zach_profile.jpg" alt="Zach Amato">
+        </div>
+        <div class="team-name">Zach Amato</div>
+        <div class="team-role">Head Chef</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/John_Profile.jpg" alt="John Stets">
+        </div>
+        <div class="team-name">John Stets</div>
+        <div class="team-role">Sous Chef</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/Carla_Profile.jpg" alt="Carla">
+        </div>
+        <div class="team-name">Carla</div>
+        <div class="team-role">Team</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="images/Britney.jpg" alt="Britney Bautista">
+        </div>
+        <div class="team-name">Britney Bautista</div>
+        <div class="team-role">Videographer</div>
+      </div>
+
+      <!-- Mia & Llucca — combined card using shared photo -->
+      <div class="team-card team-card-duo" style="grid-column: span 2;">
+        <div class="team-photo">
+          <img src="images/Mia___Llucca.jpg" alt="Mia Zaldastani &amp; Llucca Huatuco">
+        </div>
+        <div class="team-duo-names">
+          <div>
+            <div class="team-name">Mia Zaldastani</div>
+            <div class="team-role">Creative Direction</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="team-name">Llucca Huatuco</div>
+            <div class="team-role">Creative Direction</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ADMIN -->
   <div id="tab-admin" class="section">
     <div class="stat-strip">
@@ -850,7 +1002,7 @@ footer {
       <input type="text" id="admin-search" placeholder="Search guests..." oninput="renderAdmin()">
       <select id="admin-filter" onchange="renderAdmin()" style="width:auto">
         <option value="all">All editions</option>
-        <option value="April 2025">April 2025</option>
+        <option value="April 2025">Upcoming event</option>
       </select>
       <button class="btn-ghost" onclick="exportCSV()">export csv</button>
     </div>
@@ -906,10 +1058,10 @@ let seatsTotal=24, seatsUsed=13;
 let selectedType='caption', contentFilter='all';
 
 const EDITIONS={
-  '04':{num:'04',month:'April 2025',title:'Spring Awakening',creative:'Nadia Waheed — painter'},
-  '03':{num:'03',month:'March 2025',title:'Chromatic Tension',creative:'Tariku Shiferaw — abstract painter'},
-  '02':{num:'02',month:'February 2025',title:'Between Worlds',creative:'Firelei Báez — visual artist'},
-  '01':{num:'01',month:'January 2025',title:'The Weight of Memory',creative:'Harold Mendez — sculptor'},
+  '04':{num:'04',name:'Nadia Waheed',discipline:'Painter',location:'Tribeca'},
+  '03':{num:'03',name:'Georgia Janelle',discipline:'Womenswear Designer',location:'Early Terrible, Lower East Side'},
+  '02':{num:'02',name:'Yuseph Kim',discipline:'Graphic Designer',location:'Two Bridges Pub'},
+  '01':{num:'01',name:'Taylar Herman',discipline:'Creative Producer',location:'Two Bridges Apartment'},
 };
 
 const TIER_ORDER=['presenting','partner','supporting','friend'];
@@ -921,39 +1073,67 @@ function makePlaceholder(color1, color2, label){
 }
 
 contentPieces=[
-  {id:10,edition:'04',type:'photo',platform:'Instagram',title:'Setting the table — Edition 04',
-   body:'',lede:'',photo:makePlaceholder('%23181410','%23221C14','spring awakening'),ts:'Apr 2, 2025'},
-  {id:11,edition:'04',type:'photo',platform:'Instagram',title:'Nadia Waheed\'s studio, Brooklyn',
-   body:'',lede:'',photo:makePlaceholder('%23141618','%231A1C20','painter\'s light'),ts:'Apr 5, 2025'},
-  {id:1,edition:'03',type:'photo',platform:'Instagram',title:'Edition 03 — dinner table',
-   body:'',lede:'',photo:makePlaceholder('%23161412','%231E1A10','chromatic tension'),ts:'Mar 5, 2025'},
-  {id:2,edition:'03',type:'caption',platform:'Instagram',title:'On painting and hunger',
-   body:'Tariku Shiferaw names his canvases after songs. We named our dishes after colors. Last Tuesday, eight strangers sat down to eat Marvin Gaye. They left knowing each other\'s middle names.\n\n#LifeThruFood #NYCDinnerSeries #TarikuShiferaw',lede:'',photo:null,ts:'Mar 12, 2025'},
-  {id:3,edition:'03',type:'quote',platform:'Instagram',title:'On abstraction',
-   body:'"Abstraction is not the absence of something. It\'s the presence of everything at once."\n\n— Tariku Shiferaw, in conversation at Edition No. 03, Life Thru Food.',lede:'',photo:null,ts:'Mar 18, 2025'},
-  {id:4,edition:'03',type:'profile',platform:'Newsletter',title:'Color has a temperature: on Tariku Shiferaw',
-   body:'Shiferaw works fast — sometimes a single canvas in an afternoon. The paintings absorb everything around them: ambient light, the music playing in the studio, the emotional weather of the day.\n\nWe built our March menu around this idea of absorption. Each course took on the character of what surrounded it. A broth finished tableside with cold butter and citrus. A dessert plated warm, eaten cool.\n\nTwenty-four people came. No one checked their phones.',
-   lede:'In Tariku Shiferaw\'s studio in Harlem, the canvases lean against every wall — not stored, just resting. Mid-thought.',photo:null,ts:'Mar 20, 2025'},
-  {id:5,edition:'03',type:'recap',platform:'Newsletter',title:'What we ate and why it mattered — Edition No. 03',
-   body:'The third dinner landed differently than the first two. Guests arrived already oriented, already trusting the premise. They came for the food and stayed because the conversation became the food.\n\nWe served seven courses. The standout was a beet carpaccio arranged in Shiferaw\'s signature concentric rings, with a labneh so light it barely held its shape.',
-   lede:'By the third edition, something had shifted. The room already knew how to be itself.',photo:null,ts:'Mar 22, 2025'},
-  {id:6,edition:'02',type:'photo',platform:'Instagram',title:'February table — Edition 02',
-   body:'',lede:'',photo:makePlaceholder('%23121416','%23181A1E','between worlds'),ts:'Feb 4, 2025'},
-  {id:7,edition:'02',type:'caption',platform:'Instagram',title:'Between maps',
-   body:'Firelei Báez draws maps of places that never existed in order to find the ones that do. February\'s dinner followed that same logic.\n\n#LifeThruFood #NYCDinnerSeries #FireleiBaez',lede:'',photo:null,ts:'Feb 8, 2025'},
-  {id:8,edition:'02',type:'quote',platform:'Instagram',title:'On belonging',
-   body:'"I\'m interested in the body as a site of memory — what it holds that language can\'t."\n\n— Firelei Báez',lede:'',photo:null,ts:'Feb 12, 2025'},
-  {id:9,edition:'02',type:'profile',platform:'Newsletter',title:'The hyphen as a place: on Firelei Báez',
-   body:'Báez\'s canvases are populated by figures in states of becoming — part-human, part-myth, always in motion between one thing and another.\n\nFor February\'s dinner, we asked our chef to cook from the hyphen. Not Haitian food. Not French food. The food that lives in the dash between those words.\n\nWe served a soup that was also a consommé. A dessert that was also a memory.',
-   lede:'February is a short month. Firelei Báez\'s work is not.',photo:null,ts:'Feb 24, 2025'},
+
+  /* ── VOL. 03 · GEORGIA JANELLE · Early Terrible, LES ── */
+  {id:31,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03 — Early Terrible, Lower East Side',
+   body:'',lede:'',photo:makePlaceholder('%23181412','%23221A14','unapologetically hers'),ts:'Vol. 03'},
+  {id:32,edition:'03',type:'profile',platform:'Newsletter',
+   title:'Unapologetically Hers: on Georgia Janelle',
+   lede:'Georgia is a Lower East Side–based designer and founder of GRGJNA, a cut-and-sew studio that doubles as a living world of her own creation.',
+   body:'Her work is deeply personal — hyper-feminine, expressive, and rooted in self-made identity. Through garments, space, and storytelling, she builds environments that feel intimate, playful, and unapologetically hers.\n\nGRGJNA is not just a studio — it\'s a living world. Every garment is a chapter in an ongoing story that Georgia is writing for herself, in real time. The dinner at Early Terrible felt like walking into one of those chapters: deliberate, warm, and entirely on her terms.',
+   photo:null,ts:'Vol. 03'},
+  {id:33,edition:'03',type:'caption',platform:'Instagram',
+   title:'On self-made identity',
+   body:'Georgia Janelle doesn\'t make clothes for a market. She makes them for a feeling — one she\'s been building toward her whole life. Vol. 03 was an evening spent inside that feeling.\n\n#LifeThruFood #NYCDinnerSeries #GRGJNA #GeorgiaJanelle',
+   lede:'',photo:null,ts:'Vol. 03'},
+  {id:34,edition:'03',type:'quote',platform:'Instagram',
+   title:'On intimacy and space',
+   body:'"She builds environments that feel intimate, playful, and unapologetically hers."\n\n— on Georgia Janelle, Life Thru Food Vol. 03.',
+   lede:'',photo:null,ts:'Vol. 03'},
+
+  /* ── VOL. 02 · YUSEPH KIM · Two Bridges Pub ── */
+  {id:21,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02 — Two Bridges Pub',
+   body:'',lede:'',photo:makePlaceholder('%23141416','%231C1C1E','intention & process'),ts:'Vol. 02'},
+  {id:22,edition:'02',type:'profile',platform:'Newsletter',
+   title:'Intention & Process: on Yuseph Kim',
+   lede:'Born in South Korea and raised between his grandparents\' cooking and his later years in the UK, Yuseph\'s work sits at the intersection of food, design, and ritual.',
+   body:'As the mind behind Graphic Flavor, he approaches creativity through pattern, restraint, and cultural memory. His practice blends Korean tradition with European minimalism, always centered on intention, process, and sharing.\n\nAt the Two Bridges Pub dinner, Yuseph\'s sensibility shaped not just the visuals but the rhythm of the table — how information moved, how each course was introduced, how the evening unfolded as a designed experience. Restraint as hospitality. Pattern as warmth.',
+   photo:null,ts:'Vol. 02'},
+  {id:23,edition:'02',type:'caption',platform:'Instagram',
+   title:'On design and the dinner table',
+   body:'Yuseph Kim sees the table as a brief. Every element considered — spacing, sequence, pause. Vol. 02 at Two Bridges Pub was a masterclass in how design shapes the way we share a meal.\n\n#LifeThruFood #NYCDinnerSeries #GraphicFlavor #YusephKim',
+   lede:'',photo:null,ts:'Vol. 02'},
+  {id:24,edition:'02',type:'quote',platform:'Instagram',
+   title:'On ritual and making',
+   body:'"Always centered on intention, process, and sharing."\n\n— on Yuseph Kim, Life Thru Food Vol. 02.',
+   lede:'',photo:null,ts:'Vol. 02'},
+
+  /* ── VOL. 01 · TAYLAR HERMAN · Two Bridges Apartment ── */
+  {id:11,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01 — Two Bridges Apartment',
+   body:'',lede:'',photo:makePlaceholder('%23161410','%23201A12','how people gather'),ts:'Vol. 01'},
+  {id:12,edition:'01',type:'profile',platform:'Newsletter',
+   title:'How People Gather: on Taylar Herman',
+   lede:'Born and raised on the shore of North Carolina, Taylar has produced for some of the biggest brands in the world — mainly through partnerships and collaborations.',
+   body:'Her approach is rooted in feeling — thoughtful, intuitive, and grounded in how people gather and experience a space. Drawing from a mix of cultural influences and personal memory, she creates environments that feel warm, fluid, and deeply human, where conversation and connection take priority over perfection.\n\nTaylar set the tone for what Life Thru Food would become. Her instinct for room energy — for knowing when a space is working, when it needs to breathe — gave our first dinner its texture. The Two Bridges apartment felt like a home before anyone arrived.',
+   photo:null,ts:'Vol. 01'},
+  {id:13,edition:'01',type:'caption',platform:'Instagram',
+   title:'The first dinner',
+   body:'We didn\'t know exactly what Life Thru Food would be. Taylar did. She walked into a Two Bridges apartment and made it feel like it had always been ours.\n\n#LifeThruFood #NYCDinnerSeries #TaylarHerman #Vol01',
+   lede:'',photo:null,ts:'Vol. 01'},
+  {id:14,edition:'01',type:'quote',platform:'Instagram',
+   title:'On gathering',
+   body:'"Conversation and connection take priority over perfection."\n\n— on Taylar Herman, Life Thru Food Vol. 01.',
+   lede:'',photo:null,ts:'Vol. 01'},
+
 ];
 
 sponsors=[
-  {id:1,name:'Parcelle Wine',tier:'presenting',desc:'A curated wine shop and bar in Tribeca championing small producers and natural methods.',url:'parcelle.wine'},
-  {id:2,name:'Dimes Market',tier:'partner',desc:'Grocers and café on Canal Street — provisions for the curious and the hungry.',url:'dimesmarket.com'},
-  {id:3,name:'Areaware',tier:'partner',desc:'Brooklyn-based design objects that make every table a conversation.',url:'areaware.com'},
-  {id:4,name:'Milo & Olive',tier:'supporting',desc:'Ceramics handmade in Red Hook. Every edition features their tableware.',url:'miloolive.co'},
-  {id:5,name:'JRINK',tier:'friend',desc:'Cold-pressed juices for the morning after.',url:'jrink.com'},
+  {id:1,name:'Aqua Best',tier:'presenting',desc:'A family-run seafood market offering sushi-grade fish and fresh seafood sourced directly from fishermen.',url:'aquabestnyc.com',location:'276 Grand St, Chinatown'},
+  {id:2,name:'S.O.S Chef',tier:'partner',desc:'A curated specialty ingredients store carrying over 1,200 ethically sourced spices, herbs, oils, and homemade infusions.',url:'sos-chefs.com',location:'104 Avenue B, East Village'},
+  {id:3,name:'Essex Oil & Spice',tier:'partner',desc:'Premium extra virgin olive oils from a Moroccan family farm alongside over 100 varieties of specialty spices.',url:'essexoliveandspice.com',location:'88 Essex St, Lower East Side'},
+  {id:4,name:'Myers of Keswick',tier:'supporting',desc:'An authentic British grocer offering homemade savory pies, sausages, scones, and imported British specialty foods.',url:'myersofkeswick.com',location:'634 Hudson St, West Village'},
+  {id:5,name:'Di Palo Fine Foods',tier:'supporting',desc:'A century-old Italian specialty food store carrying imported cheeses, cured meats, pastas, and wines from all 20 regions of Italy.',url:'dipalofinefoods.com',location:'200 Grand St, Little Italy'},
+  {id:6,name:"Mike's Hot Honey",tier:'friend',desc:'Raw wildflower honey infused with Brazilian chilies — the original American hot honey, made in Brooklyn.',url:'mikeshothoney.com',location:'Brooklyn, NY'},
 ];
 
 function showTab(tab,btn){
@@ -1222,9 +1402,10 @@ function renderContent(){
       <div class="ed-section-head">
         <div class="ed-num">${ed.num}</div>
         <div class="ed-info">
-          <div class="ed-month">${ed.month}</div>
-          <div class="ed-title">${ed.title}</div>
-          <div class="ed-creative">Inspired by ${ed.creative}</div>
+          <div class="ed-vol">Life Thru Food &mdash; Vol. ${ed.num}</div>
+          <div class="ed-artist">${ed.name}</div>
+          <div class="ed-discipline">${ed.discipline}</div>
+          ${ed.location ? `<div class="ed-location">Location: ${ed.location}</div>` : ''}
         </div>
       </div>
       <div class="board">`;
@@ -1233,7 +1414,6 @@ function renderContent(){
         html+=`<div class="board-tile tile-photo" onclick="openLightbox(${p.id})">
           <img src="${p.photo}" alt="${p.title||''}">
           <div class="tile-photo-cap">
-            ${p.title?`<div class="cap-title">${p.title}</div>`:''}
             <div class="cap-ts">${p.ts}</div>
           </div>
         </div>`;
@@ -1251,7 +1431,6 @@ function renderContent(){
       } else if(isLong(p.type)){
         html+=`<div class="board-tile tile-essay" onclick="openLightbox(${p.id})">
           <div class="te-kind">${p.type==='profile'?'Profile':'Recap'}</div>
-          <div class="te-title">${p.title}</div>
           ${p.lede?`<div class="te-lede">${p.lede}</div>`:''}
           <div class="te-foot"><span>${p.ts}</span><button class="read-more-btn" onclick="event.stopPropagation();openLightbox(${p.id})">read</button></div>
         </div>`;
@@ -1318,6 +1497,7 @@ function renderSponsors(){
       <div class="sp-tier">${TIER_LABELS[s.tier]}</div>
       <div class="sp-name">${s.name}</div>
       ${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}
+      ${s.location?`<div class="sp-location">${s.location}</div>`:''}
       ${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}
     </div>`).join('');
   const al=document.getElementById('sponsor-list-admin');
