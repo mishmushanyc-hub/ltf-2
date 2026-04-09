@@ -482,16 +482,16 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
   transition: filter 0.3s;
 }
 .team-card:hover .team-photo img { filter: brightness(0.88) saturate(0.70); }
-.team-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  position: absolute; inset: 0;
+
+/* Artist portrait in edition header */
+.ed-artist-photo {
+  width: 52px; height: 66px;
+  object-fit: cover; object-position: top center;
+  border: 1px solid var(--rule-mid);
+  filter: brightness(0.93) saturate(0.72);
+  flex-shrink: 0;
 }
-.team-photo-placeholder span {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--ink-low);
-}
+
 /* Archive section-head new hierarchy */
 .ed-vol {
   font-family: 'Fragment Mono', monospace;
@@ -509,13 +509,6 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
   color: var(--ink-mid); margin-top: 3px;
 }
 
-/* Team photo upload */
-.team-photo { cursor: pointer; }
-.team-photo input[type="file"] { display: none; }
-.team-photo-placeholder { transition: background 0.2s; }
-.team-photo:hover .team-photo-placeholder { background: var(--lift); }
-.team-photo-placeholder span { transition: color 0.2s; }
-.team-photo:hover .team-photo-placeholder span { color: var(--olive); }
 
 .ed-divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 2.5rem; }
 .ed-divider::before, .ed-divider::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
@@ -952,49 +945,43 @@ footer {
     </div>
     <div class="team-grid">
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna">
         </div>
         <div class="team-name">Micho Hanna</div>
         <div class="team-role">Chef / Producer</div>
       </div>
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/2262602_ZacharyAmato_NYC__Card_01_745.heic" alt="Zach Amato">
         </div>
         <div class="team-name">Zach Amato</div>
         <div class="team-role">Head Chef</div>
       </div>
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/John Profile.jpg" alt="John Stets">
         </div>
         <div class="team-name">John Stets</div>
         <div class="team-role">Sous Chef</div>
       </div>
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/MiA-LLUCA.JPG" alt="Mia Zaldastani">
         </div>
         <div class="team-name">Mia Zaldastani</div>
         <div class="team-role">Creative Direction</div>
       </div>
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/MiA-LLUCA.JPG" alt="Llucca Huatuco">
         </div>
         <div class="team-name">Llucca Huatuco</div>
         <div class="team-role">Creative Direction</div>
       </div>
       <div class="team-card">
-        <div class="team-photo" onclick="triggerTeamPhoto(this)">
-          <div class="team-photo-placeholder"><span>tap to upload</span></div>
-          <input type="file" accept="image/*" onchange="loadTeamPhoto(this)">
+        <div class="team-photo">
+          <img src="images/team-profiles/Britney.jpg" alt="Britney Bautista">
         </div>
         <div class="team-name">Britney Bautista</div>
         <div class="team-role">Videographer</div>
@@ -1070,25 +1057,31 @@ let seatsTotal=24, seatsUsed=13;
 let selectedType='caption', contentFilter='all';
 
 const EDITIONS={
-  '04':{num:'04',name:'Nadia Waheed',discipline:'Painter',location:'Tribeca'},
-  '03':{num:'03',name:'Georgia Janelle',discipline:'Womenswear Designer',location:'Early Terrible, Lower East Side'},
-  '02':{num:'02',name:'Yuseph Kim',discipline:'Graphic Designer',location:'Two Bridges Pub'},
-  '01':{num:'01',name:'Taylar Herman',discipline:'Creative Producer',location:'Two Bridges Apartment'},
+  '04':{num:'04',name:'Nadia Waheed',discipline:'Painter',location:'Tribeca',artistPhoto:null},
+  '03':{num:'03',name:'Georgia Janelle',discipline:'Womenswear Designer',location:'Early Terrible, Lower East Side',artistPhoto:'images/artist-profiles/Artist Photos/Georgia.jpg'},
+  '02':{num:'02',name:'Yuseph Kim',discipline:'Graphic Designer',location:'Two Bridges Pub',artistPhoto:'images/artist-profiles/Artist Photos/YUSEPH.JPG'},
+  '01':{num:'01',name:'Taylar Herman',discipline:'Creative Producer',location:'Two Bridges Apartment',artistPhoto:'images/artist-profiles/Artist Photos/Tay.JPG'},
 };
 
 const TIER_ORDER=['presenting','partner','supporting','friend'];
 const TIER_LABELS={presenting:'Presenting sponsor',partner:'Partner',supporting:'Supporting',friend:'Friend of the table'};
 
-function makePlaceholder(color1, color2, label){
-  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='${color1}'/><stop offset='100%' stop-color='${color2}'/></linearGradient></defs><rect width='600' height='400' fill='url(%23g)'/><text x='50%' y='52%' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='22' fill='rgba(232,224,208,0.2)'>${label}</text></svg>`;
-  return 'data:image/svg+xml,' + svg.replace(/#/g,'%23');
-}
 
 contentPieces=[
 
   /* ── VOL. 03 · GEORGIA JANELLE · Early Terrible, LES ── */
-  {id:31,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03 — Early Terrible, Lower East Side',
-   body:'',lede:'',photo:makePlaceholder('%23181412','%23221A14','unapologetically hers'),ts:'Vol. 03'},
+  {id:31,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/000107001.jpg',ts:'Vol. 03'},
+  {id:35,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/000107002.jpg',ts:'Vol. 03'},
+  {id:36,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/000107003.jpg',ts:'Vol. 03'},
+  {id:37,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/000107004.jpg',ts:'Vol. 03'},
+  {id:38,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0001.jpg',ts:'Vol. 03'},
+  {id:39,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',
+   body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0002.jpg',ts:'Vol. 03'},
   {id:32,edition:'03',type:'profile',platform:'Newsletter',
    title:'Unapologetically Hers: on Georgia Janelle',
    lede:'Georgia is a Lower East Side–based designer and founder of GRGJNA, a cut-and-sew studio that doubles as a living world of her own creation.',
@@ -1104,8 +1097,18 @@ contentPieces=[
    lede:'',photo:null,ts:'Vol. 03'},
 
   /* ── VOL. 02 · YUSEPH KIM · Two Bridges Pub ── */
-  {id:21,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02 — Two Bridges Pub',
-   body:'',lede:'',photo:makePlaceholder('%23141416','%231C1C1E','intention & process'),ts:'Vol. 02'},
+  {id:21,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/DSCF0001.JPG',ts:'Vol. 02'},
+  {id:25,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/DSCF0002.JPG',ts:'Vol. 02'},
+  {id:26,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/DSCF0003.JPG',ts:'Vol. 02'},
+  {id:27,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/DSC00001.JPG',ts:'Vol. 02'},
+  {id:28,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/FullSizeRender.jpg',ts:'Vol. 02'},
+  {id:29,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',
+   body:'',lede:'',photo:'images/vol-02-yuseph-kim/FullSizeRender 2.jpg',ts:'Vol. 02'},
   {id:22,edition:'02',type:'profile',platform:'Newsletter',
    title:'Intention & Process: on Yuseph Kim',
    lede:'Born in South Korea and raised between his grandparents\' cooking and his later years in the UK, Yuseph\'s work sits at the intersection of food, design, and ritual.',
@@ -1121,8 +1124,18 @@ contentPieces=[
    lede:'',photo:null,ts:'Vol. 02'},
 
   /* ── VOL. 01 · TAYLAR HERMAN · Two Bridges Apartment ── */
-  {id:11,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01 — Two Bridges Apartment',
-   body:'',lede:'',photo:makePlaceholder('%23161410','%23201A12','how people gather'),ts:'Vol. 01'},
+  {id:11,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08221.JPG',ts:'Vol. 01'},
+  {id:15,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08222.JPG',ts:'Vol. 01'},
+  {id:16,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08223.JPG',ts:'Vol. 01'},
+  {id:17,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08224.JPG',ts:'Vol. 01'},
+  {id:18,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08225.JPG',ts:'Vol. 01'},
+  {id:19,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',
+   body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08226.JPG',ts:'Vol. 01'},
   {id:12,edition:'01',type:'profile',platform:'Newsletter',
    title:'How People Gather: on Taylar Herman',
    lede:'Born and raised on the shore of North Carolina, Taylar has produced for some of the biggest brands in the world — mainly through partnerships and collaborations.',
@@ -1412,6 +1425,7 @@ function renderContent(){
     const ed=EDITIONS[k];const pieces=byEd[k];
     html+=`<div class="ed-section">
       <div class="ed-section-head">
+        ${ed.artistPhoto ? `<img class="ed-artist-photo" src="${ed.artistPhoto}" alt="${ed.name}">` : ''}
         <div class="ed-num">${ed.num}</div>
         <div class="ed-info">
           <div class="ed-vol">Life Thru Food &mdash; Vol. ${ed.num}</div>
@@ -1529,27 +1543,6 @@ function addSponsor(){
   renderSponsors();
 }
 function removeSponsor(id){sponsors=sponsors.filter(s=>s.id!==id);renderSponsors();}
-
-function triggerTeamPhoto(wrap){
-  wrap.querySelector('input[type="file"]').click();
-}
-function loadTeamPhoto(input){
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const wrap = input.closest('.team-photo');
-    // Remove placeholder, insert image
-    const placeholder = wrap.querySelector('.team-photo-placeholder');
-    if(placeholder) placeholder.remove();
-    let img = wrap.querySelector('img');
-    if(!img){ img = document.createElement('img'); wrap.prepend(img); }
-    img.src = e.target.result;
-    img.alt = wrap.closest('.team-card').querySelector('.team-name').textContent;
-    // Change cursor hint after upload
-    wrap.title = 'Click to replace photo';
-  };
-  reader.readAsDataURL(file);
-}
 
 renderContent();
 renderSponsors();
