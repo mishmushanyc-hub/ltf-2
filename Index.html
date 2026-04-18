@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Thru Food</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Space+Grotesk:wght@300;400;500&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #F3F0E8; --paper: #EAE7DF; --card: #E2DED5; --lift: #D9D5CB;
+  --edge: #CECAC0; --rule: rgba(30,26,20,0.09); --rule-mid: rgba(30,26,20,0.16);
+  --ink: #1E1C16; --ink-mid: rgba(30,26,20,0.52); --ink-low: rgba(30,26,20,0.30);
+  --olive: #47553F; --olive-dim: rgba(71,85,63,0.18); --olive-ghost: rgba(71,85,63,0.07);
+  --craft: #B4724A; --craft-dim: rgba(180,114,74,0.18);
+  --steel: #3A424E; --success: #3A6B46; --danger: #8B3A2A;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'EB Garamond', serif; background: var(--canvas); color: var(--ink); font-size: 16px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+header { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-mid); background: var(--canvas); }
+header::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; }
+header::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 55%, rgba(71,85,63,0.06) 0%, transparent 65%); pointer-events: none; }
+.h-series { font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.26em; color: var(--olive); text-transform: uppercase; margin-bottom: 3rem; opacity: 0.75; position: relative; z-index: 1; }
+header h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: clamp(3rem, 9vw, 7.5rem); line-height: 0.95; letter-spacing: -0.04em; color: var(--ink); margin-bottom: 1.5rem; position: relative; z-index: 1; }
+header h1 em { font-family: 'EB Garamond', serif; font-style: italic; font-weight: 400; font-size: 0.68em; display: block; color: var(--ink-mid); letter-spacing: 0.01em; margin-top: 0.3em; }
+.h-logo { width: clamp(260px, 52vw, 580px); max-width: 90%; margin-bottom: 1.5rem; position: relative; z-index: 1; display: block; }
+.h-sub { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); letter-spacing: 0.04em; margin-bottom: 3rem; position: relative; z-index: 1; }
+.h-scroll-cue { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.22em; color: var(--olive); text-transform: uppercase; display: flex; align-items: center; gap: 16px; cursor: pointer; position: relative; z-index: 1; opacity: 0.65; transition: opacity 0.25s; }
+.h-scroll-cue:hover { opacity: 1; }
+.h-scroll-cue::before, .h-scroll-cue::after { content: ''; display: block; width: 40px; height: 1px; background: var(--olive); opacity: 0.5; }
+nav { display: flex; justify-content: center; flex-wrap: wrap; background: var(--paper); border-bottom: 1px solid var(--rule-mid); position: sticky; top: 0; z-index: 100; }
+nav button { background: none; border: none; font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mid); padding: 1.1rem 1.8rem; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+nav button.active { color: var(--ink); border-bottom-color: var(--olive); }
+nav button:hover { color: var(--ink); }
+main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.event-block { margin-bottom: 3rem; transition: opacity 0.4s ease; }
+.event-block.comp-dimmed { opacity: 0.35; pointer-events: none; }
+.event-masthead { background: var(--paper); border: 1px solid var(--rule-mid); border-bottom: none; padding: 3rem 2.5rem 2.5rem; position: relative; overflow: hidden; }
+.event-masthead::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--olive); pointer-events: none; }
+.ev-no { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--olive); opacity: 0.8; display: block; margin-bottom: 1.5rem; }
+.ev-date { font-family: 'Fragment Mono', monospace; font-size: 11px; color: var(--ink-mid); display: block; margin-bottom: 1rem; letter-spacing: 0.08em; }
+.event-masthead h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.0; color: var(--ink); margin-bottom: 0.75rem; letter-spacing: -0.04em; }
+.ev-discipline { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); margin-top: 6px; }
+.ev-location-ref { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); margin-top: 10px; }
+.event-meta-row { display: flex; flex-wrap: wrap; border: 1px solid var(--rule-mid); border-top: none; }
+.ev-cell { flex: 1; min-width: 100px; padding: 1.1rem 1.5rem; border-right: 1px solid var(--rule-mid); background: var(--card); }
+.ev-cell:last-child { border-right: none; }
+.ev-cell-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 5px; }
+.ev-cell-val { font-family: 'EB Garamond', serif; font-size: 1.05rem; color: var(--ink); }
+.event-desc { padding: 2rem 2.5rem; background: var(--canvas); border: 1px solid var(--rule-mid); border-top: none; }
+.event-desc p { font-size: 1.05rem; line-height: 1.9; color: var(--ink-mid); font-style: italic; }
+.seats-wrap { margin-top: 1.75rem; }
+.seats-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.seats-row span { font-family: 'Fragment Mono', monospace; font-size: 10px; color: var(--ink-low); letter-spacing: 0.08em; text-transform: uppercase; }
+.seats-row strong { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-style: italic; color: var(--olive); }
+.seats-track { height: 2px; background: var(--card); overflow: hidden; }
+.seats-fill { height: 100%; background: var(--olive); width: 0%; transition: width 0.6s ease; opacity: 0.55; }
+.form-title { font-family: 'EB Garamond', serif; font-size: 1.6rem; font-style: italic; font-weight: 400; color: var(--ink); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule-mid); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+.form-grid.full { grid-template-columns: 1fr; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-low); }
+input[type="text"], input[type="email"], input[type="tel"], select, textarea { background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 11px 0; font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); outline: none; transition: border-color 0.25s, background 0.2s; width: 100%; appearance: none; border-radius: 0; }
+input::placeholder, textarea::placeholder { color: var(--ink-low); font-style: italic; }
+input:focus, select:focus, textarea:focus { border-bottom-color: var(--olive); background: var(--lift); }
+textarea { resize: vertical; min-height: 90px; line-height: 1.7; padding-top: 8px; }
+select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(30,26,20,0.32)' stroke-width='1' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; padding-right: 24px; }
+select option { background: var(--paper); color: var(--ink); }
+.diet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 6px; }
+.check-row { display: flex; align-items: center; gap: 8px; }
+.check-row input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--olive); cursor: pointer; flex-shrink: 0; }
+.check-row label { font-family: 'EB Garamond', serif; font-size: 0.9rem; color: var(--ink-mid); cursor: pointer; font-style: italic; letter-spacing: 0; text-transform: none; }
+.btn-primary { font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; background: var(--olive); color: var(--canvas); border: none; padding: 14px 32px; cursor: pointer; transition: opacity 0.2s, transform 0.15s; }
+.btn-primary:hover { opacity: 0.80; }
+.btn-primary:active { transform: scale(0.99); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-ghost { font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 11px 22px; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+.btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+.toast { display: none; padding: 12px 0; font-size: 0.9rem; font-style: italic; margin-bottom: 1.5rem; border-left: 2px solid; padding-left: 1rem; }
+.toast.success { display: block; color: var(--success); border-color: var(--success); }
+.toast.error { display: block; color: var(--danger); border-color: var(--danger); }
+.confirmation-view { display: none; }
+.confirmation-card { background: var(--paper); border: 1px solid var(--rule-mid); position: relative; overflow: hidden; margin-bottom: 2rem; }
+.confirmation-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--olive); }
+.confirmation-hero { padding: 3.5rem 2.5rem 2.5rem; border-bottom: 1px solid var(--rule-mid); }
+.confirmation-hero .conf-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--olive); display: block; margin-bottom: 1.25rem; }
+.confirmation-hero h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: clamp(2rem, 5vw, 3rem); color: var(--ink); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.5rem; }
+.confirmation-hero p { font-size: 1rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
+.confirmation-details { display: grid; grid-template-columns: 1fr 1fr; }
+.conf-detail { padding: 1.25rem 1.5rem; border-right: 1px solid var(--rule-mid); border-bottom: 1px solid var(--rule-mid); }
+.conf-detail:nth-child(2n) { border-right: none; }
+.conf-detail:nth-last-child(-n+2) { border-bottom: none; }
+.conf-detail-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 5px; }
+.conf-detail-val { font-family: 'EB Garamond', serif; font-size: 1.05rem; color: var(--ink); }
+.confirmation-note { padding: 1.75rem 2.5rem; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.75; border-top: 1px solid var(--rule-mid); }
+.notify-intro { padding: 3rem 2.5rem; background: var(--paper); border: 1px solid var(--rule-mid); margin-bottom: 3rem; text-align: center; position: relative; overflow: hidden; }
+.notify-intro::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--olive); pointer-events: none; }
+.notify-intro h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 2.2rem; color: var(--ink); margin-bottom: 0.75rem; letter-spacing: -0.04em; }
+.notify-intro p { font-size: 1rem; font-style: italic; color: var(--ink-mid); }
+.stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 1px; background: var(--rule-mid); border: 1px solid var(--rule-mid); margin-bottom: 2.5rem; }
+.stat-block { background: var(--paper); padding: 1.5rem 1rem 1.25rem; }
+.stat-block .n { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 2.4rem; color: var(--ink); line-height: 1; letter-spacing: -0.04em; }
+.stat-block .l { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 6px; }
+.toolbar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+.toolbar input { flex: 1; min-width: 200px; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); outline: none; }
+.toolbar input:focus { border-bottom-color: var(--olive); }
+.toolbar input::placeholder { color: var(--ink-low); font-style: italic; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+thead th { text-align: left; font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); padding: 8px 12px; border-bottom: 1px solid var(--rule-mid); background: var(--paper); }
+tbody tr { border-bottom: 1px solid var(--rule); transition: background 0.15s; }
+tbody tr:hover { background: var(--paper); }
+tbody td { padding: 11px 12px; color: var(--ink-mid); vertical-align: top; font-style: italic; }
+tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
+.pill { display: inline-block; font-family: 'Fragment Mono', monospace; font-size: 9px; padding: 2px 7px; letter-spacing: 0.04em; }
+.pill.sand { background: var(--card); color: var(--ink-mid); }
+.pill.sage { background: var(--olive-dim); color: var(--olive); }
+.pill.sky { background: rgba(58,66,78,0.10); color: var(--steel); }
+.pill.paid { background: rgba(58,107,70,0.12); color: var(--success); }
+.empty-msg { text-align: center; padding: 4rem 1rem; font-style: italic; color: var(--ink-low); font-size: 1rem; }
+.ltf-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30,26,20,0.45); z-index: 999; align-items: center; justify-content: center; }
+.ltf-modal-overlay.open { display: flex; }
+.ltf-modal { background: var(--canvas); border: 1px solid var(--rule-mid); padding: 2rem 2.25rem; max-width: 420px; width: 90%; position: relative; }
+.ltf-modal h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.ltf-modal p { font-size: 0.9rem; font-style: italic; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.6; }
+.ltf-modal textarea { width: 100%; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'EB Garamond', serif; font-size: 0.95rem; color: var(--ink); outline: none; resize: none; min-height: 70px; line-height: 1.6; margin-bottom: 1.5rem; }
+.ltf-modal textarea:focus { border-bottom-color: var(--olive); }
+.ltf-modal textarea::placeholder { color: var(--ink-low); font-style: italic; }
+.ltf-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+#tab-content { padding: 0; }
+.board-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 2rem 0 1.5rem; border-bottom: 1px solid var(--rule-mid); margin-bottom: 2rem; }
+.board-toolbar h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 1.2rem; color: var(--ink); letter-spacing: -0.02em; }
+.filter-bar { display: flex; gap: 4px; flex-wrap: wrap; }
+.fpill { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 5px 12px; cursor: pointer; transition: all 0.2s; }
+.fpill.on { background: var(--olive-ghost); border-color: var(--olive); color: var(--olive); }
+.fpill:hover:not(.on) { border-color: var(--ink-low); color: var(--ink); }
+.add-row { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; cursor: pointer; }
+.add-circle { width: 26px; height: 26px; border: 1px solid var(--olive); color: var(--olive); display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; cursor: pointer; flex-shrink: 0; transition: background 0.2s; font-style: normal; }
+.add-circle:hover { background: var(--olive-ghost); }
+.add-row span { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); letter-spacing: 0.12em; text-transform: uppercase; }
+.add-form-box { background: var(--paper); border: 1px solid var(--rule-mid); padding: 2rem; margin-bottom: 2rem; display: none; }
+.add-form-box.open { display: block; }
+.add-form-box h3 { font-family: 'EB Garamond', serif; font-size: 1.3rem; font-style: italic; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-mid); color: var(--ink); }
+.type-row { display: flex; gap: 5px; flex-wrap: wrap; }
+.tpill { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 6px 14px; cursor: pointer; transition: all 0.2s; }
+.tpill.on { background: var(--olive-ghost); border-color: var(--olive); color: var(--olive); }
+.upload-zone { border: 1px dashed var(--rule-mid); padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color 0.2s; background: var(--card); }
+.upload-zone:hover { border-color: var(--olive); }
+.upload-zone span { font-family: 'Fragment Mono', monospace; font-size: 10px; color: var(--ink-low); letter-spacing: 0.08em; }
+.upload-zone input { display: none; }
+.ed-section { margin-bottom: 5rem; }
+.ed-section-head { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule-mid); }
+.ed-num { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 3.5rem; color: var(--card); line-height: 1; flex-shrink: 0; letter-spacing: -0.05em; }
+.ed-head-flyer { flex-shrink: 0; width: clamp(90px, 14vw, 130px); }
+.ed-head-flyer img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: brightness(0.95) saturate(0.82); border: 1px solid var(--rule-mid); }
+.ed-head-portrait { flex-shrink: 0; width: clamp(90px, 14vw, 130px); }
+.ed-head-portrait img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: brightness(0.93) saturate(0.72); border: 1px solid var(--rule-mid); }
+.ed-info { border-left: 2px solid var(--olive); padding-left: 1.25rem; flex: 1; }
+.ed-vol { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--olive); opacity: 0.8; margin-bottom: 6px; }
+.ed-artist { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.6rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
+.ed-discipline { font-family: 'EB Garamond', serif; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); margin-top: 3px; }
+.ed-location { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-low); margin-top: 6px; }
+.ed-divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 2.5rem; }
+.ed-divider::before, .ed-divider::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.ed-divider span { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); letter-spacing: 0.15em; text-transform: uppercase; }
+.board { columns: 3; column-gap: 10px; }
+@media (max-width: 760px) { .board { columns: 2; } }
+@media (max-width: 480px) { .board { columns: 1; } }
+.board-tile { break-inside: avoid; margin-bottom: 10px; cursor: pointer; position: relative; transition: opacity 0.25s; }
+.board-tile:hover { opacity: 0.80; }
+.tile-photo img { width: 100%; display: block; filter: brightness(0.92) saturate(0.78); transition: filter 0.3s; }
+.board-tile.tile-photo:hover img { filter: brightness(0.84) saturate(0.68); }
+.tile-photo-cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(243,240,232,0.92)); padding: 2rem 1rem 0.85rem; opacity: 0; transition: opacity 0.3s; }
+.board-tile.tile-photo:hover .tile-photo-cap { opacity: 1; }
+.tile-photo-cap .cap-ts { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-mid); margin-top: 3px; letter-spacing: 0.06em; }
+.tile-caption { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.25rem 1.25rem 1rem; }
+.tc-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 10px; }
+.tc-body { font-size: 0.9rem; line-height: 1.75; color: var(--ink-mid); font-style: italic; margin-bottom: 10px; }
+.tc-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--rule); padding-top: 8px; }
+.tc-foot .ts { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); letter-spacing: 0.06em; }
+.tile-quote { background: var(--card); border: 1px solid var(--rule-mid); border-left: 3px solid var(--olive); padding: 1.5rem 1.25rem 1.25rem; position: relative; overflow: hidden; }
+.tile-quote::before { content: '\201C'; font-family: 'EB Garamond', serif; font-size: 8rem; line-height: 0.75; color: rgba(30,26,20,0.07); position: absolute; top: 0; left: 0.5rem; pointer-events: none; }
+.tq-body { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.7; position: relative; z-index: 1; }
+.tq-attr { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--olive); opacity: 0.75; letter-spacing: 0.08em; margin-top: 1rem; position: relative; z-index: 1; }
+.tile-essay { background: var(--canvas); border: 1px solid var(--olive-dim); padding: 1.25rem; }
+.te-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
+.te-lede { font-size: 0.85rem; font-style: italic; color: var(--ink-mid); line-height: 1.65; }
+.te-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--olive-dim); font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--olive); opacity: 0.75; }
+.copy-btn { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.06em; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 2px 8px; cursor: pointer; transition: all 0.2s; }
+.copy-btn:hover { border-color: var(--olive); color: var(--olive); }
+.copy-btn.done { border-color: var(--success); color: var(--success); }
+.read-more-btn { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.08em; background: none; border: none; color: var(--olive); opacity: 0.75; cursor: pointer; padding: 0; transition: opacity 0.2s; }
+.read-more-btn:hover { opacity: 1; }
+.ed-artist-photo { width: 52px; height: 66px; object-fit: cover; object-position: top center; border: 1px solid var(--rule-mid); filter: brightness(0.93) saturate(0.72); flex-shrink: 0; }
+/* ── ARCHIVE EDITORIAL LAYOUT ── */
+.ed-visual-row { display: grid; gap: 1rem; margin: 1rem 0 1.5rem; align-items: start; }
+.ed-visual-row.has-both { grid-template-columns: 2fr 3fr; }
+.ed-visual-row.has-flyer-only { grid-template-columns: 1fr; max-width: 52%; }
+.ed-visual-row.has-portrait-only { grid-template-columns: 160px 1fr; }
+.ed-visual-portrait img { width: 100%; display: block; filter: brightness(0.93) saturate(0.72); border: 1px solid var(--rule-mid); }
+.ed-visual-flyer img { width: 100%; display: block; filter: brightness(0.95) saturate(0.82); border: 1px solid var(--rule-mid); }
+.ed-flyer-empty { height: 180px; background: var(--card); border: 1px dashed var(--rule-mid); display: flex; align-items: center; justify-content: center; }
+.ed-flyer-empty span { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); letter-spacing: 0.1em; text-transform: uppercase; }
+.ed-profile-body { margin-bottom: 1.75rem; cursor: pointer; }
+.ed-profile-body .te-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
+.ed-profile-body .te-lede { font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.75; margin-bottom: 0.75rem; }
+.ed-caption-block { margin-bottom: 1rem; }
+.ed-quote-block { margin-bottom: 2rem; }
+.ed-gallery-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); margin-bottom: 0.75rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
+.ed-gallery-cta { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); background: none; border: none; cursor: pointer; opacity: 0.75; padding: 0; transition: opacity 0.2s; }
+.ed-gallery-cta:hover { opacity: 1; }
+.ed-gallery-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 0.5rem; }
+.ed-gallery-preview img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; filter: brightness(0.92) saturate(0.75); border: 1px solid var(--rule-mid); cursor: pointer; transition: filter 0.2s; }
+.ed-gallery-preview img:hover { filter: brightness(0.80) saturate(0.65); }
+/* ── GALLERY MODAL ── */
+#gallery-modal { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(243,240,232,0.97); backdrop-filter: blur(10px); overflow-y: auto; }
+#gallery-modal.open { display: block; animation: fadeIn 0.3s ease; }
+.gm-inner { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+.gm-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule-mid); margin-bottom: 2rem; }
+.gm-title { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 1.6rem; color: var(--ink); letter-spacing: -0.03em; }
+.gm-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-top: 4px; }
+.gm-close-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 7px 18px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.gm-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+.gm-grid { columns: 3; column-gap: 8px; }
+.gm-item { break-inside: avoid; margin-bottom: 8px; cursor: pointer; position: relative; overflow: hidden; }
+.gm-item img { width: 100%; display: block; filter: brightness(0.93) saturate(0.75); transition: filter 0.25s; }
+.gm-item:hover img { filter: brightness(0.80) saturate(0.65); }
+@media (max-width: 600px) { .gm-grid { columns: 2; } }
+@media (max-width: 600px) { .ed-head-flyer { width: 72px; } .ed-head-portrait { width: 72px; } }
+.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(243,240,232,0.88); align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(6px); }
+.lightbox.open { display: flex; animation: fadeIn 0.3s ease; }
+.lb-inner { background: var(--canvas); border: 1px solid var(--rule-mid); max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 12px 48px rgba(30,26,20,0.10); }
+.lb-close { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1rem 1.25rem 0; background: var(--canvas); z-index: 1; }
+.lb-close-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 5px 14px; cursor: pointer; transition: all 0.2s; }
+.lb-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+.lb-content { padding: 0.5rem 2rem 2.5rem; }
+.lb-content img { width: 100%; display: block; margin-bottom: 1.5rem; filter: brightness(0.92) saturate(0.75); }
+.lb-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
+.lb-lede { font-family: 'EB Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--ink); line-height: 1.75; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule-mid); }
+.lb-body { font-size: 0.97rem; line-height: 1.95; color: var(--ink-mid); font-style: italic; }
+.lb-body p { margin-bottom: 1rem; }
+.lb-meta { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.team-intro { padding-bottom: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--rule-mid); }
+.team-intro p { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-style: italic; color: var(--ink-mid); line-height: 1.85; max-width: 560px; }
+.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--rule-mid); border: 1px solid var(--rule-mid); }
+.team-card { background: var(--canvas); padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 6px; transition: background 0.2s; position: relative; }
+.team-card:hover { background: var(--paper); }
+.team-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.2s; }
+.team-card:hover::before { background: var(--olive); }
+.team-name { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
+.team-role { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.8; margin-top: 2px; }
+.ig-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.1em; color: var(--ink-low); text-decoration: none; margin-top: 6px; transition: color 0.2s; }
+.ig-link:hover { color: var(--olive); }
+.ed-ig-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; }
+.team-photo { width: 100%; aspect-ratio: 3/4; background: var(--card); border: 1px solid var(--rule-mid); margin-bottom: 1rem; overflow: hidden; position: relative; }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.94) saturate(0.78); transition: filter 0.3s; }
+.team-card:hover .team-photo img { filter: brightness(0.88) saturate(0.70); }
+footer { background: var(--paper); border-top: 1px solid var(--rule-mid); padding: 4rem 2rem 3rem; }
+.foot-inner { max-width: 880px; margin: 0 auto; }
+.foot-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1rem; }
+.foot-label::after { content: ''; flex: 1; height: 1px; background: var(--rule-mid); }
+.sp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1px; background: var(--rule-mid); border: 1px solid var(--rule-mid); margin-bottom: 2.5rem; }
+.sp-card { background: var(--canvas); padding: 1.25rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 5px; transition: background 0.2s; }
+.sp-card:hover { background: var(--paper); }
+.sp-tier { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); opacity: 0.70; }
+.sp-name { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.2; }
+.sp-desc { font-size: 0.82rem; font-style: italic; color: var(--ink-mid); line-height: 1.5; margin-top: 2px; }
+.sp-location { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.08em; color: var(--ink-low); margin-top: 3px; }
+.sp-url { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--olive); opacity: 0.55; text-decoration: none; transition: opacity 0.2s; margin-top: 4px; letter-spacing: 0.04em; }
+.sp-url:hover { opacity: 1; }
+.sp-card.pres { background: var(--olive-ghost); border-left: 2px solid var(--olive-dim); }
+.sp-card.pres .sp-tier { opacity: 1; }
+.foot-cta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-top: 2rem; border-top: 1px solid var(--rule-mid); margin-bottom: 2rem; }
+.foot-cta p { font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; max-width: 440px; }
+.foot-sig { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-low); text-align: center; padding-top: 1.5rem; }
+.sp-admin { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+.sp-admin.open { display: block; }
+.admin-section-toggle { font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mid); cursor: pointer; padding: 0.9rem 0; border-bottom: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; }
+.admin-section-toggle:hover { color: var(--ink); }
+.sp-admin h3 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-style: italic; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-mid); color: var(--ink); }
+.sp-admin-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 0.9rem; font-style: italic; }
+.sp-admin-row:last-child { border-bottom: none; }
+.sp-admin-name { flex: 1; color: var(--ink); }
+.sp-admin-tier { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-mid); }
+.rm-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 3px 10px; cursor: pointer; transition: all 0.2s; }
+.rm-btn:hover { border-color: var(--danger); color: var(--danger); }
+.payment-block { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.5rem 1.5rem 1.25rem; margin-bottom: 1.5rem; }
+.payment-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.payment-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); }
+.payment-total { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.02em; }
+.payment-total-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); margin-left: 6px; }
+.payment-note { font-family: 'EB Garamond', serif; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
+#rsvp-gate { padding: 2rem 2.5rem; border: 1px solid var(--rule-mid); border-top: none; background: var(--paper); }
+.gate-prompt { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.7; }
+.gate-row { display: flex; gap: 12px; align-items: center; max-width: 420px; }
+.gate-row input { flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 2px; font-size: 1rem; font-family: 'Fragment Mono', monospace; letter-spacing: 0.12em; color: var(--ink); outline: none; transition: border-color 0.2s; }
+.gate-row input:focus { border-bottom-color: var(--olive); }
+.gate-error { display: none; font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--danger); margin-top: 12px; padding: 10px 14px; border: 1px solid rgba(139,58,42,0.45); background: rgba(139,58,42,0.06); line-height: 1.7; }
+.gate-error.visible { display: block; }
+.gate-success-banner { padding: 1rem 1.25rem; background: var(--olive-ghost); border: 1px solid var(--olive-dim); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.gate-success-banner .gsb-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); margin-bottom: 4px; }
+.gate-success-banner .gsb-msg { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); }
+.gate-success-banner .gsb-remove { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--ink-low); cursor: pointer; text-decoration: underline; white-space: nowrap; flex-shrink: 0; }
+.guest-toggle-wrap { padding-top: 6px; }
+.guest-base { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink-mid); font-style: italic; margin-bottom: 10px; }
+.toggle-row { display: flex; align-items: baseline; gap: 10px; cursor: pointer; padding: 8px 0; border-top: 1px solid var(--rule); }
+.toggle-row input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; flex-shrink: 0; border: 1px solid var(--rule-mid); background: var(--canvas); position: relative; top: 1px; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.toggle-row input[type="checkbox"]:checked { background: var(--olive); border-color: var(--olive); }
+.toggle-row input[type="checkbox"]:checked::after { content: ''; position: absolute; top: 2px; left: 4px; width: 4px; height: 7px; border: 1.5px solid #fff; border-top: none; border-left: none; transform: rotate(40deg); }
+.toggle-label { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); line-height: 1.4; }
+.toggle-price { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); margin-left: 8px; }
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  nav button { padding: 0.9rem 1rem; font-size: 9px; }
+  .event-masthead { padding: 2rem 1.5rem; }
+  .event-desc { padding: 1.5rem; }
+  .board { columns: 1; }
+  .ed-num { font-size: 2.5rem; }
+  .foot-cta { flex-direction: column; }
+  .sp-grid { grid-template-columns: 1fr 1fr; }
+  header h1 { font-size: 2.5rem; }
+  .board-toolbar { flex-direction: column; align-items: flex-start; }
+}
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<header>
+  <span class="h-series">Life Thru Food &nbsp;·&nbsp; NYC &nbsp;·&nbsp; est. 2025</span>
+  <img src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="h-logo">
+  <p class="h-sub">A monthly dinner party series inspired by local creatives</p>
+  <div class="h-scroll-cue" onclick="document.querySelector('nav').scrollIntoView({behavior:'smooth'})">enter</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('rsvp',this)">Upcoming event</button>
+  <button onclick="showTab('content',this)">The archive</button>
+  <button onclick="showTab('notify',this)">Stay informed</button>
+  <button onclick="showTab('team',this)">The team</button>
+  <button id="nav-admin-btn" onclick="showTab('admin',this)">Guest records</button>
+</nav>
+
+<main>
+
+  <!-- RSVP -->
+  <div id="tab-rsvp" class="section active">
+
+    <!-- VOL. 04 — ACTIVE EVENT -->
+    <div class="event-block" id="event-block-4">
+      <div class="event-masthead">
+        <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 04</span>
+        <span class="ev-date" id="ev-date">Sunday, April 26 &middot; 2026</span>
+        <h2 id="ev-name">Heidi Cannon</h2>
+        <p class="ev-discipline" id="ev-discipline">Stylist</p>
+        <p class="ev-location-ref" id="ev-location-ref">Location: Williamsburg</p>
+        <div class="ed-ig-links" style="margin-top:0.6rem">
+          <a href="https://www.instagram.com/americanwastoid/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@americanwastoid</a>
+        </div>
+      </div>
+      <div class="event-meta-row">
+        <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val" id="ev-doors">6:30 pm</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Dinner</span><span class="ev-cell-val" id="ev-dinner">7:00 pm</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val" id="ev-location">Williamsburg</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val" id="ev-price">$60</span></div>
+      </div>
+      <div class="event-desc">
+        <p>Vol. 04 is an evening in conversation with stylist Heidi Cannon &mdash; an intimate dinner party in Williamsburg shaped by her perspective on dress, identity, and how we present ourselves to the world. Bio coming soon. Address shared one week prior.</p>
+        <div class="seats-wrap">
+          <div class="seats-row">
+            <span>Seats remaining</span>
+            <strong id="seats-remaining">— of —</strong>
+          </div>
+          <div class="seats-track"><div class="seats-fill" id="seats-fill"></div></div>
+        </div>
+      </div>
+      <div id="rsvp-toast" class="toast"></div>
+      <div id="rsvp-form-wrap">
+        <div id="comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div class="gate-row">
+            <input type="text" id="gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate()">
+            <button class="btn-ghost" id="gate-apply-btn" onclick="checkGate()">apply &rarr;</button>
+          </div>
+          <div id="gate-error" class="gate-error"></div>
+        </div>
+        <p class="form-title">Reserve your seat</p>
+        <div class="form-grid">
+          <div class="form-field"><label for="r-first">First name</label><input type="text" id="r-first" placeholder="Margot"></div>
+          <div class="form-field"><label for="r-last">Last name</label><input type="text" id="r-last" placeholder="Laurent"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="r-email">Email</label><input type="email" id="r-email" placeholder="margot@example.com"></div>
+          <div class="form-field"><label for="r-phone">Phone</label><input type="tel" id="r-phone" placeholder="+1 212 555 0100"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="r-source">How did you hear about us?</label>
+            <select id="r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
+          </div>
+          <div class="form-field"><label for="r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="r-instagram" placeholder="@handle"></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:0.25rem">
+          <div class="form-field">
+            <label>Add-ons</label>
+            <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
+              2 complimentary drink tickets per guest &mdash; Madre Mezcal cocktails, served by a bartender
+            </div>
+            <label class="toggle-row" for="r-plus-one">
+              <input type="checkbox" id="r-plus-one" onchange="updatePaymentTotal()">
+              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="plus-one-price">+$60</span></span>
+            </label>
+            <div id="r-plus-one-details-row" style="display:none; padding-left:1.5rem; margin-top:0.75rem">
+              <div class="form-grid" style="margin-bottom:0.5rem">
+                <div class="form-field"><label>+1 first name</label><input type="text" id="r-p1-first" placeholder="First"></div>
+                <div class="form-field"><label>+1 last name</label><input type="text" id="r-p1-last" placeholder="Last"></div>
+              </div>
+              <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--olive);padding:0.5rem 0;opacity:0.8">
+                Your +1 also receives 2 complimentary drink tickets
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field">
+            <label>Dietary restrictions</label>
+            <div class="diet-grid" style="margin-top:8px">
+              <div class="check-row"><input type="checkbox" id="d-veg"><label for="d-veg">Vegetarian</label></div>
+              <div class="check-row"><input type="checkbox" id="d-vegan"><label for="d-vegan">Vegan</label></div>
+              <div class="check-row"><input type="checkbox" id="d-gf"><label for="d-gf">Gluten-free</label></div>
+              <div class="check-row"><input type="checkbox" id="d-df"><label for="d-df">Dairy-free</label></div>
+              <div class="check-row"><input type="checkbox" id="d-nut"><label for="d-nut">Nut allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="d-shell"><label for="d-shell">Shellfish allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="d-kosher"><label for="d-kosher">Kosher</label></div>
+              <div class="check-row"><input type="checkbox" id="d-halal"><label for="d-halal">Halal</label></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="r-notes">Anything else we should know?</label><textarea id="r-notes" placeholder="Other dietary needs, accessibility, or notes for us..."></textarea></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:1.75rem">
+          <div class="check-row"><input type="checkbox" id="r-notify" checked><label for="r-notify">Keep me informed of future events</label></div>
+        </div>
+        <div id="comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
+          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+        </div>
+        <div id="payment-block-wrap" class="payment-block">
+          <div class="payment-header">
+            <span class="payment-label">Payment</span>
+            <span>
+              <span class="payment-total" id="payment-total">$60</span>
+              <span class="payment-total-sub" id="payment-breakdown">1 guest &times; $60</span>
+            </span>
+          </div>
+          <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
+        </div>
+        <div id="rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <button class="btn-primary" id="rsvp-submit-btn" onclick="submitRSVP()">continue to payment &rarr;</button>
+      </div>
+    </div>
+
+    <!-- CONFIRMATION VIEW (shown after payment) -->
+    <div id="confirmation-view" class="confirmation-view">
+      <div class="confirmation-card">
+        <div class="confirmation-hero">
+          <span class="conf-label">Life Thru Food &nbsp;&mdash;&nbsp; Vol. 04</span>
+          <h2>You're confirmed.</h2>
+          <p>We're looking forward to having you at the table. A confirmation email is on its way — check your inbox.</p>
+        </div>
+        <div class="confirmation-details">
+          <div class="conf-detail"><span class="conf-detail-label">Event</span><span class="conf-detail-val">Heidi Cannon</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Sunday, April 26</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Doors</span><span class="conf-detail-val">6:30 pm</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Location</span><span class="conf-detail-val">Shared one week prior</span></div>
+        </div>
+        <div class="confirmation-note">Questions? Reach us at <a href="mailto:info@lifethrufood.com" style="color:var(--olive)">info@lifethrufood.com</a>. See you soon.</div>
+      </div>
+    </div>
+
+    <!-- VOL. 05 — LIVE TICKETS -->
+    <div class="event-block" id="event-block-5" style="margin-top:2rem">
+      <div class="event-masthead">
+        <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 05</span>
+        <span class="ev-date">Sunday, May 17 &middot; 2026</span>
+        <h2>Miles Dixon &amp; Elijuh Vuhlet</h2>
+        <p class="ev-discipline">Clothing Designers</p>
+        <p class="ev-location-ref">Location: Red Hook, Brooklyn</p>
+        <div class="ed-ig-links" style="margin-top:0.6rem">
+          <a href="https://www.instagram.com/miloblase/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@miloblase</a>
+          <a href="https://www.instagram.com/realfantasymfg/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@realfantasymfg</a>
+          <a href="https://www.instagram.com/elijuhfuckingvuhlet/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@elijuhfuckingvuhlet</a>
+          <a href="https://www.instagram.com/vuhlet/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@vuhlet</a>
+        </div>
+      </div>
+      <div class="event-meta-row">
+        <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">7:00 pm</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Dinner</span><span class="ev-cell-val">7:30 pm</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val">Red Hook, Brooklyn</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val" id="v5-ev-price">$50</span></div>
+      </div>
+      <div class="event-desc">
+        <p>Vol. 05 takes place in a sculpture garden in Red Hook — an outdoor evening with Miles Dixon and Elijuh Vuhlet, two NYC born and raised clothing designers who have become genuine community staples in the city's creative landscape. Address shared one week prior.</p>
+        <div class="seats-wrap">
+          <div class="seats-row">
+            <span>Seats remaining</span>
+            <strong id="v5-seats-remaining">— of —</strong>
+          </div>
+          <div class="seats-track"><div class="seats-fill" id="v5-seats-fill"></div></div>
+        </div>
+      </div>
+      <div id="v5-rsvp-toast" class="toast"></div>
+      <div id="v5-rsvp-form-wrap">
+        <div id="v5-comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div class="gate-row">
+            <input type="text" id="v5-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate5()">
+            <button class="btn-ghost" id="v5-gate-apply-btn" onclick="checkGate5()">apply &rarr;</button>
+          </div>
+          <div id="v5-gate-error" class="gate-error"></div>
+        </div>
+        <p class="form-title">Reserve your seat</p>
+        <div class="form-grid">
+          <div class="form-field"><label for="v5r-first">First name</label><input type="text" id="v5r-first" placeholder="Margot"></div>
+          <div class="form-field"><label for="v5r-last">Last name</label><input type="text" id="v5r-last" placeholder="Laurent"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="v5r-email">Email</label><input type="email" id="v5r-email" placeholder="margot@example.com"></div>
+          <div class="form-field"><label for="v5r-phone">Phone</label><input type="tel" id="v5r-phone" placeholder="+1 212 555 0100"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="v5r-source">How did you hear about us?</label>
+            <select id="v5r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
+          </div>
+          <div class="form-field"><label for="v5r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="v5r-instagram" placeholder="@handle"></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:0.25rem">
+          <div class="form-field">
+            <label>Add-ons</label>
+            <label class="toggle-row" for="v5r-drink">
+              <input type="checkbox" id="v5r-drink" onchange="updatePaymentTotal5()">
+              <span class="toggle-label">Drink pairings for you &mdash; curated for each course <span class="toggle-price" id="v5-drink-addon-price">+$30</span></span>
+            </label>
+            <label class="toggle-row" for="v5r-plus-one">
+              <input type="checkbox" id="v5r-plus-one" onchange="updatePaymentTotal5()">
+              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v5-plus-one-price">+$50</span></span>
+            </label>
+            <div id="v5-plus-one-details-row" style="display:none; padding-left:1.5rem; margin-top:0.75rem">
+              <div class="form-grid" style="margin-bottom:0.5rem">
+                <div class="form-field"><label>+1 first name</label><input type="text" id="v5-p1-first" placeholder="First"></div>
+                <div class="form-field"><label>+1 last name</label><input type="text" id="v5-p1-last" placeholder="Last"></div>
+              </div>
+            </div>
+            <div id="v5-plus-one-drinks-row" style="display:none; padding-left:1.5rem">
+              <label class="toggle-row" for="v5r-drink-plus-one">
+                <input type="checkbox" id="v5r-drink-plus-one" onchange="updatePaymentTotal5()">
+                <span class="toggle-label">Include drink pairings for your +1 <span class="toggle-price" id="v5-drink-plus-one-price">+$30</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field">
+            <label>Dietary restrictions</label>
+            <div class="diet-grid" style="margin-top:8px">
+              <div class="check-row"><input type="checkbox" id="v5d-veg"><label for="v5d-veg">Vegetarian</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-vegan"><label for="v5d-vegan">Vegan</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-gf"><label for="v5d-gf">Gluten-free</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-df"><label for="v5d-df">Dairy-free</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-nut"><label for="v5d-nut">Nut allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-shell"><label for="v5d-shell">Shellfish allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-kosher"><label for="v5d-kosher">Kosher</label></div>
+              <div class="check-row"><input type="checkbox" id="v5d-halal"><label for="v5d-halal">Halal</label></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="v5r-notes">Anything else we should know?</label><textarea id="v5r-notes" placeholder="Other dietary needs, accessibility, or notes for us..."></textarea></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:1.75rem">
+          <div class="check-row"><input type="checkbox" id="v5r-notify" checked><label for="v5r-notify">Keep me informed of future events</label></div>
+        </div>
+        <div id="v5-comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
+          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+        </div>
+        <div id="v5-payment-block-wrap" class="payment-block">
+          <div class="payment-header">
+            <span class="payment-label">Payment</span>
+            <span>
+              <span class="payment-total" id="v5-payment-total">$50</span>
+              <span class="payment-total-sub" id="v5-payment-breakdown">1 guest &times; $50</span>
+            </span>
+          </div>
+          <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
+        </div>
+        <div id="v5-rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <button class="btn-primary" id="v5-rsvp-submit-btn" onclick="submitRSVP5()">continue to payment &rarr;</button>
+      </div>
+    </div>
+
+    <!-- VOL. 05 CONFIRMATION VIEW (shown after payment) -->
+    <div id="confirmation-view-5" class="confirmation-view">
+      <div class="confirmation-card">
+        <div class="confirmation-hero">
+          <span class="conf-label">Life Thru Food &nbsp;&mdash;&nbsp; Vol. 05</span>
+          <h2>You're confirmed.</h2>
+          <p>We're looking forward to having you at the table. A confirmation email is on its way — check your inbox.</p>
+        </div>
+        <div class="confirmation-details">
+          <div class="conf-detail"><span class="conf-detail-label">Event</span><span class="conf-detail-val">Miles Dixon &amp; Elijuh Vuhlet</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Sunday, May 17</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Doors</span><span class="conf-detail-val">7:00 pm</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Location</span><span class="conf-detail-val">Shared one week prior</span></div>
+        </div>
+        <div class="confirmation-note">Questions? Reach us at <a href="mailto:info@lifethrufood.com" style="color:var(--olive)">info@lifethrufood.com</a>. See you soon.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTENT / ARCHIVE -->
+  <div id="tab-content" class="section">
+    <div class="board-toolbar">
+      <h2>The Archive</h2>
+      <div class="filter-bar">
+        <button class="fpill on" onclick="filterContent('all',this)">All</button>
+        <button class="fpill" onclick="filterContent('photo',this)">Photos</button>
+        <button class="fpill" onclick="filterContent('short',this)">Captions</button>
+        <button class="fpill" onclick="filterContent('quote',this)">Quotes</button>
+        <button class="fpill" onclick="filterContent('long',this)">Essays</button>
+      </div>
+    </div>
+    <div class="add-row" onclick="toggleAddForm()">
+      <div class="add-circle">+</div>
+      <span>add new piece</span>
+    </div>
+    <div id="add-content-form" class="add-form-box">
+      <h3>New piece</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="c-edition">Edition</label>
+          <select id="c-edition">
+            <option value="03">Vol. 03 — Georgia Janelle / Early Terrible, LES</option>
+            <option value="02">Vol. 02 — Yuseph Kim / Two Bridges Pub</option>
+            <option value="01">Vol. 01 — Taylar Herman / Two Bridges Apartment</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Type</label>
+          <div class="type-row" style="margin-top:6px">
+            <button class="tpill on" onclick="selectType(this,'caption')">Caption</button>
+            <button class="tpill" onclick="selectType(this,'quote')">Quote</button>
+            <button class="tpill" onclick="selectType(this,'photo')">Photo</button>
+            <button class="tpill" onclick="selectType(this,'profile')">Profile</button>
+            <button class="tpill" onclick="selectType(this,'recap')">Recap</button>
+          </div>
+        </div>
+      </div>
+      <div id="c-photo-row" class="form-grid full" style="display:none">
+        <div class="form-field">
+          <label>Photo</label>
+          <div class="upload-zone" onclick="document.getElementById('c-photo-input').click()">
+            <span id="upload-label">click to upload image</span>
+            <input type="file" id="c-photo-input" accept="image/*" onchange="handlePhotoUpload(this)">
+          </div>
+          <img id="c-photo-preview" style="display:none;width:100%;margin-top:8px;max-height:200px;object-fit:cover;">
+        </div>
+      </div>
+      <div id="c-platform-row" class="form-grid">
+        <div class="form-field">
+          <label for="c-platform">Platform</label>
+          <select id="c-platform"><option>Instagram</option><option>Newsletter</option><option>TikTok</option><option>LinkedIn</option><option>Archive only</option></select>
+        </div>
+        <div class="form-field">
+          <label for="c-title">Title / caption</label>
+          <input type="text" id="c-title" placeholder="On color and hunger">
+        </div>
+      </div>
+      <div id="c-lede-row" class="form-grid full" style="display:none">
+        <div class="form-field"><label for="c-lede">Opening lede</label><textarea id="c-lede" style="min-height:65px" placeholder="Opening sentence or two..."></textarea></div>
+      </div>
+      <div id="c-body-row" class="form-grid full">
+        <div class="form-field"><label for="c-body">Content</label><textarea id="c-body" style="min-height:100px" placeholder="Write here..."></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:1.25rem">
+        <button class="btn-primary" onclick="addContent()">save</button>
+        <button class="btn-ghost" onclick="toggleAddForm()">cancel</button>
+      </div>
+    </div>
+    <div id="content-list"></div>
+  </div>
+
+  <!-- NOTIFY -->
+  <div id="tab-notify" class="section">
+    <div class="notify-intro">
+      <h2>Be the first to know.</h2>
+      <p>New menus, new creatives, new evenings &mdash; in your inbox before anyone else.</p>
+    </div>
+    <div id="notify-toast" class="toast"></div>
+    <div>
+      <p class="form-title">Join the list</p>
+      <div class="form-grid">
+        <div class="form-field"><label for="n-first">First name</label><input type="text" id="n-first" placeholder="Margot"></div>
+        <div class="form-field"><label for="n-last">Last name</label><input type="text" id="n-last" placeholder="Laurent"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field"><label for="n-email">Email</label><input type="email" id="n-email" placeholder="margot@example.com"></div>
+        <div class="form-field"><label for="n-phone">Phone</label><input type="tel" id="n-phone" placeholder="+1 212 555 0100"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field"><label for="n-source">How did you find us?</label>
+          <select id="n-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
+        </div>
+        <div class="form-field"><label for="n-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="n-instagram" placeholder="@handle"></div>
+      </div>
+      <div id="notify-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div style="margin-top:1rem"><button class="btn-primary" onclick="submitNotify()">add me to the list</button></div>
+    </div>
+  </div>
+
+  <!-- TEAM -->
+  <div id="tab-team" class="section">
+    <div class="team-intro">
+      <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna" loading="lazy"></div><div class="team-name">Micho Hanna</div><div class="team-role">Cofounder / CEO</div><a href="https://www.instagram.com/michohanna_/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@michohanna_</a></div>
+      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/Zach Profile.jpg" alt="Zach Amato" loading="lazy"></div><div class="team-name">Zach Amato</div><div class="team-role">Cofounder / Chef</div><a href="https://www.instagram.com/zach.amato/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@zach.amato</a></div>
+      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/John Profile.jpg" alt="John Stets" loading="lazy"></div><div class="team-name">John Stets</div><div class="team-role">Chef De Cuisine</div></div>
+      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/MiA-LLUCA.JPG" alt="Mia &amp; Lluca" loading="lazy"></div><div class="team-name">Mia &amp; Lluca</div><div class="team-role">Spatial Design</div><a href="https://www.instagram.com/emelle_____/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@emelle_____</a></div>
+      <div class="team-card"><div class="team-photo" style="overflow:hidden"><img src="images/team-profiles/Britney.jpg" alt="Britney Bautista" style="transform:scale(1.25);transform-origin:center center;"></div><div class="team-name">Britney Bautista</div><div class="team-role">Videographer</div><a href="https://www.instagram.com/_britneybautista/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@_britneybautista</a></div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="tab-admin" class="section">
+    <div id="admin-pw-gate" style="padding:4rem 0;max-width:360px;margin:0 auto">
+      <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--olive);opacity:0.8;margin-bottom:1.5rem">Admin access</div>
+      <div style="display:flex;gap:10px;align-items:stretch">
+        <input type="password" id="admin-pw-input" placeholder="password" style="flex:1"
+          onkeydown="if(event.key==='Enter')checkAdminPassword()">
+        <button class="btn-ghost" onclick="checkAdminPassword()">enter →</button>
+      </div>
+      <div id="admin-pw-error" style="font-family:'Fragment Mono',monospace;font-size:9px;color:var(--danger);margin-top:0.75rem;min-height:1rem"></div>
+    </div>
+    <div id="admin-panel-inner" style="display:none">
+    <div class="admin-section-toggle" onclick="toggleEventAdmin()">Manage events <span id="ev-toggle-icon">+</span></div>
+    <div id="event-admin-panel" class="sp-admin" style="margin-bottom:2rem">
+      <h3>Events</h3>
+      <div id="event-admin-list"></div>
+      <div style="border-top:1px solid var(--rule-mid);padding-top:1.5rem;margin-top:1rem">
+        <p class="form-title" id="event-form-title" style="margin-bottom:1rem">New event</p>
+        <input type="hidden" id="ev-edit-id">
+        <div class="form-grid">
+          <div class="form-field"><label>Name</label><input type="text" id="ev-name-input" placeholder="May RSVPs"></div>
+          <div class="form-field"><label>Location</label><input type="text" id="ev-location-input" placeholder="Williamsburg, Brooklyn"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label>Date &amp; time</label><input type="datetime-local" id="ev-date-input"></div>
+          <div class="form-field"><label>Max capacity</label><input type="number" id="ev-capacity-input" placeholder="50" min="1"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label>Ticket price ($)</label><input type="number" id="ev-price-input" placeholder="60" min="0" step="1"></div>
+          <div class="form-field"><label>Wine add-on per person ($)</label><input type="number" id="ev-wine-input" placeholder="25" min="0" step="1"></div>
+        </div>
+        <label class="toggle-row" for="ev-active-input" style="margin-top:0.75rem;max-width:320px">
+          <input type="checkbox" id="ev-active-input" checked>
+          <span class="toggle-label">Active (visible on RSVP page)</span>
+        </label>
+        <div style="display:flex;gap:10px;margin-top:1.25rem;align-items:center">
+          <button class="btn-primary" id="ev-save-btn" onclick="saveEvent()">save event</button>
+          <button class="btn-ghost" onclick="clearEventForm()">clear</button>
+          <span id="ev-save-status" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--olive);display:none"></span>
+        </div>
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-block"><div class="n" id="stat-total">—</div><div class="l">Total guests</div></div>
+      <div class="stat-block"><div class="n" id="stat-capacity">—</div><div class="l">Capacity</div></div>
+      <div class="stat-block"><div class="n" id="stat-upcoming">—</div><div class="l">April RSVPs</div></div>
+    </div>
+    <div class="toolbar">
+      <input type="text" id="admin-search" placeholder="Search guests..." oninput="renderAdmin()">
+      <select id="admin-filter" onchange="renderAdmin()" style="width:auto">
+        <option value="all">All events</option>
+        <option value="April RSVPs">April RSVPs</option>
+      </select>
+      <button class="btn-ghost" onclick="exportCSV()">export csv</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Event</th><th>Party</th><th>Dietary</th><th>Status</th><th>Date</th><th></th></tr></thead>
+        <tbody id="admin-table-body"><tr><td colspan="8"><div class="empty-msg">Loading…</div></td></tr></tbody>
+      </table>
+    </div>
+    </div><!-- /admin-panel-inner -->
+  </div>
+
+</main>
+
+<!-- Remove guest modal -->
+<div class="ltf-modal-overlay" id="remove-guest-modal">
+  <div class="ltf-modal">
+    <h4 id="remove-modal-title">Remove guest</h4>
+    <p id="remove-modal-desc"></p>
+    <label style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:0.5rem">Message to guest <span style="opacity:0.6">(optional)</span></label>
+    <textarea id="remove-modal-note" placeholder="Add a personal note to their cancellation email…"></textarea>
+    <div class="ltf-modal-actions">
+      <button class="btn-ghost" onclick="closeRemoveModal()">cancel</button>
+      <button class="btn-primary" id="remove-modal-confirm" onclick="confirmRemoveGuest()" style="background:var(--danger)">remove &amp; notify</button>
+    </div>
+  </div>
+</div>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+  <div class="lb-inner">
+    <div class="lb-close"><button class="lb-close-btn" onclick="closeLightbox()">close</button></div>
+    <div class="lb-content" id="lb-content"></div>
+  </div>
+</div>
+
+<div id="gallery-modal">
+  <div class="gm-inner" id="gallery-modal-inner"></div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-label">With thanks</div>
+    <div class="sp-grid" id="sponsors-grid"></div>
+    <div class="foot-cta">
+      <p>Interested in collaborating? We partner with makers, wineries, restaurants, and cultural institutions who share our sensibility.</p>
+      <a class="btn-ghost" href="mailto:info@lifethrufood.com">get in touch</a>
+    </div>
+    <div id="sponsor-admin-panel" class="sp-admin">
+      <h3>Manage sponsors</h3>
+      <div id="sponsor-list-admin"></div>
+      <div style="border-top:1px solid var(--rule-mid);padding-top:1.5rem;margin-top:0.5rem">
+        <div class="form-grid">
+          <div class="form-field"><label for="sp-name">Name</label><input type="text" id="sp-name" placeholder="Parcelle Wine"></div>
+          <div class="form-field"><label for="sp-tier">Tier</label><select id="sp-tier"><option value="presenting">Presenting</option><option value="partner" selected>Partner</option><option value="supporting">Supporting</option><option value="friend">Friend of the table</option></select></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="sp-desc">Description</label><input type="text" id="sp-desc" placeholder="Natural wines, Tribeca"></div>
+          <div class="form-field"><label for="sp-url">Website</label><input type="text" id="sp-url" placeholder="parcelle.wine"></div>
+        </div>
+        <button class="btn-primary" onclick="addSponsor()" style="margin-top:1rem">add sponsor</button>
+      </div>
+    </div>
+    <div class="foot-sig" id="foot-sig" style="cursor:default;user-select:none" title="">Life Thru Food &nbsp;·&nbsp; New York City &nbsp;·&nbsp; <a href="https://instagram.com/lifethru___food" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@lifethru___food</a></div>
+  </div>
+</footer>
+
+<script>
+// ── SUPABASE CONFIG ─────────────────────────────────────────────
+const SUPABASE_URL = 'https://adxvrazzvcflrkfvanvg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkeHZyYXp6dmNmbHJrZnZhbnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzU3MzksImV4cCI6MjA5MTMxMTczOX0.5Xxw3tMPMKd91cvDm40cdY9JUSkNOgmy-iD9Ib4ikG8';
+const FN_URL = `${SUPABASE_URL}/functions/v1`;
+const SB_HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+
+// ── APP STATE ───────────────────────────────────────────────────
+let guests = [], contentPieces = [], sponsors = [], adminEvents = [];
+let activeEvents = [], selectedEvent = null;
+let seatsTotal = 0, seatsUsed = 0;
+let selectedType = 'caption', contentFilter = 'all';
+
+const RSVP_PASSWORD = 'cannon-stylist';
+const RSVP_PASSWORD_5 = 'real-vuhlet-fantasy';
+
+const EDITIONS = {
+  '05': { num:'05', name:'Miles Dixon & Elijuh Vuhlet', discipline:'Clothing Designers', location:'Red Hook Sculpture Garden', artistPhoto: null, artistFlyer: null, instagram: [{ handle:'@miloblase', url:'https://www.instagram.com/miloblase/' }, { handle:'@realfantasymfg', url:'https://www.instagram.com/realfantasymfg/' }, { handle:'@elijuhfuckingvuhlet', url:'https://www.instagram.com/elijuhfuckingvuhlet/' }, { handle:'@vuhlet', url:'https://www.instagram.com/vuhlet/' }] },
+  '04': { num:'04', name:'Heidi Cannon', discipline:'Stylist', location:'Williamsburg', artistPhoto: null, artistFlyer: null, instagram: [{ handle:'@americanwastoid', url:'https://www.instagram.com/americanwastoid/' }] },
+  '03': { num:'03', name:'Georgia Janelle', discipline:'Womenswear Designer', location:'Early Terrible, Lower East Side', artistPhoto:'images/artist-profiles/Artist Photos/Georgia.jpg', artistFlyer:'images/artist-profiles/Georgia Flyer.PNG', instagram: [{ handle:'@georgia.janelle', url:'https://www.instagram.com/georgia.janelle/' }, { handle:'@grgjnastudio', url:'https://www.instagram.com/grgjnastudio/' }] },
+  '02': { num:'02', name:'Yuseph Kim', discipline:'Graphic Designer', location:'Two Bridges Pub', artistPhoto:'images/artist-profiles/Artist Photos/YUSEPH.JPG', artistFlyer:'images/artist-profiles/yuseph flyer.jpg', instagram: [{ handle:'@yusephkim', url:'https://www.instagram.com/yusephkim/' }, { handle:'@graphicflavor_', url:'https://www.instagram.com/graphicflavor_/' }] },
+  '01': { num:'01', name:'Taylar Herman', discipline:'Creative Producer', location:'Two Bridges Apartment', artistPhoto:'images/artist-profiles/Artist Photos/Tay.JPG', artistFlyer:'images/artist-profiles/tay flyer v2.png', instagram: [{ handle:'@sorealnyc', url:'https://www.instagram.com/sorealnyc/' }] },
+};
+
+const TIER_ORDER = ['presenting','partner','supporting','friend'];
+const TIER_LABELS = { presenting:'Presenting sponsor', partner:'Partner', supporting:'Supporting', friend:'Friend of the table' };
+
+// ── SUPABASE HELPERS ────────────────────────────────────────────
+async function sbGet(path) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: SB_HEADERS });
+  if (!r.ok) {
+    const msg = await r.text().catch(() => String(r.status));
+    throw new Error(`Request failed (${r.status}): ${msg}`);
+  }
+  return r.json();
+}
+async function sbPost(path, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const msg = await r.text().catch(() => String(r.status));
+    throw new Error(`Insert failed (${r.status}): ${msg}`);
+  }
+  return r;
+}
+
+// ── LOAD EVENTS FROM SUPABASE ───────────────────────────────────
+async function loadEvents() {
+  try {
+    const data = await sbGet('events?is_active=eq.true&select=*&order=event_date.asc');
+    activeEvents = Array.isArray(data) ? data : [];
+
+    renderEventSelector();
+    // Vol. 4 form — first active event
+    if (activeEvents.length > 0) {
+      selectEvent(activeEvents[0]);
+      refreshSeatCount(activeEvents[0], 'vol4');
+    }
+    // Vol. 5 form — find the May event
+    const vol5Ev = activeEvents.find(e => e.event_date && new Date(e.event_date) >= new Date('2026-05-01'));
+    if (vol5Ev) {
+      selectVol5Event(vol5Ev);
+      refreshSeatCount(vol5Ev, 'vol5');
+    }
+  } catch(e) { console.warn('Could not load events:', e); }
+}
+
+// Query confirmed guests directly for a given event and update the seat bar
+async function refreshSeatCount(ev, which) {
+  try {
+    const rows = await sbGet(`guests?select=party_size&payment_status=in.(paid,comp)&event_name=eq.${encodeURIComponent(ev.name)}`);
+    const used = Array.isArray(rows) ? rows.reduce((s, g) => s + (g.party_size || 1), 0) : 0;
+    if (which === 'vol4') {
+      seatsUsed = used;
+      updateSeats();
+    } else {
+      seatsUsed5 = used;
+      updateSeats5();
+    }
+  } catch(e) { console.warn('Could not refresh seat count for', ev.name, ':', e.message); }
+}
+
+function selectEvent(ev) {
+  selectedEvent = ev;
+  seatsTotal = ev.total_capacity || ev.max_capacity || 0;
+  seatsUsed = ev.seats_booked || 0;
+  const price = ev.price_cents ? ev.price_cents / 100 : 60;
+  const wine = ev.wine_addon_cents ? ev.wine_addon_cents / 100 : 25;
+  if (ev.event_date) {
+    const d = new Date(ev.event_date);
+    document.getElementById('ev-date').textContent = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    document.getElementById('ev-doors').textContent = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  }
+  if (ev.location) {
+    document.getElementById('ev-location').textContent = ev.location;
+    document.getElementById('ev-location-ref').textContent = `Location: ${ev.location}`;
+  }
+  document.getElementById('ev-price').textContent = `$${price}`;
+  const wineAddonEl = document.getElementById('wine-addon-price');
+  if (wineAddonEl) wineAddonEl.textContent = `+$${wine} / person`;
+  document.querySelectorAll('.ev-select-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`.ev-select-card[data-id="${ev.id}"]`);
+  if (card) card.classList.add('selected');
+  updateSeats();
+  updatePaymentTotal();
+}
+
+function selectEventById(id) {
+  const ev = activeEvents.find(e => e.id === id);
+  if (ev) selectEvent(ev);
+}
+
+function renderEventSelector() {
+  // Event is determined automatically by which form/gate is used — no manual picker needed
+}
+
+// ── LOAD GUESTS FROM SUPABASE ───────────────────────────────────
+async function loadGuests() {
+  try {
+    const data = await sbGet('guests?select=*&order=created_at.desc');
+    guests = data;
+    renderAdmin();
+    // Re-sync seat counts
+    if (activeEvents[0]) refreshSeatCount(activeEvents[0], 'vol4');
+    const v5 = activeEvents.find(e => e.event_date && new Date(e.event_date) >= new Date('2026-05-01'));
+    if (v5) refreshSeatCount(v5, 'vol5');
+  } catch(e) {
+    console.warn('Could not load guests:', e);
+    document.getElementById('admin-table-body').innerHTML = '<tr><td colspan="8"><div class="empty-msg">Could not load guests.</div></td></tr>';
+  }
+}
+
+// ── NAV ─────────────────────────────────────────────────────────
+function showTab(tab, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (tab === 'admin') loadGuests();
+  if (tab === 'content') renderContent();
+}
+
+// ── ADMIN PASSWORD GATE ──────────────────────────────────────────
+function checkAdminPassword() {
+  const val = document.getElementById('admin-pw-input').value;
+  if (val === 'ltf-admin') {
+    document.getElementById('admin-pw-gate').style.display = 'none';
+    document.getElementById('admin-panel-inner').style.display = 'block';
+    loadGuests();
+  } else {
+    document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
+    document.getElementById('admin-pw-input').value = '';
+    document.getElementById('admin-pw-input').focus();
+  }
+}
+
+// ── PAYMENT TOTAL ───────────────────────────────────────────────
+function updatePaymentTotal() {
+  const price = selectedEvent ? selectedEvent.price_cents / 100 : 60;
+  const winePrice = selectedEvent ? selectedEvent.wine_addon_cents / 100 : 25;
+  const plusOne = document.getElementById('r-plus-one')?.checked;
+  const wine = document.getElementById('r-wine')?.checked;
+  const winePlusOne = document.getElementById('r-wine-plus-one')?.checked;
+
+  // Show/hide +1 detail rows
+  const p1DetailsRow = document.getElementById('r-plus-one-details-row');
+  if (p1DetailsRow) p1DetailsRow.style.display = plusOne ? 'block' : 'none';
+
+  // Update price labels
+  const p1El = document.getElementById('plus-one-price');
+  if (p1El) p1El.textContent = '+$' + price;
+  const wineEl = document.getElementById('wine-addon-price');
+  if (wineEl) wineEl.textContent = '+$' + winePrice;
+  const wineP1El = document.getElementById('wine-plus-one-price');
+  if (wineP1El) wineP1El.textContent = '+$' + winePrice;
+
+  if (activeCompCode) {
+    const compNotice = document.getElementById('comp-notice');
+    const payBlock = document.getElementById('payment-block-wrap');
+    const submitBtn = document.getElementById('rsvp-submit-btn');
+    if (plusOne) {
+      const plusOneCost = price + (winePlusOne ? winePrice : 0);
+      if (compNotice) {
+        compNotice.textContent = 'Your ticket is complimentary. You\u2019re adding a paid +1.';
+        compNotice.style.display = 'block';
+      }
+      if (payBlock) payBlock.style.display = 'block';
+      document.getElementById('payment-total').textContent = '$' + plusOneCost;
+      let parts = ['+1 ticket \xd7 $' + price];
+      if (winePlusOne) parts.push('wine \xd7 $' + winePrice);
+      document.getElementById('payment-breakdown').textContent = parts.join(' + ');
+      if (submitBtn) submitBtn.textContent = 'continue to payment \u2192';
+    } else {
+      if (compNotice) { compNotice.textContent = 'Complimentary admission.'; compNotice.style.display = 'block'; }
+      if (payBlock) payBlock.style.display = 'none';
+      if (submitBtn) submitBtn.textContent = 'confirm your seat \u2192';
+    }
+    return;
+  }
+
+  let total = price + (wine ? winePrice : 0);
+  if (plusOne) total += price + (winePlusOne ? winePrice : 0);
+  document.getElementById('payment-total').textContent = '$' + total;
+  let parts = ['you \xd7 $' + price];
+  if (wine) parts.push('wine \xd7 $' + winePrice);
+  if (plusOne) { parts.push('+1 \xd7 $' + price); if (winePlusOne) parts.push('+1 wine \xd7 $' + winePrice); }
+  document.getElementById('payment-breakdown').textContent = parts.join(' + ');
+}
+
+// ── PASSWORD GATE ───────────────────────────────────────────────
+function showGateError(errId, inputId, btnId, msg) {
+  const errEl = document.getElementById(errId);
+  if (errEl) { errEl.textContent = msg; errEl.classList.add('visible'); errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  const inp = document.getElementById(inputId);
+  if (inp) { inp.value = ''; inp.focus(); }
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.disabled = false; btn.textContent = 'apply \u2192'; }
+}
+
+function clearGateError(errId) {
+  const errEl = document.getElementById(errId);
+  if (errEl) { errEl.textContent = ''; errEl.classList.remove('visible'); }
+}
+
+async function checkGate() {
+  const val = document.getElementById('gate-password').value.trim();
+  if (!val) return;
+  const btn = document.getElementById('gate-apply-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'checking\u2026'; }
+  clearGateError('gate-error');
+
+  try {
+    const comp = await lookupCompCode(val);
+    if (comp) {
+      activeCompCode = comp;
+      applyCompDim(comp.event_id);
+      document.getElementById('comp-code-wrap').innerHTML =
+        `<div class="gate-success-banner">
+          <div>
+            <div class="gsb-label">\u2713 Comp code applied</div>
+            <div class="gsb-msg">Your ticket is complimentary \u2014 no payment needed.</div>
+          </div>
+          <span class="gsb-remove" onclick="clearCompCode()">remove</span>
+        </div>`;
+      document.getElementById('comp-notice').style.display = 'block';
+      document.getElementById('payment-block-wrap').style.display = 'none';
+      document.getElementById('rsvp-submit-btn').textContent = 'confirm your seat \u2192';
+      updatePaymentTotal();
+    } else {
+      showGateError('gate-error', 'gate-password', 'gate-apply-btn', 'That code wasn\u2019t found or has already been used. Double-check and try again.');
+    }
+  } catch(e) {
+    showGateError('gate-error', 'gate-password', 'gate-apply-btn', 'Something went wrong. Check your connection and try again.');
+    console.error('Comp code lookup error:', e);
+  }
+}
+
+function clearCompCode() {
+  activeCompCode = null;
+  clearCompDim();
+  document.getElementById('comp-code-wrap').innerHTML =
+    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    <div class="gate-row">
+      <input type="text" id="gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate()">
+      <button class="btn-ghost" id="gate-apply-btn" onclick="checkGate()">apply &rarr;</button>
+    </div>
+    <div id="gate-error" class="gate-error"></div>`;
+  document.getElementById('comp-notice').style.display = 'none';
+  updatePaymentTotal();
+}
+
+async function checkGate5() {
+  const val = document.getElementById('v5-gate-password').value.trim();
+  if (!val) return;
+  const btn = document.getElementById('v5-gate-apply-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'checking\u2026'; }
+  clearGateError('v5-gate-error');
+
+  try {
+    const comp = await lookupCompCode(val);
+    if (comp) {
+      activeCompCode5 = comp;
+      applyCompDim(comp.event_id);
+      document.getElementById('v5-comp-code-wrap').innerHTML =
+        `<div class="gate-success-banner">
+          <div>
+            <div class="gsb-label">\u2713 Comp code applied</div>
+            <div class="gsb-msg">Your ticket is complimentary \u2014 no payment needed.</div>
+          </div>
+          <span class="gsb-remove" onclick="clearCompCode5()">remove</span>
+        </div>`;
+      document.getElementById('v5-comp-notice').style.display = 'block';
+      document.getElementById('v5-payment-block-wrap').style.display = 'none';
+      document.getElementById('v5-rsvp-submit-btn').textContent = 'confirm your seat \u2192';
+      updatePaymentTotal5();
+    } else {
+      showGateError('v5-gate-error', 'v5-gate-password', 'v5-gate-apply-btn', 'That code wasn\u2019t found or has already been used. Double-check and try again.');
+    }
+  } catch(e) {
+    showGateError('v5-gate-error', 'v5-gate-password', 'v5-gate-apply-btn', 'Something went wrong. Check your connection and try again.');
+    console.error('Comp code lookup error:', e);
+  }
+}
+
+function clearCompCode5() {
+  activeCompCode5 = null;
+  clearCompDim();
+  document.getElementById('v5-comp-code-wrap').innerHTML =
+    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    <div class="gate-row">
+      <input type="text" id="v5-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate5()">
+      <button class="btn-ghost" id="v5-gate-apply-btn" onclick="checkGate5()">apply &rarr;</button>
+    </div>
+    <div id="v5-gate-error" class="gate-error"></div>`;
+  document.getElementById('v5-comp-notice').style.display = 'none';
+  updatePaymentTotal5();
+}
+
+// ── DIETARY ─────────────────────────────────────────────────────
+function getDietary() {
+  const m = { 'd-veg':'Vegetarian','d-vegan':'Vegan','d-gf':'Gluten-free','d-df':'Dairy-free','d-nut':'Nut allergy','d-shell':'Shellfish','d-kosher':'Kosher','d-halal':'Halal' };
+  return Object.entries(m).filter(([id]) => document.getElementById(id).checked).map(([,v]) => v);
+}
+
+// ── TOAST ────────────────────────────────────────────────────────
+function toast(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.className = 'toast ' + type;
+  setTimeout(() => el.className = 'toast', 4500);
+}
+
+// ── RSVP SUBMIT → STRIPE CHECKOUT ───────────────────────────────
+async function submitRSVP() {
+  const first = document.getElementById('r-first').value.trim();
+  const last = document.getElementById('r-last').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const phone = document.getElementById('r-phone').value.trim();
+  const plusOne = document.getElementById('r-plus-one')?.checked;
+  const wine = false; // drinks are complimentary for Vol. 4 — Madre Mezcal sponsorship, no charge
+  const winePlusOne = false; // +1 drinks also complimentary for Vol. 4
+  const source = document.getElementById('r-source').value;
+  const instagram = document.getElementById('r-instagram').value.trim() || null;
+  const p1First = document.getElementById('r-p1-first')?.value.trim();
+  const p1Last = document.getElementById('r-p1-last')?.value.trim();
+  const plusOneName = plusOne ? ((p1First || '') + ' ' + (p1Last || '')).trim() || `${first} ${last} (+1)` : null;
+  const numGuests = plusOne ? 2 : 1;
+
+  const rsvpErr = document.getElementById('rsvp-inline-error');
+  const missing = [];
+  if (!first || !last) missing.push('Full name');
+  if (!email || !email.includes('@')) missing.push('Valid email address');
+  if (!phone) missing.push('Phone number');
+  if (!source) missing.push('How you heard about us');
+  if (missing.length) {
+    rsvpErr.innerHTML = 'Please complete the following before continuing:<br>' + missing.map(m => `&nbsp;\xb7 ${m}`).join('<br>');
+    rsvpErr.style.display = 'block';
+    rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  rsvpErr.style.display = 'none';
+  if (selectedEvent && seatsTotal > 0 && seatsUsed + numGuests > seatsTotal)
+    return toast('rsvp-toast', 'Not enough seats remaining for your party size.', 'error');
+
+  const btn = document.getElementById('rsvp-submit-btn');
+  btn.disabled = true; btn.textContent = 'processing\u2026';
+
+  // ── COMP CODE PATH ───────────────────────────────────────────
+  if (activeCompCode) {
+    if (!plusOne) {
+      // Fully free — insert directly, skip Stripe
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary().join(', ') || null,
+          wine_addon: wine, instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode.id, email);
+        document.getElementById('rsvp-form-wrap').style.display = 'none';
+        document.getElementById('confirmation-view').style.display = 'block';
+        return;
+      } catch(err) {
+        console.error('Comp insert error:', err);
+        rsvpErr.innerHTML = 'Could not confirm your seat: ' + (err.message || 'unknown error') + '<br><span style="opacity:0.7">If this keeps happening, contact us directly.</span>';
+        rsvpErr.style.display = 'block';
+        rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        btn.disabled = false; btn.textContent = 'confirm your seat \u2192';
+        return;
+      }
+    } else {
+      // Comp holder + paid +1: insert comp record now, charge Stripe for 1
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary().join(', ') || null,
+          wine_addon: wine, instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode.id, email);
+      } catch(e) { console.warn('Comp insert failed silently:', e); }
+      // Pre-insert +1 as unpaid so it appears in admin immediately
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent?.name,
+          full_name: plusOneName,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary().join(', ') || null,
+          wine_addon: winePlusOne, instagram: null,
+          payment_status: 'unpaid'
+        });
+      } catch(e) { console.warn('Could not pre-insert +1 record:', e); }
+      // Now charge for the +1 via Stripe
+      sessionStorage.setItem('ltf_last_event', '4');
+      try {
+        const res = await fetch(`${FN_URL}/stripe-checkout`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: selectedEvent?.id,
+            fullName: plusOneName,
+            email, phone, partySize: 1,
+            dietary: getDietary().join(', ') || null,
+            wineAddon: winePlusOne, source
+          })
+        });
+        const { url, error } = await res.json();
+        if (error || !url) throw new Error(error || 'No checkout URL');
+        window.location.href = url;
+      } catch(err) {
+        toast('rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+        btn.disabled = false; btn.textContent = 'confirm your seat \u2192';
+      }
+      return;
+    }
+  }
+
+  // ── PAID PATH ────────────────────────────────────────────────
+  sessionStorage.setItem('ltf_last_event', '4');
+  try {
+    const res = await fetch(`${FN_URL}/stripe-checkout`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventId: selectedEvent?.id,
+        fullName: `${first} ${last}`,
+        email, phone, partySize: numGuests,
+        dietary: getDietary().join(', ') || null,
+        wineAddon: wine, wineAddonPlusOne: plusOne ? winePlusOne : false, source
+      })
+    });
+    const { url, error } = await res.json();
+    if (error || !url) throw new Error(error || 'No checkout URL returned');
+
+    const notify = document.getElementById('r-notify')?.checked;
+    if (notify) {
+      try {
+        await fetch(`${FN_URL}/add-to-list`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: source || 'rsvp-form' })
+        });
+      } catch(e) { console.warn('Notify list signup failed silently:', e); }
+    }
+    window.location.href = url;
+  } catch(err) {
+    toast('rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+    btn.disabled = false; btn.textContent = 'continue to payment \u2192';
+  }
+}
+
+
+// ── SEATS ────────────────────────────────────────────────────────
+function updateSeats() {
+  const rem = seatsTotal - seatsUsed;
+  document.getElementById('seats-remaining').textContent = rem + ' of ' + seatsTotal;
+  document.getElementById('seats-fill').style.width = seatsTotal > 0 ? (seatsUsed / seatsTotal * 100) + '%' : '0%';
+}
+
+// ── NOTIFY → SUPABASE ────────────────────────────────────────────
+async function submitNotify() {
+  const first = document.getElementById('n-first').value.trim();
+  const last = document.getElementById('n-last').value.trim();
+  const email = document.getElementById('n-email').value.trim();
+  const phone = document.getElementById('n-phone').value.trim();
+  const source = document.getElementById('n-source').value;
+  const instagram = document.getElementById('n-instagram').value.trim() || null;
+  const notifyErr = document.getElementById('notify-inline-error');
+  const missingN = [];
+  if (!first || !last) missingN.push('Full name');
+  if (!email || !email.includes('@')) missingN.push('Valid email address');
+  if (!phone) missingN.push('Phone number');
+  if (missingN.length) {
+    notifyErr.innerHTML = 'Please complete the following:<br>' + missingN.map(m => `&nbsp;· ${m}`).join('<br>');
+    notifyErr.style.display = 'block';
+    return;
+  }
+  notifyErr.style.display = 'none';
+
+  try {
+    const r = await fetch(`${FN_URL}/add-to-list`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source })
+    });
+    const data = await r.json();
+    if (r.status === 409 || data.error === 'already_subscribed') return toast('notify-toast', "You're already on the list.", 'error');
+    if (!r.ok) throw new Error(data.error || 'Unknown error');
+    toast('notify-toast', `You're on the list, ${first}. We'll be in touch.`, 'success');
+    ['n-first','n-last','n-email','n-phone','n-instagram'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('n-source').value = '';
+  } catch (err) {
+    console.error('Notify error:', err);
+    toast('notify-toast', 'Something went wrong. Please try again.', 'error');
+  }
+}
+
+// ── COMP CODE STATE ─────────────────────────────────────────────
+let activeCompCode = null;   // { id, code } for Vol. 4
+let activeCompCode5 = null;  // { id, code } for Vol. 5
+
+function applyCompDim(compEventId) {
+  const b4 = document.getElementById('event-block-4');
+  const b5 = document.getElementById('event-block-5');
+  if (!b4 || !b5) return;
+  const eid = Number(compEventId);
+  if (eid === 1) {        // Vol. 4 comp code → dim Vol. 5
+    b4.classList.remove('comp-dimmed');
+    b5.classList.add('comp-dimmed');
+  } else if (eid === 4) { // Vol. 5 comp code → dim Vol. 4
+    b5.classList.remove('comp-dimmed');
+    b4.classList.add('comp-dimmed');
+  }
+}
+
+function clearCompDim() {
+  document.getElementById('event-block-4')?.classList.remove('comp-dimmed');
+  document.getElementById('event-block-5')?.classList.remove('comp-dimmed');
+}
+
+async function lookupCompCode(code) {
+  // Throws on network/Supabase error — let callers handle it
+  const data = await sbGet(`comp_codes?code=eq.${encodeURIComponent(code.toUpperCase())}&used=eq.false&select=id,code,event_id`);
+  return Array.isArray(data) && data.length > 0 ? data[0] : null;
+}
+
+async function redeemCompCode(codeId, email) {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/comp_codes?id=eq.${codeId}`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
+    });
+  } catch(e) { console.warn('Could not mark comp code used:', e); }
+}
+
+// ── VOL. 5 STATE ────────────────────────────────────────────────
+let selectedEvent5 = null, seatsTotal5 = 0, seatsUsed5 = 0;
+
+function selectVol5Event(ev) {
+  selectedEvent5 = ev;
+  seatsTotal5 = ev.total_capacity || ev.max_capacity || 0;
+  seatsUsed5 = ev.seats_booked || 0;
+  const price = ev.price_cents ? ev.price_cents / 100 : 50;
+  const drink = ev.wine_addon_cents ? ev.wine_addon_cents / 100 : 30;
+  const priceEl = document.getElementById('v5-ev-price');
+  if (priceEl) priceEl.textContent = '$' + price;
+  const drEl = document.getElementById('v5-drink-addon-price');
+  if (drEl) drEl.textContent = `+$${drink} / person`;
+  updateSeats5();
+  updatePaymentTotal5();
+}
+
+function updateSeats5() {
+  const rem = seatsTotal5 - seatsUsed5;
+  const remEl = document.getElementById('v5-seats-remaining');
+  const fillEl = document.getElementById('v5-seats-fill');
+  if (remEl) remEl.textContent = rem + ' of ' + seatsTotal5;
+  if (fillEl) fillEl.style.width = seatsTotal5 > 0 ? (seatsUsed5 / seatsTotal5 * 100) + '%' : '0%';
+}
+
+function updatePaymentTotal5() {
+  const price = selectedEvent5 ? selectedEvent5.price_cents / 100 : 50;
+  const drinkPrice = selectedEvent5 ? selectedEvent5.wine_addon_cents / 100 : 30;
+  const plusOne = document.getElementById('v5r-plus-one')?.checked;
+  const drink = document.getElementById('v5r-drink')?.checked;
+  const drinkPlusOne = document.getElementById('v5r-drink-plus-one')?.checked;
+
+  // Show/hide +1 detail rows
+  const p1DetailsRow = document.getElementById('v5-plus-one-details-row');
+  if (p1DetailsRow) p1DetailsRow.style.display = plusOne ? 'block' : 'none';
+  const p1DrinksRow = document.getElementById('v5-plus-one-drinks-row');
+  if (p1DrinksRow) p1DrinksRow.style.display = plusOne ? 'block' : 'none';
+
+  // Update price labels
+  const p1El = document.getElementById('v5-plus-one-price');
+  if (p1El) p1El.textContent = '+$' + price;
+  const drEl = document.getElementById('v5-drink-addon-price');
+  if (drEl) drEl.textContent = '+$' + drinkPrice;
+  const drP1El = document.getElementById('v5-drink-plus-one-price');
+  if (drP1El) drP1El.textContent = '+$' + drinkPrice;
+
+  if (activeCompCode5) {
+    const compNotice = document.getElementById('v5-comp-notice');
+    const payBlock = document.getElementById('v5-payment-block-wrap');
+    const submitBtn = document.getElementById('v5-rsvp-submit-btn');
+    if (plusOne) {
+      const plusOneCost = price + (drinkPlusOne ? drinkPrice : 0);
+      if (compNotice) {
+        compNotice.textContent = 'Your ticket & drink pairings are complimentary. You\u2019re adding a paid +1' + (drinkPlusOne ? ' with drink pairings.' : '.');
+        compNotice.style.display = 'block';
+      }
+      if (payBlock) payBlock.style.display = 'block';
+      const totEl = document.getElementById('v5-payment-total');
+      const brkEl = document.getElementById('v5-payment-breakdown');
+      if (totEl) totEl.textContent = '$' + plusOneCost;
+      let parts = ['+1 ticket \xd7 $' + price];
+      if (drinkPlusOne) parts.push('drinks \xd7 $' + drinkPrice);
+      if (brkEl) brkEl.textContent = parts.join(' + ');
+      if (submitBtn) submitBtn.textContent = 'continue to payment \u2192';
+    } else {
+      if (compNotice) { compNotice.textContent = 'Complimentary admission \u2014 ticket & drink pairings included.'; compNotice.style.display = 'block'; }
+      if (payBlock) payBlock.style.display = 'none';
+      if (submitBtn) submitBtn.textContent = 'confirm your seat \u2192';
+    }
+    return;
+  }
+
+  let total = price + (drink ? drinkPrice : 0);
+  if (plusOne) total += price + (drinkPlusOne ? drinkPrice : 0);
+  const totEl = document.getElementById('v5-payment-total');
+  const brkEl = document.getElementById('v5-payment-breakdown');
+  if (totEl) totEl.textContent = '$' + total;
+  let parts = ['you \xd7 $' + price];
+  if (drink) parts.push('drinks \xd7 $' + drinkPrice);
+  if (plusOne) { parts.push('+1 \xd7 $' + price); if (drinkPlusOne) parts.push('+1 drinks \xd7 $' + drinkPrice); }
+  if (brkEl) brkEl.textContent = parts.join(' + ');
+}
+
+function getDietary5() {
+  const m = { 'v5d-veg':'Vegetarian','v5d-vegan':'Vegan','v5d-gf':'Gluten-free','v5d-df':'Dairy-free','v5d-nut':'Nut allergy','v5d-shell':'Shellfish','v5d-kosher':'Kosher','v5d-halal':'Halal' };
+  return Object.entries(m).filter(([id]) => document.getElementById(id)?.checked).map(([,v]) => v);
+}
+
+async function submitRSVP5() {
+  const first = document.getElementById('v5r-first').value.trim();
+  const last = document.getElementById('v5r-last').value.trim();
+  const email = document.getElementById('v5r-email').value.trim();
+  const phone = document.getElementById('v5r-phone').value.trim();
+  const plusOne = document.getElementById('v5r-plus-one')?.checked;
+  const drink = document.getElementById('v5r-drink').checked;
+  const drinkPlusOne = document.getElementById('v5r-drink-plus-one')?.checked || false;
+  const source = document.getElementById('v5r-source').value;
+  const instagram = document.getElementById('v5r-instagram').value.trim() || null;
+  const v5p1First = document.getElementById('v5-p1-first')?.value.trim();
+  const v5p1Last = document.getElementById('v5-p1-last')?.value.trim();
+  const plusOneName = plusOne ? ((v5p1First || '') + ' ' + (v5p1Last || '')).trim() || `${first} ${last} (+1)` : null;
+  const numGuests = plusOne ? 2 : 1;
+
+  const rsvpErr = document.getElementById('v5-rsvp-inline-error');
+  const missing = [];
+  if (!first || !last) missing.push('Full name');
+  if (!email || !email.includes('@')) missing.push('Valid email address');
+  if (!phone) missing.push('Phone number');
+  if (!source) missing.push('How you heard about us');
+  if (missing.length) {
+    rsvpErr.innerHTML = 'Please complete the following before continuing:<br>' + missing.map(m => `&nbsp;\xb7 ${m}`).join('<br>');
+    rsvpErr.style.display = 'block';
+    rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  rsvpErr.style.display = 'none';
+  if (selectedEvent5 && seatsTotal5 > 0 && seatsUsed5 + numGuests > seatsTotal5)
+    return toast('v5-rsvp-toast', 'Not enough seats remaining for your party size.', 'error');
+
+  const btn = document.getElementById('v5-rsvp-submit-btn');
+  btn.disabled = true; btn.textContent = 'processing\u2026';
+
+  // ── COMP CODE PATH ───────────────────────────────────────────
+  if (activeCompCode5) {
+    if (!plusOne) {
+      // Fully free
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent5?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary5().join(', ') || null,
+          wine_addon: drink, instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode5.id, email);
+        document.getElementById('v5-rsvp-form-wrap').style.display = 'none';
+        document.getElementById('confirmation-view-5').style.display = 'block';
+        return;
+      } catch(err) {
+        console.error('Comp insert error (Vol.5):', err);
+        rsvpErr.innerHTML = 'Could not confirm your seat: ' + (err.message || 'unknown error') + '<br><span style="opacity:0.7">If this keeps happening, contact us directly.</span>';
+        rsvpErr.style.display = 'block';
+        rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        btn.disabled = false; btn.textContent = 'confirm your seat \u2192';
+        return;
+      }
+    } else {
+      // Comp + paid +1
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent5?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary5().join(', ') || null,
+          wine_addon: drink, instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode5.id, email);
+      } catch(e) { console.warn('Comp insert failed silently:', e); }
+      // Pre-insert +1 as unpaid so it appears in admin immediately
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent5?.name,
+          full_name: plusOneName,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary5().join(', ') || null,
+          wine_addon: drinkPlusOne, instagram: null,
+          payment_status: 'unpaid'
+        });
+      } catch(e) { console.warn('Could not pre-insert +1 record:', e); }
+      sessionStorage.setItem('ltf_last_event', '5');
+      try {
+        const res = await fetch(`${FN_URL}/stripe-checkout`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: selectedEvent5?.id,
+            fullName: plusOneName,
+            email, phone, partySize: 1,
+            dietary: getDietary5().join(', ') || null,
+            wineAddon: drinkPlusOne, source
+          })
+        });
+        const { url, error } = await res.json();
+        if (error || !url) throw new Error(error || 'No checkout URL');
+        window.location.href = url;
+      } catch(err) {
+        toast('v5-rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+        btn.disabled = false; btn.textContent = 'confirm your seat \u2192';
+      }
+      return;
+    }
+  }
+
+  // ── PAID PATH ────────────────────────────────────────────────
+  sessionStorage.setItem('ltf_last_event', '5');
+  try {
+    const res = await fetch(`${FN_URL}/stripe-checkout`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventId: selectedEvent5?.id,
+        fullName: `${first} ${last}`,
+        email, phone, partySize: numGuests,
+        dietary: getDietary5().join(', ') || null,
+        wineAddon: drink, wineAddonPlusOne: plusOne ? drinkPlusOne : false, source
+      })
+    });
+    const { url, error } = await res.json();
+    if (error || !url) throw new Error(error || 'No checkout URL returned');
+
+    const notify = document.getElementById('v5r-notify')?.checked;
+    if (notify) {
+      try {
+        await fetch(`${FN_URL}/add-to-list`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: source || 'rsvp-vol5' })
+        });
+      } catch(e) { console.warn('Notify list signup failed silently:', e); }
+    }
+    window.location.href = url;
+  } catch(err) {
+    toast('v5-rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+    btn.disabled = false; btn.textContent = 'continue to payment \u2192';
+  }
+}
+
+// ── ADMIN EVENTS ─────────────────────────────────────────────────
+function toggleEventAdmin() {
+  const panel = document.getElementById('event-admin-panel');
+  const icon = document.getElementById('ev-toggle-icon');
+  const open = panel.classList.toggle('open');
+  icon.textContent = open ? '−' : '+';
+  if (open) loadAdminEvents();
+}
+
+async function loadAdminEvents() {
+  try {
+    adminEvents = await sbGet('events?select=*&order=event_date.asc');
+    renderAdminEvents();
+  } catch(e) { console.warn('Could not load admin events:', e); }
+}
+
+function renderAdminEvents() {
+  const el = document.getElementById('event-admin-list');
+  if (!el) return;
+  if (!adminEvents.length) { el.innerHTML = '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:italic;padding:0.5rem 0">No events yet.</p>'; return; }
+  el.innerHTML = adminEvents.map(ev => {
+    const d = ev.event_date ? new Date(ev.event_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'No date';
+    const price = ev.price_cents ? `$${ev.price_cents/100}` : '—';
+    const rem = (ev.total_capacity || 0) - (ev.seats_booked || 0);
+    const statusColor = ev.is_active ? 'var(--success)' : 'var(--ink-low)';
+    return `<div class="sp-admin-row">
+      <div style="flex:1">
+        <div style="font-style:italic;color:var(--ink)">${ev.name}</div>
+        <div style="font-family:'Fragment Mono',monospace;font-size:9px;color:var(--ink-low);margin-top:3px;letter-spacing:0.06em">${d} &middot; ${ev.location||'No location'} &middot; ${price}/person &middot; ${rem}/${ev.total_capacity||0} seats &middot; <span style="color:${statusColor}">${ev.is_active?'active':'inactive'}</span></div>
+      </div>
+      <button class="rm-btn" onclick="editEvent('${ev.id}')">edit</button>
+      <button class="rm-btn" onclick="toggleEventActive('${ev.id}',${!ev.is_active})">${ev.is_active?'deactivate':'activate'}</button>
+    </div>`;
+  }).join('');
+}
+
+function editEvent(id) {
+  const ev = adminEvents.find(e => String(e.id) === String(id));
+  if (!ev) return;
+  document.getElementById('ev-edit-id').value = ev.id;
+  document.getElementById('ev-name-input').value = ev.name || '';
+  document.getElementById('ev-location-input').value = ev.location || '';
+  document.getElementById('ev-date-input').value = ev.event_date ? new Date(ev.event_date).toISOString().slice(0,16) : '';
+  document.getElementById('ev-capacity-input').value = ev.total_capacity || '';
+  document.getElementById('ev-price-input').value = ev.price_cents ? ev.price_cents/100 : '';
+  document.getElementById('ev-wine-input').value = ev.wine_addon_cents ? ev.wine_addon_cents/100 : '';
+  document.getElementById('ev-active-input').checked = ev.is_active !== false;
+  document.getElementById('event-form-title').textContent = 'Edit event';
+  document.getElementById('event-admin-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function clearEventForm() {
+  document.getElementById('ev-edit-id').value = '';
+  ['ev-name-input','ev-location-input','ev-date-input','ev-capacity-input','ev-price-input','ev-wine-input'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ev-active-input').checked = true;
+  document.getElementById('event-form-title').textContent = 'New event';
+}
+
+async function saveEvent() {
+  const id = document.getElementById('ev-edit-id').value;
+  const name = document.getElementById('ev-name-input').value.trim();
+  const location = document.getElementById('ev-location-input').value.trim();
+  const dateVal = document.getElementById('ev-date-input').value;
+  const capacity = parseInt(document.getElementById('ev-capacity-input').value);
+  const price = parseFloat(document.getElementById('ev-price-input').value);
+  const wine = parseFloat(document.getElementById('ev-wine-input').value);
+  const is_active = document.getElementById('ev-active-input').checked;
+
+  if (!name) return alert('Event name is required.');
+  if (!capacity || capacity < 1) return alert('Please enter a valid capacity.');
+
+  const btn = document.getElementById('ev-save-btn');
+  const status = document.getElementById('ev-save-status');
+  btn.disabled = true; btn.textContent = 'saving\u2026';
+  if (status) { status.style.display = 'none'; }
+
+  const payload = {
+    name,
+    location: location || null,
+    event_date: dateVal ? new Date(dateVal).toISOString() : null,
+    total_capacity: capacity,
+    price_cents: price ? Math.round(price * 100) : null,
+    wine_addon_cents: wine ? Math.round(wine * 100) : null,
+    is_active,
+  };
+
+  try {
+    let res;
+    if (id) {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+        method: 'POST',
+        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(payload)
+      });
+    }
+    if (!res.ok) {
+      const msg = await res.text().catch(() => String(res.status));
+      btn.disabled = false; btn.textContent = 'save event';
+      if (status) { status.textContent = 'Error: ' + msg; status.style.color = 'var(--danger)'; status.style.display = 'inline'; }
+      return;
+    }
+    btn.disabled = false; btn.textContent = 'save event';
+    if (status) { status.textContent = '\u2713 saved'; status.style.color = 'var(--olive)'; status.style.display = 'inline'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
+    clearEventForm();
+    await loadAdminEvents();
+    await loadEvents();
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'save event';
+    if (status) { status.textContent = 'Error: ' + e.message; status.style.color = 'var(--danger)'; status.style.display = 'inline'; }
+  }
+}
+
+async function toggleEventActive(id, is_active) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ is_active })
+    });
+    if (!res.ok) { const msg = await res.text(); console.warn('Toggle failed:', msg); return; }
+    await loadAdminEvents();
+    await loadEvents();
+  } catch(e) { console.warn('Toggle failed:', e); }
+}
+
+// ── ADMIN ────────────────────────────────────────────────────────
+function renderAdmin() {
+  const q = (document.getElementById('admin-search').value || '').toLowerCase();
+  const f = document.getElementById('admin-filter').value;
+  const rows = guests.filter(g =>
+    (!q || (g.full_name + ' ' + g.email).toLowerCase().includes(q)) &&
+    (f === 'all' || g.event_name === f)
+  );
+
+  const confirmed = guests.filter(g => g.payment_status === 'paid' || g.payment_status === 'comp');
+  const aprilConfirmed = confirmed.filter(g => g.event_name === 'April RSVPs');
+  document.getElementById('stat-total').textContent = confirmed.reduce((s, g) => s + g.party_size, 0);
+  document.getElementById('stat-capacity').textContent = seatsTotal || '—';
+  document.getElementById('stat-upcoming').textContent = aprilConfirmed.reduce((s, g) => s + g.party_size, 0);
+
+  const tb = document.getElementById('admin-table-body');
+  if (!rows.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-msg">No guests yet.</div></td></tr>'; return; }
+  tb.innerHTML = rows.map(g => `<tr>
+    <td style="font-style:normal;color:var(--ink)">${g.full_name}</td>
+    <td class="dim">${g.email}</td>
+    <td class="dim">${g.phone || '—'}</td>
+    <td><span class="pill sand">${g.event_name || '—'}</span></td>
+    <td class="dim">${g.party_size}</td>
+    <td>${g.dietary_restrictions ? g.dietary_restrictions.split(', ').map(d => `<span class="pill sage">${d}</span>`).join('') : '<span class="dim">—</span>'}</td>
+    <td><span class="pill ${g.payment_status === 'paid' ? 'paid' : g.payment_status === 'comp' ? 'sage' : 'sand'}">${g.payment_status === 'comp' ? 'comped' : g.payment_status || 'unpaid'}</span></td>
+    <td class="dim">${new Date(g.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric'})}</td>
+    <td><button class="rm-btn" onclick="removeGuest('${g.id}','${g.full_name.replace(/'/g,"\\'")}','${g.payment_status}')">remove</button></td>
+  </tr>`).join('');
+}
+
+function exportCSV() {
+  if (!guests.length) return alert('No guests to export.');
+  const h = ['Name','Email','Phone','Event','Party','Dietary','Status','Date'];
+  const rows = guests.map(g => [g.full_name, g.email, g.phone, g.event_name, g.party_size, g.dietary_restrictions, g.payment_status, g.created_at]
+    .map(v => `"${(v||'').toString().replace(/"/g,'""')}"`));
+  const csv = [h, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'life-thru-food-guests.csv'; a.click();
+}
+
+let _pendingRemove = null;
+
+function removeGuest(id, name, status) {
+  const isPaid = status === 'paid';
+  _pendingRemove = { id, name, status };
+  document.getElementById('remove-modal-title').textContent = `Remove ${name}`;
+  document.getElementById('remove-modal-desc').textContent = isPaid
+    ? `This will issue a full refund and remove them from the guest list. A cancellation email will be sent. This cannot be undone.`
+    : `This will remove them from the guest list. A cancellation email will be sent. (Comp ticket — no payment to refund.)`;
+  document.getElementById('remove-modal-note').value = '';
+  document.getElementById('remove-guest-modal').classList.add('open');
+}
+
+function closeRemoveModal() {
+  document.getElementById('remove-guest-modal').classList.remove('open');
+  _pendingRemove = null;
+}
+
+async function confirmRemoveGuest() {
+  if (!_pendingRemove) return;
+  const { id, name } = _pendingRemove;
+  const note = document.getElementById('remove-modal-note').value.trim();
+  const btn = document.getElementById('remove-modal-confirm');
+  btn.disabled = true; btn.textContent = 'removing…';
+
+  try {
+    const res = await fetch(`${FN_URL}/stripe-refund`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ guestId: id, note })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Server error ${res.status}`);
+    closeRemoveModal();
+    if (data.refundNote) alert(data.refundNote);
+    await loadGuests();
+    await loadEvents();
+  } catch(e) {
+    alert('Could not remove guest: ' + e.message);
+    btn.disabled = false; btn.textContent = 'remove & notify';
+  }
+}
+
+// ── CONTENT ──────────────────────────────────────────────────────
+contentPieces = [
+  {id:31,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0054.jpg',ts:'Vol. 03'},
+  {id:35,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0205.jpg',ts:'Vol. 03'},
+  {id:36,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0317.jpg',ts:'Vol. 03'},
+  {id:37,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0626.jpg',ts:'Vol. 03'},
+  {id:38,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0835.jpg',ts:'Vol. 03'},
+  {id:39,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/20260330-_DSF0871.jpg',ts:'Vol. 03'},
+  {id:40,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/12-000107780001.jpg',ts:'Vol. 03'},
+  {id:41,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/37-000107790025.jpg',ts:'Vol. 03'},
+  {id:42,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/65-000107780026.jpg',ts:'Vol. 03'},
+  {id:43,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/113-000107820025.jpg',ts:'Vol. 03'},
+  {id:32,edition:'03',type:'profile',platform:'Newsletter',title:'On Georgia Janelle',lede:"Georgia is a Lower East Side–based designer and founder of GRGJNA, a cut-and-sew studio that doubles as a living world of her own creation.",body:"Her work is deeply personal — hyper-feminine, expressive, and rooted in self-made identity. Through garments, space, and storytelling, she builds environments that feel intimate, playful, and true to her.\n\nGRGJNA is not just a studio — it's a living world. Every garment is a chapter in an ongoing story that Georgia is writing for herself, in real time. The dinner at Early Terrible felt like walking into one of those chapters: deliberate, warm, and entirely on her terms.",photo:null,ts:'Vol. 03'},
+  {id:33,edition:'03',type:'caption',platform:'Instagram',title:'On self-made identity',body:"Georgia Janelle doesn't make clothes for a market. She makes them for a feeling — one she's been building toward her whole life. Vol. 03 was an evening spent inside that feeling.\n\n#LifeThruFood #NYCDinnerSeries #GRGJNA #GeorgiaJanelle",lede:'',photo:null,ts:'Vol. 03'},
+  {id:34,edition:'03',type:'quote',platform:'Instagram',title:'On intimacy and space',body:'"She builds environments that feel intimate, playful, and true to her."\n\n— on Georgia Janelle, Life Thru Food Vol. 03.',lede:'',photo:null,ts:'Vol. 03'},
+  {id:21,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/2-FullSizeRender-12.JPG',ts:'Vol. 02'},
+  {id:25,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/5-DSCF6616.JPG',ts:'Vol. 02'},
+  {id:26,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/6-DSCF6619.JPG',ts:'Vol. 02'},
+  {id:27,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/7-DSCF6620.JPG',ts:'Vol. 02'},
+  {id:28,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/8-DSCF6627.JPG',ts:'Vol. 02'},
+  {id:29,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/10-DSCF6648.JPG',ts:'Vol. 02'},
+  {id:44,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/13-DSCF6661.JPG',ts:'Vol. 02'},
+  {id:45,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/16-DSCF6670.JPG',ts:'Vol. 02'},
+  {id:46,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/20-DSCF6694.JPG',ts:'Vol. 02'},
+  {id:47,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/21-FullSizeRender-5.JPG',ts:'Vol. 02'},
+  {id:22,edition:'02',type:'profile',platform:'Newsletter',title:'Intention & Process: on Yuseph Kim',lede:"Born in South Korea and raised between his grandparents' cooking and his later years in the UK, Yuseph's work sits at the intersection of food, design, and ritual.",body:"As the mind behind Graphic Flavor, he approaches creativity through pattern, restraint, and cultural memory. His practice blends Korean tradition with European minimalism, always centered on intention, process, and sharing.\n\nAt the Two Bridges Pub dinner, Yuseph's sensibility shaped not just the visuals but the rhythm of the table — how information moved, how each course was introduced, how the evening unfolded as a designed experience. Restraint as hospitality. Pattern as warmth.",photo:null,ts:'Vol. 02'},
+  {id:23,edition:'02',type:'caption',platform:'Instagram',title:'On design and the dinner table',body:"Yuseph Kim sees the table as a brief. Every element considered — spacing, sequence, pause. Vol. 02 at Two Bridges Pub was a masterclass in how design shapes the way we share a meal.\n\n#LifeThruFood #NYCDinnerSeries #GraphicFlavor #YusephKim",lede:'',photo:null,ts:'Vol. 02'},
+  {id:24,edition:'02',type:'quote',platform:'Instagram',title:'On ritual and making',body:'"Always centered on intention, process, and sharing."\n\n— on Yuseph Kim, Life Thru Food Vol. 02.',lede:'',photo:null,ts:'Vol. 02'},
+  {id:11,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08221.JPG',ts:'Vol. 01'},
+  {id:15,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08222.JPG',ts:'Vol. 01'},
+  {id:16,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08235.JPG',ts:'Vol. 01'},
+  {id:17,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08238.JPG',ts:'Vol. 01'},
+  {id:18,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08250.JPG',ts:'Vol. 01'},
+  {id:19,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08265.JPG',ts:'Vol. 01'},
+  {id:48,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08268.JPG',ts:'Vol. 01'},
+  {id:49,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08270.JPG',ts:'Vol. 01'},
+  {id:50,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08280.JPG',ts:'Vol. 01'},
+  {id:51,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08308.JPG',ts:'Vol. 01'},
+  {id:12,edition:'01',type:'profile',platform:'Newsletter',title:'On Taylar Herman',lede:"Taylar Herman is a multidisciplinary creative whose work is rooted in identity, memory, and feeling.",body:"For this dinner, she brought those ideas to the table — each course pulling from moments, influences, and experiences that have shaped her. It was a personal, stripped-back look into her world, told through food and the way it's shared.\n\nTaylar set the tone for what Life Thru Food could be. Her instinct for room energy — for knowing when a space is working, when it needs to breathe — gave our first dinner its texture. The Two Bridges apartment felt like a home before anyone arrived.",photo:null,ts:'Vol. 01'},
+  {id:13,edition:'01',type:'caption',platform:'Instagram',title:'Vol. 01',body:"Taylar Herman brought something specific to the table — not a concept, but a feeling. Memory and identity, served across six courses in a Two Bridges apartment that felt, by the end of the night, like it had always been ours.\n\n#LifeThruFood #NYCDinnerSeries #TaylarHerman #Vol01",lede:'',photo:null,ts:'Vol. 01'},
+  {id:14,edition:'01',type:'quote',platform:'Instagram',title:'On Taylar Herman',body:'"A personal, stripped-back look into her world — told through food and the way it\'s shared."\n\n— Life Thru Food Vol. 01.',lede:'',photo:null,ts:'Vol. 01'},
+];
+
+sponsors = [
+  {id:7,name:'Madre Mezcal',tier:'partner',desc:'Small-batch mezcal crafted by a multi-generational family of palenqueros in the mountains of Oaxaca. Clay pot distilled, the traditional way. Providing complimentary cocktails at Vol. 04.',url:'madrespirits.com',location:'Oaxaca, Mexico'},
+  {id:1,name:'Aqua Best',tier:'presenting',desc:'A family-run seafood market offering sushi-grade fish and fresh seafood sourced directly from fishermen.',url:'aquabestnyc.com',location:'276 Grand St, Chinatown'},
+  {id:2,name:'S.O.S Chef',tier:'partner',desc:'A curated specialty ingredients store carrying over 1,200 ethically sourced spices, herbs, oils, and homemade infusions.',url:'sos-chefs.com',location:'104 Avenue B, East Village'},
+  {id:3,name:'Essex Oil & Spice',tier:'partner',desc:'Premium extra virgin olive oils from a Moroccan family farm alongside over 100 varieties of specialty spices.',url:'essexoliveandspice.com',location:'88 Essex St, Lower East Side'},
+  {id:4,name:'Myers of Keswick',tier:'supporting',desc:'An authentic British grocer offering homemade savory pies, sausages, scones, and imported British specialty foods.',url:'myersofkeswick.com',location:'634 Hudson St, West Village'},
+  {id:5,name:'Di Palo Fine Foods',tier:'supporting',desc:'A century-old Italian specialty food store carrying imported cheeses, cured meats, pastas, and wines from all 20 regions of Italy.',url:'dipalofinefoods.com',location:'200 Grand St, Little Italy'},
+  {id:6,name:"Mike's Hot Honey",tier:'friend',desc:'Raw wildflower honey infused with Brazilian chilies — the original American hot honey, made in Brooklyn.',url:'mikeshothoney.com',location:'Brooklyn, NY'},
+];
+
+function filterContent(f, btn) {
+  contentFilter = f;
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on'); renderContent();
+}
+function toggleAddForm() { document.getElementById('add-content-form').classList.toggle('open'); }
+
+let photoDataURL = null;
+function handlePhotoUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoDataURL = e.target.result;
+    const preview = document.getElementById('c-photo-preview');
+    preview.src = photoDataURL; preview.style.display = 'block';
+    document.getElementById('upload-label').textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+}
+function selectType(btn, type) {
+  selectedType = type;
+  document.querySelectorAll('.tpill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const isLong = type === 'profile' || type === 'recap';
+  const isPhoto = type === 'photo';
+  document.getElementById('c-lede-row').style.display = isLong ? 'grid' : 'none';
+  document.getElementById('c-platform-row').style.display = isPhoto ? 'none' : 'grid';
+  document.getElementById('c-photo-row').style.display = isPhoto ? 'grid' : 'none';
+  document.getElementById('c-body-row').style.display = isPhoto ? 'none' : 'grid';
+}
+function addContent() {
+  const edition = document.getElementById('c-edition').value;
+  const title = document.getElementById('c-title').value.trim();
+  const body = document.getElementById('c-body').value.trim();
+  const isPhoto = selectedType === 'photo';
+  const isLong = selectedType === 'profile' || selectedType === 'recap';
+  if (isPhoto) {
+    if (!photoDataURL) return alert('Please upload a photo.');
+    contentPieces.unshift({ id: Date.now(), edition, type:'photo', platform:'Instagram', title, body:'', lede:'', photo: photoDataURL, ts: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+    photoDataURL = null;
+    document.getElementById('c-photo-preview').style.display = 'none';
+    document.getElementById('upload-label').textContent = 'click to upload image';
+    document.getElementById('c-photo-input').value = '';
+  } else {
+    if (!body) return alert('Please enter some content.');
+    contentPieces.unshift({ id: Date.now(), edition, type: selectedType,
+      platform: isLong ? 'Newsletter' : document.getElementById('c-platform').value,
+      title, body, lede: document.getElementById('c-lede').value.trim(), photo: null,
+      ts: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+  }
+  ['c-title','c-body','c-lede'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('add-content-form').classList.remove('open');
+  renderContent();
+}
+function renderContent() {
+  const el = document.getElementById('content-list');
+  const isLong = t => t === 'profile' || t === 'recap';
+  const filtered = contentPieces.filter(p => {
+    if (contentFilter === 'photo') return p.type === 'photo';
+    if (contentFilter === 'short') return p.type === 'caption';
+    if (contentFilter === 'quote') return p.type === 'quote';
+    if (contentFilter === 'long') return isLong(p.type);
+    return true;
+  });
+  if (!filtered.length) { el.innerHTML = '<div class="empty-msg">Nothing here yet.</div>'; return; }
+  const byEd = {};
+  filtered.forEach(p => { if (!byEd[p.edition]) byEd[p.edition] = []; byEd[p.edition].push(p); });
+  const order = ['05','04','03','02','01'];
+  const active = order.filter(k => byEd[k]);
+  let html = '';
+  active.forEach((k, i) => {
+    const ed = EDITIONS[k];
+    const pieces = byEd[k];
+    const photos = pieces.filter(p => p.type === 'photo');
+    const profile = pieces.find(p => isLong(p.type));
+    const caption = pieces.find(p => p.type === 'caption');
+    const quote = pieces.find(p => p.type === 'quote');
+
+    html += `<div class="ed-section">`;
+
+    // Section header: flyer thumbnail (or number fallback) + info
+    const hasFlyer = !!ed.artistFlyer;
+    const hasPortrait = !!ed.artistPhoto;
+    html += `<div class="ed-section-head">`;
+    if (hasFlyer) {
+      html += `<div class="ed-head-flyer"><img src="${ed.artistFlyer}" alt="Vol. ${ed.num} flyer" loading="lazy"></div>`;
+    } else {
+      html += `<div class="ed-num">${ed.num}</div>`;
+    }
+    html += `<div class="ed-info">
+        <div class="ed-vol">Life Thru Food &mdash; Vol. ${ed.num}</div>
+        <div class="ed-artist">${ed.name}</div>
+        <div class="ed-discipline">${ed.discipline}</div>
+        ${ed.location ? `<div class="ed-location">Location: ${ed.location}</div>` : ''}
+        ${ed.instagram && ed.instagram.length ? `<div class="ed-ig-links">${ed.instagram.map(ig => `<a href="${ig.url}" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>${ig.handle}</a>`).join('')}</div>` : ''}
+      </div>`;
+    if (hasPortrait) {
+      html += `<div class="ed-head-portrait"><img src="${ed.artistPhoto}" alt="${ed.name}" loading="lazy"></div>`;
+    }
+    html += `</div>`;
+
+    // Profile text (full width)
+    if (profile) {
+      html += `<div class="ed-profile-body" onclick="openLightbox(${profile.id})">
+        <div class="te-kind">Profile</div>
+        ${profile.lede ? `<div class="te-lede">${profile.lede}</div>` : ''}
+        ${profile.body ? `<div class="lb-body" style="margin-top:0.75rem">${profile.body.replace(/\n/g,'<br>')}</div>` : ''}
+      </div>`;
+    }
+
+    // Caption
+    if (caption) {
+      html += `<div class="ed-caption-block board-tile tile-caption" onclick="openLightbox(${caption.id})">
+        <div class="tc-label">Caption</div>
+        <div class="tc-body">${caption.body.replace(/\n/g,'<br>').substring(0,300)}${caption.body.length>300?'…':''}</div>
+        <div class="tc-foot"><span class="ts">${caption.ts}</span><button class="copy-btn" data-id="${caption.id}" onclick="event.stopPropagation()">copy</button></div>
+      </div>`;
+    }
+
+    // Quote
+    if (quote) {
+      html += `<div class="ed-quote-block board-tile tile-quote" onclick="openLightbox(${quote.id})">
+        <div class="tq-body">${quote.body.replace(/\n\n[\s\S]*/,'').replace(/\n/g,'<br>')}</div>
+        <div class="tq-attr">${quote.ts}</div>
+      </div>`;
+    }
+
+    // Gallery — 2-photo preview (rotates weekly) + "view all" button
+    if (photos.length) {
+      const weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+      const offset = weekNum % photos.length;
+      const preview = [photos[offset % photos.length], photos[(offset + 1) % photos.length]];
+      html += `<div class="ed-gallery-label"><span>Gallery</span><button class="ed-gallery-cta" onclick="openGallery('${k}')">view all ${photos.length} &rarr;</button></div>`;
+      html += `<div class="ed-gallery-preview">`;
+      preview.forEach(p => {
+        html += `<img src="${p.photo}" alt="" loading="lazy" onclick="openGallery('${k}')">`;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+    if (i < active.length - 1) html += `<div class="ed-divider"><span>earlier</span></div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const p = contentPieces.find(x => x.id === parseInt(btn.dataset.id));
+      if (!p) return;
+      navigator.clipboard.writeText(p.body).then(() => {
+        btn.textContent = 'copied'; btn.classList.add('done');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 2000);
+      });
+    });
+  });
+}
+function openLightbox(id) {
+  const p = contentPieces.find(x => x.id === id); if (!p) return;
+  const isLong = t => t === 'profile' || t === 'recap';
+  let inner = '';
+  if (p.type === 'photo') inner += `<img src="${p.photo}" alt="${p.title||''}">`;
+  inner += `<div class="lb-kind">${p.type} &middot; ${p.platform||''} &middot; ${p.ts}</div>`;
+  if (p.lede) inner += `<div class="lb-lede">${p.lede}</div>`;
+  if (p.body) inner += isLong(p.type) ? `<div class="lb-body">${p.body.split('\n\n').map(x=>`<p>${x}</p>`).join('')}</div>` : `<div class="lb-body"><p>${p.body.replace(/\n/g,'<br>')}</p></div>`;
+  if (p.type === 'caption' || p.type === 'quote') inner += `<div class="lb-meta"><span>${p.platform||''}</span><button class="copy-btn" id="lb-copy" data-id="${p.id}">copy text</button></div>`;
+  document.getElementById('lb-content').innerHTML = inner;
+  document.getElementById('lightbox').classList.add('open');
+  const lbcopy = document.getElementById('lb-copy');
+  if (lbcopy) lbcopy.addEventListener('click', () => {
+    navigator.clipboard.writeText(p.body).then(() => {
+      lbcopy.textContent = 'copied'; lbcopy.classList.add('done');
+      setTimeout(() => { lbcopy.textContent = 'copy text'; lbcopy.classList.remove('done'); }, 2000);
+    });
+  });
+}
+function closeLightbox(e) {
+  if (!e || e.target === document.getElementById('lightbox') || e.currentTarget === document.querySelector('.lb-close-btn'))
+    document.getElementById('lightbox').classList.remove('open');
+}
+
+// ── GALLERY MODAL ────────────────────────────────────────────────
+function openGallery(edition) {
+  const photos = contentPieces.filter(p => p.edition === edition && p.type === 'photo');
+  const ed = EDITIONS[edition];
+  const inner = document.getElementById('gallery-modal-inner');
+  inner.innerHTML = `
+    <div class="gm-header">
+      <div>
+        <div class="gm-title">${ed.name}</div>
+        <div class="gm-sub">Life Thru Food &mdash; Vol. ${ed.num} &middot; ${photos.length} photos</div>
+      </div>
+      <button class="gm-close-btn" onclick="closeGallery()">close &times;</button>
+    </div>
+    <div class="gm-grid">
+      ${photos.map(p => `<div class="gm-item" onclick="closeGallery();openLightbox(${p.id})"><img src="${p.photo}" alt="" loading="lazy"></div>`).join('')}
+    </div>`;
+  document.getElementById('gallery-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGallery() {
+  document.getElementById('gallery-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('lightbox').classList.remove('open');
+    closeGallery();
+  }
+});
+
+function renderSponsors() {
+  const grid = document.getElementById('sponsors-grid');
+  const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
+  if (!sorted.length) { grid.innerHTML = '<div style="padding:2rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No sponsors yet.</div>'; return; }
+  grid.innerHTML = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
+  const al = document.getElementById('sponsor-list-admin');
+  if (!al) return;
+  al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:italic">No sponsors yet.</p>' :
+    sponsors.map(s => `<div class="sp-admin-row"><span class="sp-admin-name">${s.name}</span><span class="sp-admin-tier">${TIER_LABELS[s.tier]}</span><button class="rm-btn" onclick="removeSponsor(${s.id})">remove</button></div>`).join('');
+}
+function toggleSponsorAdmin() { document.getElementById('sponsor-admin-panel').classList.toggle('open'); renderSponsors(); }
+function addSponsor() {
+  const name = document.getElementById('sp-name').value.trim();
+  if (!name) return alert('Please enter a name.');
+  sponsors.push({ id: Date.now(), name, tier: document.getElementById('sp-tier').value, desc: document.getElementById('sp-desc').value.trim(), url: document.getElementById('sp-url').value.trim().replace(/^https?:\/\//, '') });
+  ['sp-name','sp-desc','sp-url'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('sp-tier').value = 'partner';
+  renderSponsors();
+}
+function removeSponsor(id) { sponsors = sponsors.filter(s => s.id !== id); renderSponsors(); }
+
+// ── INIT ─────────────────────────────────────────────────────────
+loadEvents();
+renderContent();
+renderSponsors();
+
+// Handle Stripe payment success redirect
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    history.replaceState({}, '', window.location.pathname);
+    const rsvpBtn = document.querySelector('nav button');
+    showTab('rsvp', rsvpBtn);
+    const lastEvent = sessionStorage.getItem('ltf_last_event');
+    sessionStorage.removeItem('ltf_last_event');
+    if (lastEvent === '5') {
+      document.getElementById('v5-rsvp-gate').style.display = 'none';
+      document.getElementById('v5-rsvp-form-wrap').style.display = 'none';
+      document.getElementById('confirmation-view-5').style.display = 'block';
+    } else {
+      document.getElementById('rsvp-gate').style.display = 'none';
+      document.getElementById('rsvp-form-wrap').style.display = 'none';
+      document.getElementById('confirmation-view').style.display = 'block';
+    }
+  }
+})();
+</script>
+</body>
+</html>
