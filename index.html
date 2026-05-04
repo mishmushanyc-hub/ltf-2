@@ -557,13 +557,19 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
       <div class="event-desc">
         <p>Vol. 05 is an evening with Ekaterina Semenova Conway &mdash; a painter and tattoo artist from Moscow, three years into New York. An intimate dinner in the East Village shaped by where she came from and everything she&rsquo;s picked up since.</p>
 
+        <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <p style="font-size:0.97rem;line-height:1.85;color:var(--ink-mid);margin:0 0 1.1rem">Katya (Ekaterina Semenova Conway) is a Moscow-born tattoo artist and painter whose work lives in tension &mdash; between softness and aggression, control and chaos, intimacy and rebellion. Raised in a large, intellectually rooted family and shaped by early influences like chess and generational artistry, she developed a visual language that blends abstract realism with surreal, rule-breaking instinct.</p>
+          <p style="font-size:0.97rem;line-height:1.85;color:var(--ink-mid);margin:0 0 1.1rem">Her journey from Russia to New York &mdash; through Paris and Barcelona &mdash; wasn&rsquo;t just geographic, but deeply personal. Political activism, displacement, and lived resistance inform her perspective, giving her work an emotional weight that feels both confrontational and vulnerable. She creates to provoke &mdash; to make people uncomfortable, then draw them in closer.</p>
+          <p style="font-size:0.97rem;line-height:1.85;color:var(--ink-mid);margin:0">Now based in New York, Katya channels that same philosophy into tattooing &mdash; treating the human body as both canvas and connection point. Her work is permanent, intimate, and unapologetically hers &mdash; marked by contrast, memory, and a refusal to follow rules.</p>
+        </div>
+
         <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
           <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:2rem">The Menu</span>
           <div style="display:grid;gap:1.75rem">
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
               <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Charcuterie &mdash; Parm, Jamón, Brie, Salted Fish, Black Rye</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">This mirrors how she eats at home &mdash; communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground it in her upbringing, while the cheese and jamón reflect her life now.</p>
+              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">This mirrors how she eats at home &mdash; communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground this course in her upbringing, while the cheese and jamón reflect her life now.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
@@ -577,13 +583,13 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Fried Shrimp, Caviar, Crème Fraîche</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">Directly tied to her childhood &mdash; fried shrimp was a staple &mdash; but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.</p>
+              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Pelmeni &mdash; Russian Tom Yum Soup Dumplings</p>
+              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">A fusion of her cultural base and her mom&rsquo;s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 05</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Pelmeni &mdash; Russian Tom Yum Soup Dumplings</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">A fusion of her cultural base and her mom&rsquo;s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.</p>
+              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Fried Shrimp, Caviar, Crème Fraîche</p>
+              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">Directly tied to her childhood &mdash; fried shrimp was a staple &mdash; but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
@@ -1138,15 +1144,16 @@ const EDITIONS = {
     artistPhoto: null, artistFlyer: null, instagram: [{ handle:'@katyadoesthings', url:'https://www.instagram.com/katyadoesthings/' }],
     desc: 'Vol. 05 is an evening with Ekaterina Semenova Conway — a painter and tattoo artist from Moscow, three years into New York. An intimate dinner in the East Village shaped by where she came from and everything she\'s picked up since.',
     bio: [
-      'Ekaterina grew up in Moscow and has been in New York for three years. She paints and does tattoo work — two practices that are more connected than they look. Both are about putting something permanent down.',
-      'Her relationship to food starts with where she came from. The charcuterie, the black rye, the salted fish — these things were always on the table growing up. She\'s not trying to recreate anything; they\'re just part of how she eats. The rest of the menu moves around. It\'s not fusion, it\'s just what happens when you\'ve been moving and you pick things up along the way.',
+      'Katya (Ekaterina Semenova Conway) is a Moscow-born tattoo artist and painter whose work lives in tension — between softness and aggression, control and chaos, intimacy and rebellion. Raised in a large, intellectually rooted family and shaped by early influences like chess and generational artistry, she developed a visual language that blends abstract realism with surreal, rule-breaking instinct.',
+      'Her journey from Russia to New York — through Paris and Barcelona — wasn\'t just geographic, but deeply personal. Political activism, displacement, and lived resistance inform her perspective, giving her work an emotional weight that feels both confrontational and vulnerable. She creates to provoke — to make people uncomfortable, then draw them in closer.',
+      'Now based in New York, Katya channels that same philosophy into tattooing — treating the human body as both canvas and connection point. Her work is permanent, intimate, and unapologetically hers — marked by contrast, memory, and a refusal to follow rules.',
     ],
     menu: [
-      { course:'Course 01', name:'Charcuterie — Parm, Jamón, Brie, Salted Fish, Black Rye', note: null, body: 'This mirrors how she eats at home — communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground it in her upbringing, while the cheese and jamón reflect her life now.' },
+      { course:'Course 01', name:'Charcuterie — Parm, Jamón, Brie, Salted Fish, Black Rye', note: null, body: 'This mirrors how she eats at home — communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground this course in her upbringing, while the cheese and jamón reflect her life now.' },
       { course:'Course 02', name:'Patatas Bravas, Sriracha Aïoli', note: null, body: 'A nod to her time living in Spain, love for sriracha, and casual, shareable plates. It represents that late-night, slightly chaotic energy she thrives in.' },
       { course:'Course 03', name:'Rocket Salad — Roasted Peppers, Chestnut, Cherry Vinaigrette', note: null, body: 'Built from memory — arugula (rocket) from her grandmother\'s garden, peppers she learned to love later, and chestnut and cherry bringing in Eastern European warmth and balance.' },
-      { course:'Course 04', name:'Fried Shrimp, Caviar, Crème Fraîche', note: null, body: 'Directly tied to her childhood — fried shrimp was a staple — but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.' },
-      { course:'Course 05', name:'Pelmeni — Russian Tom Yum Soup Dumplings', note: null, body: 'A fusion of her cultural base and her mom\'s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.' },
+      { course:'Course 04', name:'Pelmeni — Russian Tom Yum Soup Dumplings', note: null, body: 'A fusion of her cultural base and her mom\'s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.' },
+      { course:'Course 05', name:'Fried Shrimp, Caviar, Crème Fraîche', note: null, body: 'Directly tied to her childhood — fried shrimp was a staple — but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.' },
       { course:'To Close', name:'Masala Chai & Russian Tea Cookies', note: null, body: 'Tea is ritual for her — something grounding at the end. The pairing keeps dessert light, nostalgic, and communal rather than overly indulgent.' },
     ]
   },
