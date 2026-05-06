@@ -1885,16 +1885,21 @@ let activeCompCode = null;   // { id, code } for Vol. 4
 let activeCompCode5 = null;  // { id, code } for Vol. 6 (June)
 
 function applyCompDim(compEventId) {
-  const b4 = document.getElementById('event-block-4');
-  const b5 = document.getElementById('event-block-5');
-  if (!b4 || !b5) return;
+  const b4  = document.getElementById('event-block-4');
+  const bMay = document.getElementById('event-block-may');
+  const b5  = document.getElementById('event-block-5');
   const eid = Number(compEventId);
-  if (eid === 1) {        // Vol. 4 comp code → dim Vol. 5
-    b4.classList.remove('comp-dimmed');
-    b5.classList.add('comp-dimmed');
-  } else if (eid === 4) { // Vol. 5 comp code → dim Vol. 4
-    b5.classList.remove('comp-dimmed');
-    b4.classList.add('comp-dimmed');
+  // Reset all first
+  [b4, bMay, b5].forEach(b => b && b.classList.remove('comp-dimmed'));
+  if (eid === 1) {        // Vol. 4 (Heidi) → dim May + Vol. 6
+    bMay && bMay.classList.add('comp-dimmed');
+    b5   && b5.classList.add('comp-dimmed');
+  } else if (eid === 6) { // Vol. 5 (Ekaterina) → dim Vol. 4 + Vol. 6
+    b4 && b4.classList.add('comp-dimmed');
+    b5 && b5.classList.add('comp-dimmed');
+  } else {                // Vol. 6 (Miles) → dim Vol. 4 + May
+    b4   && b4.classList.add('comp-dimmed');
+    bMay && bMay.classList.add('comp-dimmed');
   }
 }
 
