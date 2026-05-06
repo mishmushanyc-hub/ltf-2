@@ -338,6 +338,9 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
   <span class="h-series">Life Thru Food &nbsp;·&nbsp; NYC &nbsp;·&nbsp; est. 2025</span>
   <img src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="h-logo">
   <p class="h-sub">A dinner series rooted in art, story, and community</p>
+  <div style="margin-bottom:2.5rem;position:relative;z-index:1">
+    <button onclick="scrollToRsvp()" style="font-family:'Fragment Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--paper);background:var(--ink);border:none;padding:0.85rem 2rem;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Reserve your seat &nbsp;&rarr;</button>
+  </div>
   <div class="h-scroll-cue" onclick="document.querySelector('nav').scrollIntoView({behavior:'smooth'})">enter</div>
 </header>
 
@@ -1357,6 +1360,24 @@ function showTab(tab, btn) {
   if (btn) btn.classList.add('active');
   if (tab === 'admin') loadGuests();
   if (tab === 'content') renderContent();
+}
+
+function scrollToRsvp() {
+  // Switch to RSVP tab
+  const rsvpBtn = document.querySelector('nav button');
+  showTab('rsvp', rsvpBtn);
+  // Find the first visible event block and scroll to its form
+  const targets = [
+    document.getElementById('may-rsvp-form-wrap'),
+    document.getElementById('v5-rsvp-form-wrap'),
+    document.getElementById('rsvp-form-wrap'),
+  ];
+  const target = targets.find(el => el && el.closest('.event-block') && el.closest('.event-block').style.display !== 'none');
+  if (target) {
+    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  } else {
+    setTimeout(() => document.querySelector('nav').scrollIntoView({ behavior: 'smooth' }), 50);
+  }
 }
 
 // ── ADMIN PASSWORD GATE ──────────────────────────────────────────
