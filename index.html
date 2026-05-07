@@ -415,7 +415,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
               <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
               <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Philly Cheesesteak Cr&ecirc;pe</p>
               <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0 0 6px">truffle wiz for good measure</p>
-              <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75">At 10 years old, Heidi spent an entire summer making thousands of cr&ecirc;pes, convinced she'd become a French pastry chef. Years later, she lived in Philly. This dish connects those two versions of her &mdash; obsessive creativity and lived experience. Intentionally a little absurd. That balance between serious and unserious is very much her.</p>
+              <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75">At 10 years old, Heidi spent an entire summer making thousands of cr&ecirc;pes, convinced she\'d become a French pastry chef. Years later, she lived in Philly. This dish connects those two versions of her &mdash; obsessive creativity and lived experience. Intentionally a little absurd. That balance between serious and unserious is very much her.</p>
             </div>
 
             <div>
@@ -1174,14 +1174,14 @@ const EDITIONS = {
     desc: 'Vol. 04 is an evening in conversation with stylist Heidi Cannon — an intimate dinner party in Williamsburg shaped by her perspective on food, memory, and the lives we carry with us.',
     bio: [
       'Heidi grew up everywhere and nowhere at the same time — moving between Hawaii, Florida, California, West Virginia, Philly, and eventually New York. Home was never a place, it was something more fluid. Music, memory, and small sensory moments stuck more than geography ever did.',
-      'Her relationship to food mirrors that. It swings between extremes — Spam and Spaghettios, sushi at six years old, diner breakfasts, anchovies on toast, caviar when she can get it. There’s no strict logic, just instinct. A “freak palette,” as she puts it — where high and low, comfort and curiosity all sit at the same table. Each dish reflects a moment, a habit, or a phase, pulled from a life that’s been constantly in motion but always grounded in feeling.'
+      'Her relationship to food mirrors that. It swings between extremes — Spam and Spaghettios, sushi at six years old, diner breakfasts, anchovies on toast, caviar when she can get it. There\'s no strict logic, just instinct. A "freak palette," as she puts it — where high and low, comfort and curiosity all sit at the same table. Each dish reflects a moment, a habit, or a phase, pulled from a life that\'s been constantly in motion but always grounded in feeling.'
     ],
     menu: [
-      { course:'Course 01', name:'Goat Cheese &amp; Pistachio Stuffed Figs', note:'lil spicy, lil sweet', body:'Figs come from an early fixation — Heidi references the Sylvia Plath “fig tree,” the idea of too many lives and not knowing which one to choose. This dish sets that tone: soft, sweet, a little sharp. It’s the starting point of everything — possibility, tension, and a slightly romanticized way of looking at the world.' },
-      { course:'Course 02', name:'Charred Balsamic Brussels, Confit Garlic Purée', note:'heaps and loads of parm on top', body:'Heidi is a self-proclaimed “greens girl,” but not in a delicate way. She wants depth — char, sweetness, heaviness. This dish leans into that.' },
-      { course:'Course 03', name:'Spam Onigiri', note:'touch of wasabi for your nostrils', body:'This is childhood, directly. Spam was always around, and sushi came early — introduced by parents who loved Japanese food. This dish sits right between those two worlds: something humble, something more refined, meeting in the middle. It’s also a reminder that nostalgia doesn’t have to be polished to be meaningful.' },
-      { course:'Course 04', name:'Philly Cheesesteak Crêpe', note:'truffle wiz for good measure', body:'At 10 years old, Heidi spent an entire summer making thousands of crêpes, convinced she’d become a French pastry chef. Years later, she lived in Philly. This dish connects those two versions of her — obsessive creativity and lived experience. Intentionally a little absurd. That balance between serious and unserious is very much her.' },
-      { course:'Dessert', name:'Surprise', note:'think: it’s Micho’s birthday', body:null },
+      { course:'Course 01', name:'Goat Cheese &amp; Pistachio Stuffed Figs', note:'lil spicy, lil sweet', body:'Figs come from an early fixation — Heidi references the Sylvia Plath "fig tree," the idea of too many lives and not knowing which one to choose. This dish sets that tone: soft, sweet, a little sharp. It\'s the starting point of everything — possibility, tension, and a slightly romanticized way of looking at the world.' },
+      { course:'Course 02', name:'Charred Balsamic Brussels, Confit Garlic Purée', note:'heaps and loads of parm on top', body:'Heidi is a self-proclaimed "greens girl," but not in a delicate way. She wants depth — char, sweetness, heaviness. This dish leans into that.' },
+      { course:'Course 03', name:'Spam Onigiri', note:'touch of wasabi for your nostrils', body:'This is childhood, directly. Spam was always around, and sushi came early — introduced by parents who loved Japanese food. This dish sits right between those two worlds: something humble, something more refined, meeting in the middle. It\'s also a reminder that nostalgia doesn\'t have to be polished to be meaningful.' },
+      { course:'Course 04', name:'Philly Cheesesteak Crêpe', note:'truffle wiz for good measure', body:'At 10 years old, Heidi spent an entire summer making thousands of crêpes, convinced she\'d become a French pastry chef. Years later, she lived in Philly. This dish connects those two versions of her — obsessive creativity and lived experience. Intentionally a little absurd. That balance between serious and unserious is very much her.' },
+      { course:'Dessert', name:'Surprise', note:'think: it\'s Micho\'s birthday', body:null },
     ]
   },
   '03': { num:'03', eventDate:'2026-03-30', name:'Georgia Janelle', discipline:'Womenswear Designer', location:'Early Terrible, Lower East Side', artistPhoto:'images/artist-profiles/Artist Photos/Georgia.jpg', artistFlyer:'images/artist-profiles/Georgia Flyer.PNG', instagram: [{ handle:'@georgia.janelle', url:'https://www.instagram.com/georgia.janelle/' }, { handle:'@grgjnastudio', url:'https://www.instagram.com/grgjnastudio/' }] },
@@ -1226,7 +1226,7 @@ async function loadEvents() {
     // Helper: extract YYYY-MM-DD string from any date format Supabase returns
     const dateStr = e => (e.event_date || '').slice(0, 10);
 
-    // Vol. 4 block — only show if there's an active event before May
+    // Vol. 4 block — only show if there\'s an active event before May
     const vol4Ev = activeEvents.find(e => dateStr(e) && dateStr(e) < '2026-05-01');
     const block4 = document.getElementById('event-block-4');
     const conf4  = document.getElementById('confirmation-view');
@@ -1640,7 +1640,7 @@ async function submitRSVP() {
             body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp' })
           }).catch(e => console.warn('add-to-list failed:', e));
         }
-        // Increment seats_booked so loadEvents doesn't revert the counter
+        // Increment seats_booked so loadEvents doesn\'t revert the counter
         if (selectedEvent?.id) {
           await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_event_guests`, {
             method: 'POST',
@@ -1836,7 +1836,7 @@ async function submitNotify() {
       body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source })
     }).catch(e => console.warn('Brevo add-to-list failed:', e));
 
-    toast('notify-toast', `You're on the list, ${first}. We'll be in touch.`, 'success');
+    toast('notify-toast', `You\'re on the list, ${first}. We'll be in touch.`, 'success');
     ['n-first','n-last','n-email','n-phone','n-instagram'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('n-source').value = '';
   } catch (err) {
@@ -2101,7 +2101,7 @@ async function submitRSVP5() {
             body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol5' })
           }).catch(e => console.warn('add-to-list failed:', e));
         }
-        // Increment seats_booked so loadEvents doesn't revert the counter
+        // Increment seats_booked so loadEvents doesn\'t revert the counter
         if (selectedEvent5?.id) {
           await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_event_guests`, {
             method: 'POST',
@@ -2243,43 +2243,43 @@ function updateSeatsMay() {
 
 function updatePaymentTotalMay() {
   const price   = selectedEventMay ? selectedEventMay.price_cents / 100 : 75;
-  const plusOne = document.getElementById(‘mayr-plus-one’)?.checked;
+  const plusOne = document.getElementById('mayr-plus-one')?.checked;
 
   // Show/hide +1 details
-  const p1Details = document.getElementById(‘may-plus-one-details-row’);
-  if (p1Details) p1Details.style.display = plusOne ? ‘block’ : ‘none’;
+  const p1Details = document.getElementById('may-plus-one-details-row');
+  if (p1Details) p1Details.style.display = plusOne ? 'block' : 'none';
 
   // Update +1 price label
-  const p1El = document.getElementById(‘may-plus-one-price’);
-  if (p1El) p1El.textContent = ‘+$’ + price;
+  const p1El = document.getElementById('may-plus-one-price');
+  if (p1El) p1El.textContent = '+$' + price;
 
   if (activeCompCodeMay) {
-    const compNotice = document.getElementById(‘may-comp-notice’);
-    const payBlock   = document.getElementById(‘may-payment-block-wrap’);
-    const submitBtn  = document.getElementById(‘may-rsvp-submit-btn’);
+    const compNotice = document.getElementById('may-comp-notice');
+    const payBlock   = document.getElementById('may-payment-block-wrap');
+    const submitBtn  = document.getElementById('may-rsvp-submit-btn');
     if (plusOne) {
-      if (compNotice) { compNotice.textContent = ‘Your ticket is complimentary. You\’re adding a paid +1.’; compNotice.style.display = ‘block’; }
-      if (payBlock)   payBlock.style.display = ‘block’;
-      const totEl = document.getElementById(‘may-payment-total’);
-      const brkEl = document.getElementById(‘may-payment-breakdown’);
-      if (totEl) totEl.textContent = ‘$’ + price;
-      if (brkEl) brkEl.textContent = ‘+1 ticket \xd7 $’ + price;
-      if (submitBtn) submitBtn.textContent = ‘continue to payment →’;
+      if (compNotice) { compNotice.textContent = 'Your ticket is complimentary. You\'re adding a paid +1.'; compNotice.style.display = 'block'; }
+      if (payBlock)   payBlock.style.display = 'block';
+      const totEl = document.getElementById('may-payment-total');
+      const brkEl = document.getElementById('may-payment-breakdown');
+      if (totEl) totEl.textContent = '$' + price;
+      if (brkEl) brkEl.textContent = '+1 ticket \xd7 $' + price;
+      if (submitBtn) submitBtn.textContent = 'continue to payment →';
     } else {
-      if (compNotice) { compNotice.textContent = ‘Complimentary admission — no payment needed.’; compNotice.style.display = ‘block’; }
-      if (payBlock)   payBlock.style.display = ‘none’;
-      if (submitBtn)  submitBtn.textContent = ‘confirm your seat →’;
+      if (compNotice) { compNotice.textContent = 'Complimentary admission — no payment needed.'; compNotice.style.display = 'block'; }
+      if (payBlock)   payBlock.style.display = 'none';
+      if (submitBtn)  submitBtn.textContent = 'confirm your seat →';
     }
     return;
   }
 
   const total = price + (plusOne ? price : 0);
-  const totEl = document.getElementById(‘may-payment-total’);
-  const brkEl = document.getElementById(‘may-payment-breakdown’);
-  if (totEl) totEl.textContent = ‘$’ + total;
-  const parts = [‘you \xd7 $’ + price];
-  if (plusOne) parts.push(‘+1 \xd7 $’ + price);
-  if (brkEl) brkEl.textContent = parts.join(‘ + ‘);
+  const totEl = document.getElementById('may-payment-total');
+  const brkEl = document.getElementById('may-payment-breakdown');
+  if (totEl) totEl.textContent = '$' + total;
+  const parts = ['you \xd7 $' + price];
+  if (plusOne) parts.push('+1 \xd7 $' + price);
+  if (brkEl) brkEl.textContent = parts.join(' + ');
 }
 
 async function checkGateMay() {
@@ -2739,8 +2739,8 @@ contentPieces = [
   {id:41,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/37-000107790025.jpg',ts:'Vol. 03'},
   {id:42,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/65-000107780026.jpg',ts:'Vol. 03'},
   {id:43,edition:'03',type:'photo',platform:'Instagram',title:'Vol. 03',body:'',lede:'',photo:'images/vol-03-georgia-janelle/113-000107820025.jpg',ts:'Vol. 03'},
-  {id:32,edition:'03',type:'profile',platform:'Newsletter',title:'On Georgia Janelle',lede:"Georgia is a Lower East Side–based designer and founder of GRGJNA, a cut-and-sew studio that doubles as a living world of her own creation.",body:"Her work is deeply personal — hyper-feminine, expressive, and rooted in self-made identity. Through garments, space, and storytelling, she builds environments that feel intimate, playful, and true to her.\n\nGRGJNA is not just a studio — it's a living world. Every garment is a chapter in an ongoing story that Georgia is writing for herself, in real time. The dinner at Early Terrible felt like walking into one of those chapters: deliberate, warm, and entirely on her terms.",photo:null,ts:'Vol. 03'},
-  {id:33,edition:'03',type:'caption',platform:'Instagram',title:'On self-made identity',body:"Georgia Janelle doesn't make clothes for a market. She makes them for a feeling — one she's been building toward her whole life. Vol. 03 was an evening spent inside that feeling.\n\n#LifeThruFood #NYCDinnerSeries #GRGJNA #GeorgiaJanelle",lede:'',photo:null,ts:'Vol. 03'},
+  {id:32,edition:'03',type:'profile',platform:'Newsletter',title:'On Georgia Janelle',lede:"Georgia is a Lower East Side–based designer and founder of GRGJNA, a cut-and-sew studio that doubles as a living world of her own creation.",body:"Her work is deeply personal — hyper-feminine, expressive, and rooted in self-made identity. Through garments, space, and storytelling, she builds environments that feel intimate, playful, and true to her.\n\nGRGJNA is not just a studio — it\'s a living world. Every garment is a chapter in an ongoing story that Georgia is writing for herself, in real time. The dinner at Early Terrible felt like walking into one of those chapters: deliberate, warm, and entirely on her terms.",photo:null,ts:'Vol. 03'},
+  {id:33,edition:'03',type:'caption',platform:'Instagram',title:'On self-made identity',body:"Georgia Janelle doesn\'t make clothes for a market. She makes them for a feeling — one she\'s been building toward her whole life. Vol. 03 was an evening spent inside that feeling.\n\n#LifeThruFood #NYCDinnerSeries #GRGJNA #GeorgiaJanelle",lede:'',photo:null,ts:'Vol. 03'},
   {id:34,edition:'03',type:'quote',platform:'Instagram',title:'On intimacy and space',body:'"She builds environments that feel intimate, playful, and true to her."\n\n— on Georgia Janelle, Life Thru Food Vol. 03.',lede:'',photo:null,ts:'Vol. 03'},
   {id:21,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/2-FullSizeRender-12.JPG',ts:'Vol. 02'},
   {id:25,edition:'02',type:'photo',platform:'Instagram',title:'Vol. 02',body:'',lede:'',photo:'images/vol-02-yuseph-kim/5-DSCF6616.JPG',ts:'Vol. 02'},
@@ -2765,7 +2765,7 @@ contentPieces = [
   {id:49,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08270.JPG',ts:'Vol. 01'},
   {id:50,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08280.JPG',ts:'Vol. 01'},
   {id:51,edition:'01',type:'photo',platform:'Instagram',title:'Vol. 01',body:'',lede:'',photo:'images/vol-01-taylar-herman/DSC08308.JPG',ts:'Vol. 01'},
-  {id:12,edition:'01',type:'profile',platform:'Newsletter',title:'On Taylar Herman',lede:"Taylar Herman is a multidisciplinary creative whose work is rooted in identity, memory, and feeling.",body:"For this dinner, she brought those ideas to the table — each course pulling from moments, influences, and experiences that have shaped her. It was a personal, stripped-back look into her world, told through food and the way it's shared.\n\nTaylar set the tone for what Life Thru Food could be. Her instinct for room energy — for knowing when a space is working, when it needs to breathe — gave our first dinner its texture. The Two Bridges apartment felt like a home before anyone arrived.",photo:null,ts:'Vol. 01'},
+  {id:12,edition:'01',type:'profile',platform:'Newsletter',title:'On Taylar Herman',lede:"Taylar Herman is a multidisciplinary creative whose work is rooted in identity, memory, and feeling.",body:"For this dinner, she brought those ideas to the table — each course pulling from moments, influences, and experiences that have shaped her. It was a personal, stripped-back look into her world, told through food and the way it\'s shared.\n\nTaylar set the tone for what Life Thru Food could be. Her instinct for room energy — for knowing when a space is working, when it needs to breathe — gave our first dinner its texture. The Two Bridges apartment felt like a home before anyone arrived.",photo:null,ts:'Vol. 01'},
   {id:13,edition:'01',type:'caption',platform:'Instagram',title:'Vol. 01',body:"Taylar Herman brought something specific to the table — not a concept, but a feeling. Memory and identity, served across six courses in a Two Bridges apartment that felt, by the end of the night, like it had always been ours.\n\n#LifeThruFood #NYCDinnerSeries #TaylarHerman #Vol01",lede:'',photo:null,ts:'Vol. 01'},
   {id:14,edition:'01',type:'quote',platform:'Instagram',title:'On Taylar Herman',body:'"A personal, stripped-back look into her world — told through food and the way it\'s shared."\n\n— Life Thru Food Vol. 01.',lede:'',photo:null,ts:'Vol. 01'},
 ];
