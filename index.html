@@ -639,10 +639,9 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
             <label>Add-ons</label>
-            <label class="toggle-row" for="mayr-drink">
-              <input type="checkbox" id="mayr-drink" onchange="updatePaymentTotalMay()">
-              <span class="toggle-label">Open drink package <span class="toggle-price" id="may-drink-addon-price">+$20</span></span>
-            </label>
+            <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
+              Open bar &mdash; vodka martinis &amp; espresso martinis courtesy of 3BR Distillery
+            </div>
             <label class="toggle-row" for="mayr-plus-one">
               <input type="checkbox" id="mayr-plus-one" onchange="updatePaymentTotalMay()">
               <span class="toggle-label">Bring a +1 <span class="toggle-price" id="may-plus-one-price">+$75</span></span>
@@ -652,12 +651,6 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
                 <div class="form-field"><label>+1 first name</label><input type="text" id="may-p1-first" placeholder="First"></div>
                 <div class="form-field"><label>+1 last name</label><input type="text" id="may-p1-last" placeholder="Last"></div>
               </div>
-            </div>
-            <div id="may-plus-one-drinks-row" style="display:none;padding-left:1.5rem">
-              <label class="toggle-row" for="mayr-drink-plus-one">
-                <input type="checkbox" id="mayr-drink-plus-one" onchange="updatePaymentTotalMay()">
-                <span class="toggle-label">Open drink package for your +1 <span class="toggle-price" id="may-drink-plus-one-price">+$20</span></span>
-              </label>
             </div>
           </div>
         </div>
@@ -2249,58 +2242,44 @@ function updateSeatsMay() {
 }
 
 function updatePaymentTotalMay() {
-  const price = selectedEventMay ? selectedEventMay.price_cents / 100 : 75;
-  const drinkPrice = 20;
-  const plusOne    = document.getElementById('mayr-plus-one')?.checked;
-  const drink      = document.getElementById('mayr-drink')?.checked;
-  const drinkPlusOne = document.getElementById('mayr-drink-plus-one')?.checked;
+  const price   = selectedEventMay ? selectedEventMay.price_cents / 100 : 75;
+  const plusOne = document.getElementById(‘mayr-plus-one’)?.checked;
 
-  // Show/hide +1 sub-rows
-  const p1Details = document.getElementById('may-plus-one-details-row');
-  if (p1Details) p1Details.style.display = plusOne ? 'block' : 'none';
-  const p1Drinks = document.getElementById('may-plus-one-drinks-row');
-  if (p1Drinks) p1Drinks.style.display = plusOne ? 'block' : 'none';
+  // Show/hide +1 details
+  const p1Details = document.getElementById(‘may-plus-one-details-row’);
+  if (p1Details) p1Details.style.display = plusOne ? ‘block’ : ‘none’;
 
-  // Update price labels
-  const p1El  = document.getElementById('may-plus-one-price');
-  if (p1El)  p1El.textContent  = '+$' + price;
-  const drEl  = document.getElementById('may-drink-addon-price');
-  if (drEl)  drEl.textContent  = '+$' + drinkPrice;
-  const drP1El = document.getElementById('may-drink-plus-one-price');
-  if (drP1El) drP1El.textContent = '+$' + drinkPrice;
+  // Update +1 price label
+  const p1El = document.getElementById(‘may-plus-one-price’);
+  if (p1El) p1El.textContent = ‘+$’ + price;
 
   if (activeCompCodeMay) {
-    const compNotice = document.getElementById('may-comp-notice');
-    const payBlock   = document.getElementById('may-payment-block-wrap');
-    const submitBtn  = document.getElementById('may-rsvp-submit-btn');
+    const compNotice = document.getElementById(‘may-comp-notice’);
+    const payBlock   = document.getElementById(‘may-payment-block-wrap’);
+    const submitBtn  = document.getElementById(‘may-rsvp-submit-btn’);
     if (plusOne) {
-      const plusOneCost = price + (drinkPlusOne ? drinkPrice : 0);
-      if (compNotice) { compNotice.textContent = 'Your ticket is complimentary. You’re adding a paid +1' + (drinkPlusOne ? ' with drink package.' : '.'); compNotice.style.display = 'block'; }
-      if (payBlock)   payBlock.style.display = 'block';
-      const totEl = document.getElementById('may-payment-total');
-      const brkEl = document.getElementById('may-payment-breakdown');
-      if (totEl) totEl.textContent = '$' + plusOneCost;
-      const parts = ['+1 ticket \xd7 $' + price];
-      if (drinkPlusOne) parts.push('drinks \xd7 $' + drinkPrice);
-      if (brkEl) brkEl.textContent = parts.join(' + ');
-      if (submitBtn) submitBtn.textContent = 'continue to payment →';
+      if (compNotice) { compNotice.textContent = ‘Your ticket is complimentary. You\’re adding a paid +1.’; compNotice.style.display = ‘block’; }
+      if (payBlock)   payBlock.style.display = ‘block’;
+      const totEl = document.getElementById(‘may-payment-total’);
+      const brkEl = document.getElementById(‘may-payment-breakdown’);
+      if (totEl) totEl.textContent = ‘$’ + price;
+      if (brkEl) brkEl.textContent = ‘+1 ticket \xd7 $’ + price;
+      if (submitBtn) submitBtn.textContent = ‘continue to payment →’;
     } else {
-      if (compNotice) { compNotice.textContent = 'Complimentary admission — no payment needed.'; compNotice.style.display = 'block'; }
-      if (payBlock)   payBlock.style.display = 'none';
-      if (submitBtn)  submitBtn.textContent = 'confirm your seat →';
+      if (compNotice) { compNotice.textContent = ‘Complimentary admission — no payment needed.’; compNotice.style.display = ‘block’; }
+      if (payBlock)   payBlock.style.display = ‘none’;
+      if (submitBtn)  submitBtn.textContent = ‘confirm your seat →’;
     }
     return;
   }
 
-  let total = price + (drink ? drinkPrice : 0);
-  if (plusOne) total += price + (drinkPlusOne ? drinkPrice : 0);
-  const totEl = document.getElementById('may-payment-total');
-  const brkEl = document.getElementById('may-payment-breakdown');
-  if (totEl) totEl.textContent = '$' + total;
-  const parts = ['you \xd7 $' + price];
-  if (drink) parts.push('drinks \xd7 $' + drinkPrice);
-  if (plusOne) { parts.push('+1 \xd7 $' + price); if (drinkPlusOne) parts.push('+1 drinks \xd7 $' + drinkPrice); }
-  if (brkEl) brkEl.textContent = parts.join(' + ');
+  const total = price + (plusOne ? price : 0);
+  const totEl = document.getElementById(‘may-payment-total’);
+  const brkEl = document.getElementById(‘may-payment-breakdown’);
+  if (totEl) totEl.textContent = ‘$’ + total;
+  const parts = [‘you \xd7 $’ + price];
+  if (plusOne) parts.push(‘+1 \xd7 $’ + price);
+  if (brkEl) brkEl.textContent = parts.join(‘ + ‘);
 }
 
 async function checkGateMay() {
@@ -2794,6 +2773,7 @@ contentPieces = [
 sponsors = [
   {id:7,name:'Madre Mezcal',tier:'partner',desc:'Small-batch mezcal crafted by a multi-generational family of palenqueros in the mountains of Oaxaca. Clay pot distilled, the traditional way. Providing complimentary cocktails at Vol. 04.',url:'madremezcal.com',location:'Oaxaca, Mexico'},
   {id:8,name:'Good Mood Kombucha',tier:'partner',desc:'A Brooklyn-based kombucha brewery crafting small-batch, live-culture kombucha with real fruit and botanicals. Raw, naturally effervescent, and made with intention. Providing complimentary drinks at Vol. 04.',url:'goodmoodkombucha.com',location:'Brooklyn, NY'},
+  {id:9,name:'3BR Distillery',tier:'partner',desc:'A New York craft distillery producing small-batch spirits with an emphasis on quality and character. Providing complimentary vodka martinis and espresso martinis at Vol. 05.',url:'3brdistillery.com',location:'New York, NY'},
   {id:1,name:'Aqua Best',tier:'presenting',desc:'A family-run seafood market offering sushi-grade fish and fresh seafood sourced directly from fishermen.',url:'aquabestnyc.com',location:'276 Grand St, Chinatown'},
   {id:2,name:'S.O.S Chef',tier:'partner',desc:'A curated specialty ingredients store carrying over 1,200 ethically sourced spices, herbs, oils, and homemade infusions.',url:'sos-chefs.com',location:'104 Avenue B, East Village'},
   {id:3,name:'Essex Oil & Spice',tier:'partner',desc:'Premium extra virgin olive oils from a Moroccan family farm alongside over 100 varieties of specialty spices.',url:'essexoliveandspice.com',location:'88 Essex St, Lower East Side'},
