@@ -736,9 +736,37 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
 
         <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
           <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Miles Dixon &amp; Elijuh Vuhlet</span>
-          <p style="font-style:normal;color:var(--ink-mid)">Miles is a creature of habit in the best way &mdash; same spots, same people, same bacon egg and cheese. The food he gravitates toward is tied to places he&rsquo;s been and people he&rsquo;s eaten with. It builds meaning without him trying to make it meaningful. His work in clothing runs the same way &mdash; grounded in classic American workwear, the kind that doesn&rsquo;t need to be reinvented, just made well and worn in.</p>
-          <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Elijuh grew up around food that moved with people. Dominican and Puerto Rican on both sides, Bronx roots, time on Long Island. Cookouts, street food, things passed around. It was always more about what was happening around the food than the food itself. His clothing takes that same workwear foundation and pulls it somewhere else &mdash; punk-influenced, distressed, a little torn up. Less about preservation, more about what you do with something after it&rsquo;s been lived in.</p>
-          <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">They&rsquo;ve known each other for years. This is an afternoon with both of them.</p>
+          <p style="font-style:normal;color:var(--ink-mid)">Elijah learned the value of family and community early. Growing up Dominican and Puerto Rican between Long Island and the LES, his first references for food and clothing were rooted in function. Over time that foundation evolved &mdash; he found punk, and with it a natural overlap between distressed aesthetics and workwear sensibility. The result feels honest. His clothes, his attitude, his presence all bring people together &mdash; don&rsquo;t let the ripped hats or head tat confuse you.</p>
+          <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Miles is a Brooklyn kid. He grew up on a MetroCard and a sense of freedom, moving through the city with curiosity. That world expanded when he moved to Germany, but eventually it pushed beyond place altogether. Miles leans toward the fantastical. Through his brand, Real Fantasy, he brings those ideas back down to earth &mdash; grounded in American workwear. His taste in food reflects that same utility, especially in his deep love for sandwiches. Whether it&rsquo;s early memories at The Odeon or a lifelong connection to the BEC, everything he creates builds on the culture that raised him.</p>
+        </div>
+
+        <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.5rem">The Menu</span>
+          <div style="display:flex;flex-direction:column;gap:1.75rem">
+            <div>
+              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
+              <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Smoked Beef Bacon Egg and Cheese</p>
+              <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">Papi lemme get a bacon egg and cheese, Mayo, salt, pepper, spicy ketchup &mdash; on a potato roll</p>
+              <p style="margin-top:0.65rem;color:var(--ink-mid)">Our conversation with Miles made two things clear: he is New York through and through, and he cares deeply about his sandwiches. There&rsquo;s no better way to honor that than going straight for the city&rsquo;s jugular.</p>
+            </div>
+            <div>
+              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
+              <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Wedge Salad w/ Chicharr&oacute;n de Pollo, Dominican Fried Cheese &amp; Creamy Passionfruit Dressing</p>
+              <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">The brasserie meets the Caribbean</p>
+              <p style="margin-top:0.65rem;color:var(--ink-mid)">Light, fresh flavors colliding head first with rich, familiar Dominican comfort. This course lives at the intersection of where things started and where they are now. It was Miles who pushed to bring Elijah into this dinner &mdash; a small, genuine act that shaped the entire direction of the night. His memories at The Odeon meet Elijah&rsquo;s Caribbean roots here. This is what Life Through Food is about.</p>
+            </div>
+            <div>
+              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
+              <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Whole Roast Pig w/ Moro de Guandules</p>
+              <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">Smokers in full effect</p>
+              <p style="margin-top:0.65rem;color:var(--ink-mid)">Y&rsquo;all, it&rsquo;s a cookout. Slow-roasted pork with glass skin, served alongside rice with pigeon peas and coconut milk &mdash; an iconic pairing. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.</p>
+            </div>
+            <div>
+              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
+              <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Chilled Watermelon</p>
+              <p style="margin-top:0.65rem;color:var(--ink-mid)">A cool, refreshing way to transition us to the next chapter of the night.</p>
+            </div>
+          </div>
         </div>
       </div>
       <div id="v5-rsvp-toast" class="toast"></div>
@@ -1161,9 +1189,14 @@ const EDITIONS = {
     instagram: [{ handle:'@miloblase', url:'https://www.instagram.com/miloblase/' }, { handle:'@realfantasymfg', url:'https://www.instagram.com/realfantasymfg/' }, { handle:'@elijuhfuckingvuhlet', url:'https://www.instagram.com/elijuhfuckingvuhlet/' }, { handle:'@vuhlet', url:'https://www.instagram.com/vuhlet/' }],
     desc: 'Vol. 06 is an afternoon outside in Red Hook — two close friends, two different ways of life, one table. Doors at 3pm.',
     bio: [
-      'Miles is a creature of habit in the best way — same spots, same people, same bacon egg and cheese. The food he gravitates toward is tied to places he\'s been and people he\'s eaten with. It builds meaning without him trying to make it meaningful. His work in clothing runs the same way — grounded in classic American workwear, the kind that doesn\'t need to be reinvented, just made well and worn in.',
-      'Elijuh grew up around food that moved with people. Dominican and Puerto Rican on both sides, Bronx roots, time on Long Island. Cookouts, street food, things passed around. It was always more about what was happening around the food than the food itself. His clothing takes that same workwear foundation and pulls it somewhere else — punk-influenced, distressed, a little torn up. Less about preservation, more about what you do with something after it\'s been lived in.',
-      'They\'ve known each other for years. This is an afternoon with both of them.'
+      'Elijah learned the value of family and community early. Growing up Dominican and Puerto Rican between Long Island and the LES, his first references for food and clothing were rooted in function. Over time that foundation evolved — he found punk, and with it a natural overlap between distressed aesthetics and workwear sensibility. The result feels honest. His clothes, his attitude, his presence all bring people together — don\'t let the ripped hats or head tat confuse you.',
+      'Miles is a Brooklyn kid. He grew up on a MetroCard and a sense of freedom, moving through the city with curiosity. That world expanded when he moved to Germany, but eventually it pushed beyond place altogether. Miles leans toward the fantastical. Through his brand, Real Fantasy, he brings those ideas back down to earth — grounded in American workwear. His taste in food reflects that same utility, especially in his deep love for sandwiches. Whether it\'s early memories at The Odeon or a lifelong connection to the BEC, everything he creates builds on the culture that raised him.',
+    ],
+    menu: [
+      { course:'Course 01', name:'Smoked Beef Bacon Egg and Cheese', note:'Mayo, salt, pepper, spicy ketchup — served on a potato roll', body:'Papi lemme get a bacon egg and cheese. Our conversation with Miles made two things clear: he is New York through and through, and he cares deeply about his sandwiches. There\'s no better way to honor that than going straight for the city\'s jugular.' },
+      { course:'Course 02', name:'Wedge Salad w/ Chicharrón de Pollo, Dominican Fried Cheese &amp; Creamy Passionfruit Dressing', note:'The brasserie meets the Caribbean', body:'Light, fresh flavors colliding head first with rich, familiar Dominican comfort. This course lives at the intersection of where things started and where they are now. It was Miles who pushed to bring Elijah into this dinner — a small, genuine act that shaped the entire direction of the night. His memories at The Odeon meet Elijah\'s Caribbean roots here. This is what Life Through Food is about.' },
+      { course:'Course 03', name:'Whole Roast Pig w/ Moro de Guandules', note:'Smokers in full effect', body:'Y\'all, it\'s a cookout. Slow-roasted pork with glass skin, served alongside rice with pigeon peas and coconut milk — an iconic pairing. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.' },
+      { course:'Course 04', name:'Chilled Watermelon', note:null, body:'A cool, refreshing way to transition us to the next chapter of the night.' },
     ]
   },
   '04': {
@@ -1640,14 +1673,8 @@ async function submitRSVP() {
             body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp' })
           }).catch(e => console.warn('add-to-list failed:', e));
         }
-        // Increment seats_booked so loadEvents doesn\'t revert the counter
-        if (selectedEvent?.id) {
-          await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_event_guests`, {
-            method: 'POST',
-            headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_name_param: selectedEvent.name, increment_by: 1 })
-          }).catch(e => console.warn('Could not increment seats_booked:', e));
-        }
+        // DB trigger handles seats_booked — just refresh display from DB
+        await refreshSeatCount(selectedEvent, 'vol4').catch(() => {});
         seatsUsed = (seatsUsed || 0) + 1; updateSeats();
         document.getElementById('rsvp-form-wrap').style.display = 'none';
         document.getElementById('confirmation-view').style.display = 'block';
@@ -2101,14 +2128,8 @@ async function submitRSVP5() {
             body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol5' })
           }).catch(e => console.warn('add-to-list failed:', e));
         }
-        // Increment seats_booked so loadEvents doesn\'t revert the counter
-        if (selectedEvent5?.id) {
-          await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_event_guests`, {
-            method: 'POST',
-            headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_name_param: selectedEvent5.name, increment_by: 1 })
-          }).catch(e => console.warn('Could not increment seats_booked:', e));
-        }
+        // DB trigger handles seats_booked — just refresh display from DB
+        await refreshSeatCount(selectedEvent5, 'vol6').catch(() => {});
         seatsUsed5 = (seatsUsed5 || 0) + 1; updateSeats5();
         document.getElementById('v5-rsvp-form-wrap').style.display = 'none';
         document.getElementById('confirmation-view-5').style.display = 'block';
@@ -2385,9 +2406,8 @@ async function submitRSVPMay() {
         if (document.getElementById('mayr-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol05' }) }).catch(() => {});
         }
-        if (selectedEventMay?.id) {
-          await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_event_guests`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ event_name_param: selectedEventMay.name, increment_by: 1 }) }).catch(() => {});
-        }
+        // DB trigger handles seats_booked — just refresh display from DB
+        await refreshSeatCount(selectedEventMay, 'may').catch(() => {});
         seatsUsedMay = (seatsUsedMay || 0) + 1; updateSeatsMay();
         document.getElementById('may-rsvp-form-wrap').style.display = 'none';
         document.getElementById('confirmation-view-may').style.display = 'block';
@@ -2783,6 +2803,7 @@ sponsors = [
   {id:4,name:'Myers of Keswick',tier:'supporting',desc:'An authentic British grocer offering homemade savory pies, sausages, scones, and imported British specialty foods.',url:'myersofkeswick.com',location:'634 Hudson St, West Village'},
   {id:5,name:'Di Palo Fine Foods',tier:'supporting',desc:'A century-old Italian specialty food store carrying imported cheeses, cured meats, pastas, and wines from all 20 regions of Italy.',url:'dipalofinefoods.com',location:'200 Grand St, Little Italy'},
   {id:6,name:"Mike's Hot Honey",tier:'friend',desc:'Raw wildflower honey infused with Brazilian chilies — the original American hot honey, made in Brooklyn.',url:'mikeshothoney.com',location:'Brooklyn, NY'},
+  {id:10,name:'The Pathfinder Hemp & Root',tier:'partner',desc:'A botanical non-alcoholic spirit from Seattle, distilled from hemp with roots, herbs, and wild botanicals. Their Phony Negroni was featured at LTF Vol. 05.',url:'drinkthepathfinder.com',location:'Seattle, WA'},
 ];
 
 function filterContent(f, btn) {
