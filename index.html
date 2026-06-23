@@ -748,18 +748,30 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Smoked Beef Bacon Egg and Cheese</p>
               <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">Papi lemme get a bacon egg and cheese, Mayo, salt, pepper, spicy ketchup &mdash; on a potato roll</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Our conversation with Miles made two things clear: he is New York through and through, and he cares deeply about his sandwiches. There&rsquo;s no better way to honor that than going straight for the city&rsquo;s jugular.</p>
+              <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
+                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-size:0.9rem;color:var(--ink-mid)">Egg Sando &mdash; spicy ketchup &amp; hash browns</span>
+              </div>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Wedge Salad w/ Chicharr&oacute;n de Pollo, Dominican Fried Cheese &amp; Creamy Passionfruit Dressing</p>
               <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">The brasserie meets the Caribbean</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Light, fresh flavors colliding head first with rich, familiar Dominican comfort. This course lives at the intersection of where things started and where they are now. It was Miles who pushed to bring Elijah into this dinner &mdash; a small, genuine act that shaped the entire direction of the night. His memories at The Odeon meet Elijah&rsquo;s Caribbean roots here. This is what Life Through Food is about.</p>
+              <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
+                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-size:0.9rem;color:var(--ink-mid)">Wedge Salad &mdash; fried cheese, pickled onions &amp; passionfruit ranch</span>
+              </div>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Whole Roast Pig w/ Moro de Guandules</p>
               <p style="font-style:italic;font-size:0.9rem;color:var(--ink-low);margin-top:0.2rem">Smokers in full effect</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Y&rsquo;all, it&rsquo;s a cookout. Slow-roasted pork with glass skin, served alongside rice with pigeon peas and coconut milk &mdash; an iconic pairing. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.</p>
+              <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
+                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-size:0.9rem;color:var(--ink-mid)">Smoked Cauliflower Steak &mdash; Moro de Habichuelas &amp; tostones</span>
+              </div>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
@@ -807,7 +819,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
             <label>Add-ons</label>
             <label class="toggle-row" for="v5r-drink">
               <input type="checkbox" id="v5r-drink" onchange="updatePaymentTotal5()">
-              <span class="toggle-label">Open drink package <span class="toggle-price" id="v5-drink-addon-price">+$20</span></span>
+              <span class="toggle-label">Open drink package <span class="toggle-price" id="v5-drink-addon-price">Complimentary</span></span>
             </label>
             <label class="toggle-row" for="v5r-plus-one">
               <input type="checkbox" id="v5r-plus-one" onchange="updatePaymentTotal5()">
@@ -822,7 +834,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
             <div id="v5-plus-one-drinks-row" style="display:none; padding-left:1.5rem">
               <label class="toggle-row" for="v5r-drink-plus-one">
                 <input type="checkbox" id="v5r-drink-plus-one" onchange="updatePaymentTotal5()">
-                <span class="toggle-label">Open drink package for your +1 <span class="toggle-price" id="v5-drink-plus-one-price">+$20</span></span>
+                <span class="toggle-label">Open drink package for your +1 <span class="toggle-price" id="v5-drink-plus-one-price">Complimentary</span></span>
               </label>
             </div>
           </div>
@@ -1991,11 +2003,11 @@ function selectVol5Event(ev) {
   seatsTotal5 = ev.total_capacity || ev.max_capacity || 0;
   if (eventChanged5) seatsUsed5 = ev.seats_booked || 0;
   const price = ev.price_cents ? ev.price_cents / 100 : 50;
-  const drink = 20;
+  const drink = 0;
   const priceEl = document.getElementById('v5-ev-price');
   if (priceEl) priceEl.textContent = '$' + price;
   const drEl = document.getElementById('v5-drink-addon-price');
-  if (drEl) drEl.textContent = `+$${drink} / person`;
+  if (drEl) drEl.textContent = 'Complimentary';
   updateSeats5();
   updatePaymentTotal5();
 }
@@ -2010,7 +2022,7 @@ function updateSeats5() {
 
 function updatePaymentTotal5() {
   const price = selectedEvent5 ? selectedEvent5.price_cents / 100 : 50;
-  const drinkPrice = 20;
+  const drinkPrice = 0;
   const plusOne = document.getElementById('v5r-plus-one')?.checked;
   const drink = document.getElementById('v5r-drink')?.checked;
   const drinkPlusOne = document.getElementById('v5r-drink-plus-one')?.checked;
@@ -2025,9 +2037,9 @@ function updatePaymentTotal5() {
   const p1El = document.getElementById('v5-plus-one-price');
   if (p1El) p1El.textContent = '+$' + price;
   const drEl = document.getElementById('v5-drink-addon-price');
-  if (drEl) drEl.textContent = '+$' + drinkPrice;
+  if (drEl) drEl.textContent = 'Complimentary';
   const drP1El = document.getElementById('v5-drink-plus-one-price');
-  if (drP1El) drP1El.textContent = '+$' + drinkPrice;
+  if (drP1El) drP1El.textContent = 'Complimentary';
 
   if (activeCompCode5) {
     const compNotice = document.getElementById('v5-comp-notice');
