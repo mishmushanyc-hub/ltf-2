@@ -2224,7 +2224,7 @@ async function submitRSVP5() {
         fullName: `${first} ${last}`,
         email, phone, partySize: numGuests,
         dietary: getDietary5().join(', ') || null,
-        wineAddon: drink, wineAddonPlusOne: plusOne ? drinkPlusOne : false, source,
+        wineAddon: false, wineAddonPlusOne: false, source,
         discountPercent: activeCompCode5?.discount_percent === 50 ? 50 : 0,
       })
     });
