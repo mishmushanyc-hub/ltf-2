@@ -817,7 +817,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
             <label>Add-ons</label>
-            <div style="padding:0.5rem 0;font-size:0.95rem;color:var(--ink-mid)">Open drink package &mdash; <span style="color:var(--olive);font-family:'Fragment Mono',monospace;font-size:0.8rem;letter-spacing:0.05em">Complimentary</span></div>
+            <div style="padding:0.5rem 0;font-size:0.95rem;color:var(--ink-mid)">Drinks provided by Parch &amp; Juan Please</div>
             <input type="checkbox" id="v5r-drink" checked style="display:none">
             <label class="toggle-row" for="v5r-plus-one">
               <input type="checkbox" id="v5r-plus-one" onchange="updatePaymentTotal5()">
@@ -830,7 +830,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
               </div>
             </div>
             <div id="v5-plus-one-drinks-row" style="display:none; padding-left:1.5rem">
-              <div style="padding:0.5rem 0;font-size:0.95rem;color:var(--ink-mid)">Open drink package for your +1 &mdash; <span style="color:var(--olive);font-family:'Fragment Mono',monospace;font-size:0.8rem;letter-spacing:0.05em">Complimentary</span></div>
+              <div style="padding:0.5rem 0;font-size:0.95rem;color:var(--ink-mid)">Drinks for your +1 provided by Parch &amp; Juan Please</div>
               <input type="checkbox" id="v5r-drink-plus-one" checked style="display:none">
             </div>
           </div>
@@ -2003,7 +2003,7 @@ function selectVol5Event(ev) {
   const priceEl = document.getElementById('v5-ev-price');
   if (priceEl) priceEl.textContent = '$' + price;
   const drEl = document.getElementById('v5-drink-addon-price');
-  if (drEl) drEl.textContent = 'Complimentary';
+  if (drEl) drEl.textContent = 'By Parch & Juan Please';
   updateSeats5();
   updatePaymentTotal5();
 }
@@ -2033,9 +2033,9 @@ function updatePaymentTotal5() {
   const p1El = document.getElementById('v5-plus-one-price');
   if (p1El) p1El.textContent = '+$' + price;
   const drEl = document.getElementById('v5-drink-addon-price');
-  if (drEl) drEl.textContent = 'Complimentary';
+  if (drEl) drEl.textContent = 'By Parch & Juan Please';
   const drP1El = document.getElementById('v5-drink-plus-one-price');
-  if (drP1El) drP1El.textContent = 'Complimentary';
+  if (drP1El) drP1El.textContent = 'By Parch & Juan Please';
 
   if (activeCompCode5) {
     const compNotice = document.getElementById('v5-comp-notice');
