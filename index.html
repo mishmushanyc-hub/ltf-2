@@ -350,6 +350,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
   <button onclick="showTab('notify',this)">Stay informed</button>
   <button onclick="showTab('team',this)">The team</button>
   <button onclick="showTab('private',this)">Private events</button>
+  <button onclick="showTab('artist',this)">Artist submission</button>
   <button id="nav-admin-btn" onclick="showTab('admin',this)">Guest records</button>
 </nav>
 
@@ -752,6 +753,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
                 <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Egg Sando &mdash; spicy ketchup &amp; hash browns</span>
               </div>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">Our conversation with Miles made two things clear. He is NY through and through and is passionate about his sandwiches. No better way to honor this than going right for the NY sandwich jugular.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
@@ -762,6 +764,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
                 <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Wedge Salad &mdash; fried cheese, pickled onions &amp; passionfruit ranch</span>
               </div>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">At the intersection of where things begin and where they are now. It was Miles who birthed the idea of expanding this event to include Elijah. A humble act of spotlight sharing that inspired this course. Miles&rsquo; childhood memories at The Odeon paired seamlessly with Elijah&rsquo;s Caribbean roots. This dish is what LTF is all about.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
@@ -772,6 +775,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
                 <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Smoked Cauliflower Steak &mdash; Moro de Habichuelas &amp; tostones</span>
               </div>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">Y&rsquo;all, it&rsquo;s a cookout. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.</p>
             </div>
             <div>
               <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
@@ -1029,6 +1033,86 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
     </div>
   </div>
 
+  <!-- ARTIST SUBMISSION -->
+  <div id="tab-artist" class="section">
+    <div class="notify-intro">
+      <h2>Artist submission.</h2>
+      <p>Life Thru Food is built around creatives whose work &mdash; and relationship with food &mdash; tells a story worth gathering around. Submit yourself or someone you think belongs at the table.</p>
+    </div>
+    <div id="artist-toast" class="toast"></div>
+    <div id="artist-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+      <p style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
+      <p style="font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We&rsquo;ll be in touch.</p>
+      <p style="font-size:0.95rem;font-style:italic;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit.</p>
+    </div>
+    <div id="artist-form-wrap">
+
+      <!-- Mode toggle -->
+      <div style="display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--rule-mid);width:fit-content">
+        <button id="ar-mode-self" onclick="setArtistMode('self')" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:var(--ink);color:var(--paper);transition:all 0.15s">I&rsquo;m the artist</button>
+        <button id="ar-mode-nom" onclick="setArtistMode('nominate')" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:transparent;color:var(--ink-low);transition:all 0.15s">Nominate someone</button>
+      </div>
+
+      <!-- Self section -->
+      <div id="ar-self-section">
+        <p class="form-title">Tell us about yourself</p>
+        <div class="form-grid">
+          <div class="form-field"><label for="ar-first">First name</label><input type="text" id="ar-first" placeholder="First"></div>
+          <div class="form-field"><label for="ar-last">Last name</label><input type="text" id="ar-last" placeholder="Last"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="ar-email">Email</label><input type="email" id="ar-email" placeholder="you@email.com"></div>
+          <div class="form-field"><label for="ar-instagram">Instagram</label><input type="text" id="ar-instagram" placeholder="@yourhandle"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="ar-discipline">Discipline</label><input type="text" id="ar-discipline" placeholder="e.g. Painter, Designer, Photographer"></div>
+          <div class="form-field"><label for="ar-portfolio">Website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-portfolio" placeholder="https://"></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-bio">Tell us about your work</label><textarea id="ar-bio" rows="4" placeholder="A little about who you are and what you make..."></textarea></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-why">Why Life Thru Food?</label><textarea id="ar-why" rows="4" placeholder="What draws you to LTF, and how does food connect to your creative life?"></textarea></div>
+        </div>
+      </div>
+
+      <!-- Nomination section -->
+      <div id="ar-nom-section" style="display:none">
+        <p class="form-title">About the artist</p>
+        <div class="form-grid">
+          <div class="form-field"><label for="ar-nom-first">Artist first name</label><input type="text" id="ar-nom-first" placeholder="First"></div>
+          <div class="form-field"><label for="ar-nom-last">Artist last name</label><input type="text" id="ar-nom-last" placeholder="Last"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="ar-nom-instagram">Artist Instagram</label><input type="text" id="ar-nom-instagram" placeholder="@theirhandle"></div>
+          <div class="form-field"><label for="ar-nom-discipline">Discipline</label><input type="text" id="ar-nom-discipline" placeholder="e.g. Sculptor, Musician, Chef"></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-nom-portfolio">Their website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-nom-portfolio" placeholder="https://"></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-nom-bio">Tell us about their work</label><textarea id="ar-nom-bio" rows="4" placeholder="Who are they and what do they make?"></textarea></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-nom-why">Why would they be a great fit for LTF?</label><textarea id="ar-nom-why" rows="4" placeholder="What makes their story worth gathering around?"></textarea></div>
+        </div>
+        <div style="border-top:1px solid var(--rule-mid);margin-top:2rem;padding-top:2rem">
+          <p class="form-title">About you</p>
+          <div class="form-grid">
+            <div class="form-field"><label for="ar-ref-name">Your name</label><input type="text" id="ar-ref-name" placeholder="Your name"></div>
+            <div class="form-field"><label for="ar-ref-email">Your email</label><input type="email" id="ar-ref-email" placeholder="you@email.com"></div>
+          </div>
+          <div class="form-grid full">
+            <div class="form-field"><label for="ar-ref-relation">Your relationship to the artist <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="ar-ref-relation" placeholder="e.g. Friend, collaborator, fan of their work"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="artist-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div style="margin-top:1.5rem"><button class="btn-primary" id="ar-submit-btn" onclick="submitArtistInquiry()">send submission &rarr;</button></div>
+    </div>
+  </div>
+
   <!-- ADMIN -->
   <div id="tab-admin" class="section">
     <div id="admin-pw-gate" style="padding:4rem 0;max-width:360px;margin:0 auto">
@@ -1214,10 +1298,10 @@ const EDITIONS = {
       'Miles is a Brooklyn kid. He grew up on a MetroCard and a sense of freedom, moving through the city with curiosity. That world expanded when he moved to Germany, but eventually it pushed beyond place altogether. Miles leans toward the fantastical. Through his brand, Real Fantasy, he brings those ideas back down to earth — grounded in American workwear. His taste in food reflects that same utility, especially in his deep love for sandwiches. Whether it\'s early memories at The Odeon or a lifelong connection to the BEC, everything he creates builds on the culture that raised him.',
     ],
     menu: [
-      { course:'Course 01', name:'Smoked Beef Bacon Egg and Cheese', note:'Mayo, salt, pepper, spicy ketchup — served on a potato roll', body:'Papi lemme get a bacon egg and cheese. Our conversation with Miles made two things clear: he is New York through and through, and he cares deeply about his sandwiches. There\'s no better way to honor that than going straight for the city\'s jugular.' },
-      { course:'Course 02', name:'Wedge Salad w/ Chicharrón de Pollo, Dominican Fried Cheese &amp; Creamy Passionfruit Dressing', note:'The brasserie meets the Caribbean', body:'Light, fresh flavors colliding head first with rich, familiar Dominican comfort. This course lives at the intersection of where things started and where they are now. It was Miles who pushed to bring Elijah into this dinner — a small, genuine act that shaped the entire direction of the night. His memories at The Odeon meet Elijah\'s Caribbean roots here. This is what Life Through Food is about.' },
-      { course:'Course 03', name:'Whole Roast Pig w/ Moro de Guandules', note:'Smokers in full effect', body:'Y\'all, it\'s a cookout. Slow-roasted pork with glass skin, served alongside rice with pigeon peas and coconut milk — an iconic pairing. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.' },
-      { course:'Course 04', name:'Chilled Watermelon', note:null, body:'A cool, refreshing way to transition us to the next chapter of the night.' },
+      { course:'Course 01', name:'Beef Bacon Egg n Cheese', note:'Yo Ock, get me a B.E.C on a roll', body:'Our conversation with Miles made two things clear. He is NY through and through and is passionate about his sandwiches. No better way to honor this than going right for the NY sandwich jugular.', veg:'Egg Sando — spicy ketchup & hash browns', ingredients:'Smokey beef bacon, fluffy eggs, American cheese — there are no other options because it\'s perfect in every way — and spicy ketchup.' },
+      { course:'Course 02', name:'Wedge Salad', note:'Brasserie food meets the Caribbean. What\'s more New York?', body:'At the intersection of where things begin and where they are now. It was Miles who birthed the idea of expanding this event to include Elijah. A humble act of spotlight sharing that inspired this course. Miles\' childhood memories at The Odeon paired seamlessly with Elijah\'s Caribbean roots. This dish is what LTF is all about.', veg:'Wedge Salad — fried cheese, pickled onions & passionfruit ranch', ingredients:'Chicharrón de pollo, fried cheese, pickled red onions, passionfruit ranch.' },
+      { course:'Course 03', name:'Whole Roasted Hog', note:'An LTF twist on a Dominican classic', body:'Y\'all, it\'s a cookout. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.', veg:'Smoked Cauliflower Steak — Moro de Habichuelas & tostones', ingredients:'Served w/ Moro de Habichuelas and tostones. Crispy skin, fragrant rice con caperberries y frijoles, and pull-apart pork.' },
+      { course:'To Close', name:'Compressed Watermelon Poppers', note:'The brainchild of guest chef Ayele Mystic', body:'Lemon, shiso, West Indian bay leaf. Served cold — engineered to refresh.', veg:null, ingredients:'Lemon, shiso, West Indian bay leaf. Served cold — engineered to refresh.' },
     ]
   },
   '04': {
@@ -1939,6 +2023,113 @@ async function submitPrivateInquiry() {
     errEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'send inquiry →';
+  }
+}
+
+// ── ARTIST SUBMISSION ────────────────────────────────────────────
+let artistMode = 'self';
+
+function setArtistMode(mode) {
+  artistMode = mode;
+  const selfBtn = document.getElementById('ar-mode-self');
+  const nomBtn  = document.getElementById('ar-mode-nom');
+  const selfSec = document.getElementById('ar-self-section');
+  const nomSec  = document.getElementById('ar-nom-section');
+  const isSelf  = mode === 'self';
+
+  selfBtn.style.background   = isSelf ? 'var(--ink)'         : 'transparent';
+  selfBtn.style.color        = isSelf ? 'var(--paper)'       : 'var(--ink-low)';
+  nomBtn.style.background    = isSelf ? 'transparent'        : 'var(--ink)';
+  nomBtn.style.color         = isSelf ? 'var(--ink-low)'     : 'var(--paper)';
+  selfSec.style.display      = isSelf ? ''                   : 'none';
+  nomSec.style.display       = isSelf ? 'none'               : '';
+
+  document.getElementById('artist-inline-error').style.display = 'none';
+}
+
+async function submitArtistInquiry() {
+  const errEl = document.getElementById('artist-inline-error');
+  const btn   = document.getElementById('ar-submit-btn');
+  const missing = [];
+  let payload = {};
+
+  if (artistMode === 'self') {
+    const first      = document.getElementById('ar-first').value.trim();
+    const last       = document.getElementById('ar-last').value.trim();
+    const email      = document.getElementById('ar-email').value.trim();
+    const instagram  = document.getElementById('ar-instagram').value.trim();
+    const discipline = document.getElementById('ar-discipline').value.trim();
+    const portfolio  = document.getElementById('ar-portfolio').value.trim();
+    const bio        = document.getElementById('ar-bio').value.trim();
+    const why        = document.getElementById('ar-why').value.trim();
+
+    if (!first || !last)              missing.push('Your full name');
+    if (!email || !email.includes('@')) missing.push('Valid email address');
+    if (!discipline)                  missing.push('Discipline');
+    if (!bio)                         missing.push('A bit about your work');
+
+    payload = {
+      submission_type: 'self',
+      first_name: first, last_name: last, email,
+      instagram: instagram || null, discipline,
+      portfolio: portfolio || null, bio, why_ltf: why || null,
+    };
+
+  } else {
+    const nomFirst    = document.getElementById('ar-nom-first').value.trim();
+    const nomLast     = document.getElementById('ar-nom-last').value.trim();
+    const nomIg       = document.getElementById('ar-nom-instagram').value.trim();
+    const nomDisc     = document.getElementById('ar-nom-discipline').value.trim();
+    const nomPortfolio= document.getElementById('ar-nom-portfolio').value.trim();
+    const nomBio      = document.getElementById('ar-nom-bio').value.trim();
+    const nomWhy      = document.getElementById('ar-nom-why').value.trim();
+    const refName     = document.getElementById('ar-ref-name').value.trim();
+    const refEmail    = document.getElementById('ar-ref-email').value.trim();
+    const refRelation = document.getElementById('ar-ref-relation').value.trim();
+
+    if (!nomFirst || !nomLast)              missing.push('Artist full name');
+    if (!nomDisc)                           missing.push('Artist discipline');
+    if (!nomBio)                            missing.push('About their work');
+    if (!refName)                           missing.push('Your name');
+    if (!refEmail || !refEmail.includes('@')) missing.push('Your email address');
+
+    payload = {
+      submission_type: 'nomination',
+      first_name: nomFirst, last_name: nomLast,
+      instagram: nomIg || null, discipline: nomDisc,
+      portfolio: nomPortfolio || null, bio: nomBio, why_ltf: nomWhy || null,
+      nominator_name: refName, nominator_email: refEmail,
+      nominator_relation: refRelation || null,
+    };
+  }
+
+  if (missing.length) {
+    errEl.innerHTML = 'Please complete the following:<br>' + missing.map(m => `&nbsp;&middot; ${m}`).join('<br>');
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  btn.disabled = true;
+  btn.textContent = 'sending…';
+
+  try {
+    await sbPost('artist_inquiries', { ...payload, created_at: new Date().toISOString() });
+
+    fetch(`${FN_URL}/notify-artist-inquiry`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(e => console.warn('Artist submission notification failed:', e));
+
+    document.getElementById('artist-form-wrap').style.display = 'none';
+    document.getElementById('artist-success').style.display = 'block';
+  } catch (err) {
+    console.error('Artist submission error:', err);
+    errEl.innerHTML = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'send submission →';
   }
 }
 
