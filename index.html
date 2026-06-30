@@ -1069,10 +1069,13 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
           <div class="form-field"><label for="ar-portfolio">Website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-portfolio" placeholder="https://"></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-bio">Tell us about yourself <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, places you&rsquo;ve lived)</span></label><textarea id="ar-bio" rows="4" placeholder="A little about who you are and what you make..."></textarea></div>
+          <div class="form-field"><label for="ar-bio">Tell us about yourself <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-bio" rows="4" placeholder="A little about who you are and what you make..."></textarea></div>
         </div>
         <div class="form-grid full">
           <div class="form-field"><label for="ar-why">Why Life Thru Food?</label><textarea id="ar-why" rows="4" placeholder="What draws you to LTF, and how does food connect to your creative life?"></textarea></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-timeline">Timeline &amp; upcoming projects <span style="font-style:italic;opacity:0.6">(optional)</span></label><textarea id="ar-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where you are in your work right now..."></textarea></div>
         </div>
       </div>
 
@@ -1091,10 +1094,13 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
           <div class="form-field"><label for="ar-nom-portfolio">Their website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-nom-portfolio" placeholder="https://"></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-nom-bio">Tell us about them <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, places they&rsquo;ve lived)</span></label><textarea id="ar-nom-bio" rows="4" placeholder="Who are they and what do they make?"></textarea></div>
+          <div class="form-field"><label for="ar-nom-bio">Tell us about them <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-nom-bio" rows="4" placeholder="Who are they and what do they make?"></textarea></div>
         </div>
         <div class="form-grid full">
           <div class="form-field"><label for="ar-nom-why">Why would they be a great fit for LTF?</label><textarea id="ar-nom-why" rows="4" placeholder="What makes their story worth gathering around?"></textarea></div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="ar-nom-timeline">Their timeline &amp; upcoming projects <span style="font-style:italic;opacity:0.6">(optional)</span></label><textarea id="ar-nom-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where they are in their work right now..."></textarea></div>
         </div>
         <div style="border-top:1px solid var(--rule-mid);margin-top:2rem;padding-top:2rem">
           <p class="form-title">About you</p>
@@ -2062,6 +2068,7 @@ async function submitArtistInquiry() {
     const portfolio  = document.getElementById('ar-portfolio').value.trim();
     const bio        = document.getElementById('ar-bio').value.trim();
     const why        = document.getElementById('ar-why').value.trim();
+    const timeline   = document.getElementById('ar-timeline').value.trim();
 
     if (!first || !last)              missing.push('Your full name');
     if (!email || !email.includes('@')) missing.push('Valid email address');
@@ -2073,6 +2080,7 @@ async function submitArtistInquiry() {
       first_name: first, last_name: last, email,
       instagram: instagram || null, discipline,
       portfolio: portfolio || null, bio, why_ltf: why || null,
+      timeline: timeline || null,
     };
 
   } else {
@@ -2083,6 +2091,7 @@ async function submitArtistInquiry() {
     const nomPortfolio= document.getElementById('ar-nom-portfolio').value.trim();
     const nomBio      = document.getElementById('ar-nom-bio').value.trim();
     const nomWhy      = document.getElementById('ar-nom-why').value.trim();
+    const nomTimeline = document.getElementById('ar-nom-timeline').value.trim();
     const refName     = document.getElementById('ar-ref-name').value.trim();
     const refEmail    = document.getElementById('ar-ref-email').value.trim();
     const refRelation = document.getElementById('ar-ref-relation').value.trim();
@@ -2098,6 +2107,7 @@ async function submitArtistInquiry() {
       first_name: nomFirst, last_name: nomLast,
       instagram: nomIg || null, discipline: nomDisc,
       portfolio: nomPortfolio || null, bio: nomBio, why_ltf: nomWhy || null,
+      timeline: nomTimeline || null,
       nominator_name: refName, nominator_email: refEmail,
       nominator_relation: refRelation || null,
     };
