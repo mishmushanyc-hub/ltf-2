@@ -329,6 +329,25 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
   header h1 { font-size: 2.5rem; }
   .board-toolbar { flex-direction: column; align-items: flex-start; }
 }
+/* ── ARCHIVE ACCORDION ── */
+.ed-accordion { border: 1px solid var(--rule-mid); margin-bottom: 0.5rem; background: var(--canvas); transition: border-color 0.2s; }
+.ed-accordion.open { border-color: var(--olive-dim); }
+.ed-acc-header { cursor: pointer; padding: 1.25rem 1.5rem 0; user-select: none; }
+.ed-acc-header:hover .ed-info { border-left-color: var(--olive); }
+.ed-acc-meta-row { display: flex; align-items: flex-start; gap: 1.25rem; }
+.ed-mini-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin: 1rem 0 0; }
+.ed-mini-strip.has-fewer { grid-template-columns: repeat(2, 1fr); }
+.ed-mini-strip img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: brightness(0.88) saturate(0.70); display: block; cursor: pointer; transition: filter 0.2s; }
+.ed-mini-strip img:hover { filter: brightness(0.76) saturate(0.60); }
+.ed-mini-strip-empty { height: 52px; }
+.ed-acc-foot { display: flex; justify-content: flex-end; align-items: center; padding: 0.65rem 1.5rem; }
+.ed-acc-hint { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); transition: color 0.2s; }
+.ed-accordion.open .ed-acc-hint { color: var(--olive); }
+.ed-accordion-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.38s ease; }
+.ed-acc-inner { overflow: hidden; min-height: 0; }
+.ed-accordion.open .ed-accordion-body { grid-template-rows: 1fr; }
+.ed-acc-content { padding: 1.5rem; border-top: 1px solid var(--rule-mid); }
+@media (max-width: 600px) { .ed-mini-strip { grid-template-columns: repeat(3, 1fr); } }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -917,7 +936,6 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
         <button class="fpill" onclick="filterContent('photo',this)">Photos</button>
         <button class="fpill" onclick="filterContent('short',this)">Captions</button>
         <button class="fpill" onclick="filterContent('quote',this)">Quotes</button>
-        <button class="fpill" onclick="filterContent('long',this)">Essays</button>
       </div>
     </div>
     <div id="content-list"></div>
@@ -3060,6 +3078,12 @@ function filterContent(f, btn) {
 function renderContent() {
   const el = document.getElementById('content-list');
   const isLong = t => t === 'profile' || t === 'recap';
+
+  // All photos (unfiltered) — always used for mini strip
+  const allByEd = {};
+  contentPieces.forEach(p => { if (!allByEd[p.edition]) allByEd[p.edition] = []; allByEd[p.edition].push(p); });
+
+  // Filtered pieces for the expanded body
   const filtered = contentPieces.filter(p => {
     if (contentFilter === 'photo') return p.type === 'photo';
     if (contentFilter === 'short') return p.type === 'caption';
@@ -3069,63 +3093,83 @@ function renderContent() {
   });
   const byEd = {};
   filtered.forEach(p => { if (!byEd[p.edition]) byEd[p.edition] = []; byEd[p.edition].push(p); });
-  // Auto-include any edition whose event date has already passed (even if no content yet)
+
   const today = new Date().toISOString().split('T')[0];
   const order = ['06','05','04','03','02','01'];
-  const active = order.filter(k => byEd[k] || (EDITIONS[k]?.eventDate && EDITIONS[k].eventDate < today));
+  const active = order.filter(k => allByEd[k] || byEd[k] || (EDITIONS[k]?.eventDate && EDITIONS[k].eventDate < today));
   if (!active.length) { el.innerHTML = '<div class="empty-msg">Nothing here yet.</div>'; return; }
+
+  // Preserve open state across re-renders
+  const openSet = new Set([...el.querySelectorAll('.ed-accordion.open')].map(n => n.dataset.ed));
+
   let html = '';
-  active.forEach((k, i) => {
+  active.forEach((k) => {
     const ed = EDITIONS[k];
+    const allPhotos = (allByEd[k] || []).filter(p => p.type === 'photo');
     const pieces = byEd[k] || [];
     const photos = pieces.filter(p => p.type === 'photo');
     const profile = pieces.find(p => isLong(p.type));
     const caption = pieces.find(p => p.type === 'caption');
     const quote = pieces.find(p => p.type === 'quote');
+    const isOpen = openSet.has(k);
 
-    html += `<div class="ed-section">`;
+    html += `<div class="ed-accordion${isOpen ? ' open' : ''}" data-ed="${k}" id="ed-acc-${k}">`;
 
-    // Section header: flyer thumbnail (or number fallback) + info
-    const hasFlyer = !!ed.artistFlyer;
-    const hasPortrait = !!ed.artistPhoto;
-    html += `<div class="ed-section-head">`;
-    if (hasFlyer) {
+    // ── Clickable header ──
+    html += `<div class="ed-acc-header" onclick="toggleAccordion('${k}')">`;
+    html += `<div class="ed-acc-meta-row">`;
+    if (ed.artistFlyer) {
       html += `<div class="ed-head-flyer"><img src="${ed.artistFlyer}" alt="Vol. ${ed.num} flyer" loading="lazy"></div>`;
     } else {
       html += `<div class="ed-num">${ed.num}</div>`;
     }
-    html += `<div class="ed-info">
+    html += `<div class="ed-info" style="flex:1">
         <div class="ed-vol">Life Thru Food &mdash; Vol. ${ed.num}</div>
-        <div class="ed-artist">${ed.name}</div>
-        <div class="ed-discipline">${ed.discipline}</div>
+        <div class="ed-artist">${ed.name || 'TBA'}</div>
+        ${ed.discipline ? `<div class="ed-discipline">${ed.discipline}</div>` : ''}
         ${ed.location ? `<div class="ed-location">Location: ${ed.location}</div>` : ''}
         ${ed.eventDateDisplay ? `<div class="ed-location" style="margin-top:4px">${ed.eventDateDisplay}</div>` : ''}
-        ${ed.instagram && ed.instagram.length ? `<div class="ed-ig-links">${ed.instagram.map(ig => `<a href="${ig.url}" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>${ig.handle}</a>`).join('')}</div>` : ''}
+        ${ed.instagram && ed.instagram.length ? `<div class="ed-ig-links">${ed.instagram.map(ig => `<a href="${ig.url}" target="_blank" rel="noopener" class="ig-link" onclick="event.stopPropagation()"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>${ig.handle}</a>`).join('')}</div>` : ''}
       </div>`;
-    if (hasPortrait) {
+    if (ed.artistPhoto) {
       html += `<div class="ed-head-portrait"><img src="${ed.artistPhoto}" alt="${ed.name}" loading="lazy"></div>`;
     }
+    html += `</div>`; // close meta-row
+
+    // Mini photo strip — always visible, clicking opens gallery
+    if (allPhotos.length) {
+      const weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+      const off = weekNum % allPhotos.length;
+      const stripCount = Math.min(4, allPhotos.length);
+      const stripPhotos = Array.from({ length: stripCount }, (_, i) => allPhotos[(off + i) % allPhotos.length]);
+      const fewerClass = stripCount < 4 ? ' has-fewer' : '';
+      html += `<div class="ed-mini-strip${fewerClass}" onclick="event.stopPropagation(); openGallery('${k}')">`;
+      stripPhotos.forEach(p => { html += `<img src="${p.photo}" alt="" loading="lazy">`; });
+      html += `</div>`;
+    } else {
+      html += `<div class="ed-mini-strip-empty"></div>`;
+    }
+
+    html += `</div>`; // close ed-acc-header
+
+    // Expand/collapse hint + photo count
+    html += `<div class="ed-acc-foot" onclick="toggleAccordion('${k}')" style="cursor:pointer">`;
+    html += `<span class="ed-acc-hint"></span>`;
+    if (allPhotos.length) html += `<span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--ink-low);text-transform:uppercase">${allPhotos.length} photos</span>`;
     html += `</div>`;
 
-    // Event details, bio, menu (for editions that carry this data)
+    // ── Expandable body ──
+    html += `<div class="ed-accordion-body"><div class="ed-acc-inner"><div class="ed-acc-content">`;
+
     if (ed.desc || ed.bio || ed.menu) {
-      html += `<div class="ed-archive-detail">`;
-      // Description
-      if (ed.desc) {
-        html += `<p class="ed-archive-desc">${ed.desc}</p>`;
-      }
-      // Bio
+      if (ed.desc) html += `<p class="ed-archive-desc">${ed.desc}</p>`;
       if (ed.bio && ed.bio.length) {
-        html += `<div class="ed-archive-bio">`;
-        html += `<span class="ed-archive-section-label">Guest Profile — ${ed.name}</span>`;
+        html += `<div class="ed-archive-bio"><span class="ed-archive-section-label">Guest Profile — ${ed.name}</span>`;
         ed.bio.forEach(p => { html += `<p>${p}</p>`; });
         html += `</div>`;
       }
-      // Menu
       if (ed.menu && ed.menu.length) {
-        html += `<div class="ed-archive-menu">`;
-        html += `<span class="ed-archive-section-label">The Menu</span>`;
-        html += `<div class="ed-archive-courses">`;
+        html += `<div class="ed-archive-menu"><span class="ed-archive-section-label">The Menu</span><div class="ed-archive-courses">`;
         ed.menu.forEach(item => {
           html += `<div>`;
           if (item.course) html += `<span class="ed-course-num">${item.course}</span>`;
@@ -3136,10 +3180,8 @@ function renderContent() {
         });
         html += `</div></div>`;
       }
-      html += `</div>`;
     }
 
-    // Profile text (full width)
     if (profile) {
       html += `<div class="ed-profile-body" onclick="openLightbox(${profile.id})">
         <div class="te-kind">Profile</div>
@@ -3147,8 +3189,6 @@ function renderContent() {
         ${profile.body ? `<div class="lb-body" style="margin-top:0.75rem">${profile.body.replace(/\n/g,'<br>')}</div>` : ''}
       </div>`;
     }
-
-    // Caption
     if (caption) {
       html += `<div class="ed-caption-block board-tile tile-caption" onclick="openLightbox(${caption.id})">
         <div class="tc-label">Caption</div>
@@ -3156,8 +3196,6 @@ function renderContent() {
         <div class="tc-foot"><span class="ts">${caption.ts}</span><button class="copy-btn" data-id="${caption.id}" onclick="event.stopPropagation()">copy</button></div>
       </div>`;
     }
-
-    // Quote
     if (quote) {
       html += `<div class="ed-quote-block board-tile tile-quote" onclick="openLightbox(${quote.id})">
         <div class="tq-body">${quote.body.replace(/\n\n[\s\S]*/,'').replace(/\n/g,'<br>')}</div>
@@ -3165,26 +3203,24 @@ function renderContent() {
       </div>`;
     }
 
-    // Gallery — 2-photo preview (rotates weekly) + "view all" button
+    // Full gallery preview inside expanded
     if (photos.length) {
       const weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
-      const offset = weekNum % photos.length;
-      const preview = [photos[offset % photos.length], photos[(offset + 1) % photos.length]];
-      html += `<div class="ed-gallery-label"><span>Gallery</span><button class="ed-gallery-cta" onclick="openGallery('${k}')">view all ${photos.length} &rarr;</button></div>`;
+      const off = weekNum % photos.length;
+      const preview = [photos[off % photos.length], photos[(off + 1) % photos.length]];
+      html += `<div class="ed-gallery-label"><span>Gallery</span><button class="ed-gallery-cta" onclick="openGallery('${k}')">view all ${allPhotos.length} &rarr;</button></div>`;
       html += `<div class="ed-gallery-preview">`;
-      preview.forEach(p => {
-        html += `<img src="${p.photo}" alt="" loading="lazy" onclick="openGallery('${k}')">`;
-      });
+      preview.forEach(p => { html += `<img src="${p.photo}" alt="" loading="lazy" onclick="openGallery('${k}')">`; });
       html += `</div>`;
-    } else {
-      // No photos yet — fuller message only if the edition has zero content at all
-      const hasDetailContent = !!(ed.desc || ed.bio || ed.menu);
-      html += `<div class="ed-photos-soon">${hasDetailContent || pieces.length ? 'Photos coming soon.' : 'Photos &amp; recap from this evening will be shared soon.'}</div>`;
+    } else if (!allPhotos.length) {
+      const hasDetail = !!(ed.desc || ed.bio || ed.menu);
+      html += `<div class="ed-photos-soon">${hasDetail || pieces.length ? 'Photos coming soon.' : 'Photos &amp; recap from this evening will be shared soon.'}</div>`;
     }
 
-    html += `</div>`;
-    if (i < active.length - 1) html += `<div class="ed-divider"><span>earlier</span></div>`;
+    html += `</div></div></div>`; // close acc-content, acc-inner, accordion-body
+    html += `</div>`; // close ed-accordion
   });
+
   el.innerHTML = html;
   el.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', e => {
@@ -3197,6 +3233,12 @@ function renderContent() {
       });
     });
   });
+}
+
+function toggleAccordion(k) {
+  const acc = document.getElementById(`ed-acc-${k}`);
+  if (!acc) return;
+  acc.classList.toggle('open');
 }
 function openLightbox(id) {
   const p = contentPieces.find(x => x.id === id); if (!p) return;
