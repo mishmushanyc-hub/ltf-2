@@ -340,6 +340,8 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
 .ed-mini-strip img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: brightness(0.88) saturate(0.70); display: block; cursor: pointer; transition: filter 0.2s; }
 .ed-mini-strip img:hover { filter: brightness(0.76) saturate(0.60); }
 .ed-mini-strip-empty { height: 52px; }
+.ed-head-portraits { display: flex; gap: 3px; flex-shrink: 0; }
+.ed-head-portraits .ed-head-portrait { width: clamp(58px, 8vw, 80px); }
 .ed-acc-foot { display: flex; justify-content: flex-end; align-items: center; padding: 0.65rem 1.5rem; }
 .ed-acc-hint { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); transition: color 0.2s; }
 .ed-accordion.open .ed-acc-hint { color: var(--olive); }
@@ -1314,7 +1316,7 @@ const EDITIONS = {
   '06': {
     num:'06', eventDate:'2026-06-28', eventDateDisplay:'Sunday, June 28 · 2026', doors:'5:00 pm', price:'$50',
     name:'Miles Dixon & Elijuh Vuhlet', discipline:'Clothing Designers', location:'Red Hook Sculpture Garden',
-    artistPhoto: null, artistFlyer: null,
+    artistPhoto: null, artistPhotos: ['images/artist-profiles/Artist Photos/miles.jpg','images/artist-profiles/Artist Photos/elijuh.jpg'], artistFlyer: 'images/artist-profiles/flyer6 2.jpg',
     instagram: [{ handle:'@miloblase', url:'https://www.instagram.com/miloblase/' }, { handle:'@realfantasymfg', url:'https://www.instagram.com/realfantasymfg/' }, { handle:'@elijuhfuckingvuhlet', url:'https://www.instagram.com/elijuhfuckingvuhlet/' }, { handle:'@vuhlet', url:'https://www.instagram.com/vuhlet/' }],
     desc: 'Vol. 06 is an afternoon outside in Red Hook — two close friends, two different ways of life, one table. Doors at 5pm.',
     bio: [
@@ -2998,6 +3000,19 @@ contentPieces = [
   {id:85,edition:'05',type:'photo',platform:'Instagram',title:'Vol. 05',body:'',lede:'',photo:'images/vol-05-katya-semenova/Copy of Copy of DSC_9482.jpg',ts:'Vol. 05'},
   {id:86,edition:'05',type:'photo',platform:'Instagram',title:'Vol. 05',body:'',lede:'',photo:'images/vol-05-katya-semenova/Copy of Copy of DSC_9485.jpg',ts:'Vol. 05'},
   {id:87,edition:'05',type:'photo',platform:'Instagram',title:'Vol. 05',body:'',lede:'',photo:'images/vol-05-katya-semenova/Copy of Copy of DSC_9487.jpg',ts:'Vol. 05'},
+  {id:88,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of Copy of DSC_2517.jpg',ts:'Vol. 06'},
+  {id:89,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of Copy of DSC_2580.jpg',ts:'Vol. 06'},
+  {id:90,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of Copy of DSC_2610.jpg',ts:'Vol. 06'},
+  {id:91,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07325.jpg',ts:'Vol. 06'},
+  {id:92,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07693.jpg',ts:'Vol. 06'},
+  {id:93,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07746.jpg',ts:'Vol. 06'},
+  {id:94,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07755.jpg',ts:'Vol. 06'},
+  {id:95,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07763.jpg',ts:'Vol. 06'},
+  {id:96,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07764.jpg',ts:'Vol. 06'},
+  {id:97,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07772.jpg',ts:'Vol. 06'},
+  {id:98,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07775.jpg',ts:'Vol. 06'},
+  {id:99,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07798.jpg',ts:'Vol. 06'},
+  {id:100,edition:'06',type:'photo',platform:'Instagram',title:'Vol. 06',body:'',lede:'',photo:'images/vol-05-miles-elijuh/Copy of DSC07811.jpg',ts:'Vol. 06'},
   {id:50,edition:'04',type:'photo',platform:'Instagram',title:'Vol. 04',body:'',lede:'',photo:'images/vol-04-heidi-cannon/1D3A1428.jpeg',ts:'Vol. 04'},
   {id:51,edition:'04',type:'photo',platform:'Instagram',title:'Vol. 04',body:'',lede:'',photo:'images/vol-04-heidi-cannon/1D3A1472.jpg',ts:'Vol. 04'},
   {id:52,edition:'04',type:'photo',platform:'Instagram',title:'Vol. 04',body:'',lede:'',photo:'images/vol-04-heidi-cannon/1D3A1482.jpg',ts:'Vol. 04'},
@@ -3131,7 +3146,11 @@ function renderContent() {
         ${ed.eventDateDisplay ? `<div class="ed-location" style="margin-top:4px">${ed.eventDateDisplay}</div>` : ''}
         ${ed.instagram && ed.instagram.length ? `<div class="ed-ig-links">${ed.instagram.map(ig => `<a href="${ig.url}" target="_blank" rel="noopener" class="ig-link" onclick="event.stopPropagation()"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>${ig.handle}</a>`).join('')}</div>` : ''}
       </div>`;
-    if (ed.artistPhoto) {
+    if (ed.artistPhotos && ed.artistPhotos.length) {
+      html += `<div class="ed-head-portraits">`;
+      ed.artistPhotos.forEach(src => { html += `<div class="ed-head-portrait"><img src="${src}" alt="${ed.name}" loading="lazy"></div>`; });
+      html += `</div>`;
+    } else if (ed.artistPhoto) {
       html += `<div class="ed-head-portrait"><img src="${ed.artistPhoto}" alt="${ed.name}" loading="lazy"></div>`;
     }
     html += `</div>`; // close meta-row
