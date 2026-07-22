@@ -921,7 +921,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">5:00 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val">Shared upon confirmation</span></div>
-        <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val" id="v7-ev-price">$85</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val" id="v7-ev-price">$75</span></div>
       </div>
       <div class="event-desc">
         <p>Vol. 07 takes the rooftop. Ned and Merv &mdash; co-founders of Quell, a New York creative agency &mdash; tell their life thru food on a private Williamsburg rooftop with 70 people from the downtown fashion, food, and creative world.</p>
@@ -973,7 +973,7 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
           <div class="form-field">
             <label class="toggle-row" for="v7r-plus-one">
               <input type="checkbox" id="v7r-plus-one" onchange="updatePaymentTotal7()">
-              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v7-plus-one-price">+$85</span></span>
+              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v7-plus-one-price">+$75</span></span>
             </label>
             <div id="v7-plus-one-details-row" style="display:none; padding-left:1.5rem; margin-top:0.75rem">
               <div class="form-grid" style="margin-bottom:0.5rem">
@@ -1012,8 +1012,8 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
           <div class="payment-header">
             <span class="payment-label">Payment</span>
             <span>
-              <span class="payment-total" id="v7-payment-total">$85</span>
-              <span class="payment-total-sub" id="v7-payment-breakdown">1 guest &times; $85</span>
+              <span class="payment-total" id="v7-payment-total">$75</span>
+              <span class="payment-total-sub" id="v7-payment-breakdown">1 guest &times; $75</span>
             </span>
           </div>
           <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
@@ -1443,7 +1443,7 @@ const EDITIONS = {
     ]
   },
   '07': {
-    num:'07', eventDate:'2026-08-01', eventDateDisplay:'Saturday, August 1 · 2026', doors:'5:00 pm', price:'$85',
+    num:'07', eventDate:'2026-08-01', eventDateDisplay:'Saturday, August 1 · 2026', doors:'5:00 pm', price:'$75',
     name:'Ned & Merv', discipline:'Co-Founders, Quell', location:'Williamsburg, Brooklyn',
     desc: 'Vol. 07 takes the rooftop. Ned and Merv — co-founders of Quell, a New York creative agency — tell their life thru food on a private Williamsburg rooftop with 70 people from the downtown fashion, food, and creative world.',
     bio: [
@@ -1562,15 +1562,11 @@ async function loadEvents() {
       if (block5) block5.style.display = 'none';
     }
 
-    // Vol. 07 block (Aug) — find event on or after Aug 1
+    // Vol. 07 block (Aug) — always visible; wire up seat counter if event exists in DB
     const vol7Ev = activeEvents.find(e => dateStr(e) >= '2026-08-01');
-    const block7 = document.getElementById('event-block-7');
     if (vol7Ev) {
-      if (block7) block7.style.display = '';
       selectVol7Event(vol7Ev);
       refreshSeatCount(vol7Ev, 'vol7');
-    } else {
-      if (block7) block7.style.display = 'none';
     }
     // seats_booked is authoritative via DB trigger — refreshSeatCount handles it
   } catch(e) { console.warn('Could not load events:', e); }
@@ -2496,7 +2492,7 @@ function updateSeats7() {
 }
 
 function updatePaymentTotal7() {
-  const price = selectedEvent7 ? selectedEvent7.price_cents / 100 : 85;
+  const price = selectedEvent7 ? selectedEvent7.price_cents / 100 : 75;
   const plusOne = document.getElementById('v7r-plus-one')?.checked;
 
   const plusOneDetails = document.getElementById('v7-plus-one-details-row');
