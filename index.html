@@ -909,12 +909,135 @@ footer { background: var(--paper); border-top: 1px solid var(--rule-mid); paddin
       </div>
     </div>
 
-    <!-- VOL. 07 — TEASER -->
+    <!-- VOL. 07 — LIVE TICKETS -->
     <div class="event-block" id="event-block-7" style="margin-top:2rem">
       <div class="event-masthead">
         <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 07</span>
         <span class="ev-date">Saturday, August 1 &middot; 2026</span>
-        <p style="margin-top:1.8rem; font-family:'Courier New', monospace; font-size:0.82rem; letter-spacing:0.04em; opacity:0.65;">Clear your evening. More details coming soon&hellip;</p>
+        <h2>Ned &amp; Merv</h2>
+        <p class="ev-discipline">Co-Founders, Quell</p>
+        <p class="ev-location-ref">Location: Williamsburg, Brooklyn</p>
+      </div>
+      <div class="event-meta-row">
+        <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">5:00 pm</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val">Shared upon confirmation</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Per person</span><span class="ev-cell-val" id="v7-ev-price">$85</span></div>
+      </div>
+      <div class="event-desc">
+        <p>Vol. 07 takes the rooftop. Ned and Merv &mdash; co-founders of Quell, a New York creative agency &mdash; tell their life thru food on a private Williamsburg rooftop with 70 people from the downtown fashion, food, and creative world.</p>
+
+        <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Ned &amp; Merv</span>
+          <p style="font-style:normal;color:var(--ink-mid)">Ned and Merv built Quell around a belief that creative work should feel like something &mdash; not just look like it. Their approach blends instinct with intention, and their taste in food follows the same logic. Tonight is their table.</p>
+        </div>
+
+        <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">The Concept</span>
+          <p style="font-style:normal;color:var(--ink-mid)">The concept: a kid&rsquo;s birthday party, grown up. The childish and the adult, blended at every turn. A magician next to a tattoo artist. Balloon animals next to a weed rolling station. Martinis next to peanut butter and jelly. Vol. 07 is what happens when you refuse to choose between the two.</p>
+        </div>
+      </div>
+      <div id="v7-rsvp-toast" class="toast"></div>
+      <div id="v7-rsvp-form-wrap">
+        <div class="seats-wrap" style="margin-bottom:1.75rem">
+          <div class="seats-row">
+            <span>Seats remaining</span>
+            <strong id="v7-seats-remaining">— of —</strong>
+          </div>
+          <div class="seats-track"><div class="seats-fill" id="v7-seats-fill"></div></div>
+        </div>
+        <div id="v7-comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div class="gate-row">
+            <input type="text" id="v7-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate7()">
+            <button class="btn-ghost" id="v7-gate-apply-btn" onclick="checkGate7()">apply &rarr;</button>
+          </div>
+          <div id="v7-gate-error" class="gate-error"></div>
+        </div>
+        <p class="form-title">Reserve your seat</p>
+        <div class="form-grid">
+          <div class="form-field"><label for="v7r-first">First name</label><input type="text" id="v7r-first" placeholder="OG"></div>
+          <div class="form-field"><label for="v7r-last">Last name</label><input type="text" id="v7r-last" placeholder="Anunoby"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="v7r-email">Email</label><input type="email" id="v7r-email" placeholder="og.anunoby@gmail.com"></div>
+          <div class="form-field"><label for="v7r-phone">Phone</label><input type="tel" id="v7r-phone" placeholder="+1 212 555 0100"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="v7r-source">How did you hear about us?</label>
+            <select id="v7r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
+          </div>
+          <div class="form-field"><label for="v7r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="v7r-instagram" placeholder="@oanunoby"></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:0.25rem">
+          <div class="form-field">
+            <label class="toggle-row" for="v7r-plus-one">
+              <input type="checkbox" id="v7r-plus-one" onchange="updatePaymentTotal7()">
+              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v7-plus-one-price">+$85</span></span>
+            </label>
+            <div id="v7-plus-one-details-row" style="display:none; padding-left:1.5rem; margin-top:0.75rem">
+              <div class="form-grid" style="margin-bottom:0.5rem">
+                <div class="form-field"><label>+1 first name</label><input type="text" id="v7-p1-first" placeholder="First"></div>
+                <div class="form-field"><label>+1 last name</label><input type="text" id="v7-p1-last" placeholder="Last"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field">
+            <label>Dietary restrictions</label>
+            <div class="diet-grid" style="margin-top:8px">
+              <div class="check-row"><input type="checkbox" id="v7d-veg"><label for="v7d-veg">Vegetarian</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-vegan"><label for="v7d-vegan">Vegan</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-gf"><label for="v7d-gf">Gluten-free</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-df"><label for="v7d-df">Dairy-free</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-nut"><label for="v7d-nut">Nut allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-shell"><label for="v7d-shell">Shellfish allergy</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-kosher"><label for="v7d-kosher">Kosher</label></div>
+              <div class="check-row"><input type="checkbox" id="v7d-halal"><label for="v7d-halal">Halal</label></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="v7r-notes">Anything else we should know?</label><textarea id="v7r-notes" placeholder="Other dietary needs, accessibility, or notes for us..."></textarea></div>
+        </div>
+        <div class="form-grid full" style="margin-bottom:1.75rem">
+          <div class="check-row"><input type="checkbox" id="v7r-notify" checked><label for="v7r-notify">Keep me informed of future events</label></div>
+        </div>
+        <div id="v7-comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
+          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">✓ Complimentary admission</div>
+          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+        </div>
+        <div id="v7-payment-block-wrap" class="payment-block">
+          <div class="payment-header">
+            <span class="payment-label">Payment</span>
+            <span>
+              <span class="payment-total" id="v7-payment-total">$85</span>
+              <span class="payment-total-sub" id="v7-payment-breakdown">1 guest &times; $85</span>
+            </span>
+          </div>
+          <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
+        </div>
+        <div id="v7-rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <button class="btn-primary" id="v7-rsvp-submit-btn" onclick="submitRSVP7()">continue to payment &rarr;</button>
+      </div>
+    </div>
+
+    <!-- VOL. 07 CONFIRMATION VIEW (shown after payment) -->
+    <div id="confirmation-view-7" class="confirmation-view">
+      <div class="confirmation-card">
+        <div class="confirmation-hero">
+          <span class="conf-label">Life Thru Food &nbsp;&mdash;&nbsp; Vol. 07</span>
+          <h2>You're confirmed.</h2>
+          <p>We're looking forward to having you at the table. A confirmation email is on its way &mdash; check your inbox for the address and everything you need to know.</p>
+        </div>
+        <div class="confirmation-details">
+          <div class="conf-detail"><span class="conf-detail-label">Event</span><span class="conf-detail-val">Ned &amp; Merv &mdash; Quell</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Saturday, August 1</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Doors</span><span class="conf-detail-val">5:00 pm</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Location</span><span class="conf-detail-val">In your confirmation email</span></div>
+        </div>
+        <div class="confirmation-note">Questions? Reach us at <a href="mailto:info@lifethrufood.com" style="color:var(--olive)">info@lifethrufood.com</a>. See you on the rooftop.</div>
       </div>
     </div>
 
@@ -1297,6 +1420,7 @@ let contentFilter = 'all';
 
 const RSVP_PASSWORD = 'cannon-stylist';
 const RSVP_PASSWORD_5 = 'real-vuhlet-fantasy';
+const RSVP_PASSWORD_7 = 'quell-rooftop';
 
 const EDITIONS = {
   '05': {
@@ -1319,8 +1443,12 @@ const EDITIONS = {
     ]
   },
   '07': {
-    num:'07', eventDate:'2026-08-01', eventDateDisplay:'Saturday, August 1 · 2026', doors:'5:00 pm',
-    name:'', discipline:'', location:'Williamsburg, Brooklyn'
+    num:'07', eventDate:'2026-08-01', eventDateDisplay:'Saturday, August 1 · 2026', doors:'5:00 pm', price:'$85',
+    name:'Ned & Merv', discipline:'Co-Founders, Quell', location:'Williamsburg, Brooklyn',
+    desc: 'Vol. 07 takes the rooftop. Ned and Merv — co-founders of Quell, a New York creative agency — tell their life thru food on a private Williamsburg rooftop with 70 people from the downtown fashion, food, and creative world.',
+    bio: [
+      'Ned and Merv built Quell around a belief that creative work should feel like something — not just look like it. Their approach blends instinct with intention, and their taste in food follows the same logic. Tonight is their table.',
+    ],
   },
   '06': {
     num:'06', eventDate:'2026-06-28', eventDateDisplay:'Sunday, June 28 · 2026', doors:'5:00 pm', price:'$50',
@@ -1423,8 +1551,8 @@ async function loadEvents() {
       if (blockMay) blockMay.style.display = 'none';
     }
 
-    // Vol. 06 block (June) — find event on or after June 1
-    const vol5Ev = activeEvents.find(e => dateStr(e) >= '2026-06-01');
+    // Vol. 06 block (June) — find event between June 1 and Aug 1
+    const vol5Ev = activeEvents.find(e => dateStr(e) >= '2026-06-01' && dateStr(e) < '2026-08-01');
     const block5 = document.getElementById('event-block-5');
     if (vol5Ev) {
       if (block5) block5.style.display = '';
@@ -1432,6 +1560,17 @@ async function loadEvents() {
       refreshSeatCount(vol5Ev, 'vol5');
     } else {
       if (block5) block5.style.display = 'none';
+    }
+
+    // Vol. 07 block (Aug) — find event on or after Aug 1
+    const vol7Ev = activeEvents.find(e => dateStr(e) >= '2026-08-01');
+    const block7 = document.getElementById('event-block-7');
+    if (vol7Ev) {
+      if (block7) block7.style.display = '';
+      selectVol7Event(vol7Ev);
+      refreshSeatCount(vol7Ev, 'vol7');
+    } else {
+      if (block7) block7.style.display = 'none';
     }
     // seats_booked is authoritative via DB trigger — refreshSeatCount handles it
   } catch(e) { console.warn('Could not load events:', e); }
@@ -1445,6 +1584,7 @@ async function refreshSeatCount(ev, which) {
     const used = rows[0].seats_booked || 0;
     if (which === 'vol4') { seatsUsed = used; updateSeats(); }
     else if (which === 'may') { seatsUsedMay = used; updateSeatsMay(); }
+    else if (which === 'vol7') { seatsUsed7 = used; updateSeats7(); }
     else { seatsUsed5 = used; updateSeats5(); }
   } catch(e) { console.warn('Could not refresh seat count:', e.message); }
 }
@@ -1464,10 +1604,15 @@ function syncSeatsFromGuests() {
     seatsUsedMay = confirmed.filter(g => matchEv(g, vMay)).reduce((s, g) => s + (g.party_size || 1), 0);
     updateSeatsMay();
   }
-  const v5 = activeEvents.find(e => ds(e) >= '2026-06-01');
+  const v5 = activeEvents.find(e => ds(e) >= '2026-06-01' && ds(e) < '2026-08-01');
   if (v5) {
     seatsUsed5 = confirmed.filter(g => matchEv(g, v5)).reduce((s, g) => s + (g.party_size || 1), 0);
     updateSeats5();
+  }
+  const v7 = activeEvents.find(e => ds(e) >= '2026-08-01');
+  if (v7) {
+    seatsUsed7 = confirmed.filter(g => matchEv(g, v7)).reduce((s, g) => s + (g.party_size || 1), 0);
+    updateSeats7();
   }
 }
 
@@ -2175,6 +2320,7 @@ async function submitArtistInquiry() {
 // ── COMP CODE STATE ─────────────────────────────────────────────
 let activeCompCode = null;   // { id, code } for Vol. 4
 let activeCompCode5 = null;  // { id, code } for Vol. 6 (June)
+let activeCompCode7 = null;  // { id, code } for Vol. 7 (Aug)
 
 function applyCompDim(compEventId) {
   const b4  = document.getElementById('event-block-4');
@@ -2232,6 +2378,9 @@ async function sendCompConfirmation({ fullName, email, eventName, eventDate, eve
 
 // ── VOL. 5 (JUNE) STATE ─────────────────────────────────────────
 let selectedEvent5 = null, seatsTotal5 = 0, seatsUsed5 = 0;
+
+// ── VOL. 07 (AUG) STATE ─────────────────────────────────────────
+let selectedEvent7 = null, seatsTotal7 = 0, seatsUsed7 = 0;
 
 // ── VOL. 05 (MAY) STATE ─────────────────────────────────────────
 let selectedEventMay = null, seatsTotalMay = 0, seatsUsedMay = 0, activeCompCodeMay = null;
@@ -2320,6 +2469,274 @@ function updatePaymentTotal5() {
 function getDietary5() {
   const m = { 'v5d-veg':'Vegetarian','v5d-vegan':'Vegan','v5d-gf':'Gluten-free','v5d-df':'Dairy-free','v5d-nut':'Nut allergy','v5d-shell':'Shellfish','v5d-kosher':'Kosher','v5d-halal':'Halal' };
   return Object.entries(m).filter(([id]) => document.getElementById(id)?.checked).map(([,v]) => v);
+}
+
+// ── VOL. 07 (AUG) FUNCTIONS ─────────────────────────────────────
+
+function selectVol7Event(ev) {
+  const eventChanged7 = !selectedEvent7 || String(selectedEvent7.id) !== String(ev.id);
+  selectedEvent7 = ev;
+  seatsTotal7 = ev.total_capacity || ev.max_capacity || 0;
+  if (eventChanged7) seatsUsed7 = ev.seats_booked || 0;
+  const price = ev.price_cents ? ev.price_cents / 100 : 85;
+  const priceEl = document.getElementById('v7-ev-price');
+  if (priceEl) priceEl.textContent = '$' + price;
+  const plusPriceEl = document.getElementById('v7-plus-one-price');
+  if (plusPriceEl) plusPriceEl.textContent = '+$' + price;
+  updateSeats7();
+  updatePaymentTotal7();
+}
+
+function updateSeats7() {
+  const rem = seatsTotal7 - seatsUsed7;
+  const remEl = document.getElementById('v7-seats-remaining');
+  const fillEl = document.getElementById('v7-seats-fill');
+  if (remEl) remEl.textContent = seatsTotal7 > 0 ? rem + ' of ' + seatsTotal7 : '— of —';
+  if (fillEl) fillEl.style.width = seatsTotal7 > 0 ? (seatsUsed7 / seatsTotal7 * 100) + '%' : '0%';
+}
+
+function updatePaymentTotal7() {
+  const price = selectedEvent7 ? selectedEvent7.price_cents / 100 : 85;
+  const plusOne = document.getElementById('v7r-plus-one')?.checked;
+
+  const plusOneDetails = document.getElementById('v7-plus-one-details-row');
+  if (plusOneDetails) plusOneDetails.style.display = plusOne ? '' : 'none';
+
+  if (activeCompCode7) {
+    const compNotice = document.getElementById('v7-comp-notice');
+    const payBlock = document.getElementById('v7-payment-block-wrap');
+    const submitBtn = document.getElementById('v7-rsvp-submit-btn');
+    const isHalfOff7 = (activeCompCode7.discount_percent || 100) === 50;
+    if (!isHalfOff7) {
+      if (compNotice) compNotice.style.display = 'block';
+      if (payBlock) payBlock.style.display = 'none';
+      if (submitBtn) submitBtn.textContent = 'confirm your seat →';
+      return;
+    }
+  }
+
+  let total = price;
+  if (plusOne) total += price;
+  const totEl = document.getElementById('v7-payment-total');
+  const brkEl = document.getElementById('v7-payment-breakdown');
+  if (totEl) totEl.textContent = '$' + total;
+  let parts = ['you \xd7 $' + price];
+  if (plusOne) parts.push('+1 \xd7 $' + price);
+  if (brkEl) brkEl.textContent = parts.join(' + ');
+}
+
+async function checkGate7() {
+  const val = document.getElementById('v7-gate-password').value.trim();
+  if (!val) return;
+  const btn = document.getElementById('v7-gate-apply-btn');
+  btn.disabled = true; btn.textContent = 'checking…';
+  try {
+    const comp = await lookupCompCode(val);
+    if (comp) {
+      activeCompCode7 = comp;
+      applyCompDim(comp.event_id);
+      const isHalfOff7 = (comp.discount_percent || 100) === 50;
+      document.getElementById('v7-comp-code-wrap').innerHTML =
+        `<div class="gate-success-banner">
+          <div>
+            <div class="gsb-label">✓ ${isHalfOff7 ? '50% discount applied' : 'Comp code applied'}</div>
+            <div class="gsb-msg">${isHalfOff7 ? 'Half-off applied — updated total below.' : 'Your ticket is complimentary — no payment needed.'}</div>
+          </div>
+          <span class="gsb-remove" onclick="clearCompCode7()">remove</span>
+        </div>`;
+      document.getElementById('v7-comp-notice').style.display = isHalfOff7 ? 'none' : 'block';
+      document.getElementById('v7-payment-block-wrap').style.display = isHalfOff7 ? '' : 'none';
+      document.getElementById('v7-rsvp-submit-btn').textContent = isHalfOff7 ? 'continue to payment →' : 'confirm your seat →';
+      updatePaymentTotal7();
+    } else {
+      showGateError('v7-gate-error', 'v7-gate-password', 'v7-gate-apply-btn', 'That code wasn’t found or has already been used. Double-check and try again.');
+    }
+  } catch(e) {
+    showGateError('v7-gate-error', 'v7-gate-password', 'v7-gate-apply-btn', 'Something went wrong. Try again.');
+  }
+}
+
+function clearCompCode7() {
+  activeCompCode7 = null;
+  clearCompDim();
+  document.getElementById('v7-comp-code-wrap').innerHTML =
+    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    <div class="gate-row">
+      <input type="text" id="v7-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate7()">
+      <button class="btn-ghost" id="v7-gate-apply-btn" onclick="checkGate7()">apply &rarr;</button>
+    </div>
+    <div id="v7-gate-error" class="gate-error"></div>`;
+  document.getElementById('v7-comp-notice').style.display = 'none';
+  updatePaymentTotal7();
+}
+
+function getDietary7() {
+  const m = { 'v7d-veg':'Vegetarian','v7d-vegan':'Vegan','v7d-gf':'Gluten-free','v7d-df':'Dairy-free','v7d-nut':'Nut allergy','v7d-shell':'Shellfish','v7d-kosher':'Kosher','v7d-halal':'Halal' };
+  return Object.entries(m).filter(([id]) => document.getElementById(id)?.checked).map(([,v]) => v);
+}
+
+async function submitRSVP7() {
+  const first = document.getElementById('v7r-first').value.trim();
+  const last = document.getElementById('v7r-last').value.trim();
+  const email = document.getElementById('v7r-email').value.trim();
+  const phone = document.getElementById('v7r-phone').value.trim();
+  const plusOne = document.getElementById('v7r-plus-one')?.checked;
+  const source = document.getElementById('v7r-source').value;
+  const instagram = document.getElementById('v7r-instagram').value.trim() || null;
+  const v7p1First = document.getElementById('v7-p1-first')?.value.trim();
+  const v7p1Last = document.getElementById('v7-p1-last')?.value.trim();
+  const plusOneName = plusOne ? ((v7p1First || '') + ' ' + (v7p1Last || '')).trim() || `${first} ${last} (+1)` : null;
+  const numGuests = plusOne ? 2 : 1;
+
+  const rsvpErr = document.getElementById('v7-rsvp-inline-error');
+  const missing = [];
+  if (!first || !last) missing.push('Full name');
+  if (!email || !email.includes('@')) missing.push('Valid email address');
+  if (!phone) missing.push('Phone number');
+  if (!source) missing.push('How you heard about us');
+  if (missing.length) {
+    rsvpErr.innerHTML = 'Please complete the following before continuing:<br>' + missing.map(m => `&nbsp;\xb7 ${m}`).join('<br>');
+    rsvpErr.style.display = 'block';
+    rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  rsvpErr.style.display = 'none';
+  if (selectedEvent7 && seatsTotal7 > 0 && seatsUsed7 + numGuests > seatsTotal7)
+    return toast('v7-rsvp-toast', 'Not enough seats remaining for your party size.', 'error');
+
+  const btn = document.getElementById('v7-rsvp-submit-btn');
+  btn.disabled = true; btn.textContent = 'processing…';
+
+  // ── COMP CODE PATH ───────────────────────────────────────────
+  if (activeCompCode7 && (activeCompCode7.discount_percent || 100) === 100) {
+    if (!plusOne) {
+      try {
+        await sbPost('guests', {
+          event_id: selectedEvent7?.id,
+          event_name: selectedEvent7?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary7().join(', ') || null,
+          instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode7.id, email);
+        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent7?.name, eventDate: selectedEvent7?.event_date, eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time });
+        if (document.getElementById('v7r-notify')?.checked) {
+          fetch(`${FN_URL}/add-to-list`, {
+            method: 'POST',
+            headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol7' })
+          }).catch(e => console.warn('add-to-list failed:', e));
+        }
+        await refreshSeatCount(selectedEvent7, 'vol7').catch(() => {});
+        seatsUsed7 = (seatsUsed7 || 0) + 1; updateSeats7();
+        document.getElementById('v7-rsvp-form-wrap').style.display = 'none';
+        document.getElementById('confirmation-view-7').style.display = 'block';
+        return;
+      } catch(err) {
+        console.error('Comp insert error (Vol.7):', err);
+        rsvpErr.innerHTML = 'Could not confirm your seat: ' + (err.message || 'unknown error') + '<br><span style="opacity:0.7">If this keeps happening, contact us directly.</span>';
+        rsvpErr.style.display = 'block';
+        rsvpErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        btn.disabled = false; btn.textContent = 'confirm your seat →';
+        return;
+      }
+    } else {
+      // Comp + paid +1
+      try {
+        await sbPost('guests', {
+          event_id: selectedEvent7?.id,
+          event_name: selectedEvent7?.name,
+          full_name: `${first} ${last}`,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary7().join(', ') || null,
+          instagram,
+          payment_status: 'comp'
+        });
+        await redeemCompCode(activeCompCode7.id, email);
+        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent7?.name, eventDate: selectedEvent7?.event_date, eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time });
+        if (document.getElementById('v7r-notify')?.checked) {
+          fetch(`${FN_URL}/add-to-list`, {
+            method: 'POST',
+            headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol7' })
+          }).catch(e => console.warn('add-to-list failed:', e));
+        }
+      } catch(e) { console.warn('Comp insert failed silently:', e); }
+      try {
+        await sbPost('guests', {
+          event_name: selectedEvent7?.name,
+          full_name: plusOneName,
+          email, phone, party_size: 1,
+          dietary_restrictions: getDietary7().join(', ') || null,
+          instagram: null,
+          payment_status: 'unpaid'
+        });
+      } catch(e) { console.warn('Could not pre-insert +1 record:', e); }
+      sessionStorage.setItem('ltf_last_event', '7');
+      try {
+        const res = await fetch(`${FN_URL}/stripe-checkout`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: selectedEvent7?.id,
+            eventName: selectedEvent7?.name,
+            eventDate: selectedEvent7?.event_date,
+            eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time,
+            fullName: plusOneName,
+            email, phone, partySize: 1,
+            dietary: getDietary7().join(', ') || null,
+            wineAddon: false, source
+          })
+        });
+        const { url, error } = await res.json();
+        if (error || !url) throw new Error(error || 'No checkout URL');
+        window.location.href = url;
+      } catch(err) {
+        toast('v7-rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+        btn.disabled = false; btn.textContent = 'confirm your seat →';
+      }
+      return;
+    }
+  }
+
+  // ── PAID PATH ────────────────────────────────────────────────
+  sessionStorage.setItem('ltf_last_event', '7');
+  try {
+    const res = await fetch(`${FN_URL}/stripe-checkout`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventId: selectedEvent7?.id,
+        eventName: selectedEvent7?.name,
+        eventDate: selectedEvent7?.event_date,
+        eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time,
+        fullName: `${first} ${last}`,
+        email, phone, partySize: numGuests,
+        dietary: getDietary7().join(', ') || null,
+        wineAddon: false, wineAddonPlusOne: false, source,
+        discountPercent: activeCompCode7?.discount_percent === 50 ? 50 : 0,
+      })
+    });
+    const { url, error } = await res.json();
+    if (error || !url) throw new Error(error || 'No checkout URL returned');
+
+    const notify = document.getElementById('v7r-notify')?.checked;
+    if (notify) {
+      try {
+        await fetch(`${FN_URL}/add-to-list`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: source || 'rsvp-vol7' })
+        });
+      } catch(e) { console.warn('Notify list signup failed silently:', e); }
+    }
+    window.location.href = url;
+  } catch(err) {
+    toast('v7-rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
+    btn.disabled = false; btn.textContent = 'continue to payment →';
+  }
 }
 
 async function submitRSVP5() {
