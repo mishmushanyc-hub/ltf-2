@@ -1519,7 +1519,7 @@ async function sbPost(path, body) {
 async function loadEvents() {
   try {
     const today = new Date().toISOString().split('T')[0];
-    const data = await sbGet(`events?is_active=eq.true&event_date=gte.${today}&select=*&order=event_date.asc`);
+    const data = await sbGet(`events?event_date=gte.${today}&select=*&order=event_date.asc`);
     activeEvents = Array.isArray(data) ? data : [];
 
     renderEventSelector();
@@ -2631,7 +2631,7 @@ async function submitRSVP7() {
             body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol7' })
           }).catch(e => console.warn('add-to-list failed:', e));
         }
-        await refreshSeatCount(selectedEvent7, 'vol7').catch(() => {});
+        await refreshSeatCount({ id: v7evId }, 'vol7').catch(() => {});
         seatsUsed7 = (seatsUsed7 || 0) + 1; updateSeats7();
         document.getElementById('v7-rsvp-form-wrap').style.display = 'none';
         document.getElementById('confirmation-view-7').style.display = 'block';
@@ -3791,8 +3791,10 @@ setInterval(() => {
   if (vol4Ev) refreshSeatCount(vol4Ev, 'vol4');
   const volMayEv = activeEvents.find(e => dstr(e) >= '2026-05-01' && dstr(e) < '2026-06-01');
   if (volMayEv) refreshSeatCount(volMayEv, 'may');
-  const v5 = activeEvents.find(e => dstr(e) >= '2026-06-01');
+  const v5 = activeEvents.find(e => dstr(e) >= '2026-06-01' && dstr(e) < '2026-08-01');
   if (v5) refreshSeatCount(v5, 'vol5');
+  const v7 = activeEvents.find(e => dstr(e) >= '2026-08-01');
+  if (v7) refreshSeatCount(v7, 'vol7');
 }, 60000);
 
 // Handle Stripe payment success redirect
