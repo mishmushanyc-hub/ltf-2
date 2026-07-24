@@ -2605,11 +2605,17 @@ async function submitRSVP7() {
 
   // ── COMP CODE PATH ───────────────────────────────────────────
   if (activeCompCode7 && (activeCompCode7.discount_percent || 100) === 100) {
+    // Fallbacks in case selectedEvent7 wasn't populated from DB
+    const v7evId   = selectedEvent7?.id   ?? activeCompCode7?.event_id;
+    const v7evName = selectedEvent7?.name  ?? 'Ned & Merv — Quell';
+    const v7evDate = selectedEvent7?.event_date ?? '2026-08-01';
+    const v7evTime = selectedEvent7?.doors_time ?? selectedEvent7?.event_time ?? '5:00 pm';
+
     if (!plusOne) {
       try {
         await sbPost('guests', {
-          event_id: selectedEvent7?.id,
-          event_name: selectedEvent7?.name,
+          event_id: v7evId,
+          event_name: v7evName,
           full_name: `${first} ${last}`,
           email, phone, party_size: 1,
           dietary_restrictions: getDietary7().join(', ') || null,
@@ -2617,7 +2623,7 @@ async function submitRSVP7() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode7.id, email);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent7?.name, eventDate: selectedEvent7?.event_date, eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time });
+        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -2642,8 +2648,8 @@ async function submitRSVP7() {
       // Comp + paid +1
       try {
         await sbPost('guests', {
-          event_id: selectedEvent7?.id,
-          event_name: selectedEvent7?.name,
+          event_id: v7evId,
+          event_name: v7evName,
           full_name: `${first} ${last}`,
           email, phone, party_size: 1,
           dietary_restrictions: getDietary7().join(', ') || null,
@@ -2651,7 +2657,7 @@ async function submitRSVP7() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode7.id, email);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent7?.name, eventDate: selectedEvent7?.event_date, eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time });
+        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -2662,7 +2668,8 @@ async function submitRSVP7() {
       } catch(e) { console.warn('Comp insert failed silently:', e); }
       try {
         await sbPost('guests', {
-          event_name: selectedEvent7?.name,
+          event_id: v7evId,
+          event_name: v7evName,
           full_name: plusOneName,
           email, phone, party_size: 1,
           dietary_restrictions: getDietary7().join(', ') || null,
@@ -2704,10 +2711,10 @@ async function submitRSVP7() {
       method: 'POST',
       headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        eventId: selectedEvent7?.id,
-        eventName: selectedEvent7?.name,
-        eventDate: selectedEvent7?.event_date,
-        eventTime: selectedEvent7?.doors_time || selectedEvent7?.event_time,
+        eventId: selectedEvent7?.id ?? activeCompCode7?.event_id,
+        eventName: selectedEvent7?.name ?? 'Ned & Merv — Quell',
+        eventDate: selectedEvent7?.event_date ?? '2026-08-01',
+        eventTime: selectedEvent7?.doors_time ?? selectedEvent7?.event_time ?? '5:00 pm',
         fullName: `${first} ${last}`,
         email, phone, partySize: numGuests,
         dietary: getDietary7().join(', ') || null,
