@@ -1723,8 +1723,9 @@ function scrollToRsvp() {
   showTab('rsvp', rsvpBtn);
   // Find the first visible event block and scroll to its form
   const targets = [
-    document.getElementById('may-rsvp-form-wrap'),
+    document.getElementById('v7-rsvp-form-wrap'),
     document.getElementById('v5-rsvp-form-wrap'),
+    document.getElementById('may-rsvp-form-wrap'),
     document.getElementById('rsvp-form-wrap'),
   ];
   const target = targets.find(el => el && el.closest('.event-block') && el.closest('.event-block').style.display !== 'none');
