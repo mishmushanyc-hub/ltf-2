@@ -2700,12 +2700,9 @@ async function submitRSVP8() {
     const price = selectedEvent8 ? selectedEvent8.price_cents : 10000;
     const isHalfOff8 = activeCompCode8 && (activeCompCode8.discount_percent || 100) === 50;
     const unitPrice = isHalfOff8 ? Math.round(price * 0.5) : price;
-    const lineItems = [{ price_data: { currency:'usd', unit_amount: unitPrice, product_data:{ name:'Life Thru Food — Vol. 08' } }, quantity:1 }];
-    if (plusOne) lineItems.push({ price_data:{ currency:'usd', unit_amount: price, product_data:{ name:'Vol. 08 — +1 Guest' } }, quantity:1 });
-
     const checkoutRes = await fetch(`${FN_URL}/stripe-checkout`, {
       method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'},
-      body: JSON.stringify({ line_items: lineItems, metadata:{ eventId: String(v8evId || ''), fullName:`${first} ${last}`, email, partySize: String(numGuests), phone, eventTime:'5:00 pm' }, success_url: window.location.href + '?paid=8', cancel_url: window.location.href })
+      body: JSON.stringify({ eventId: v8evId, eventName: selectedEvent8?.name || 'Vol. 08 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime:'5:00 pm', fullName:`${first} ${last}`, email, phone, partySize: numGuests, plusOne: plusOne || false, unitPrice: unitPrice, source })
     });
     const checkoutData = await checkoutRes.json();
     if (!checkoutData.url) throw new Error(checkoutData.error || 'No checkout URL returned');
