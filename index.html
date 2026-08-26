@@ -2670,7 +2670,7 @@ async function submitRSVP8() {
   const btn = document.getElementById('v8-rsvp-submit-btn');
   btn.disabled = true; btn.textContent = 'processing…';
 
-  const v8evId = selectedEvent8?.id ?? activeCompCode8?.event_id;
+  const v8evId = selectedEvent8?.id ?? activeCompCode8?.event_id ?? 8;
 
   // ── FULL COMP PATH ───────────────────────────────────────────
   if (activeCompCode8 && (activeCompCode8.discount_percent || 100) === 100 && !plusOne) {
