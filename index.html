@@ -1452,13 +1452,13 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   background: none;
   border: none;
   font-size: 1rem;
-  color: rgba(68,51,42,0.4);
+  color: #509F97;
   cursor: pointer;
   line-height: 1;
   padding: 0.2rem;
   transition: color 0.15s;
 }
-.popup-x:hover { color: var(--canvas); }
+.popup-x:hover { color: #6db8b1; }
 .popup-inner { padding: 1.1rem 1.25rem 1rem; }
 .popup-lbl {
   font-family: 'Fragment Mono', monospace;
@@ -1594,11 +1594,11 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   border: 1px solid rgba(68,51,42,0.20);
   border-left: 3px solid rgba(28,43,69,0.55);
   color: var(--ink);
-  padding: 0.6rem 0.85rem;
+  padding: 0.75rem 1rem;
   border-radius: 0;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   font-family: 'EB Garamond', serif;
-  max-width: 240px;
+  max-width: 280px;
   width: max-content;
   white-space: normal;
   word-break: break-word;
@@ -1611,15 +1611,25 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--olive);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
 }
-.pt-name { font-size: 1.1rem; color: var(--ink); margin-bottom: 2px; }
+.pt-name { font-size: 1.1rem; color: var(--ink); margin-bottom: 3px; line-height: 1.2; }
 .pt-disc {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.12em;
   color: var(--ink-low);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.pt-desc {
+  font-family: 'EB Garamond', serif;
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink-mid);
+  border-top: 1px solid var(--rule-mid);
+  padding-top: 0.5rem;
+  margin-top: 0.1rem;
 }
 
 
@@ -5685,8 +5695,13 @@ function initMap() {
     const bioText = Array.isArray(bioArr) ? (bioArr[0] || '') : String(bioArr);
     const snippet = bioText.length > 130 ? bioText.slice(0, 130) + '&hellip;' : bioText;
 
-    const ttHtml = '<div class="pt-vol">VOL. ' + p.num + (p.upcoming ? ' &nbsp;&middot;&nbsp; Upcoming' : '') + '</div>' +
-      '<div class="pt-name">' + (ed.name || '') + '</div>';
+    var descText = ed.desc || '';
+    var descTrimmed = descText.length > 130 ? descText.slice(0, 127) + '&hellip;' : descText;
+    var volLabel = p.num === '08' ? 'Sitting 01' : ('VOL. ' + p.num);
+    const ttHtml = '<div class="pt-vol">' + volLabel + (p.upcoming ? ' &nbsp;&middot;&nbsp; Upcoming' : '') + '</div>' +
+      '<div class="pt-name">' + (ed.name || '') + '</div>' +
+      (ed.discipline ? '<div class="pt-disc">' + ed.discipline + '</div>' : '') +
+      (descTrimmed ? '<div class="pt-desc">' + descTrimmed + '</div>' : '');
 
     const marker = L.marker([p.lat, p.lng], { icon }).addTo(ltfMap)
       .bindTooltip(ttHtml, { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false });
