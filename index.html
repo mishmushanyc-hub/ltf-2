@@ -1550,11 +1550,11 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   border: 1px solid rgba(68,51,42,0.20);
   border-left: 3px solid rgba(28,43,69,0.55);
   color: var(--ink);
-  padding: 0.85rem 1rem;
+  padding: 0.6rem 0.85rem;
   border-radius: 0;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.50);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   font-family: 'EB Garamond', serif;
-  max-width: 230px;
+  max-width: 180px;
 }
 .ltf-tooltip.leaflet-tooltip::before { display: none; }
 .pt-vol {
@@ -1573,7 +1573,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   color: var(--ink-low);
   margin-bottom: 0.5rem;
 }
-.pt-bio { font-size: 0.88rem; color: var(--ink-mid); font-style: italic; line-height: 1.55; }
+
 
 /* Leaflet attribution — aged ink look */
 .leaflet-control-attribution {
@@ -5199,7 +5199,7 @@ function renderContent(volFilter) {
   // If a volFilter is provided, only render that volume
   const active = volFilter
     ? [volFilter].filter(k => EDITIONS[k])
-    : order.filter(k => allByEd[k] || byEd[k] || (EDITIONS[k]?.eventDate && EDITIONS[k].eventDate < today));
+    : order.filter(k => EDITIONS[k]?.name);
   if (!active.length) { el.innerHTML = '<div class="empty-msg">Nothing here yet.</div>'; return; }
 
   // Preserve open state across re-renders
@@ -5532,7 +5532,7 @@ function initMap() {
     zoomControl: false,
     attributionControl: true,
     maxBounds: nycBounds,
-    maxBoundsViscosity: 0.85,
+    maxBoundsViscosity: 1.0,
     minZoom: 10,
     maxZoom: 16
   });
@@ -5569,17 +5569,14 @@ function initMap() {
     const bioText = Array.isArray(bioArr) ? (bioArr[0] || '') : String(bioArr);
     const snippet = bioText.length > 130 ? bioText.slice(0, 130) + '&hellip;' : bioText;
 
-    const ttHtml = '<div class="pt-vol">VOL. ' + p.num + '</div>' +
-      '<div class="pt-name">' + (ed.name || '') + '</div>' +
-      '<div class="pt-disc">' + (ed.discipline || '') + (ed.location ? ' &middot; ' + ed.location : '') + '</div>' +
-      (snippet ? '<div class="pt-bio">' + snippet + '</div>' : '');
+    const ttHtml = '<div class="pt-vol">VOL. ' + p.num + (p.upcoming ? ' &nbsp;&middot;&nbsp; Upcoming' : '') + '</div>' +
+      '<div class="pt-name">' + (ed.name || '') + '</div>';
 
     const marker = L.marker([p.lat, p.lng], { icon }).addTo(ltfMap)
       .bindTooltip(ttHtml, { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false });
 
     marker.on('click', function() {
-      if (p.upcoming) { openPanel('current'); }
-      else { openDrawer(p.num); }
+      openDrawer(p.num);
     });
   });
 }
