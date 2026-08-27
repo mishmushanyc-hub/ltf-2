@@ -19,17 +19,15 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Space+Grotesk:wght@300;400;500&family=Fragment+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Color tokens — LTF palette
-     Dominant: cognac brown (#44332A)
-     Secondary: midnight navy (#1C2B45)
-     Accent: aged gold (#B8902A) — labels, underlines, CTAs only
-     Text: warm cream (#ECE4D5) */
-  --canvas: #44332A; --paper: #1C2B45; --card: #223356; --lift: #2A3D64;
-  --edge: #334A78; --rule: rgba(236,228,213,0.08); --rule-mid: rgba(236,228,213,0.14);
-  --ink: #ECE4D5; --ink-mid: rgba(236,228,213,0.52); --ink-low: rgba(236,228,213,0.30);
-  --olive: #B8902A; --olive-dim: rgba(184,144,42,0.18); --olive-ghost: rgba(184,144,42,0.07);
-  --craft: #6E4E2C; --craft-dim: rgba(110,78,44,0.28);
-  --steel: #111E33; --success: #2E6A4A; --danger: #B83A2A;
+  /* Color tokens — LTF palette (editorial neutrals)
+     Brown canvas · cream ink · olive accent
+     Grid structure replaces color contrast */
+  --canvas: #44332A; --paper: #4E3A2B; --card: #3A2B1F; --lift: #5C4638;
+  --edge: #5C4638; --rule: rgba(247,244,238,0.11); --rule-mid: rgba(247,244,238,0.22);
+  --ink: #F7F4EE; --ink-mid: rgba(247,244,238,0.55); --ink-low: rgba(247,244,238,0.32);
+  --olive: #EFDFB8; --olive-dim: rgba(239,223,184,0.20); --olive-ghost: rgba(239,223,184,0.08);
+  --craft: #B4724A; --craft-dim: rgba(180,114,74,0.25);
+  --steel: #211408; --success: #3A9F97; --danger: #CF6B52;
   /* Layout */
   --measure: 68ch;
   --grid-gap: clamp(1rem, 3vw, 2rem);
@@ -213,7 +211,7 @@ header {
 .h-index-name { font-family: 'EB Garamond', serif; font-size: 0.95rem; color: var(--ink); flex: 1; }
 .h-index-date { font-family: 'Fragment Mono', monospace; font-size: var(--t-label); color: var(--ink-low); }
 .h-index-dim { opacity: 0.38; pointer-events: none; }
-.h-index-dim .h-index-vol { color: rgba(28,43,69,0.4); }
+.h-index-dim .h-index-vol { color: rgba(247,244,238,0.06); }
 
 .h-upcoming { background: var(--olive); color: var(--canvas); padding: 2rem 1.5rem; }
 .h-upcoming-label {
@@ -315,17 +313,18 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   background: var(--paper);
   border: 1px solid var(--rule-mid);
   border-bottom: none;
-  padding: 3rem 2.75rem 2.5rem;
   position: relative;
   overflow: hidden;
+  display: grid;
+  grid-template-columns: 4px 1fr;
 }
 .event-masthead::before {
   content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 4px; height: 100%;
   background: var(--olive);
-  pointer-events: none;
+  opacity: 0.7;
+}
+.event-masthead-body {
+  padding: 2.5rem 2.5rem 2rem;
 }
 
 .ev-no {
@@ -666,7 +665,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .board-tile:hover { opacity: 0.80; }
 .tile-photo img { width: 100%; display: block; filter: brightness(0.92) saturate(0.78); transition: filter 0.3s; }
 .board-tile.tile-photo:hover img { filter: brightness(0.84) saturate(0.68); }
-.tile-photo-cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(236,228,213,0.92)); padding: 2rem 1rem 0.85rem; opacity: 0; transition: opacity 0.3s; }
+.tile-photo-cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(247,244,238,0.92)); padding: 2rem 1rem 0.85rem; opacity: 0; transition: opacity 0.3s; }
 .board-tile.tile-photo:hover .tile-photo-cap { opacity: 1; }
 .tile-photo-cap .cap-ts { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-mid); margin-top: 3px; letter-spacing: 0.06em; }
 .tile-caption { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.25rem 1.25rem 1rem; }
@@ -709,7 +708,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .ed-gallery-preview img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; filter: brightness(0.92) saturate(0.75); border: 1px solid var(--rule-mid); cursor: pointer; transition: filter 0.2s; }
 .ed-gallery-preview img:hover { filter: brightness(0.80) saturate(0.65); }
 /* ── GALLERY MODAL ── */
-#gallery-modal { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(236,228,213,0.97); backdrop-filter: blur(10px); overflow-y: auto; }
+#gallery-modal { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(247,244,238,0.97); backdrop-filter: blur(10px); overflow-y: auto; }
 #gallery-modal.open { display: block; animation: fadeIn 0.3s ease; }
 .gm-inner { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
 .gm-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule-mid); margin-bottom: 2rem; }
@@ -723,7 +722,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .gm-item:hover img { filter: brightness(0.80) saturate(0.65); }
 @media (max-width: 600px) { .gm-grid { columns: 2; } }
 @media (max-width: 600px) { .ed-head-flyer { width: 72px; } .ed-head-portrait { width: 72px; } }
-.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(236,228,213,0.88); align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(6px); }
+.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(247,244,238,0.88); align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(6px); }
 .lightbox.open { display: flex; animation: fadeIn 0.3s ease; }
 .lb-inner { background: var(--canvas); border: 1px solid var(--rule-mid); max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 12px 48px rgba(30,26,20,0.10); }
 .lb-close { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1rem 1.25rem 0; background: var(--canvas); z-index: 1; }
@@ -915,11 +914,12 @@ footer {
 
 /* ── SITE NAV (replaces header + nav) ── */
 .site-nav {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   padding: 0 1.5rem;
   border-bottom: 1px solid var(--rule-mid);
+  border-top: 3px solid rgba(239,223,184,0.40);
   background: var(--canvas);
   position: sticky;
   top: 0;
@@ -937,8 +937,8 @@ footer {
 }
 .sn-locator {
   font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-low);
   margin-top: 3px;
@@ -992,20 +992,18 @@ footer {
 }
 .arc-vol-row {
   display: grid;
-  grid-template-columns: 72px 1fr auto;
+  grid-template-columns: 52px 1fr auto;
   align-items: center;
-  gap: 1.25rem;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid var(--rule);
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule-mid);
   cursor: pointer;
   transition: background 0.12s;
   margin: 0 -1.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
 }
-.arc-vol-row:hover { background: rgba(236,228,213,0.04); }
-.arc-vol-row.arc-upcoming { background: rgba(184,144,42,0.06); border-color: rgba(184,144,42,0.10); }
-.arc-vol-row.arc-upcoming:hover { background: rgba(184,144,42,0.1); }
+.arc-vol-row:hover { background: rgba(247,244,238,0.04); }
+.arc-vol-row.arc-upcoming { background: rgba(239,223,184,0.06); border-color: rgba(239,223,184,0.10); }
+.arc-vol-row.arc-upcoming:hover { background: rgba(239,223,184,0.1); }
 .arc-vol-row.arc-lg .arc-vname { font-size: 1.15rem; }
 .arc-vol-row.arc-ghost { opacity: 0.3; cursor: default; }
 .arc-vnum {
@@ -1015,7 +1013,7 @@ footer {
   text-transform: uppercase;
   color: var(--ink-low);
 }
-.arc-vol-row.arc-upcoming .arc-vnum { color: rgba(184,144,42,0.6); }
+.arc-vol-row.arc-upcoming .arc-vnum { color: rgba(239,223,184,0.6); }
 .arc-vname {
   font-family: 'EB Garamond', serif;
   font-size: 1.05rem;
@@ -1035,7 +1033,7 @@ footer {
   font-family: 'Fragment Mono', monospace;
   font-size: var(--t-label);
   letter-spacing: 0.1em;
-  color: rgba(236,228,213,0.22);
+  color: rgba(247,244,238,0.22);
   text-align: right;
   min-width: 80px;
 }
@@ -1046,8 +1044,8 @@ footer {
   text-transform: uppercase;
   margin-top: 3px;
 }
-.arc-vstatus.arc-archived { color: rgba(184,144,42,0.6); }
-.arc-vstatus.arc-upc { color: rgba(184,144,42,0.7); }
+.arc-vstatus.arc-archived { color: rgba(239,223,184,0.6); }
+.arc-vstatus.arc-upc { color: rgba(239,223,184,0.7); }
 .arc-stats {
   display: flex;
   flex-wrap: wrap;
@@ -1057,7 +1055,7 @@ footer {
   font-size: var(--t-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(236,228,213,0.18);
+  color: rgba(247,244,238,0.18);
   border-top: 1px solid var(--rule);
   margin-top: 0;
 }
@@ -1115,6 +1113,26 @@ footer {
   border-bottom: 1px solid var(--rule-mid);
   margin-bottom: 2.5rem;
 }
+.about-index-label {
+  font-family: 'Fragment Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.about-index-label {
+  font-family: 'Fragment Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
 .about-heading {
   font-family: 'EB Garamond', serif;
   font-style: italic;
@@ -1160,10 +1178,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .site-nav {
   position: fixed !important;
   top: 0; left: 0; right: 0;
-  background: rgba(28,43,69,0.93) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(236,228,213,0.10) !important;
+  background: var(--canvas) !important;
+  border-bottom: 1px solid rgba(247,244,238,0.10) !important;
   z-index: 200;
 }
 .sn-locator { display: none !important; }
@@ -1204,6 +1220,21 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 #tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open {
   transform: translateX(0);
+}
+
+/* Editorial grid overlay on all panels */
+#tab-current, #tab-about, #tab-participate, #tab-admin, #archive-drawer {
+  background-image:
+    repeating-linear-gradient(
+      rgba(247,244,238,0.055) 0px, rgba(247,244,238,0.055) 1px,
+      transparent 1px, transparent 28px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(247,244,238,0.028) 0px, rgba(247,244,238,0.028) 1px,
+      transparent 1px, transparent 80px
+    ) !important;
+  background-size: 100% 28px, 80px 100% !important;
 }
 
 /* Panel headers */
@@ -1249,7 +1280,47 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
+}/* Grid-structured section layout */
+.grid-section {
+  border-top: 1px solid var(--rule-mid);
 }
+.grid-section + .grid-section {
+  border-top: 1px solid var(--rule-mid);
+}
+.section-rule {
+  height: 1px;
+  background: var(--rule-mid);
+  margin: 0 -2rem;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.field-grid-row {
+  display: contents;
+}
+.field-grid-label {
+  font-family: 'Fragment Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  padding: 0.85rem 1rem 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+  align-self: start;
+}
+.field-grid-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 1rem;
+  color: var(--ink-mid);
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.5;
+}
+
+
 #panel-overlay.visible { opacity: 1; pointer-events: auto; }
 
 /* Archive Drawer */
@@ -1317,6 +1388,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   right: 2rem;
   width: 264px;
   background: var(--olive);
+  border-top: 3px solid var(--canvas);
   z-index: 160;
   box-shadow: 0 10px 40px rgba(0,0,0,0.45);
   transform: translateY(24px);
@@ -1445,7 +1517,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   height: 11px;
   border-radius: 50%;
   background: var(--ink);
-  border: 2px solid rgba(236,228,213,0.25);
+  border: 2px solid rgba(247,244,238,0.25);
   cursor: pointer;
   transition: transform 0.2s, background 0.2s;
   position: relative;
@@ -1475,13 +1547,14 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Leaflet tooltip */
 .ltf-tooltip.leaflet-tooltip {
   background: var(--canvas);
-  border: 1px solid rgba(236,228,213,0.15);
+  border: 1px solid rgba(247,244,238,0.18);
+  border-left: 3px solid rgba(239,223,184,0.55);
   color: var(--ink);
   padding: 0.85rem 1rem;
   border-radius: 0;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.50);
   font-family: 'EB Garamond', serif;
-  max-width: 220px;
+  max-width: 230px;
 }
 .ltf-tooltip.leaflet-tooltip::before { display: none; }
 .pt-vol {
@@ -1583,6 +1656,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <!-- VOL. 04 — PAST (hidden, preserved for JS compatibility) -->
     <div class="event-block" id="event-block-4" style="display:none">
       <div class="event-masthead">
+        <div class="event-masthead-body">
         <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 04</span>
         <span class="ev-date" id="ev-date">Sunday, April 26 &middot; 2026</span>
         <h2 id="ev-name">Heidi Cannon</h2>
@@ -1591,7 +1665,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div class="ed-ig-links" style="margin-top:0.6rem">
           <a href="https://www.instagram.com/americanwastoid/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@americanwastoid</a>
         </div>
-      </div>
+      
+        </div>
+        </div>
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val" id="ev-doors">6:30 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Dinner</span><span class="ev-cell-val" id="ev-dinner">7:00 pm</span></div>
@@ -1764,6 +1840,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <!-- VOL. 05 — EKATERINA SEMENOVA CONWAY -->
     <div class="event-block" id="event-block-may" style="display:none;margin-top:2rem">
       <div class="event-masthead">
+        <div class="event-masthead-body">
         <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 05</span>
         <span class="ev-date">Sunday, May 17 &middot; 2026</span>
         <h2>Ekaterina Semenova Conway</h2>
@@ -1772,7 +1849,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div class="ed-ig-links" style="margin-top:0.6rem">
           <a href="https://www.instagram.com/katyadoesthings/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@katyadoesthings</a>
         </div>
-      </div>
+      
+        </div>
+        </div>
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Date</span><span class="ev-cell-val">Sunday, May 17</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">6:30 pm</span></div>
@@ -1936,6 +2015,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <!-- VOL. 06 — LIVE TICKETS -->
     <div class="event-block" id="event-block-5" style="display:none;margin-top:2rem">
       <div class="event-masthead">
+        <div class="event-masthead-body">
         <span class="ev-no">Life Thru Food &nbsp;&mdash;&nbsp; Volume 06</span>
         <span class="ev-date">Sunday, June 28 &middot; 2026</span>
         <h2>Miles Dixon &amp; Elijuh Vuhlet</h2>
@@ -1947,7 +2027,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <a href="https://www.instagram.com/elijuhfuckingvuhlet/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@elijuhfuckingvuhlet</a>
           <a href="https://www.instagram.com/vuhlet/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@vuhlet</a>
         </div>
-      </div>
+      
+        </div>
+        </div>
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">5:00 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Location</span><span class="ev-cell-val">Red Hook, Brooklyn</span></div>
@@ -2103,6 +2185,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <!-- VOL. 08 — NICOLE KO / EPHEMERA — SITTING 01 -->
     <div class="event-block" id="event-block-8" style="margin-top:2rem">
       <div class="event-masthead">
+        <div class="event-masthead-body">
         <span class="ev-no">Sitting 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
         <span class="ev-date">Saturday, September 27 &middot; 2026</span>
         <h2>Nicole Ko</h2>
@@ -2111,7 +2194,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div class="ed-ig-links" style="margin-top:0.6rem">
           <a href="https://www.instagram.com/e_p_h_e_m_e_r_a/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@e_p_h_e_m_e_r_a</a>
         </div>
-      </div>
+      
+        </div>
+        </div>
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">5:00 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Site</span><span class="ev-cell-val">Bushwick, Brooklyn</span></div>
@@ -2279,8 +2364,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   </div>
   <div class="panel-body">
     <div class="about-intro">
+      <div class="about-index-label">LTF &nbsp;&middot;&nbsp; Archive &nbsp;&middot;&nbsp; 2024&ndash;Present</div>
       <div class="about-heading">About</div>
-      <p class="about-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject — someone whose background, culture, and creative life shapes every course. Food is not the subject of the story. It is how we communicate it.</p>
+      <p class="about-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course. Food is not the subject of the story. It is how we communicate it.</p>
     </div>
     <div class="team-intro">
       <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
@@ -2690,7 +2776,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
       <div class="arc-vol-row arc-ghost">
         <div class="arc-vnum">VOL. 001&ndash;002</div>
-        <div><div class="arc-vname" style="font-style:italic;color:rgba(236,228,213,0.38)">Earlier volumes</div><div class="arc-vsub">Two Bridges &middot; 2025&ndash;2026</div></div>
+        <div><div class="arc-vname" style="font-style:italic;color:rgba(247,244,238,0.38)">Earlier volumes</div><div class="arc-vsub">Two Bridges &middot; 2025&ndash;2026</div></div>
         <div class="arc-vright">2025&ndash;26</div>
       </div>
 
@@ -5458,9 +5544,10 @@ function initMap() {
     maxZoom: 16
   });
 
-  L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png', {
-    maxZoom: 16,
-    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
   }).addTo(ltfMap);
 
   L.control.zoom({ position: 'bottomright' }).addTo(ltfMap);
