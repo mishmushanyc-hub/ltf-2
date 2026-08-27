@@ -1329,7 +1329,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   top: 0;
   right: 0;
   height: 100%;
-  width: min(500px, 100vw);
+  width: min(750px, 100vw);
   background: var(--canvas);
   border-left: 1px solid var(--rule-mid);
   transform: translateX(110%);
@@ -1554,7 +1554,11 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   border-radius: 0;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   font-family: 'EB Garamond', serif;
-  max-width: 180px;
+  max-width: 240px;
+  width: max-content;
+  white-space: normal;
+  word-break: break-word;
+  overflow: hidden;
 }
 .ltf-tooltip.leaflet-tooltip::before { display: none; }
 .pt-vol {
@@ -2181,7 +2185,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
       <div class="event-masthead">
         <div class="event-masthead-body">
         <span class="ev-no">Sitting 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
-        <span class="ev-date">Saturday, September 27 &middot; 2026</span>
+        <span class="ev-date">Sunday, September 27 &middot; 2026</span>
         <h2>Nicole Ko</h2>
         <p class="ev-discipline"><em>Ephemera</em> &nbsp;&middot;&nbsp; Floral Artist</p>
         <p class="ev-location-ref">Site: Bushwick, Brooklyn</p>
@@ -2302,7 +2306,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         </div>
         <div class="confirmation-details">
           <div class="conf-detail"><span class="conf-detail-label">Sitting</span><span class="conf-detail-val">01 &middot; Nicole Ko (Ephemera)</span></div>
-          <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Saturday, September 27</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Sunday, September 27</span></div>
           <div class="conf-detail"><span class="conf-detail-label">Doors</span><span class="conf-detail-val">5:00 pm</span></div>
           <div class="conf-detail"><span class="conf-detail-label">Site</span><span class="conf-detail-val">Bushwick, Brooklyn (address to follow)</span></div>
         </div>
@@ -2813,7 +2817,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <div class="popup-name">Nicole Ko</div>
     <div class="popup-disc">Ephemera &middot; Floral Artist</div>
     <div class="popup-meta">
-      Sat, Sep 27 &middot; 2026<br>
+      Sun, Sep 27 &middot; 2026<br>
       Bushwick, Brooklyn<br>
       Doors 5:00 pm &middot; $100 / seat
     </div>
@@ -2863,7 +2867,7 @@ const EDITIONS = {
     ]
   },
   '08': {
-    num:'08', eventDate:'2026-09-27', eventDateDisplay:'Saturday, September 27 · 2026', doors:'5:00 pm', price:'$100',
+    num:'08', eventDate:'2026-09-27', eventDateDisplay:'Sunday, September 27 · 2026', doors:'5:00 pm', price:'$100',
     name:'Nicole Ko', discipline:'Floral Artist', location:'Bushwick, Brooklyn',
     instagram:[{url:'https://www.instagram.com/e_p_h_e_m_e_r_a/',handle:'@e_p_h_e_m_e_r_a'}],
     desc:'Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic.',
@@ -5214,7 +5218,7 @@ function renderContent(volFilter) {
     const profile = pieces.find(p => isLong(p.type));
     const caption = pieces.find(p => p.type === 'caption');
     const quote = pieces.find(p => p.type === 'quote');
-    const isOpen = openSet.has(k);
+    const isOpen = openSet.has(k) || !!volFilter;
 
     html += `<div class="ed-accordion${isOpen ? ' open' : ''}" data-ed="${k}" id="ed-acc-${k}">`;
 
@@ -5634,16 +5638,8 @@ function openDrawer(volNum) {
 function scrollToSection(id, btn) {
   document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
   if (btn) btn.classList.add('on');
-  // Expand first accordion if not already open
-  var acc = document.querySelector('.ed-accordion');
-  if (acc && !acc.classList.contains('open')) {
-    acc.classList.add('open');
-  }
-  // Small delay to let accordion expand before scrolling
-  setTimeout(function() {
-    var el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, acc && !acc.classList.contains('open') ? 350 : 0);
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function closeDrawer(clearOverlay) {
@@ -5673,7 +5669,14 @@ function showDrawerVolume(volNum) {
   if (metaEl) metaEl.textContent = (ed.discipline || '') + (ed.location ? ' · ' + ed.location : '') + (ed.eventDateDisplay ? ' · ' + ed.eventDateDisplay : '');
   document.getElementById('drawer-breadcrumb').textContent = 'VOL. ' + String(volNum).padStart(3,'0');
   renderContent(volNum);
-  if (!document.getElementById('archive-drawer').classList.contains('open')) { openDrawer(volNum); }
+  // Open drawer directly — avoid calling openDrawer() to prevent recursion
+  var drawer = document.getElementById('archive-drawer');
+  if (!drawer.classList.contains('open')) {
+    drawer.classList.add('open');
+    document.getElementById('panel-overlay').classList.add('visible');
+    document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+    var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
+  }
 }
 
 // ── Popup ────────────────────────────────────────────────────────
