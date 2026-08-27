@@ -754,7 +754,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 footer {
   background: var(--paper);
   border-top: 1px solid var(--rule-mid);
-  padding: 5rem 2rem 3.5rem;
+  padding: 2.5rem 2rem 2rem;
 }
 .foot-inner { max-width: 880px; margin: 0 auto; }
 
@@ -774,13 +774,13 @@ footer {
 
 .sp-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 1px;
   background: var(--rule-mid);
   border: 1px solid var(--rule-mid);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
-.sp-card { background: var(--canvas); padding: 1.25rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 5px; transition: background var(--dur-fast); }
+.sp-card { background: var(--canvas); padding: 0.85rem 1rem 0.75rem; display: flex; flex-direction: column; gap: 4px; transition: background var(--dur-fast); }
 .sp-card:hover { background: var(--paper); }
 .sp-tier { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.65; }
 .sp-name { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.2; }
@@ -1171,10 +1171,10 @@ footer {
    MAP-FIRST ARCHITECTURE OVERRIDES
 ═══════════════════════════════════════════════════════════════ */
 
-/* Override main to allow fixed children */
+/* Map landing page */
 main { max-width: none !important; margin: 0 !important; padding: 0 !important; }
 
-/* Site nav: float over the map */
+/* Site nav: always on top */
 .site-nav {
   position: fixed !important;
   top: 0; left: 0; right: 0;
@@ -1184,89 +1184,96 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .sn-locator { display: none !important; }
 
-/* All tab sections: hidden by default (panels, not page sections) */
+/* All tab sections hidden by default */
 .section { display: none !important; }
 
-/* Tab-archive: becomes the map background — always visible */
+/* Archive: normal-flow page, clears fixed nav */
 #tab-archive {
-  display: grid !important;
-  grid-template-columns: 360px 1fr !important;
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
+  display: block !important;
+  position: relative !important;
+  padding: 54px 0 0 !important;
+  background: var(--canvas) !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
 }
 
-/* Landing intro panel — left column */
-.landing-intro {
+/* Map window — centered frame */
+.map-window {
   position: relative;
-  z-index: 10;
-  background: var(--canvas);
-  border-right: 1px solid var(--rule-mid);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 3rem 2.5rem 4rem;
-  overflow-y: auto;
+  width: min(92vw, 1200px);
+  height: clamp(360px, 60vh, 740px);
+  margin: 2rem auto 0;
+  border: 1px solid var(--rule-mid);
+  overflow: hidden;
 }
-.li-eyebrow {
+
+/* Leaflet map fills window */
+#map { width: 100%; height: 100%; }
+
+/* Landing bottom strip */
+.landing-bottom {
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  border-top: 1px solid var(--rule-mid);
+  margin-top: 2rem;
+}
+.lb-col {
+  padding: 2rem 1.75rem;
+  border-right: 1px solid var(--rule-mid);
+}
+.lb-col:last-child { border-right: none; }
+.lb-label {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-low);
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
+  display: block;
 }
-.li-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 1.2rem;
-  line-height: 1.7;
-  color: var(--ink);
-  margin: 0 0 1rem;
-}
-.li-tagline {
+.lb-blurb p {
   font-family: 'EB Garamond', serif;
   font-size: 1.05rem;
+  line-height: 1.72;
+  color: var(--ink);
+  margin: 0 0 0.75rem;
+}
+.lb-blurb em {
   font-style: italic;
   color: var(--ink-mid);
-  margin: 0 0 2.5rem;
 }
-.li-btns {
+.lb-btns {
   display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.5rem;
 }
-.li-btn {
+.lb-btn {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  padding: 0.8rem 1.25rem;
+  padding: 0.65rem 1rem;
   border: 1px solid var(--rule-mid);
   background: none;
   color: var(--ink);
   cursor: pointer;
-  text-align: left;
   transition: background 0.15s, border-color 0.15s;
 }
-.li-btn:hover { background: var(--paper); border-color: var(--edge); }
-.li-btn-primary {
+.lb-btn:hover { background: var(--paper); border-color: var(--edge); }
+.lb-btn-primary {
   background: rgba(28,43,69,0.07);
   border-color: rgba(28,43,69,0.28);
   color: var(--olive);
 }
-.li-btn-primary:hover { background: rgba(28,43,69,0.14); }
+.lb-btn-primary:hover { background: rgba(28,43,69,0.14); }
 
 @media (max-width: 720px) {
-  #tab-archive { grid-template-columns: 1fr !important; grid-template-rows: auto 1fr !important; }
-  .landing-intro { padding: 2rem 1.5rem 2rem; justify-content: flex-start; }
-  .li-body { font-size: 1.05rem; }
-  .li-tagline { margin-bottom: 1.75rem; }
+  .map-window { width: 100%; height: 50vh; margin: 0; border-left: none; border-right: none; }
+  .landing-bottom { grid-template-columns: 1fr; }
+  .lb-col { border-right: none; border-bottom: 1px solid var(--rule-mid); }
+  .lb-col:last-child { border-bottom: none; }
 }
-
-/* Leaflet map fill */
-#map { width: 100%; height: 100%; }
 
 /* Other sections: slide-in panels */
 #tab-current, #tab-about, #tab-participate, #tab-admin {
@@ -1452,9 +1459,9 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 /* RSVP Popup — calling card style */
 #rsvp-popup {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
   width: 220px;
   background: var(--ink);
   border-top: 3px solid var(--olive);
@@ -1550,7 +1557,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Grain texture overlay — simulates aged paper */
-#tab-archive::after {
+.map-window::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -1563,7 +1570,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Vignette — darkened edges like old paper */
-#tab-archive::before {
+.map-window::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1681,7 +1688,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
 /* Mobile */
 @media (max-width: 600px) {
-  #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
+  #rsvp-popup { left: 1rem; right: 1rem; bottom: 1rem; width: auto; }
   #tab-current, #tab-about, #tab-participate, #tab-admin { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
 }
@@ -1706,21 +1713,53 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
 <main>
 
-  <!-- ARCHIVE — split: intro left, map right -->
+  <!-- ARCHIVE — map window + bottom strip -->
   <div id="tab-archive" class="section active">
 
-    <div class="landing-intro">
-      <div class="li-eyebrow">New York City &middot; 2024&ndash;Present</div>
-      <p class="li-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
-      <p class="li-tagline">Food is not the subject of the story. It is how we communicate it.</p>
-      <div class="li-btns">
-        <button class="li-btn li-btn-primary" onclick="openPanel('current')">Upcoming: Sitting 01</button>
-        <button class="li-btn" onclick="openDrawer('all')">Archive</button>
-        <button class="li-btn" onclick="openPanel('about')">About</button>
+    <div class="map-window">
+      <div id="map"></div>
+
+<div id="rsvp-popup">
+  <button class="popup-x" onclick="closePopup()" aria-label="Close">&times;</button>
+  <div class="popup-inner">
+    <div class="popup-lbl">Life Thru Food</div>
+    <div class="popup-sitting">Sitting 01</div>
+    <div class="popup-name">Nicole Ko</div>
+    <div class="popup-disc">Ephemera &middot; Floral Artist</div>
+    <div class="popup-meta">
+      Sun, Sep 27 &middot; 2026<br>
+      Bushwick, Brooklyn<br>
+      Doors 5:00 pm &middot; $100 / seat
+    </div>
+    <button class="popup-cta" onclick="closePopup(); openPanel('current')">Claim your seat &rarr;</button>
+  </div>
+
+    </div>
+
+    <div class="landing-bottom">
+      <!-- Left: previous partners -->
+      <div class="lb-col lb-sponsors">
+        <span class="lb-label">Previous Partners</span>
+        <div class="sp-grid" id="sponsors-grid-left" style="margin:0"></div>
+      </div>
+      <!-- Center: LTF blurb -->
+      <div class="lb-col lb-blurb">
+        <span class="lb-label">New York City &middot; 2024&ndash;Present</span>
+        <p>Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
+        <p><em>Food is not the subject of the story. It is how we communicate it.</em></p>
+        <div class="lb-btns">
+          <button class="lb-btn lb-btn-primary" onclick="openPanel('current')">Upcoming: Sitting 01</button>
+          <button class="lb-btn" onclick="openDrawer('all')">Archive</button>
+          <button class="lb-btn" onclick="openPanel('about')">About</button>
+        </div>
+      </div>
+      <!-- Right: previous partners continued -->
+      <div class="lb-col lb-sponsors">
+        <span class="lb-label">Previous Partners</span>
+        <div class="sp-grid" id="sponsors-grid-right" style="margin:0"></div>
       </div>
     </div>
 
-    <div id="map"></div>
   </div>
 
   <!-- RSVP PANEL -->
@@ -2458,6 +2497,12 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
       <div class="team-card"><div class="team-photo"><img src="images/team-profiles/leo-profile.jpg" alt="Leo Velleu" loading="lazy"></div><div class="team-name">Leo Velleu</div><div class="team-role">Head of Service &amp; Graphic Designer</div><a href="https://www.instagram.com/leo_velleu/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leo_velleu</a></div>
       <div class="team-card"><div class="team-photo"><img src="images/team-profiles/andreo-profile.jpg" alt="Andreo Otiniano" loading="lazy"></div><div class="team-name">Andreo Otiniano</div><div class="team-role">Head of Photography</div><a href="https://www.instagram.com/andreo.otiniano/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@andreo.otiniano</a></div>
     </div>
+  <!-- Previous Partners -->
+  <div style="padding: 2.5rem 1.5rem 0; border-top: 1px solid var(--rule-mid); margin-top: 2rem;">
+    <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
+    <div class="sp-grid" id="sponsors-grid-about" style="margin-top:1.25rem;margin-bottom:0;"></div>
+  </div>
+
   </div>
   </div><!-- panel-body -->
   </div><!-- tab-about -->
@@ -2776,7 +2821,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
 <footer>
   <div class="foot-inner">
-    <div class="foot-label">With thanks</div>
+    <div class="foot-label">Previous Partners</div>
     <div class="sp-grid" id="sponsors-grid"></div>
     <div class="foot-cta">
       <p>Interested in collaborating? We partner with makers, wineries, restaurants, and cultural institutions who share our sensibility.</p>
@@ -2889,22 +2934,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   </div>
 </div>
 
-<!-- RSVP Calling Card Popup (shown after 5 seconds) -->
-<div id="rsvp-popup">
-  <button class="popup-x" onclick="closePopup()" aria-label="Close">&times;</button>
-  <div class="popup-inner">
-    <div class="popup-lbl">Life Thru Food</div>
-    <div class="popup-sitting">Sitting 01</div>
-    <div class="popup-name">Nicole Ko</div>
-    <div class="popup-disc">Ephemera &middot; Floral Artist</div>
-    <div class="popup-meta">
-      Sun, Sep 27 &middot; 2026<br>
-      Bushwick, Brooklyn<br>
-      Doors 5:00 pm &middot; $100 / seat
-    </div>
-    <button class="popup-cta" onclick="closePopup(); openPanel('current')">Claim your seat &rarr;</button>
-  </div>
-</div>
+<!-- RSVP Calling Card Popup (shown after 5 seconds) --></div>
 
 <!-- Panel backdrop -->
 <div id="panel-overlay" onclick="closeAllPanels()"></div>
@@ -5488,9 +5518,21 @@ document.addEventListener('keydown', e => {
 
 function renderSponsors() {
   const grid = document.getElementById('sponsors-grid');
+  const gridAbout = document.getElementById('sponsors-grid-about');
   const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
-  if (!sorted.length) { grid.innerHTML = '<div style="padding:2rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No sponsors yet.</div>'; return; }
-  grid.innerHTML = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
+  const cardHtml = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
+  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No sponsors yet.</div>';
+  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridAbout) gridAbout.innerHTML = emptyHtml; return; }
+  // Split sponsors: odd → left, even → right (both columns in landing-bottom)
+  const leftCards = sorted.filter((_,i) => i % 2 === 0);
+  const rightCards = sorted.filter((_,i) => i % 2 !== 0);
+  const toHtml = arr => arr.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
+  grid.innerHTML = cardHtml;
+  if (gridAbout) gridAbout.innerHTML = cardHtml;
+  const gl = document.getElementById('sponsors-grid-left');
+  const gr = document.getElementById('sponsors-grid-right');
+  if (gl) gl.innerHTML = leftCards.length ? toHtml(leftCards) : '';
+  if (gr) gr.innerHTML = rightCards.length ? toHtml(rightCards) : '';
   const al = document.getElementById('sponsor-list-admin');
   if (!al) return;
   al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:italic">No sponsors yet.</p>' :
