@@ -934,6 +934,19 @@ footer {
   cursor: pointer;
   line-height: 1;
   letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+}
+.sn-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+.sn-logo-fallback {
+  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-size: 1.1rem;
+  color: var(--ink);
 }
 .sn-locator {
   font-family: 'Fragment Mono', monospace;
@@ -1156,6 +1169,37 @@ footer {
 .part-section + .part-section {
   border-top: 1px solid var(--rule-mid);
 }
+/* Participate tab nav */
+.part-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--rule-mid);
+  background: var(--canvas);
+  position: sticky;
+  top: 54px;
+  z-index: 10;
+  flex-shrink: 0;
+}
+.part-tab {
+  flex: 1;
+  font-family: 'Fragment Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-low);
+  padding: 0.85rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  line-height: 1.3;
+}
+.part-tab:hover { color: var(--ink); }
+.part-tab.active {
+  color: var(--ink);
+  border-bottom-color: #509F97;
+}
+
 .part-label {
   font-family: 'Fragment Mono', monospace;
   font-size: var(--t-label);
@@ -1678,7 +1722,10 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
 <div class="site-nav">
   <div class="sn-left" onclick="closeAllPanels()" style="cursor:pointer">
-    <div class="sn-wordmark">Life Thru Food</div>
+    <div class="sn-wordmark">
+      <img src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="sn-logo" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="sn-logo-fallback" style="display:none">Life Thru Food</span>
+    </div>
   </div>
   <div class="sn-nav">
     <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
@@ -2470,10 +2517,16 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <div class="panel-hd-title">Participate</div>
     <button class="panel-close" onclick="closePanel('participate')" aria-label="Close">&times;</button>
   </div>
+  <!-- Participate nav tabs -->
+  <div class="part-tabs">
+    <button class="part-tab active" onclick="showPartSection('part-informed', this)">Stay Informed</button>
+    <button class="part-tab" onclick="showPartSection('part-private', this)">Private Event</button>
+    <button class="part-tab" onclick="showPartSection('part-subject', this)">Submit an Artist</button>
+  </div>
   <div class="panel-body">
 
     <!-- Stay informed -->
-    <div class="part-section">
+    <div class="part-section" id="part-informed">
     <span class="part-label">Stay informed</span>
     <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
       <h2>Be the first to know.</h2>
@@ -2502,7 +2555,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     </div>
 
     <!-- Private events -->
-    <div class="part-section">
+    <div class="part-section" id="part-private">
     <span class="part-label">Private events</span>
     <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
       <h2>Private Events</h2>
@@ -2570,7 +2623,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     </div>
 
     <!-- Artist submission -->
-    <div class="part-section">
+    <div class="part-section" id="part-subject">
     <span class="part-label">Subject submission</span>
     <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
       <h2>Nominate a Subject.</h2>
@@ -5523,6 +5576,26 @@ function removeSponsor(id) { sponsors = sponsors.filter(s => s.id !== id); rende
   }
 })();
 
+// ── Participate panel section tabs ───────────────────────────────────────────
+function showPartSection(sectionId, btn) {
+  // Toggle tab active state
+  document.querySelectorAll('.part-tab').forEach(function(t) { t.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  // Show/hide sections
+  ['part-informed', 'part-private', 'part-subject'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = (id === sectionId) ? '' : 'none';
+  });
+}
+// Initialize: show Stay Informed, hide others
+(function() {
+  ['part-private', 'part-subject'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+})();
+
+
 // ── LANDING GALLERY — weekly rotating 12 photos ─────────────────────────────
 function seededRng(seed) {
   let s = seed | 0;
@@ -5653,7 +5726,7 @@ function initMap() {
     L.latLng(40.930, -73.650)  // NE — northern Bronx
   );
   ltfMap = L.map('map', {
-    center: [40.660, -73.970],
+    center: [40.710, -73.970],
     zoom: 13,
     zoomControl: false,
     attributionControl: true,
@@ -5710,6 +5783,10 @@ function initMap() {
       openDrawer(p.num);
     });
   });
+
+  // Fit map to show all pins, respecting viewport size (mobile + desktop)
+  var pinBounds = L.latLngBounds(EVENT_PINS.map(function(p) { return [p.lat, p.lng]; }));
+  ltfMap.fitBounds(pinBounds, { padding: [60, 60], maxZoom: 13, animate: false });
 }
 
 // ── Panel control ────────────────────────────────────────────────
