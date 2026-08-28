@@ -5726,13 +5726,13 @@ function initMap() {
     L.latLng(40.930, -73.650)  // NE — northern Bronx
   );
   ltfMap = L.map('map', {
-    center: [40.710, -73.970],
-    zoom: 13,
+    center: [40.660, -73.970],
+    zoom: 10,
     zoomControl: false,
     attributionControl: true,
     maxBounds: nycBounds,
     maxBoundsViscosity: 1.0,
-    minZoom: 12,
+    minZoom: 10,
     maxZoom: 16
   });
 
@@ -5784,9 +5784,7 @@ function initMap() {
     });
   });
 
-  // Fit map to show all pins, respecting viewport size (mobile + desktop)
-  var pinBounds = L.latLngBounds(EVENT_PINS.map(function(p) { return [p.lat, p.lng]; }));
-  ltfMap.fitBounds(pinBounds, { padding: [60, 60], maxZoom: 13, animate: false });
+  // Fixed starting view — matches design intent (zoomed-out NYC metro)
 }
 
 // ── Panel control ────────────────────────────────────────────────
