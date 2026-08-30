@@ -21,12 +21,12 @@
 :root {
   /* Color tokens — LTF palette (neutral light ground)
      Cream canvas · brown ink · navy accent */
-  --canvas: #F2EDE3; --paper: #EAE0D4; --card: #E0D5C5; --lift: #DDD0BC;
-  --edge: #C9BBAA; --rule: rgba(68,51,42,0.12); --rule-mid: rgba(68,51,42,0.20);
-  --ink: #44332A; --ink-mid: rgba(68,51,42,0.60); --ink-low: rgba(68,51,42,0.38);
-  --olive: #1C2B45; --olive-dim: rgba(28,43,69,0.14); --olive-ghost: rgba(28,43,69,0.06);
-  --craft: #44332A; --craft-dim: rgba(68,51,42,0.20);
-  --steel: #F2EDE3; --success: #2E6A4A; --danger: #B83A2A;
+  --canvas: #EAE6D9; --paper: #E0DCCE; --card: #D4D0C2; --lift: #CAC6B4;
+  --edge: #B8B4A4; --rule: rgba(0,0,0,0.12); --rule-mid: rgba(0,0,0,0.20);
+  --ink: #000000; --ink-mid: rgba(0,0,0,0.60); --ink-low: rgba(0,0,0,0.38);
+  --olive: #008863; --olive-dim: rgba(0,136,99,0.14); --olive-ghost: rgba(0,136,99,0.06);
+  --craft: #000000; --craft-dim: rgba(0,0,0,0.20);
+  --steel: #EAE6D9; --success: #2E6A4A; --danger: #B83A2A;
   /* Layout */
   --measure: 68ch;
   --grid-gap: clamp(1rem, 3vw, 2rem);
@@ -78,7 +78,7 @@ body { font-family: 'EB Garamond', serif; background: var(--canvas); color: var(
 header {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--rule-mid);
+  border-bottom: 3px solid #008863;
   background: var(--canvas);
   position: relative;
 }
@@ -297,7 +297,7 @@ nav button {
   transition: color var(--dur-fast), border-color var(--dur-fast);
   min-height: 44px;
 }
-nav button.active { color: var(--ink); border-bottom-color: var(--olive); }
+nav button.active { color: var(--ink); border-bottom-color: #5A868D; }
 nav button:hover:not(.active) { color: var(--ink-mid); }
 
 /* === MAIN === */
@@ -332,7 +332,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   font-size: var(--t-label);
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #509F97;
+  color: #008863;
   opacity: 1;
   display: block;
   margin-bottom: 2rem;
@@ -360,7 +360,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   font-family: 'EB Garamond', serif;
   font-size: 1.15rem;
   font-style: italic;
-  color: #509F97;
+  color: #008863;
   margin-top: 8px;
 }
 .ev-location-ref {
@@ -386,7 +386,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   font-size: 8px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #509F97;
+  color: #008863;
   display: block;
   margin-bottom: 6px;
 }
@@ -711,11 +711,11 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 #gallery-modal { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(68,51,42,0.97); backdrop-filter: blur(10px); overflow-y: auto; }
 #gallery-modal.open { display: block; animation: fadeIn 0.3s ease; }
 .gm-inner { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
-.gm-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(242,237,227,0.15); margin-bottom: 2rem; }
-.gm-title { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 1.6rem; color: #F2EDE3; letter-spacing: -0.03em; }
-.gm-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #509F97; opacity: 1; margin-top: 4px; }
+.gm-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(234,230,217,0.15); margin-bottom: 2rem; }
+.gm-title { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 1.6rem; color: #EAE6D9; letter-spacing: -0.03em; }
+.gm-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #008863; opacity: 1; margin-top: 4px; }
 .gm-close-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid rgba(242,237,227,0.25); color: rgba(242,237,227,0.70); padding: 7px 18px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
-.gm-close-btn:hover { border-color: rgba(242,237,227,0.60); color: #F2EDE3; }
+.gm-close-btn:hover { border-color: rgba(234,230,217,0.60); color: #EAE6D9; }
 .gm-grid { columns: 3; column-gap: 8px; }
 .gm-item { break-inside: avoid; margin-bottom: 8px; cursor: pointer; position: relative; overflow: hidden; }
 .gm-item img { width: 100%; display: block; filter: brightness(0.93) saturate(0.75); transition: filter 0.25s; }
@@ -745,7 +745,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .team-name { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
 .team-role { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.8; margin-top: 2px; }
 .ig-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.1em; color: var(--ink-low); text-decoration: none; margin-top: 6px; transition: color 0.2s; }
-.ig-link:hover { color: #509F97; }
+.ig-link:hover { color: #008863; }
 .ed-ig-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; }
 .team-photo { width: 100%; aspect-ratio: 3/4; background: var(--card); border: 1px solid var(--rule-mid); margin-bottom: 1rem; overflow: hidden; position: relative; }
 .team-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.94) saturate(0.78); transition: filter 0.3s; }
@@ -973,7 +973,7 @@ footer {
   cursor: pointer;
   transition: color var(--dur-fast), border-color var(--dur-fast);
 }
-.sn-btn.active { color: var(--ink); border-bottom-color: var(--olive); }
+.sn-btn.active { color: #EAE6D9; background: #008863; border-bottom-color: transparent; }
 .sn-btn:hover:not(.active) { color: var(--ink-mid); }
 @media (max-width: 600px) {
   .sn-btn { padding: 0 0.65rem; font-size: 8px; letter-spacing: 0.1em; }
@@ -1015,9 +1015,9 @@ footer {
   transition: background 0.12s;
   margin: 0 -1.5rem;
 }
-.arc-vol-row:hover { background: rgba(68,51,42,0.04); }
-.arc-vol-row.arc-upcoming { background: rgba(28,43,69,0.06); border-color: rgba(28,43,69,0.10); }
-.arc-vol-row.arc-upcoming:hover { background: rgba(28,43,69,0.1); }
+.arc-vol-row:hover { background: rgba(242,190,75,0.38); }
+.arc-vol-row.arc-upcoming { background: #008863; border-color: rgba(0,136,99,0.40); }
+.arc-vol-row.arc-upcoming:hover { background: #007a59; }
 .arc-vol-row.arc-lg .arc-vname { font-size: 1.15rem; }
 .arc-vol-row.arc-ghost { opacity: 0.3; cursor: default; }
 .arc-vnum {
@@ -1027,14 +1027,14 @@ footer {
   text-transform: uppercase;
   color: var(--ink-low);
 }
-.arc-vol-row.arc-upcoming .arc-vnum { color: rgba(28,43,69,0.6); }
+.arc-vol-row.arc-upcoming .arc-vnum { color: rgba(234,230,217,0.60); }
 .arc-vname {
   font-family: 'EB Garamond', serif;
   font-size: 1.05rem;
   color: var(--ink);
   line-height: 1.2;
 }
-.arc-vol-row.arc-upcoming .arc-vname { color: var(--olive); }
+.arc-vol-row.arc-upcoming .arc-vname { color: #EAE6D9; }
 .arc-vsub {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
@@ -1047,10 +1047,11 @@ footer {
   font-family: 'Fragment Mono', monospace;
   font-size: var(--t-label);
   letter-spacing: 0.1em;
-  color: rgba(68,51,42,0.20);
+  color: var(--ink-low);
   text-align: right;
   min-width: 80px;
 }
+.arc-vol-row.arc-upcoming .arc-vright { color: #EAE6D9; }
 .arc-vstatus {
   display: block;
   font-size: 8px;
@@ -1059,7 +1060,7 @@ footer {
   margin-top: 3px;
 }
 .arc-vstatus.arc-archived { color: rgba(28,43,69,0.6); }
-.arc-vstatus.arc-upc { color: rgba(28,43,69,0.7); }
+.arc-vstatus.arc-upc { color: #F2BE4B; }
 .arc-stats {
   display: flex;
   flex-wrap: wrap;
@@ -1174,7 +1175,7 @@ footer {
 .part-tabs {
   display: flex;
   border-bottom: 1px solid var(--rule-mid);
-  background: var(--canvas);
+  background: #008863;
   position: sticky;
   top: 54px;
   z-index: 10;
@@ -1189,16 +1190,16 @@ footer {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: var(--ink-low);
+  color: rgba(234,230,217,0.60);
   padding: 0.85rem 0.5rem;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
   line-height: 1.3;
 }
-.part-tab:hover { color: var(--ink); }
+.part-tab:hover { color: #EAE6D9; }
 .part-tab.active {
-  color: var(--ink);
-  border-bottom-color: #509F97;
+  color: #EAE6D9;
+  border-bottom-color: #F2BE4B;
 }
 
 .part-label {
@@ -1448,7 +1449,10 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink-low);
+  color: rgba(234,230,217,0.80);
+  background: #008863;
+  padding: 0.3rem 0.65rem;
+  display: inline-block;
 }
 .drw-close {
   background: none;
@@ -1476,10 +1480,10 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   bottom: 2rem;
   left: 2rem;
   width: 220px;
-  background: var(--ink);
-  border-top: 3px solid var(--olive);
+  background: #008863;
+  border-top: 3px solid #5A868D;
   z-index: 160;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.30);
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s;
@@ -1497,22 +1501,22 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   background: none;
   border: none;
   font-size: 1rem;
-  color: #509F97;
+  color: rgba(234,230,217,0.55);
   cursor: pointer;
   line-height: 1;
   padding: 0.2rem;
   transition: color 0.15s;
 }
-.popup-x:hover { color: #6db8b1; }
+.popup-x:hover { color: #EAE6D9; }
 .popup-inner { padding: 1.1rem 1.25rem 1rem; }
 .popup-lbl {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(242,237,227,0.50);
+  color: rgba(234,230,217,0.55);
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(242,237,227,0.15);
+  border-bottom: 1px solid rgba(234,230,217,0.20);
   margin-bottom: 0.9rem;
 }
 .popup-sitting {
@@ -1520,13 +1524,13 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 8px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(242,237,227,0.55);
+  color: rgba(234,230,217,0.60);
   margin-bottom: 0.3rem;
 }
 .popup-name {
   font-family: 'LTF Hand Ink', 'EB Garamond', serif;
   font-size: 1.9rem;
-  color: #F2EDE3;
+  color: #EAE6D9;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
@@ -1534,17 +1538,17 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: 0.92rem;
-  color: rgba(68,51,42,0.55);
+  color: #F2BE4B;
   margin-bottom: 1rem;
 }
 .popup-meta {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.10em;
-  color: rgba(242,237,227,0.55);
+  color: rgba(234,230,217,0.60);
   line-height: 1.9;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(242,237,227,0.12);
+  border-top: 1px solid rgba(234,230,217,0.18);
   margin-bottom: 1rem;
 }
 .popup-cta {
@@ -1554,15 +1558,15 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  background: #F2EDE3;
-  color: var(--olive);
+  background: #EAE6D9;
+  color: #5A868D;
   border: none;
   padding: 0.85rem 1rem;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
   text-align: center;
 }
-.popup-cta:hover { background: rgba(68,51,42,0.82); }
+.popup-cta:hover { background: #5A868D; color: #EAE6D9; }
 
 /* Vintage map treatment — aged parchment / engraved print */
 .leaflet-tile-pane {
@@ -1616,11 +1620,11 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .ltf-pin-upcoming .ltf-pin-dot {
   width: 14px;
   height: 14px;
-  background: var(--olive);
-  border-color: rgba(28,43,69,0.40);
+  background: #F2BE4B;
+  border-color: rgba(242,190,75,0.40);
 }
 @keyframes pin-pulse {
-  0% { transform: translate(-50%,-50%) scale(1); opacity: 0.55; }
+  0% { transform: translate(-50%,-50%) scale(1); opacity: 0.70; }
   100% { transform: translate(-50%,-50%) scale(2.8); opacity: 0; }
 }
 .ltf-pin-pulse {
@@ -1628,7 +1632,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   top: 50%; left: 50%;
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: var(--craft);
+  background: #F2BE4B;
   animation: pin-pulse 2.2s ease-out infinite;
   pointer-events: none;
 }
@@ -2994,6 +2998,32 @@ const EDITIONS = {
     instagram:[{url:'https://www.instagram.com/e_p_h_e_m_e_r_a/',handle:'@e_p_h_e_m_e_r_a'}],
     desc:'Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic.',
     bio:['Nicole Ko is the artist behind Ephemera, a floral practice rooted in intuition and impermanence. She makes arrangements built to be experienced once, then released.'],
+    menu: [
+      {
+        course: 'Course 01',
+        name: 'Fried Green Tomatoes w/ Smoked Herring and Pumpkin Crema',
+        note: null,
+        body: 'Nicole\'s story began on the creekbeds of Georgia developing a deeply personal relationship with the world around her. The first course of this menu is an homage to this chapter of her life. Fried Green Tomatoes serve as a touchpoint for her early memories in Georgia. At 10 she was first exposed to Kiki\'s Delivery Service. Hayao Miyazaki\'s feminine protagonist pushed her to nurture her own creative ecosystem and continues to remind her to enjoy life and leave space for new creative ideas. In reference to this foundational inspiration, her fried green tomatoes are topped with a smoked herring and pumpkin crema, our take on Kiki\'s most difficult delivery.'
+      },
+      {
+        course: 'Course 02',
+        name: 'Dumplings 2 Ways',
+        note: 'Chicken and Dumpling Gazpacho w/ Citrus Poulet Composé ┃ Fried Dumplings w/ Chrysanthemum Leaves and Chinese Broccoli',
+        body: 'When Nicole needs to think of family she makes Chicken and Dumplings. She was raised in a military family which meant constantly moving around. Our second course plays on this constant change, taking what is usually hot and making it cold, what is usually straightforward and creating something bold.\n\nChinese food can be found everywhere, but like so many cuisines it feels almost inherent to NY. There is no understanding Nicole\'s art without first understanding how NY has shaped her. A painter turned florist. NY carves a path for all those who call her home and our fried dumpling course pays tribute to this truth.'
+      },
+      {
+        course: 'Course 03',
+        name: 'Pasta al Nasturtium w/ Brown Butter, Morel Mushroom, and Green Apple',
+        note: null,
+        body: 'Ephemera means something that lasts only a short while. Flowers, pasta sauce emulsions, an event of this very nature. With Nicole, there is so much more than what meets the eye. Like a flower we only see what has budded thru the surface. Our final savory course tells this very story. A sauce simple in color, bursting with flavor. Eat it while it\'s hot, its truest form is fast fleeting.'
+      },
+      {
+        course: 'Dessert',
+        name: 'Chocolate Fire and Ice Cream',
+        note: null,
+        body: 'Our dessert is a glimpse into the future for Nicole. Her dream is to create a book that highlights not only her own work but the spectrum of emotions that flowers convey. Her art is intrinsically focused on pulling people into the present moment. Stunning arrangements that grant people permission to enjoy themselves and allow the beauty of the world to penetrate deep. Our dessert marries her love of chocolate with this momentous artistic responsibility. A play on all the senses, a grand finale for a subject whose work is so often the explosion of color that makes memories last forever.'
+      },
+    ],
   },
   '07': {
     num:'07', eventDate:'2026-08-01', eventDateDisplay:'Saturday, August 1 · 2026', doors:'5:00 pm', price:'$75',
