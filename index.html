@@ -1290,7 +1290,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Other sections: slide-in panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin {
+#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
@@ -1308,12 +1308,12 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
   padding: 0 !important;
 }
-#tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open {
+#tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
   transform: translateX(0);
 }
 
 /* Editorial grid overlay on all panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin, #archive-drawer {
+#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
   background-image:
     repeating-linear-gradient(
       rgba(68,51,42,0.06) 0px, rgba(68,51,42,0.06) 1px,
@@ -1475,15 +1475,45 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* RSVP Popup — calling card style */
+/* Popup hand-drawn annotation */
+#popup-annot {
+  position: fixed;
+  bottom: calc(2rem + 315px); /* popup is ~290px tall; this sits ~25px above its top */
+  left: 6px;
+  width: 310px;
+  height: 155px;
+  pointer-events: none;
+  z-index: 159;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease 0.25s, transform 0.5s ease 0.25s;
+}
+#popup-annot.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.annot-text {
+  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-size: 17px;
+  fill: #000000;
+}
+.annot-arrow {
+  stroke: #000000;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 #rsvp-popup {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
   width: 220px;
-  background: #5A868D;
+  background: #EAE6D9;
   border-top: 3px solid #008863;
   z-index: 160;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.30);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.18);
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s;
@@ -1501,22 +1531,22 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   background: none;
   border: none;
   font-size: 1rem;
-  color: rgba(234,230,217,0.55);
+  color: rgba(0,136,99,0.50);
   cursor: pointer;
   line-height: 1;
   padding: 0.2rem;
   transition: color 0.15s;
 }
-.popup-x:hover { color: #EAE6D9; }
+.popup-x:hover { color: #008863; }
 .popup-inner { padding: 1.1rem 1.25rem 1rem; }
 .popup-lbl {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(234,230,217,0.55);
+  color: rgba(0,136,99,0.55);
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(234,230,217,0.20);
+  border-bottom: 1px solid rgba(0,136,99,0.20);
   margin-bottom: 0.9rem;
 }
 .popup-sitting {
@@ -1524,13 +1554,13 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 8px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(234,230,217,0.60);
+  color: rgba(0,136,99,0.60);
   margin-bottom: 0.3rem;
 }
 .popup-name {
   font-family: 'LTF Hand Ink', 'EB Garamond', serif;
   font-size: 1.9rem;
-  color: #EAE6D9;
+  color: #008863;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
@@ -1538,17 +1568,17 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: 0.92rem;
-  color: #F2BE4B;
+  color: #000000;
   margin-bottom: 1rem;
 }
 .popup-meta {
   font-family: 'Fragment Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.10em;
-  color: rgba(234,230,217,0.60);
+  color: rgba(0,136,99,0.60);
   line-height: 1.9;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(234,230,217,0.18);
+  border-top: 1px solid rgba(0,136,99,0.18);
   margin-bottom: 1rem;
 }
 .popup-cta {
@@ -1558,15 +1588,15 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  background: #EAE6D9;
+  background: transparent;
   color: #008863;
-  border: none;
+  border: 1.5px solid #5A868D;
   padding: 0.85rem 1rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
   text-align: center;
 }
-.popup-cta:hover { background: #008863; color: #EAE6D9; }
+.popup-cta:hover { background: #5A868D; color: #EAE6D9; border-color: #5A868D; }
 
 /* Vintage map treatment — aged parchment / engraved print */
 .leaflet-tile-pane {
@@ -1716,7 +1746,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 /* Mobile */
 @media (max-width: 600px) {
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
-  #tab-current, #tab-about, #tab-participate, #tab-admin { width: 100vw !important; border-left: none !important; }
+  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
 }
 
@@ -1726,7 +1756,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 <body>
 
 <div class="site-nav">
-  <div class="sn-left" onclick="closeAllPanels()" style="cursor:pointer">
+  <div class="sn-left" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">
     <div class="sn-wordmark">
       <img src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="sn-logo" onerror="this.style.display='none'">
       <span class="sn-logo-text">Life Thru Food</span>
@@ -1735,7 +1765,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   <div class="sn-nav">
     <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
     <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Upcoming Events</button>
-    <button class="sn-btn" id="sn-btn-about" onclick="openPanel('about')">About</button>
+    <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Sponsors</button>
     <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate')">Participate</button>
     <button class="sn-btn" id="nav-admin-btn" onclick="openPanel('admin')" style="opacity:0;pointer-events:none;width:0;overflow:hidden;padding:0">Records</button>
   </div>
@@ -1754,6 +1784,33 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <p>Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
     <p class="lc-tagline">Food is not the subject of the story. It is how we communicate it.</p>
   </div>
+
+<!-- Hand-drawn notebook annotation pointing to popup -->
+<div id="popup-annot" aria-hidden="true">
+  <!--
+    Annotation sits ~295px above popup bottom (popup is ~230px tall → popup top ~65px below annotation div bottom).
+    SVG overflow:visible lets arrows extend past the 140px div height to reach the popup top edge (~y=205).
+    z-index:161 keeps arrows on top of the popup (z:160) so they're never hidden.
+    Popup is at left:32px, width:220px → in annotation SVG coords: x=26..246.
+  -->
+  <svg viewBox="0 0 310 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+    <!-- LEFT: "this month's event" — tilted CCW -->
+    <text x="8"  y="32" class="annot-text" transform="rotate(-8,8,32)">this month's</text>
+    <text x="18" y="54" class="annot-text" transform="rotate(-8,18,54)">event</text>
+    <!-- Arrow: tangent at endpoint (52,118)→(70,143) = direction (18,25) -->
+    <path class="annot-arrow" d="M 48 62 C 44 92 52 118 70 143"/>
+    <!-- Arrowhead legs computed from tangent (18,25): to (58,135) and (67,130) -->
+    <path class="annot-arrow" d="M 70 143 L 58 135 M 70 143 L 67 130"/>
+
+    <!-- RIGHT: "get your ticket now!" — tilted CW -->
+    <text x="162" y="38" class="annot-text" transform="rotate(7,162,38)">get your</text>
+    <text x="150" y="60" class="annot-text" transform="rotate(7,150,60)">ticket now!</text>
+    <!-- Arrow: tangent at endpoint (186,120)→(178,143) = direction (-8,23) -->
+    <path class="annot-arrow" d="M 195 68 C 200 100 186 120 178 143"/>
+    <!-- Arrowhead legs computed from tangent (-8,23): to (178,129) and (187,132) -->
+    <path class="annot-arrow" d="M 178 143 L 178 129 M 178 143 L 187 132"/>
+  </svg>
+</div>
 
 <div id="rsvp-popup">
   <button class="popup-x" onclick="closePopup()" aria-label="Close">&times;</button>
@@ -2493,7 +2550,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <div class="about-intro">
       <div class="about-index-label">LTF &nbsp;&middot;&nbsp; Archive &nbsp;&middot;&nbsp; 2024&ndash;Present</div>
       <div class="about-heading">About</div>
-      <p class="about-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course. Food is not the subject of the story. It is how we communicate it.</p>
+      <p class="about-body"><strong>LIFE THRU FOOD</strong> is a cultural programming, hospitality &amp; media company. We translate human stories into immersive dining experiences.</p>
     </div>
     <div class="team-intro">
       <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
@@ -2515,6 +2572,80 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   </div>
   </div><!-- panel-body -->
   </div><!-- tab-about -->
+
+  <!-- SPONSOR PANEL -->
+  <div id="tab-sponsor" class="section">
+  <div class="panel-hd">
+    <div class="panel-hd-title">Sponsors</div>
+    <button class="panel-close" onclick="closePanel('sponsor')" aria-label="Close">&times;</button>
+  </div>
+  <div class="panel-body">
+
+    <!-- Intro -->
+    <div class="about-intro">
+      <div class="about-index-label">LTF &nbsp;&middot;&nbsp; Partnerships</div>
+      <div class="about-heading">Partner with us.</div>
+      <p class="about-body">Life Thru Food brings together culture, food, and community in intimate, intentional spaces. We work with brands and organizations who believe in the power of human storytelling.</p>
+    </div>
+
+    <!-- Inquiry form -->
+    <div style="padding: 2rem 1.5rem;">
+      <p class="form-title">Sponsor inquiry</p>
+      <div id="sponsor-toast" class="toast"></div>
+      <div id="sponsor-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+        <p style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
+        <p style="font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
+        <p style="font-size:0.95rem;font-style:italic;color:var(--ink-mid)">Thank you for your interest in partnering with Life Thru Food.</p>
+      </div>
+      <div id="sponsor-form-wrap">
+        <div class="form-grid">
+          <div class="form-field"><label for="sp-first">First name</label><input type="text" id="sp-first" placeholder="First"></div>
+          <div class="form-field"><label for="sp-last">Last name</label><input type="text" id="sp-last" placeholder="Last"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="sp-company">Company / Brand</label><input type="text" id="sp-company" placeholder="Organization name"></div>
+          <div class="form-field"><label for="sp-email">Email</label><input type="email" id="sp-email" placeholder="you@company.com"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="sp-type">Partnership type</label>
+            <select id="sp-type">
+              <option value="">—</option>
+              <option>Presenting Sponsor</option>
+              <option>Event Partner</option>
+              <option>Product / Beverage Placement</option>
+              <option>Media Partner</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="sp-budget">Budget range <span style="font-style:italic;opacity:0.6">(optional)</span></label>
+            <select id="sp-budget">
+              <option value="">—</option>
+              <option>Under $1,000</option>
+              <option>$1,000 – $5,000</option>
+              <option>$5,000 – $15,000</option>
+              <option>$15,000+</option>
+              <option>Open to discussion</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-field"><label for="sp-message">Tell us about your vision</label><textarea id="sp-message" rows="5" placeholder="What are you hoping to achieve through this partnership? Any details about your brand, audience, or goals..."></textarea></div>
+        </div>
+        <div id="sponsor-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSponsorInquiry()">send inquiry &rarr;</button></div>
+      </div>
+    </div>
+
+    <!-- Previous sponsors -->
+    <div style="padding: 2.5rem 1.5rem 2rem; border-top: 1px solid var(--rule-mid); margin-top: 1rem;">
+      <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
+      <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0;"></div>
+    </div>
+
+  </div>
+  </div><!-- tab-sponsor -->
 
   <!-- PARTICIPATE PANEL -->
   <div id="tab-participate" class="section">
@@ -3776,6 +3907,52 @@ async function submitPrivateInquiry() {
     document.getElementById('private-success').style.display = 'block';
   } catch (err) {
     console.error('Private inquiry error:', err);
+    errEl.innerHTML = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'send inquiry →';
+  }
+}
+
+// ── SPONSOR INQUIRY ──────────────────────────────────────────────
+async function submitSponsorInquiry() {
+  const first   = document.getElementById('sp-first').value.trim();
+  const last    = document.getElementById('sp-last').value.trim();
+  const company = document.getElementById('sp-company').value.trim();
+  const email   = document.getElementById('sp-email').value.trim();
+  const type    = document.getElementById('sp-type').value;
+  const budget  = document.getElementById('sp-budget').value;
+  const message = document.getElementById('sp-message').value.trim();
+  const errEl   = document.getElementById('sponsor-inline-error');
+
+  const missing = [];
+  if (!first || !last) missing.push('Full name');
+  if (!email || !email.includes('@')) missing.push('Valid email address');
+  if (!company) missing.push('Company / Brand');
+  if (!type) missing.push('Partnership type');
+
+  if (missing.length) {
+    errEl.innerHTML = 'Please complete the following:<br>' + missing.map(m => `&nbsp;· ${m}`).join('<br>');
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'sending…';
+
+  try {
+    await sbPost('sponsor_inquiries', {
+      first_name: first, last_name: last, company, email,
+      partnership_type: type, budget_range: budget || null,
+      message: message || null,
+      created_at: new Date().toISOString()
+    });
+    document.getElementById('sponsor-form-wrap').style.display = 'none';
+    document.getElementById('sponsor-success').style.display = 'block';
+  } catch (err) {
+    console.error('Sponsor inquiry error:', err);
     errEl.innerHTML = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
     errEl.style.display = 'block';
     btn.disabled = false;
@@ -5560,16 +5737,18 @@ document.addEventListener('keydown', e => {
 function renderSponsors() {
   const grid = document.getElementById('sponsors-grid');
   const gridAbout = document.getElementById('sponsors-grid-about');
+  const gridSponsor = document.getElementById('sponsors-grid-sponsor');
   const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
   const cardHtml = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
-  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No sponsors yet.</div>';
-  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridAbout) gridAbout.innerHTML = emptyHtml; return; }
+  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No partners yet.</div>';
+  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridAbout) gridAbout.innerHTML = emptyHtml; if (gridSponsor) gridSponsor.innerHTML = emptyHtml; return; }
   // Split sponsors: odd → left, even → right (both columns in landing-bottom)
   const leftCards = sorted.filter((_,i) => i % 2 === 0);
   const rightCards = sorted.filter((_,i) => i % 2 !== 0);
   const toHtml = arr => arr.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
   grid.innerHTML = cardHtml;
   if (gridAbout) gridAbout.innerHTML = cardHtml;
+  if (gridSponsor) gridSponsor.innerHTML = cardHtml;
   const gl = document.getElementById('sponsors-grid-left');
   const gr = document.getElementById('sponsors-grid-right');
   if (gl) gl.innerHTML = leftCards.length ? toHtml(leftCards) : '';
@@ -5821,7 +6000,7 @@ function initMap() {
 // ── Panel control ────────────────────────────────────────────────
 function openPanel(id) {
   closeDrawer(false);
-  ['current','about','participate','admin'].forEach(function(pid) {
+  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
     if (pid !== id) { var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open'); }
   });
   var el = document.getElementById('tab-' + id);
@@ -5838,7 +6017,7 @@ function closePanel(id) {
   var el = document.getElementById('tab-' + id);
   if (el) el.classList.remove('open');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var anyOpen = ['current','about','participate','admin'].some(function(pid) {
+  var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
     var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
   });
   if (!anyOpen && !document.getElementById('archive-drawer').classList.contains('open')) {
@@ -5879,7 +6058,7 @@ function closeDrawer(clearOverlay) {
   var d = document.getElementById('archive-drawer'); if (d) d.classList.remove('open');
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.remove('active');
   if (clearOverlay !== false) {
-    var anyOpen = ['current','about','participate','admin'].some(function(pid) {
+    var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
       var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
     });
     if (!anyOpen) document.getElementById('panel-overlay').classList.remove('visible');
@@ -5915,13 +6094,19 @@ function showDrawerVolume(volNum) {
 // ── Popup ────────────────────────────────────────────────────────
 function closePopup() {
   var p = document.getElementById('rsvp-popup');
+  var a = document.getElementById('popup-annot');
   p.classList.remove('visible');
+  if (a) a.classList.remove('visible');
 }
 
 setTimeout(function() {
   var p = document.getElementById('rsvp-popup');
+  var a = document.getElementById('popup-annot');
   if (!p) return;
-  requestAnimationFrame(function() { requestAnimationFrame(function() { p.classList.add('visible'); }); });
+  requestAnimationFrame(function() { requestAnimationFrame(function() {
+    p.classList.add('visible');
+    if (a) a.classList.add('visible');
+  }); });
 }, 5000);
 
 // ── Legacy compatibility ─────────────────────────────────────────
