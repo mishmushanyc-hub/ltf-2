@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preload" as="image" href="images/life_thru_food_no_bg.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life Thru Food</title>
@@ -16,14 +17,14 @@
 <link rel="icon" type="image/png" href="images/life_thru_food_no_bg.png">
 <link rel="apple-touch-icon" href="images/life_thru_food_no_bg.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Space+Grotesk:wght@300;400;500&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?display=swap" rel="stylesheet">
 <style>
 :root {
   /* Color tokens — LTF palette (neutral light ground)
      Cream canvas · brown ink · navy accent */
   --canvas: #EAE6D9; --paper: #E0DCCE; --card: #D4D0C2; --lift: #CAC6B4;
   --edge: #B8B4A4; --rule: rgba(0,0,0,0.12); --rule-mid: rgba(0,0,0,0.20);
-  --ink: #000000; --ink-mid: rgba(0,0,0,0.60); --ink-low: rgba(0,0,0,0.38);
+  --ink: #000000; --ink-mid: rgba(0,0,0,0.75); --ink-low: rgba(0,0,0,0.60);
   --olive: #008863; --olive-dim: rgba(0,136,99,0.14); --olive-ghost: rgba(0,136,99,0.06);
   --craft: #000000; --craft-dim: rgba(0,0,0,0.20);
   --steel: #EAE6D9; --success: #2E6A4A; --danger: #B83A2A;
@@ -47,7 +48,7 @@
 /* === RESET + BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: 'EB Garamond', serif; background: var(--canvas); color: var(--ink); font-size: 16px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Crimson Pro', serif; font-weight: 400; letter-spacing: 0.01em; background: var(--canvas); color: var(--ink); font-size: 16px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
 /* === MOTION === */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -63,6 +64,14 @@ body { font-family: 'EB Garamond', serif; background: var(--canvas); color: var(
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@font-face {
+  font-family: 'Crimson Pro';
+  src: url('CrimsonPro-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -95,7 +104,7 @@ header {
   align-items: center;
   padding: 0.65rem 2rem;
   border-bottom: 1px solid var(--rule-mid);
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -117,7 +126,7 @@ header {
 }
 
 .h-wordmark {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: clamp(3.5rem, 9vw, 6.5rem);
   line-height: 0.92;
   color: var(--ink);
@@ -127,7 +136,7 @@ header {
 
 .h-body { max-width: 44ch; animation: h-enter var(--dur-slow) var(--ease-out) 0.25s both; }
 .h-body p {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1.1rem;
   line-height: 1.85;
   color: var(--ink-mid);
@@ -135,7 +144,7 @@ header {
 }
 .h-body p:last-child { margin-bottom: 0; }
 .h-body .h-meta {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -145,8 +154,8 @@ header {
 
 .h-cta-wrap { margin-top: 2.5rem; animation: h-enter var(--dur-slow) var(--ease-out) 0.4s both; }
 .h-cta {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--canvas);
@@ -182,7 +191,7 @@ header {
 
 .h-index { padding: 2rem 1.5rem 1.5rem; border-bottom: 1px solid var(--rule); }
 .h-index-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -201,21 +210,21 @@ header {
 .h-index-row:last-child { border-bottom: none; }
 .h-index-row:hover:not(.h-index-dim) { opacity: 0.7; }
 .h-index-vol {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.18em;
   color: var(--olive);
   width: 24px;
   flex-shrink: 0;
 }
-.h-index-name { font-family: 'EB Garamond', serif; font-size: 0.95rem; color: var(--ink); flex: 1; }
-.h-index-date { font-family: 'Fragment Mono', monospace; font-size: var(--t-label); color: var(--ink-low); }
+.h-index-name { font-family: 'Crimson Pro', serif; font-size: 0.95rem; color: var(--ink); flex: 1; }
+.h-index-date { font-family: 'Crimson Pro', serif; font-size: var(--t-label); color: var(--ink-low); }
 .h-index-dim { opacity: 0.38; pointer-events: none; }
 .h-index-dim .h-index-vol { color: rgba(68,51,42,0.06); }
 
 .h-upcoming { background: var(--olive); color: var(--canvas); padding: 2rem 1.5rem; }
 .h-upcoming-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -223,21 +232,21 @@ header {
   margin-bottom: 1rem;
 }
 .h-upcoming-sub {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
+  font-family: 'Crimson Pro', serif;
+  font-style: normal;
   font-size: 0.9rem;
   color: rgba(68,51,42,0.60);
   margin-bottom: 0.3rem;
 }
 .h-upcoming-name {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: 2.4rem;
   line-height: 1.0;
   color: var(--canvas);
   margin-bottom: 0.5rem;
 }
 .h-upcoming-detail {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.12em;
   color: rgba(68,51,42,0.45);
@@ -245,7 +254,7 @@ header {
 }
 
 .h-scroll-cue {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.3em;
   color: var(--olive);
@@ -287,7 +296,7 @@ nav button {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -328,7 +337,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
 }
 
 .ev-no {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -338,7 +347,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   margin-bottom: 2rem;
 }
 .ev-date {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: 11px;
   color: var(--ink-mid);
   display: block;
@@ -348,7 +357,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
 
 /* Subject name — large, commanding */
 .event-masthead h2 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Crimson Pro', serif;
   font-weight: 300;
   font-size: clamp(2.5rem, 7vw, 5rem);
   line-height: 0.95;
@@ -357,14 +366,14 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   letter-spacing: -0.04em;
 }
 .ev-discipline {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1.15rem;
-  font-style: italic;
+  font-style: normal;
   color: #008863;
   margin-top: 8px;
 }
 .ev-location-ref {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -382,15 +391,15 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
 }
 .ev-cell:last-child { border-right: none; }
 .ev-cell-label {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: #008863;
   display: block;
   margin-bottom: 6px;
 }
-.ev-cell-val { font-family: 'EB Garamond', serif; font-size: 1.1rem; color: var(--ink); }
+.ev-cell-val { font-family: 'Crimson Pro', serif; font-size: 1.1rem; color: var(--ink); }
 
 .event-desc {
   padding: 2rem 2.75rem;
@@ -398,20 +407,20 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
   border: 1px solid var(--rule-mid);
   border-top: none;
 }
-.event-desc p { font-size: var(--t-body); line-height: 1.9; color: var(--ink-mid); font-style: italic; }
+.event-desc p { font-size: var(--t-body); line-height: 1.9; color: var(--ink-mid); font-style: normal; }
 
 /* Seat counter — data visualization */
 .seats-wrap { margin-top: 2rem; }
 .seats-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.seats-row span { font-family: 'Fragment Mono', monospace; font-size: 10px; color: var(--ink-low); letter-spacing: 0.12em; text-transform: uppercase; }
-.seats-row strong { font-family: 'EB Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--olive); }
+.seats-row span { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-low); letter-spacing: 0.12em; text-transform: uppercase; }
+.seats-row strong { font-family: 'Crimson Pro', serif; font-size: 1.1rem; font-style: normal; color: var(--olive); }
 .seats-track { height: 3px; background: var(--card); overflow: hidden; border: 1px solid var(--rule-mid); }
 .seats-fill { height: 100%; background: var(--olive); width: 0%; transition: width 0.8s var(--ease-out); opacity: 0.72; }
 /* === FORMS === */
 .form-title {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1.65rem;
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
   color: var(--ink);
   margin-bottom: 2rem;
@@ -422,7 +431,7 @@ main { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
 .form-grid.full { grid-template-columns: 1fr; }
 .form-field { display: flex; flex-direction: column; gap: 8px; }
 .form-field label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -433,7 +442,7 @@ input[type="text"], input[type="email"], input[type="tel"], select, textarea {
   border: none;
   border-bottom: 1px solid var(--rule-mid);
   padding: 12px 0;
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1rem;
   color: var(--ink);
   outline: none;
@@ -442,7 +451,7 @@ input[type="text"], input[type="email"], input[type="tel"], select, textarea {
   appearance: none;
   border-radius: 0;
 }
-input::placeholder, textarea::placeholder { color: var(--ink-low); font-style: italic; }
+input::placeholder, textarea::placeholder { color: var(--ink-low); font-style: normal; }
 input:focus, select:focus, textarea:focus { border-bottom-color: var(--olive); background: var(--lift); }
 textarea { resize: vertical; min-height: 90px; line-height: 1.7; padding-top: 10px; }
 select {
@@ -457,14 +466,14 @@ select option { background: var(--paper); color: var(--ink); }
 .diet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 8px; }
 .check-row { display: flex; align-items: center; gap: 8px; }
 .check-row input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--olive); cursor: pointer; flex-shrink: 0; }
-.check-row label { font-family: 'EB Garamond', serif; font-size: 0.95rem; color: var(--ink-mid); cursor: pointer; font-style: italic; letter-spacing: 0; text-transform: none; }
+.check-row label { font-family: 'Crimson Pro', serif; font-size: 0.95rem; color: var(--ink-mid); cursor: pointer; font-style: normal; letter-spacing: 0; text-transform: none; }
 
 /* === BUTTONS === */
 
 /* Primary — olive with shade-sweep hover */
 .btn-primary {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   background: var(--olive);
@@ -493,8 +502,8 @@ select option { background: var(--paper); color: var(--ink); }
 
 /* Ghost — border with fill-slide hover */
 .btn-ghost {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   background: none;
@@ -506,56 +515,56 @@ select option { background: var(--paper); color: var(--ink); }
   transition: background var(--dur-med) var(--ease-out), color var(--dur-fast), border-color var(--dur-fast);
 }
 .btn-ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--canvas); }
-.toast { display: none; padding: 12px 0; font-size: 0.9rem; font-style: italic; margin-bottom: 1.5rem; border-left: 2px solid; padding-left: 1rem; }
+.toast { display: none; padding: 12px 0; font-size: 0.9rem; font-style: normal; margin-bottom: 1.5rem; border-left: 2px solid; padding-left: 1rem; }
 .toast.success { display: block; color: var(--success); border-color: var(--success); }
 .toast.error { display: block; color: var(--danger); border-color: var(--danger); }
 .confirmation-view { display: none; }
 .confirmation-card { background: var(--paper); border: 1px solid var(--rule-mid); position: relative; overflow: hidden; margin-bottom: 2rem; }
 .confirmation-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--olive); }
 .confirmation-hero { padding: 3.5rem 2.5rem 2.5rem; border-bottom: 1px solid var(--rule-mid); }
-.confirmation-hero .conf-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--olive); display: block; margin-bottom: 1.25rem; }
-.confirmation-hero h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: clamp(2rem, 5vw, 3rem); color: var(--ink); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.5rem; }
-.confirmation-hero p { font-size: 1rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
+.confirmation-hero .conf-label { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--olive); display: block; margin-bottom: 1.25rem; }
+.confirmation-hero h2 { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: clamp(2rem, 5vw, 3rem); color: var(--ink); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.5rem; }
+.confirmation-hero p { font-size: 1rem; font-style: normal; color: var(--ink-mid); line-height: 1.7; }
 .confirmation-details { display: grid; grid-template-columns: 1fr 1fr; }
 .conf-detail { padding: 1.25rem 1.5rem; border-right: 1px solid var(--rule-mid); border-bottom: 1px solid var(--rule-mid); }
 .conf-detail:nth-child(2n) { border-right: none; }
 .conf-detail:nth-last-child(-n+2) { border-bottom: none; }
-.conf-detail-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 5px; }
-.conf-detail-val { font-family: 'EB Garamond', serif; font-size: 1.05rem; color: var(--ink); }
-.confirmation-note { padding: 1.75rem 2.5rem; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.75; border-top: 1px solid var(--rule-mid); }
+.conf-detail-label { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 5px; }
+.conf-detail-val { font-family: 'Crimson Pro', serif; font-size: 1.05rem; color: var(--ink); }
+.confirmation-note { padding: 1.75rem 2.5rem; font-size: 0.95rem; font-style: normal; color: var(--ink-mid); line-height: 1.75; border-top: 1px solid var(--rule-mid); }
 .notify-intro { padding: 3rem 2.5rem; background: var(--paper); border: 1px solid var(--rule-mid); margin-bottom: 3rem; text-align: center; position: relative; overflow: hidden; }
 .notify-intro::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--olive); pointer-events: none; }
-.notify-intro h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 2.2rem; color: var(--ink); margin-bottom: 0.75rem; letter-spacing: -0.04em; }
-.notify-intro p { font-size: 1rem; font-style: italic; color: var(--ink-mid); }
+.notify-intro h2 { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: 2.2rem; color: var(--ink); margin-bottom: 0.75rem; letter-spacing: -0.04em; }
+.notify-intro p { font-size: 1rem; font-style: normal; color: var(--ink-mid); }
 .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 1px; background: var(--rule-mid); border: 1px solid var(--rule-mid); margin-bottom: 2.5rem; }
 .stat-block { background: var(--paper); padding: 1.5rem 1rem 1.25rem; }
-.stat-block .n { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 2.4rem; color: var(--ink); line-height: 1; letter-spacing: -0.04em; }
-.stat-block .l { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 6px; }
+.stat-block .n { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: 2.4rem; color: var(--ink); line-height: 1; letter-spacing: -0.04em; }
+.stat-block .l { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--ink-low); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 6px; }
 .toolbar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
-.toolbar input { flex: 1; min-width: 200px; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); outline: none; }
+.toolbar input { flex: 1; min-width: 200px; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--ink); outline: none; }
 .toolbar input:focus { border-bottom-color: var(--olive); }
-.toolbar input::placeholder { color: var(--ink-low); font-style: italic; }
+.toolbar input::placeholder { color: var(--ink-low); font-style: normal; }
 .table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-thead th { text-align: left; font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); padding: 8px 12px; border-bottom: 1px solid var(--rule-mid); background: var(--paper); }
+thead th { text-align: left; font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); padding: 8px 12px; border-bottom: 1px solid var(--rule-mid); background: var(--paper); }
 tbody tr { border-bottom: 1px solid var(--rule); transition: background 0.15s; }
 tbody tr:hover { background: var(--paper); }
-tbody td { padding: 11px 12px; color: var(--ink-mid); vertical-align: top; font-style: italic; }
+tbody td { padding: 11px 12px; color: var(--ink-mid); vertical-align: top; font-style: normal; }
 tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
-.pill { display: inline-block; font-family: 'Fragment Mono', monospace; font-size: 9px; padding: 2px 7px; letter-spacing: 0.04em; }
+.pill { display: inline-block; font-family: 'Crimson Pro', serif; font-size: 13px; padding: 2px 7px; letter-spacing: 0.04em; }
 .pill.sand { background: var(--card); color: var(--ink-mid); }
 .pill.sage { background: var(--olive-dim); color: var(--olive); }
 .pill.sky { background: rgba(58,66,78,0.10); color: var(--steel); }
 .pill.paid { background: rgba(58,107,70,0.12); color: var(--success); }
-.empty-msg { text-align: center; padding: 4rem 1rem; font-style: italic; color: var(--ink-low); font-size: 1rem; }
+.empty-msg { text-align: center; padding: 4rem 1rem; font-style: normal; color: var(--ink-low); font-size: 1rem; }
 .ltf-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30,26,20,0.45); z-index: 999; align-items: center; justify-content: center; }
 .ltf-modal-overlay.open { display: flex; }
 .ltf-modal { background: var(--canvas); border: 1px solid var(--rule-mid); padding: 2rem 2.25rem; max-width: 420px; width: 90%; position: relative; }
-.ltf-modal h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-.ltf-modal p { font-size: 0.9rem; font-style: italic; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.6; }
-.ltf-modal textarea { width: 100%; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'EB Garamond', serif; font-size: 0.95rem; color: var(--ink); outline: none; resize: none; min-height: 70px; line-height: 1.6; margin-bottom: 1.5rem; }
+.ltf-modal h4 { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.ltf-modal p { font-size: 0.9rem; font-style: normal; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.6; }
+.ltf-modal textarea { width: 100%; background: var(--paper); border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 0; font-family: 'Crimson Pro', serif; font-size: 0.95rem; color: var(--ink); outline: none; resize: none; min-height: 70px; line-height: 1.6; margin-bottom: 1.5rem; }
 .ltf-modal textarea:focus { border-bottom-color: var(--olive); }
-.ltf-modal textarea::placeholder { color: var(--ink-low); font-style: italic; }
+.ltf-modal textarea::placeholder { color: var(--ink-low); font-style: normal; }
 .ltf-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 /* === ARCHIVE / CONTENT === */
 #tab-archive { padding: 0; }
@@ -572,7 +581,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
   gap: 1rem;
 }
 .archive-title {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Crimson Pro', serif;
   font-weight: 300;
   font-size: var(--t-headline);
   line-height: 0.95;
@@ -580,7 +589,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
   color: var(--ink);
 }
 .archive-meta {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -600,7 +609,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
   margin-bottom: 2rem;
 }
 .board-toolbar h2 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Crimson Pro', serif;
   font-weight: 300;
   font-size: 1.3rem;
   color: var(--ink);
@@ -610,7 +619,7 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 /* Filter pills — archival category tabs */
 .filter-bar { display: flex; gap: 4px; flex-wrap: wrap; }
 .fpill {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -624,67 +633,67 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 }
 .fpill.on { background: var(--ink); border-color: var(--ink); color: var(--canvas); }
 .fpill:hover:not(.on) { border-color: var(--ink); color: var(--ink); }
-.ed-photos-soon { padding: 2rem 0; font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); letter-spacing: 0.14em; text-transform: uppercase; border-top: 1px solid var(--rule); margin-top: 1rem; }
+.ed-photos-soon { padding: 2rem 0; font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-low); letter-spacing: 0.14em; text-transform: uppercase; border-top: 1px solid var(--rule); margin-top: 1rem; }
 /* ── ARCHIVE EDITION DETAIL (bio, menu, event info) ── */
 .ed-archive-detail { border-top: 1px solid var(--rule-mid); margin-top: 1.5rem; padding-top: 1.75rem; }
 .ed-archive-meta { display: flex; flex-wrap: wrap; border: 1px solid var(--rule-mid); margin-bottom: 1.75rem; }
 .ed-am-cell { flex: 1; min-width: 100px; padding: 1rem 1.25rem; border-right: 1px solid var(--rule-mid); background: var(--paper); }
 .ed-am-cell:last-child { border-right: none; }
-.ed-am-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 4px; }
-.ed-am-val { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); }
-.ed-archive-desc { font-size: 1.05rem; line-height: 1.9; color: var(--ink-mid); font-style: italic; margin-bottom: 2rem; }
-.ed-archive-section-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--olive); display: block; margin-bottom: 1.25rem; }
+.ed-am-label { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 4px; }
+.ed-am-val { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--ink); }
+.ed-archive-desc { font-size: 1.05rem; line-height: 1.9; color: var(--ink-mid); font-style: normal; margin-bottom: 2rem; }
+.ed-archive-section-label { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--olive); display: block; margin-bottom: 1.25rem; }
 .ed-archive-bio { margin-bottom: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--rule-mid); }
 .ed-archive-bio p { font-size: 1.05rem; line-height: 1.9; color: var(--ink-mid); margin-bottom: 1rem; }
 .ed-archive-bio p:last-child { margin-bottom: 0; }
 .ed-archive-menu { padding-top: 1.75rem; border-top: 1px solid var(--rule-mid); margin-bottom: 2rem; }
 .ed-archive-courses { display: grid; gap: 1.75rem; margin-top: 1.25rem; }
-.ed-course-num { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 6px; }
-.ed-course-name { font-family: 'EB Garamond', serif; font-size: 1.1rem; color: var(--ink); margin: 0 0 4px; font-style: normal; }
-.ed-course-note { font-size: 0.9rem; font-style: italic; color: var(--ink-low); margin: 0 0 6px; }
+.ed-course-num { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 6px; }
+.ed-course-name { font-family: 'Crimson Pro', serif; font-size: 1.1rem; color: var(--ink); margin: 0 0 4px; font-style: normal; }
+.ed-course-note { font-size: 0.9rem; font-style: normal; color: var(--ink-low); margin: 0 0 6px; }
 .ed-course-body { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.75; margin: 6px 0 0; }
 .ed-section { margin-bottom: 5rem; }
 .ed-section-head { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule-mid); }
-.ed-num { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 3.5rem; color: var(--card); line-height: 1; flex-shrink: 0; letter-spacing: -0.05em; }
+.ed-num { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: 3.5rem; color: var(--card); line-height: 1; flex-shrink: 0; letter-spacing: -0.05em; }
 .ed-head-flyer { flex-shrink: 0; width: clamp(90px, 14vw, 130px); }
 .ed-head-flyer img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: brightness(0.95) saturate(0.82); border: 1px solid var(--rule-mid); }
 .ed-head-portrait { flex-shrink: 0; width: clamp(90px, 14vw, 130px); }
 .ed-head-portrait img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: brightness(0.93) saturate(0.72); border: 1px solid var(--rule-mid); }
 .ed-info { border-left: 2px solid var(--olive); padding-left: 1.25rem; flex: 1; }
-.ed-vol { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--olive); opacity: 0.8; margin-bottom: 6px; }
-.ed-artist { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.6rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
-.ed-discipline { font-family: 'EB Garamond', serif; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); margin-top: 3px; }
-.ed-location { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-low); margin-top: 6px; }
+.ed-vol { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--olive); opacity: 0.95; margin-bottom: 6px; }
+.ed-artist { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.6rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
+.ed-discipline { font-family: 'Crimson Pro', serif; font-size: 0.95rem; font-style: normal; color: var(--ink-mid); margin-top: 3px; }
+.ed-location { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-low); margin-top: 6px; }
 .ed-divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 2.5rem; }
 .ed-divider::before, .ed-divider::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
-.ed-divider span { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); letter-spacing: 0.15em; text-transform: uppercase; }
+.ed-divider span { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--ink-low); letter-spacing: 0.15em; text-transform: uppercase; }
 .board { columns: 3; column-gap: 10px; }
 @media (max-width: 760px) { .board { columns: 2; } }
 @media (max-width: 480px) { .board { columns: 1; } }
 .board-tile { break-inside: avoid; margin-bottom: 10px; cursor: pointer; position: relative; transition: opacity 0.25s; }
-.board-tile:hover { opacity: 0.80; }
+.board-tile:hover { opacity: 0.950; }
 .tile-photo img { width: 100%; display: block; filter: brightness(0.92) saturate(0.78); transition: filter 0.3s; }
 .board-tile.tile-photo:hover img { filter: brightness(0.84) saturate(0.68); }
 .tile-photo-cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(68,51,42,0.92)); padding: 2rem 1rem 0.85rem; opacity: 0; transition: opacity 0.3s; }
 .board-tile.tile-photo:hover .tile-photo-cap { opacity: 1; }
-.tile-photo-cap .cap-ts { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-mid); margin-top: 3px; letter-spacing: 0.06em; }
+.tile-photo-cap .cap-ts { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--ink-mid); margin-top: 3px; letter-spacing: 0.06em; }
 .tile-caption { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.25rem 1.25rem 1rem; }
-.tc-label { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 10px; }
-.tc-body { font-size: 0.9rem; line-height: 1.75; color: var(--ink-mid); font-style: italic; margin-bottom: 10px; }
+.tc-label { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.90; margin-bottom: 10px; }
+.tc-body { font-size: 0.9rem; line-height: 1.75; color: var(--ink-mid); font-style: normal; margin-bottom: 10px; }
 .tc-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--rule); padding-top: 8px; }
-.tc-foot .ts { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--ink-low); letter-spacing: 0.06em; }
+.tc-foot .ts { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--ink-low); letter-spacing: 0.06em; }
 .tile-quote { background: var(--card); border: 1px solid var(--rule-mid); border-left: 3px solid var(--olive); padding: 1.5rem 1.25rem 1.25rem; position: relative; overflow: hidden; }
-.tile-quote::before { content: '\201C'; font-family: 'EB Garamond', serif; font-size: 8rem; line-height: 0.75; color: rgba(30,26,20,0.07); position: absolute; top: 0; left: 0.5rem; pointer-events: none; }
-.tq-body { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.7; position: relative; z-index: 1; }
-.tq-attr { font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--olive); opacity: 0.75; letter-spacing: 0.08em; margin-top: 1rem; position: relative; z-index: 1; }
+.tile-quote::before { content: '\201C'; font-family: 'Crimson Pro', serif; font-size: 8rem; line-height: 0.75; color: rgba(30,26,20,0.07); position: absolute; top: 0; left: 0.5rem; pointer-events: none; }
+.tq-body { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: normal; color: var(--ink); line-height: 1.7; position: relative; z-index: 1; }
+.tq-attr { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--olive); opacity: 0.90; letter-spacing: 0.08em; margin-top: 1rem; position: relative; z-index: 1; }
 .tile-essay { background: var(--canvas); border: 1px solid var(--olive-dim); padding: 1.25rem; }
-.te-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
-.te-lede { font-size: 0.85rem; font-style: italic; color: var(--ink-mid); line-height: 1.65; }
-.te-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--olive-dim); font-family: 'Fragment Mono', monospace; font-size: 8px; color: var(--olive); opacity: 0.75; }
-.copy-btn { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.06em; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 2px 8px; cursor: pointer; transition: all 0.2s; }
+.te-kind { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.90; margin-bottom: 8px; }
+.te-lede { font-size: 0.85rem; font-style: normal; color: var(--ink-mid); line-height: 1.65; }
+.te-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--olive-dim); font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--olive); opacity: 0.90; }
+.copy-btn { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.06em; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 2px 8px; cursor: pointer; transition: all 0.2s; }
 .copy-btn:hover { border-color: var(--olive); color: var(--olive); }
 .copy-btn.done { border-color: var(--success); color: var(--success); }
-.read-more-btn { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.08em; background: none; border: none; color: var(--olive); opacity: 0.75; cursor: pointer; padding: 0; transition: opacity 0.2s; }
+.read-more-btn { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.08em; background: none; border: none; color: var(--olive); opacity: 0.90; cursor: pointer; padding: 0; transition: opacity 0.2s; }
 .read-more-btn:hover { opacity: 1; }
 .ed-artist-photo { width: 52px; height: 66px; object-fit: cover; object-position: top center; border: 1px solid var(--rule-mid); filter: brightness(0.93) saturate(0.72); flex-shrink: 0; }
 /* ── ARCHIVE EDITORIAL LAYOUT ── */
@@ -695,14 +704,14 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .ed-visual-portrait img { width: 100%; display: block; filter: brightness(0.93) saturate(0.72); border: 1px solid var(--rule-mid); }
 .ed-visual-flyer img { width: 100%; display: block; filter: brightness(0.95) saturate(0.82); border: 1px solid var(--rule-mid); }
 .ed-flyer-empty { height: 180px; background: var(--card); border: 1px dashed var(--rule-mid); display: flex; align-items: center; justify-content: center; }
-.ed-flyer-empty span { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); letter-spacing: 0.1em; text-transform: uppercase; }
+.ed-flyer-empty span { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-low); letter-spacing: 0.1em; text-transform: uppercase; }
 .ed-profile-body { margin-bottom: 1.75rem; cursor: pointer; }
-.ed-profile-body .te-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
-.ed-profile-body .te-lede { font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.75; margin-bottom: 0.75rem; }
+.ed-profile-body .te-kind { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.90; margin-bottom: 8px; }
+.ed-profile-body .te-lede { font-size: 1rem; font-style: normal; color: var(--ink); line-height: 1.75; margin-bottom: 0.75rem; }
 .ed-caption-block { margin-bottom: 1rem; }
 .ed-quote-block { margin-bottom: 2rem; }
-.ed-gallery-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); margin-bottom: 0.75rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
-.ed-gallery-cta { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); background: none; border: none; cursor: pointer; opacity: 0.75; padding: 0; transition: opacity 0.2s; }
+.ed-gallery-label { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-low); margin-bottom: 0.75rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
+.ed-gallery-cta { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); background: none; border: none; cursor: pointer; opacity: 0.90; padding: 0; transition: opacity 0.2s; }
 .ed-gallery-cta:hover { opacity: 1; }
 .ed-gallery-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 0.5rem; }
 .ed-gallery-preview img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; filter: brightness(0.92) saturate(0.75); border: 1px solid var(--rule-mid); cursor: pointer; transition: filter 0.2s; }
@@ -712,9 +721,9 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 #gallery-modal.open { display: block; animation: fadeIn 0.3s ease; }
 .gm-inner { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
 .gm-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(234,230,217,0.15); margin-bottom: 2rem; }
-.gm-title { font-family: 'Space Grotesk', sans-serif; font-weight: 300; font-size: 1.6rem; color: #EAE6D9; letter-spacing: -0.03em; }
-.gm-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #008863; opacity: 1; margin-top: 4px; }
-.gm-close-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid rgba(242,237,227,0.25); color: rgba(242,237,227,0.70); padding: 7px 18px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.gm-title { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: 1.6rem; color: #EAE6D9; letter-spacing: -0.03em; }
+.gm-sub { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #008863; opacity: 1; margin-top: 4px; }
+.gm-close-btn { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid rgba(242,237,227,0.25); color: rgba(242,237,227,0.70); padding: 7px 18px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
 .gm-close-btn:hover { border-color: rgba(234,230,217,0.60); color: #EAE6D9; }
 .gm-grid { columns: 3; column-gap: 8px; }
 .gm-item { break-inside: avoid; margin-bottom: 8px; cursor: pointer; position: relative; overflow: hidden; }
@@ -726,25 +735,25 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .lightbox.open { display: flex; animation: fadeIn 0.3s ease; }
 .lb-inner { background: var(--canvas); border: 1px solid var(--rule-mid); max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 12px 48px rgba(30,26,20,0.10); }
 .lb-close { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1rem 1.25rem 0; background: var(--canvas); z-index: 1; }
-.lb-close-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 5px 14px; cursor: pointer; transition: all 0.2s; }
+.lb-close-btn { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 5px 14px; cursor: pointer; transition: all 0.2s; }
 .lb-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
 .lb-content { padding: 0.5rem 2rem 2.5rem; }
 .lb-content img { width: 100%; display: block; margin-bottom: 1.5rem; filter: brightness(0.92) saturate(0.75); }
-.lb-kind { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.75; margin-bottom: 8px; }
-.lb-lede { font-family: 'EB Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--ink); line-height: 1.75; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule-mid); }
-.lb-body { font-size: 0.97rem; line-height: 1.95; color: var(--ink-mid); font-style: italic; }
+.lb-kind { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--olive); opacity: 0.90; margin-bottom: 8px; }
+.lb-lede { font-family: 'Crimson Pro', serif; font-size: 1.1rem; font-style: normal; color: var(--ink); line-height: 1.75; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule-mid); }
+.lb-body { font-size: 0.97rem; line-height: 1.95; color: var(--ink-mid); font-style: normal; }
 .lb-body p { margin-bottom: 1rem; }
-.lb-meta { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.lb-meta { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-low); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .team-intro { padding-bottom: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--rule-mid); }
-.team-intro p { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-style: italic; color: var(--ink-mid); line-height: 1.85; max-width: 560px; }
+.team-intro p { font-family: 'Crimson Pro', serif; font-size: 1.05rem; font-style: normal; color: var(--ink-mid); line-height: 1.85; max-width: 560px; }
 .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--rule-mid); border: 1px solid var(--rule-mid); }
 .team-card { background: var(--canvas); padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 6px; transition: background 0.2s; position: relative; }
 .team-card:hover { background: var(--paper); }
 .team-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.2s; }
 .team-card:hover::before { background: var(--olive); }
-.team-name { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
-.team-role { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.8; margin-top: 2px; }
-.ig-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.1em; color: var(--ink-low); text-decoration: none; margin-top: 6px; transition: color 0.2s; }
+.team-name { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
+.team-role { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.95; margin-top: 2px; }
+.ig-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.1em; color: var(--ink-low); text-decoration: none; margin-top: 6px; transition: color 0.2s; }
 .ig-link:hover { color: #008863; }
 .ed-ig-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; }
 .team-photo { width: 100%; aspect-ratio: 3/4; background: var(--card); border: 1px solid var(--rule-mid); margin-bottom: 1rem; overflow: hidden; position: relative; }
@@ -760,7 +769,7 @@ footer {
 
 /* Archival tier label */
 .foot-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -782,11 +791,11 @@ footer {
 }
 .sp-card { background: var(--canvas); padding: 0.85rem 1rem 0.75rem; display: flex; flex-direction: column; gap: 4px; transition: background var(--dur-fast); }
 .sp-card:hover { background: var(--paper); }
-.sp-tier { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.65; }
-.sp-name { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.2; }
-.sp-desc { font-size: 0.82rem; font-style: italic; color: var(--ink-mid); line-height: 1.5; margin-top: 2px; }
-.sp-location { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.08em; color: var(--ink-low); margin-top: 3px; }
-.sp-url { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--olive); opacity: 0.55; text-decoration: none; transition: opacity var(--dur-fast); margin-top: 4px; letter-spacing: 0.04em; }
+.sp-tier { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); opacity: 0.90; }
+.sp-name { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: normal; color: var(--ink); line-height: 1.2; }
+.sp-desc { font-size: 0.82rem; font-style: normal; color: var(--ink-mid); line-height: 1.5; margin-top: 2px; }
+.sp-location { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-low); margin-top: 3px; }
+.sp-url { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--olive); opacity: 0.955; text-decoration: none; transition: opacity var(--dur-fast); margin-top: 4px; letter-spacing: 0.04em; }
 .sp-url:hover { opacity: 1; }
 
 /* Presenting partner — visually distinct */
@@ -804,11 +813,11 @@ footer {
   border-top: 1px solid var(--rule-mid);
   margin-bottom: 2.5rem;
 }
-.foot-cta p { font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; max-width: 440px; }
+.foot-cta p { font-size: 0.95rem; font-style: normal; color: var(--ink-mid); line-height: 1.7; max-width: 440px; }
 
 /* Colophon */
 .foot-sig {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -819,44 +828,44 @@ footer {
 }
 .sp-admin { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.5rem; margin-top: 1.5rem; display: none; }
 .sp-admin.open { display: block; }
-.admin-section-toggle { font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mid); cursor: pointer; padding: 0.9rem 0; border-bottom: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; }
+.admin-section-toggle { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mid); cursor: pointer; padding: 0.9rem 0; border-bottom: 1px solid var(--rule-mid); display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; }
 .admin-section-toggle:hover { color: var(--ink); }
-.sp-admin h3 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-style: italic; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-mid); color: var(--ink); }
-.sp-admin-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 0.9rem; font-style: italic; }
+.sp-admin h3 { font-family: 'Crimson Pro', serif; font-size: 1.2rem; font-style: normal; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-mid); color: var(--ink); }
+.sp-admin-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 0.9rem; font-style: normal; }
 .sp-admin-row:last-child { border-bottom: none; }
 .sp-admin-name { flex: 1; color: var(--ink); }
-.sp-admin-tier { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-mid); }
-.rm-btn { font-family: 'Fragment Mono', monospace; font-size: 9px; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 3px 10px; cursor: pointer; transition: all 0.2s; }
+.sp-admin-tier { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-mid); }
+.rm-btn { font-family: 'Crimson Pro', serif; font-size: 13px; background: none; border: 1px solid var(--rule-mid); color: var(--ink-mid); padding: 3px 10px; cursor: pointer; transition: all 0.2s; }
 .rm-btn:hover { border-color: var(--danger); color: var(--danger); }
 .payment-block { background: var(--paper); border: 1px solid var(--rule-mid); padding: 1.5rem 1.5rem 1.25rem; margin-bottom: 1.5rem; }
 .payment-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
-.payment-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); }
-.payment-total { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.02em; }
-.payment-total-sub { font-family: 'Fragment Mono', monospace; font-size: 9px; color: var(--ink-low); margin-left: 6px; }
-.payment-note { font-family: 'EB Garamond', serif; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
+.payment-label { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); }
+.payment-total { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.02em; }
+.payment-total-sub { font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--ink-low); margin-left: 6px; }
+.payment-note { font-family: 'Crimson Pro', serif; font-size: 0.95rem; font-style: normal; color: var(--ink-mid); line-height: 1.7; }
 #rsvp-gate { padding: 2rem 2.5rem; border: 1px solid var(--rule-mid); border-top: none; background: var(--paper); }
-.gate-prompt { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.7; }
+.gate-prompt { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: normal; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.7; }
 .gate-row { display: flex; gap: 12px; align-items: center; max-width: 420px; }
-.gate-row input { flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 2px; font-size: 1rem; font-family: 'Fragment Mono', monospace; letter-spacing: 0.12em; color: var(--ink); outline: none; transition: border-color 0.2s; }
+.gate-row input { flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--rule-mid); padding: 10px 2px; font-size: 1rem; font-family: 'Crimson Pro', serif; letter-spacing: 0.12em; color: var(--ink); outline: none; transition: border-color 0.2s; }
 .gate-row input:focus { border-bottom-color: var(--olive); }
-.gate-error { display: none; font-family: 'Fragment Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--danger); margin-top: 12px; padding: 10px 14px; border: 1px solid rgba(68,51,42,0.45); background: rgba(68,51,42,0.06); line-height: 1.7; }
+.gate-error { display: none; font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.06em; color: var(--danger); margin-top: 12px; padding: 10px 14px; border: 1px solid rgba(68,51,42,0.45); background: rgba(68,51,42,0.06); line-height: 1.7; }
 .gate-error.visible { display: block; }
 .gate-success-banner { padding: 1rem 1.25rem; background: var(--olive-ghost); border: 1px solid var(--olive-dim); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.gate-success-banner .gsb-label { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); margin-bottom: 4px; }
-.gate-success-banner .gsb-msg { font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; color: var(--ink-mid); }
-.gate-success-banner .gsb-remove { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--ink-low); cursor: pointer; text-decoration: underline; white-space: nowrap; flex-shrink: 0; }
+.gate-success-banner .gsb-label { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); margin-bottom: 4px; }
+.gate-success-banner .gsb-msg { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: normal; color: var(--ink-mid); }
+.gate-success-banner .gsb-remove { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.1em; color: var(--ink-low); cursor: pointer; text-decoration: underline; white-space: nowrap; flex-shrink: 0; }
 .guest-toggle-wrap { padding-top: 6px; }
-.guest-base { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink-mid); font-style: italic; margin-bottom: 10px; }
+.guest-base { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--ink-mid); font-style: normal; margin-bottom: 10px; }
 .toggle-row { display: flex; align-items: baseline; gap: 10px; cursor: pointer; padding: 8px 0; border-top: 1px solid var(--rule); }
 .toggle-row input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; flex-shrink: 0; border: 1px solid var(--rule-mid); background: var(--canvas); position: relative; top: 1px; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
 .toggle-row input[type="checkbox"]:checked { background: var(--olive); border-color: var(--olive); }
 .toggle-row input[type="checkbox"]:checked::after { content: ''; position: absolute; top: 2px; left: 4px; width: 4px; height: 7px; border: 1.5px solid #fff; border-top: none; border-left: none; transform: rotate(40deg); }
-.toggle-label { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink); line-height: 1.4; }
-.toggle-price { font-family: 'Fragment Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); margin-left: 8px; }
+.toggle-label { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--ink); line-height: 1.4; }
+.toggle-price { font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--olive); margin-left: 8px; }
 @media (max-width: 600px) {
   .form-grid { grid-template-columns: 1fr; }
   nav { overflow-x: auto; flex-wrap: nowrap; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
-  nav button { padding: 1rem 0.9rem; font-size: 8px; letter-spacing: 0.1em; white-space: nowrap; }
+  nav button { padding: 1rem 0.9rem; font-size: 12px; letter-spacing: 0.1em; white-space: nowrap; }
   .event-masthead { padding: 2rem 1.5rem; }
   .event-masthead h2 { font-size: clamp(2rem, 10vw, 3rem); }
   .event-desc { padding: 1.5rem; }
@@ -885,7 +894,7 @@ footer {
 .ed-head-portraits { display: flex; gap: 3px; flex-shrink: 0; }
 .ed-head-portraits .ed-head-portrait { width: clamp(52px, 7vw, 72px); }
 .ed-acc-foot { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.5rem; border-top: 1px solid var(--rule); }
-.ed-acc-hint { font-family: 'Fragment Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); transition: color 0.2s; }
+.ed-acc-hint { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-low); transition: color 0.2s; }
 .ed-accordion.open .ed-acc-hint { color: var(--olive); }
 .ed-accordion-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.38s ease; }
 .ed-acc-inner { overflow: hidden; min-height: 0; }
@@ -893,7 +902,7 @@ footer {
 .ed-acc-content { padding: 1.5rem; border-top: 1px solid var(--rule-mid); }
 /* Archive entry row header — typographic strip style */
 .ed-vol {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -928,7 +937,7 @@ footer {
 }
 .sn-left { display: flex; flex-direction: column; justify-content: center; }
 .sn-wordmark {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: 1.1rem;
   color: var(--ink);
   cursor: pointer;
@@ -945,12 +954,12 @@ footer {
   margin-right: 0.55rem;
 }
 .sn-logo-text {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: 1.1rem;
   color: var(--ink);
 }
 .sn-locator {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: 7.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -963,9 +972,10 @@ footer {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  font-family: 'Fragment Mono', monospace;
-  font-size: var(--t-label);
-  letter-spacing: 0.16em;
+  font-family: 'Crimson Pro', serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--ink-low);
   padding: 0 1rem;
@@ -976,7 +986,7 @@ footer {
 .sn-btn.active { color: #EAE6D9; background: #008863; border-bottom-color: transparent; }
 .sn-btn:hover:not(.active) { color: var(--ink-mid); }
 @media (max-width: 600px) {
-  .sn-btn { padding: 0 0.65rem; font-size: 8px; letter-spacing: 0.1em; }
+  .sn-btn { padding: 0 0.65rem; font-size: 11px; letter-spacing: 0.01em; }
   .sn-locator { display: none; }
 }
 
@@ -991,14 +1001,14 @@ footer {
   margin-bottom: 0;
 }
 .arc-heading-text {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
+  font-family: 'Crimson Pro', serif;
+  font-style: normal;
   font-size: clamp(2rem, 6vw, 3rem);
   line-height: 1;
   color: var(--ink);
 }
 .arc-heading-sub {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1021,7 +1031,7 @@ footer {
 .arc-vol-row.arc-lg .arc-vname { font-size: 1.15rem; }
 .arc-vol-row.arc-ghost { opacity: 0.3; cursor: default; }
 .arc-vnum {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1029,22 +1039,22 @@ footer {
 }
 .arc-vol-row.arc-upcoming .arc-vnum { color: rgba(234,230,217,0.60); }
 .arc-vname {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1.05rem;
   color: var(--ink);
   line-height: 1.2;
 }
 .arc-vol-row.arc-upcoming .arc-vname { color: #EAE6D9; }
 .arc-vsub {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-low);
   margin-top: 0.25rem;
 }
 .arc-vright {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.1em;
   color: var(--ink-low);
@@ -1054,7 +1064,7 @@ footer {
 .arc-vol-row.arc-upcoming .arc-vright { color: #EAE6D9; }
 .arc-vstatus {
   display: block;
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-top: 3px;
@@ -1066,7 +1076,7 @@ footer {
   flex-wrap: wrap;
   gap: 1.5rem;
   padding: 0.85rem 0;
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1084,7 +1094,7 @@ footer {
   border-bottom: 1px solid var(--rule);
 }
 .arc-back-btn {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1105,17 +1115,17 @@ footer {
   margin-bottom: 2.5rem;
 }
 .current-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--olive);
-  opacity: 0.8;
+  opacity: 0.95;
   margin-bottom: 0.75rem;
 }
 .current-name {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
+  font-family: 'Crimson Pro', serif;
+  font-style: normal;
   font-size: clamp(2.2rem, 7vw, 4rem);
   line-height: 1;
   color: var(--ink);
@@ -1129,7 +1139,7 @@ footer {
   margin-bottom: 2.5rem;
 }
 .about-index-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: 7.5px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -1139,7 +1149,7 @@ footer {
   border-bottom: 1px solid var(--rule);
 }
 .about-index-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: 7.5px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -1149,8 +1159,8 @@ footer {
   border-bottom: 1px solid var(--rule);
 }
 .about-heading {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
+  font-family: 'Crimson Pro', serif;
+  font-style: normal;
   font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1;
   color: var(--ink);
@@ -1183,8 +1193,8 @@ footer {
 }
 .part-tab {
   flex: 1;
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   background: none;
@@ -1203,12 +1213,12 @@ footer {
 }
 
 .part-label {
-  font-family: 'Fragment Mono', monospace;
+  font-family: 'Crimson Pro', serif;
   font-size: var(--t-label);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--olive);
-  opacity: 0.8;
+  opacity: 0.95;
   margin-bottom: 1.5rem;
   display: block;
 }
@@ -1265,7 +1275,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   text-align: center;
 }
 #landing-copy p {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 0.98rem;
   line-height: 1.65;
   color: var(--ink);
@@ -1273,7 +1283,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 #landing-copy p:last-child { margin: 0; }
 #landing-copy .lc-tagline {
-  font-style: italic;
+  font-style: normal;
   color: var(--ink-mid);
 }
 
@@ -1311,6 +1321,12 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 #tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
   transform: translateX(0);
 }
+#tab-sponsor {
+  width: min(900px, 100vw) !important;
+}
+#tab-sponsor .sp-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
 
 /* Editorial grid overlay on all panels */
 #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
@@ -1342,8 +1358,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   flex-shrink: 0;
 }
 .panel-hd-title {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 9px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-low);
@@ -1392,8 +1408,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   display: contents;
 }
 .field-grid-label {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-low);
@@ -1402,7 +1418,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   align-self: start;
 }
 .field-grid-value {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 1rem;
   color: var(--ink-mid);
   padding: 0.85rem 0;
@@ -1445,8 +1461,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   flex-shrink: 0;
 }
 .drw-breadcrumb {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 9px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(234,230,217,0.80);
@@ -1493,7 +1509,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transform: translateY(0);
 }
 .annot-text {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: 17px;
   fill: #000000;
 }
@@ -1540,52 +1556,52 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .popup-x:hover { color: #008863; }
 .popup-inner { padding: 1.1rem 1.25rem 1rem; }
 .popup-lbl {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(0,136,99,0.55);
+  color: rgba(0,136,99,0.65);
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(0,136,99,0.20);
+  border-bottom: 1px solid rgba(0,136,99,0.25);
   margin-bottom: 0.9rem;
 }
 .popup-sitting {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(0,136,99,0.60);
+  color: rgba(0,136,99,0.70);
   margin-bottom: 0.3rem;
 }
 .popup-name {
-  font-family: 'LTF Hand Ink', 'EB Garamond', serif;
-  font-size: 1.9rem;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
+  font-size: 2.1rem;
   color: #008863;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
 .popup-disc {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
-  font-size: 0.92rem;
+  font-family: 'Crimson Pro', serif;
+  font-style: normal;
+  font-size: 1rem;
   color: #000000;
   margin-bottom: 1rem;
 }
 .popup-meta {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.10em;
-  color: rgba(0,136,99,0.60);
+  color: rgba(0,136,99,0.70);
   line-height: 1.9;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(0,136,99,0.18);
+  border-top: 1px solid rgba(0,136,99,0.25);
   margin-bottom: 1rem;
 }
 .popup-cta {
   display: block;
   width: 100%;
-  font-family: 'Fragment Mono', monospace;
-  font-size: 9px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   background: transparent;
@@ -1676,7 +1692,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   padding: 0.75rem 1rem;
   border-radius: 0;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   max-width: 280px;
   width: max-content;
   white-space: normal;
@@ -1685,8 +1701,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .ltf-tooltip.leaflet-tooltip::before { display: none; }
 .pt-vol {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--olive);
@@ -1694,16 +1710,16 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .pt-name { font-size: 1.1rem; color: var(--ink); margin-bottom: 3px; line-height: 1.2; }
 .pt-disc {
-  font-family: 'Fragment Mono', monospace;
-  font-size: 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
   letter-spacing: 0.12em;
   color: var(--ink-low);
   margin-bottom: 0.6rem;
 }
 .pt-desc {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Pro', serif;
   font-size: 0.88rem;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.5;
   color: var(--ink-mid);
   border-top: 1px solid var(--rule-mid);
@@ -1716,8 +1732,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .leaflet-control-attribution {
   background: rgba(242,237,227,0.80) !important;
   color: rgba(68,51,42,0.4) !important;
-  font-size: 9px !important;
-  font-family: 'Fragment Mono', monospace !important;
+  font-size: 13px !important;
+  font-family: 'Crimson Pro', serif !important;
   letter-spacing: 0.04em !important;
   border: none !important;
   box-shadow: none !important;
@@ -1750,6 +1766,55 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   #archive-drawer { width: 100vw; border-left: none; }
 }
 
+
+/* ── CRIMSON PRO TYPOGRAPHY SYSTEM ──────────────────────────────────────────
+   Titles  → Extra Bold (800) · tracking 10 (0.01em)
+   Body    → Regular (400)    · tracking 10 (0.01em)  ← inherited from body
+   Hand Ink → untouched
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Headings */
+h1, h2, h3, h4 {
+  font-family: 'Crimson Pro', serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* Named title elements */
+.about-heading,
+.panel-hd-title,
+.ed-artist,
+.gm-title,
+.form-title,
+.part-label,
+.notify-intro h2,
+.confirmation-hero h2,
+.ltf-modal h4,
+.team-name,
+.arc-vname,
+.ev-course,
+.ev-name,
+.lc-heading,
+.drw-title {
+  font-family: 'Crimson Pro', serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* Reset negative letter-spacing that came from Space Grotesk design */
+.confirmation-hero h2,
+.notify-intro h2,
+.stat-block .n,
+.ed-num,
+.ed-artist,
+.gm-title,
+.team-name,
+.ltf-modal h4,
+.payment-total,
+.sp-admin h3 {
+  letter-spacing: 0.01em;
+}
+
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -1758,7 +1823,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 <div class="site-nav">
   <div class="sn-left" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">
     <div class="sn-wordmark">
-      <img src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="sn-logo" onerror="this.style.display='none'">
+      <img decoding="async" src="images/life_thru_food_no_bg.png" alt="Life Thru Food" class="sn-logo" fetchpriority="high" onerror="this.style.display='none'">
       <span class="sn-logo-text">Life Thru Food</span>
     </div>
   </div>
@@ -1780,9 +1845,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
   <!-- Landing copy overlay -->
   <div id="landing-copy">
-    <p>Life Thru Food is a monthly dinner series in New York City.</p>
-    <p>Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
-    <p class="lc-tagline">Food is not the subject of the story. It is how we communicate it.</p>
+    <p><strong>LIFE THRU FOOD</strong> is a cultural programming, hospitality &amp; media company.</p>
+    <p>We translate human stories into immersive dining experiences.</p>
   </div>
 
 <!-- Hand-drawn notebook annotation pointing to popup -->
@@ -1862,48 +1926,48 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <p>Vol. 04 is an evening in conversation with stylist Heidi Cannon &mdash; an intimate dinner party in Williamsburg shaped by her perspective on food, memory, and the lives we carry with us.</p>
 
         <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Heidi Cannon</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Heidi Cannon</span>
           <p style="font-style:normal;color:var(--ink-mid)">Heidi grew up everywhere and nowhere at the same time &mdash; moving between Hawaii, Florida, California, West Virginia, Philly, and eventually New York. Home was never a place, it was something more fluid. Music, memory, and small sensory moments stuck more than geography ever did.</p>
           <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Her relationship to food mirrors that. It swings between extremes &mdash; Spam and Spaghettios, sushi at six years old, diner breakfasts, anchovies on toast, caviar when she can get it. There's no strict logic, just instinct. A &ldquo;freak palette,&rdquo; as she puts it &mdash; where high and low, comfort and curiosity all sit at the same table. Each dish reflects a moment, a habit, or a phase, pulled from a life that's been constantly in motion but always grounded in feeling.</p>
         </div>
 
         <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:2rem">The Menu</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:2rem">The Menu</span>
 
           <div style="display:grid;gap:1.75rem">
 
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Goat Cheese &amp; Pistachio Stuffed Figs</p>
-              <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0 0 6px">lil spicy, lil sweet</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Goat Cheese &amp; Pistachio Stuffed Figs</p>
+              <p style="font-size:0.9rem;font-style:normal;color:var(--ink-low);margin:0 0 6px">lil spicy, lil sweet</p>
               <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75;margin:6px 0 0">Figs come from an early fixation &mdash; Heidi references the Sylvia Plath &ldquo;fig tree,&rdquo; the idea of too many lives and not knowing which one to choose. This dish sets that tone: soft, sweet, a little sharp. It&rsquo;s the starting point of everything &mdash; possibility, tension, and a slightly romanticized way of looking at the world.</p>
             </div>
 
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Charred Balsamic Brussels, Confit Garlic Pur&eacute;e</p>
-              <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0 0 6px">heaps and loads of parm on top</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Charred Balsamic Brussels, Confit Garlic Pur&eacute;e</p>
+              <p style="font-size:0.9rem;font-style:normal;color:var(--ink-low);margin:0 0 6px">heaps and loads of parm on top</p>
               <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75">Heidi is a self-proclaimed &ldquo;greens girl,&rdquo; but not in a delicate way. She wants depth &mdash; char, sweetness, heaviness. This dish leans into that.</p>
             </div>
 
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Spam Onigiri</p>
-              <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0 0 6px">touch of wasabi for your nostrils</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Spam Onigiri</p>
+              <p style="font-size:0.9rem;font-style:normal;color:var(--ink-low);margin:0 0 6px">touch of wasabi for your nostrils</p>
               <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75;margin:6px 0 0">This is childhood, directly. Spam was always around, and sushi came early &mdash; introduced by parents who loved Japanese food. This dish sits right between those two worlds: something humble, something more refined, meeting in the middle. It&rsquo;s also a reminder that nostalgia doesn&rsquo;t have to be polished to be meaningful.</p>
             </div>
 
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Philly Cheesesteak Cr&ecirc;pe</p>
-              <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0 0 6px">truffle wiz for good measure</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Philly Cheesesteak Cr&ecirc;pe</p>
+              <p style="font-size:0.9rem;font-style:normal;color:var(--ink-low);margin:0 0 6px">truffle wiz for good measure</p>
               <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid);line-height:1.75">At 10 years old, Heidi spent an entire summer making thousands of cr&ecirc;pes, convinced she\'d become a French pastry chef. Years later, she lived in Philly. This dish connects those two versions of her &mdash; obsessive creativity and lived experience. Intentionally a little absurd. That balance between serious and unserious is very much her.</p>
             </div>
 
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Dessert</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Surprise</p>
-              <p style="font-size:0.9rem;font-style:italic;color:var(--ink-low);margin:0">think: it&rsquo;s Micho&rsquo;s birthday</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Dessert</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 4px;font-style:normal">Surprise</p>
+              <p style="font-size:0.9rem;font-style:normal;color:var(--ink-low);margin:0">think: it&rsquo;s Micho&rsquo;s birthday</p>
             </div>
 
           </div>
@@ -1919,7 +1983,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="seats-track"><div class="seats-fill" id="seats-fill"></div></div>
         </div>
         <div id="comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
           <div class="gate-row">
             <input type="text" id="gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate()">
             <button class="btn-ghost" id="gate-apply-btn" onclick="checkGate()">apply &rarr;</button>
@@ -1940,12 +2004,12 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             <label for="r-source">How did you hear about us?</label>
             <select id="r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
           </div>
-          <div class="form-field"><label for="r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="r-instagram" placeholder="@oanunoby"></div>
+          <div class="form-field"><label for="r-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="r-instagram" placeholder="@oanunoby"></div>
         </div>
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
             <label>Add-ons</label>
-            <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
+            <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
               Open bar &mdash; complimentary drinks provided by Madre Mezcal and Good Mood Kombucha
             </div>
             <label class="toggle-row" for="r-plus-one">
@@ -1957,7 +2021,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
                 <div class="form-field"><label>+1 first name</label><input type="text" id="r-p1-first" placeholder="First"></div>
                 <div class="form-field"><label>+1 last name</label><input type="text" id="r-p1-last" placeholder="Last"></div>
               </div>
-              <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--olive);padding:0.5rem 0;opacity:0.8">
+              <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--olive);padding:0.5rem 0;opacity:0.95">
                 Your +1 also receives 2 complimentary drink tickets
               </div>
             </div>
@@ -1985,8 +2049,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="check-row"><input type="checkbox" id="r-notify" checked><label for="r-notify">Keep me informed of future events</label></div>
         </div>
         <div id="comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
-          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
+          <div style="font-family:'Crimson Pro',serif;font-size:1rem;font-style:normal;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
         </div>
         <div id="payment-block-wrap" class="payment-block">
           <div class="payment-header">
@@ -1998,7 +2062,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           </div>
           <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
         </div>
-        <div id="rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div id="rsvp-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
         <button class="btn-primary" id="rsvp-submit-btn" onclick="submitRSVP()">continue to payment &rarr;</button>
       </div>
     </div>
@@ -2046,44 +2110,44 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <p>Vol. 05 is an evening with Ekaterina Semenova Conway &mdash; a painter and tattoo artist from Moscow, three years into New York. An intimate dinner in the East Village shaped by where she came from and everything she&rsquo;s picked up since.</p>
 
         <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Ekaterina Semenova Conway</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Ekaterina Semenova Conway</span>
           <p style="font-style:normal;color:var(--ink-mid)">Katya (Ekaterina Semenova Conway) is a Moscow-born tattoo artist and painter whose work lives in tension &mdash; between softness and aggression, control and chaos, intimacy and rebellion. Raised in a large family, full of intellectuals and shaped by early influences like chess and generational artistry, she developed a visual language that blends abstract realism with surreal, rule-breaking instinct.</p>
           <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Her journey from Russia to New York &mdash; through Paris and Barcelona &mdash; wasn&rsquo;t just geographic, but deeply personal. Political activism, displacement, and lived resistance inform her perspective, giving her work an emotional weight that feels both confrontational and vulnerable. She creates to provoke &mdash; to make people uncomfortable, then draw them in closer.</p>
           <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Now based in New York, Katya channels that same philosophy into tattooing &mdash; treating the human body as both canvas and connection point. Her work is permanent, intimate, and unapologetically hers &mdash; marked by contrast, memory, and a refusal to follow rules.</p>
         </div>
 
         <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:2rem">The Menu</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:2rem">The Menu</span>
           <div style="display:grid;gap:1.75rem">
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Charcuterie &mdash; Parm, Jamón, Brie, Salted Fish, Black Rye</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">This mirrors how she eats at home &mdash; communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground this course in her upbringing, while the cheese and jamón reflect her life now.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Charcuterie &mdash; Parm, Jamón, Brie, Salted Fish, Black Rye</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">This mirrors how she eats at home &mdash; communal, unstructured, pulling from both European staples and Russian essentials. The black rye and salted fish ground this course in her upbringing, while the cheese and jamón reflect her life now.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Patatas Bravas, Sriracha Aïoli</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">A nod to her time living in Spain, love for sriracha, and casual, shareable plates. It represents that late-night, slightly chaotic energy she thrives in.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Patatas Bravas, Sriracha Aïoli</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">A nod to her time living in Spain, love for sriracha, and casual, shareable plates. It represents that late-night, slightly chaotic energy she thrives in.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Rocket Salad &mdash; Roasted Peppers, Chestnut, Cherry Vinaigrette</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">Built from memory &mdash; arugula (rocket) from her grandmother&rsquo;s garden, peppers she learned to love later, and chestnut and cherry bringing in Eastern European warmth and balance.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Rocket Salad &mdash; Roasted Peppers, Chestnut, Cherry Vinaigrette</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">Built from memory &mdash; arugula (rocket) from her grandmother&rsquo;s garden, peppers she learned to love later, and chestnut and cherry bringing in Eastern European warmth and balance.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Pelmeni &mdash; Russian Tom Yum Soup Dumplings</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">A fusion of her cultural base and her mom&rsquo;s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 04</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Pelmeni &mdash; Russian Tom Yum Soup Dumplings</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">A fusion of her cultural base and her mom&rsquo;s influence cooking Thai food at home. It represents movement, travel, and flavors colliding naturally.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 05</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Fried Shrimp, Caviar, Crème Fraîche</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">Directly tied to her childhood &mdash; fried shrimp was a staple &mdash; but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">Course 05</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Fried Shrimp, Caviar, Crème Fraîche</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">Directly tied to her childhood &mdash; fried shrimp was a staple &mdash; but elevated with caviar to reflect her Russian roots and that contrast between grit and luxury.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
-              <p style="font-family:'EB Garamond',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Masala Chai &amp; Russian Tea Cookies</p>
-              <p style="font-size:0.92rem;font-style:italic;color:var(--ink-mid);line-height:1.7;margin:0">Tea is ritual for her &mdash; something grounding at the end. The pairing keeps dessert light, nostalgic, and communal rather than overly indulgent.</p>
+              <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
+              <p style="font-family:'Crimson Pro',serif;font-size:1.1rem;color:var(--ink);margin:6px 0 6px;font-style:normal">Masala Chai &amp; Russian Tea Cookies</p>
+              <p style="font-size:0.92rem;font-style:normal;color:var(--ink-mid);line-height:1.7;margin:0">Tea is ritual for her &mdash; something grounding at the end. The pairing keeps dessert light, nostalgic, and communal rather than overly indulgent.</p>
             </div>
           </div>
         </div>
@@ -2098,7 +2162,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="seats-track"><div class="seats-fill" id="may-seats-fill"></div></div>
         </div>
         <div id="may-comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
           <div class="gate-row">
             <input type="text" id="may-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGateMay()">
             <button class="btn-ghost" id="may-gate-apply-btn" onclick="checkGateMay()">apply &rarr;</button>
@@ -2119,12 +2183,12 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             <label for="mayr-source">How did you hear about us?</label>
             <select id="mayr-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
           </div>
-          <div class="form-field"><label for="mayr-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="mayr-instagram" placeholder="@oanunoby"></div>
+          <div class="form-field"><label for="mayr-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="mayr-instagram" placeholder="@oanunoby"></div>
         </div>
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
             <label>Add-ons</label>
-            <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
+            <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--olive);padding:0.85rem 1rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:0.25rem;line-height:1.7">
               Open bar &mdash; vodka martinis &amp; espresso martinis courtesy of 3BR Distillery
             </div>
             <label class="toggle-row" for="mayr-plus-one">
@@ -2161,19 +2225,19 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="check-row"><input type="checkbox" id="mayr-notify" checked><label for="mayr-notify">Keep me informed of future events</label></div>
         </div>
         <div id="may-comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">&#10003; Complimentary admission</div>
-          <div style="font-size:0.9rem;font-style:italic;color:var(--olive)">Your ticket is on us. Just confirm below.</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">&#10003; Complimentary admission</div>
+          <div style="font-size:0.9rem;font-style:normal;color:var(--olive)">Your ticket is on us. Just confirm below.</div>
         </div>
         <div id="may-payment-block-wrap" class="payment-block">
           <div class="payment-header">
-            <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low)">Total</span>
+            <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low)">Total</span>
             <span>
               <span class="payment-total" id="may-payment-total">$75</span>
               <span class="payment-total-sub" id="may-payment-breakdown">1 guest &times; $75</span>
             </span>
           </div>
         </div>
-        <div id="may-rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div id="may-rsvp-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
         <button class="btn-primary" id="may-rsvp-submit-btn" onclick="submitRSVPMay()">continue to payment &rarr;</button>
       </div>
     </div>
@@ -2223,51 +2287,51 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <p>Vol. 06 is an afternoon outside in Red Hook &mdash; two close friends, two different ways of life, one table. Doors at 5pm. Address shared one week prior.</p>
 
         <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Miles Dixon &amp; Elijuh Vuhlet</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.25rem">Guest Profile &mdash; Miles Dixon &amp; Elijuh Vuhlet</span>
           <p style="font-style:normal;color:var(--ink-mid)">Elijah learned the value of family and community early. Growing up Dominican and Puerto Rican between Long Island and the LES, his first references for food and clothing were rooted in function. Over time that foundation evolved &mdash; he found punk, and with it a natural overlap between distressed aesthetics and workwear sensibility. The result feels honest. His clothes, his attitude, his presence all bring people together &mdash; don&rsquo;t let the ripped hats or head tat confuse you.</p>
           <p style="margin-top:1rem;font-style:normal;color:var(--ink-mid)">Miles is a Brooklyn kid. He grew up on a MetroCard and a sense of freedom, moving through the city with curiosity. That world expanded when he moved to Germany, but eventually it pushed beyond place altogether. Miles leans toward the fantastical. Through his brand, Real Fantasy, he brings those ideas back down to earth &mdash; grounded in American workwear. His taste in food reflects that same utility, especially in his deep love for sandwiches. Whether it&rsquo;s early memories at The Odeon or a lifelong connection to the BEC, everything he creates builds on the culture that raised him.</p>
         </div>
 
         <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.5rem">The Menu</span>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);display:block;margin-bottom:1.5rem">The Menu</span>
           <div style="display:flex;flex-direction:column;gap:1.75rem">
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
+              <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 01</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Beef Bacon Egg n Cheese</p>
-              <p style="font-style:italic;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">Yo Ock, get me a BEC on a roll</p>
+              <p style="font-style:normal;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">Yo Ock, get me a BEC on a roll</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Smokey beef bacon, fluffy eggs, American cheese &mdash; there are no other options because it&rsquo;s perfect in every way &mdash; and spicy ketchup.</p>
               <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
-                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Egg Sando &mdash; spicy ketchup &amp; hash browns</span>
               </div>
-              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">Our conversation with Miles made two things clear. He is NY through and through and is passionate about his sandwiches. No better way to honor this than going right for the NY sandwich jugular.</p>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:normal;line-height:1.6">Our conversation with Miles made two things clear. He is NY through and through and is passionate about his sandwiches. No better way to honor this than going right for the NY sandwich jugular.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
+              <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 02</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Wedge Salad</p>
-              <p style="font-style:italic;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">Brasserie food meets the Caribbean. What&rsquo;s more New York?</p>
+              <p style="font-style:normal;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">Brasserie food meets the Caribbean. What&rsquo;s more New York?</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Chicharr&oacute;n de pollo, fried cheese, pickled red onions, passionfruit ranch.</p>
               <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
-                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Wedge Salad &mdash; fried cheese, pickled onions &amp; passionfruit ranch</span>
               </div>
-              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">At the intersection of where things begin and where they are now. It was Miles who birthed the idea of expanding this event to include Elijah. A humble act of spotlight sharing that inspired this course. Miles&rsquo; childhood memories at The Odeon paired seamlessly with Elijah&rsquo;s Caribbean roots. This dish is what LTF is all about.</p>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:normal;line-height:1.6">At the intersection of where things begin and where they are now. It was Miles who birthed the idea of expanding this event to include Elijah. A humble act of spotlight sharing that inspired this course. Miles&rsquo; childhood memories at The Odeon paired seamlessly with Elijah&rsquo;s Caribbean roots. This dish is what LTF is all about.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
+              <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">Course 03</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Whole Roasted Hog</p>
-              <p style="font-style:italic;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">An LTF twist on a Dominican classic</p>
+              <p style="font-style:normal;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">An LTF twist on a Dominican classic</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Served w/ Moro de Habichuelas and tostones. Crispy skin, fragrant rice con caperberries y frijoles, and pull-apart pork.</p>
               <div style="margin-top:0.75rem;padding:0.6rem 0.85rem;border-left:2px solid var(--rule-mid);display:flex;flex-direction:column;gap:0.15rem">
-                <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
+                <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--olive)">Vegetarian</span>
                 <span style="font-size:0.9rem;color:var(--ink-mid)">Smoked Cauliflower Steak &mdash; Moro de Habichuelas &amp; tostones</span>
               </div>
-              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:italic;line-height:1.6">Y&rsquo;all, it&rsquo;s a cookout. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.</p>
+              <p style="margin-top:0.9rem;font-size:0.9rem;color:var(--ink-low);font-style:normal;line-height:1.6">Y&rsquo;all, it&rsquo;s a cookout. Spending time with Elijah made one thing obvious: everything comes back to community. This had to be big, shared, and felt. A proper finale rooted in gathering and kinship.</p>
             </div>
             <div>
-              <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
+              <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low)">To Close</span>
               <p style="font-weight:400;margin-top:0.35rem;color:var(--ink-hi)">Compressed Watermelon Poppers</p>
-              <p style="font-style:italic;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">The brainchild of guest chef Ayele Mystic</p>
+              <p style="font-style:normal;font-size:0.9rem;font-weight:500;color:var(--ink-mid);margin-top:0.2rem">The brainchild of guest chef Ayele Mystic</p>
               <p style="margin-top:0.65rem;color:var(--ink-mid)">Lemon, shiso, West Indian bay leaf. Served cold &mdash; engineered to refresh.</p>
             </div>
           </div>
@@ -2283,7 +2347,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="seats-track"><div class="seats-fill" id="v5-seats-fill"></div></div>
         </div>
         <div id="v5-comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
           <div class="gate-row">
             <input type="text" id="v5-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate5()">
             <button class="btn-ghost" id="v5-gate-apply-btn" onclick="checkGate5()">apply &rarr;</button>
@@ -2304,7 +2368,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             <label for="v5r-source">How did you hear about us?</label>
             <select id="v5r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
           </div>
-          <div class="form-field"><label for="v5r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="v5r-instagram" placeholder="@oanunoby"></div>
+          <div class="form-field"><label for="v5r-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="v5r-instagram" placeholder="@oanunoby"></div>
         </div>
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
@@ -2348,8 +2412,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="check-row"><input type="checkbox" id="v5r-notify" checked><label for="v5r-notify">Keep me informed of future events</label></div>
         </div>
         <div id="v5-comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
-          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">\u2713 Complimentary admission</div>
+          <div style="font-family:'Crimson Pro',serif;font-size:1rem;font-style:normal;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
         </div>
         <div id="v5-payment-block-wrap" class="payment-block">
           <div class="payment-header">
@@ -2361,7 +2425,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           </div>
           <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
         </div>
-        <div id="v5-rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div id="v5-rsvp-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
         <button class="btn-primary" id="v5-rsvp-submit-btn" onclick="submitRSVP5()">continue to payment &rarr;</button>
       </div>
     </div>
@@ -2399,7 +2463,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="seats-track"><div class="seats-fill" id="v8-seats-fill"></div></div>
         </div>
         <div id="v8-comp-code-wrap" style="margin-bottom:2rem;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
           <div class="gate-row">
             <input type="text" id="v8-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate8()">
             <button class="btn-ghost" id="v8-gate-apply-btn" onclick="checkGate8()">apply &rarr;</button>
@@ -2420,7 +2484,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             <label for="v8r-source">How did you hear about us?</label>
             <select id="v8r-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
           </div>
-          <div class="form-field"><label for="v8r-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="v8r-instagram" placeholder="@handle"></div>
+          <div class="form-field"><label for="v8r-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="v8r-instagram" placeholder="@handle"></div>
         </div>
         <div class="form-grid full" style="margin-bottom:0.25rem">
           <div class="form-field">
@@ -2464,8 +2528,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="check-row"><input type="checkbox" id="v8r-notify" checked><label for="v8r-notify">Keep me informed of future Sittings</label></div>
         </div>
         <div id="v8-comp-notice" style="display:none;padding:1rem 1.5rem;border:1px solid var(--olive-dim);background:var(--olive-ghost);margin-bottom:1.5rem">
-          <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">✓ Complimentary admission</div>
-          <div style="font-family:'EB Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
+          <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--olive);margin-bottom:4px">✓ Complimentary admission</div>
+          <div style="font-family:'Crimson Pro',serif;font-size:1rem;font-style:normal;color:var(--ink-mid)">Your seat is covered &mdash; no payment required.</div>
         </div>
         <div id="v8-payment-block-wrap" class="payment-block">
           <div class="payment-header">
@@ -2477,7 +2541,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           </div>
           <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
         </div>
-        <div id="v8-rsvp-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div id="v8-rsvp-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
         <button class="btn-primary" id="v8-rsvp-submit-btn" onclick="submitRSVP8()">continue to payment &rarr;</button>
       </div>
     </div>
@@ -2550,24 +2614,20 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <div class="about-intro">
       <div class="about-index-label">LTF &nbsp;&middot;&nbsp; Archive &nbsp;&middot;&nbsp; 2024&ndash;Present</div>
       <div class="about-heading">About</div>
-      <p class="about-body"><strong>LIFE THRU FOOD</strong> is a cultural programming, hospitality &amp; media company. We translate human stories into immersive dining experiences.</p>
+      <p class="about-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
+      <p class="about-body" style="margin-top:0.75rem">Food is not the subject of the story. It is how we communicate it.</p>
     </div>
     <div class="team-intro">
       <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
     </div>
     <div class="team-grid">
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna" loading="lazy"></div><div class="team-name">Micho Hanna</div><div class="team-role">Cofounder / CEO</div><a href="https://www.instagram.com/michohanna_/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@michohanna_</a></div>
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/Zach Profile.jpg" alt="Zach Amato" loading="lazy"></div><div class="team-name">Zach Amato</div><div class="team-role">Cofounder / Chef</div><a href="https://www.instagram.com/zach.amato/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@zach.amato</a></div>
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/John Profile.jpg" alt="John Stets" loading="lazy"></div><div class="team-name">John Stets</div><div class="team-role">Chef De Cuisine</div><a href="https://www.instagram.com/stets_jk/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@stets_jk</a></div>
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/Lea Workman.JPG" alt="Lea Workman" loading="lazy"></div><div class="team-name">Lea Workman</div><div class="team-role">Director of Growth &amp; Partnerships</div><a href="https://www.instagram.com/leamassaro/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leamassaro</a></div>
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/leo-profile.jpg" alt="Leo Velleu" loading="lazy"></div><div class="team-name">Leo Velleu</div><div class="team-role">Head of Service &amp; Graphic Designer</div><a href="https://www.instagram.com/leo_velleu/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leo_velleu</a></div>
-      <div class="team-card"><div class="team-photo"><img src="images/team-profiles/andreo-profile.jpg" alt="Andreo Otiniano" loading="lazy"></div><div class="team-name">Andreo Otiniano</div><div class="team-role">Head of Photography</div><a href="https://www.instagram.com/andreo.otiniano/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@andreo.otiniano</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna" loading="lazy"></div><div class="team-name">Micho Hanna</div><div class="team-role">Cofounder / CEO</div><a href="https://www.instagram.com/michohanna_/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@michohanna_</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Zach Profile.jpg" alt="Zach Amato" loading="lazy"></div><div class="team-name">Zach Amato</div><div class="team-role">Cofounder / Chef</div><a href="https://www.instagram.com/zach.amato/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@zach.amato</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/John Profile.jpg" alt="John Stets" loading="lazy"></div><div class="team-name">John Stets</div><div class="team-role">Chef De Cuisine</div><a href="https://www.instagram.com/stets_jk/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@stets_jk</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Lea Workman.JPG" alt="Lea Workman" loading="lazy"></div><div class="team-name">Lea Workman</div><div class="team-role">Director of Growth &amp; Partnerships</div><a href="https://www.instagram.com/leamassaro/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leamassaro</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/leo-profile.jpg" alt="Leo Velleu" loading="lazy"></div><div class="team-name">Leo Velleu</div><div class="team-role">Head of Service &amp; Graphic Designer</div><a href="https://www.instagram.com/leo_velleu/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leo_velleu</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/andreo-profile.jpg" alt="Andreo Otiniano" loading="lazy"></div><div class="team-name">Andreo Otiniano</div><div class="team-role">Head of Photography</div><a href="https://www.instagram.com/andreo.otiniano/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@andreo.otiniano</a></div>
     </div>
-  <!-- Previous Partners -->
-  <div style="padding: 2.5rem 1.5rem 0; border-top: 1px solid var(--rule-mid); margin-top: 2rem;">
-    <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
-    <div class="sp-grid" id="sponsors-grid-about" style="margin-top:1.25rem;margin-bottom:0;"></div>
-  </div>
 
   </div>
   </div><!-- panel-body -->
@@ -2593,9 +2653,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
       <p class="form-title">Sponsor inquiry</p>
       <div id="sponsor-toast" class="toast"></div>
       <div id="sponsor-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-        <p style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
-        <p style="font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
-        <p style="font-size:0.95rem;font-style:italic;color:var(--ink-mid)">Thank you for your interest in partnering with Life Thru Food.</p>
+        <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
+        <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
+        <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">Thank you for your interest in partnering with Life Thru Food.</p>
       </div>
       <div id="sponsor-form-wrap">
         <div class="form-grid">
@@ -2619,7 +2679,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             </select>
           </div>
           <div class="form-field">
-            <label for="sp-budget">Budget range <span style="font-style:italic;opacity:0.6">(optional)</span></label>
+            <label for="sp-budget">Budget range <span style="font-style:normal;opacity:0.6">(optional)</span></label>
             <select id="sp-budget">
               <option value="">—</option>
               <option>Under $1,000</option>
@@ -2633,14 +2693,14 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div class="form-grid full">
           <div class="form-field"><label for="sp-message">Tell us about your vision</label><textarea id="sp-message" rows="5" placeholder="What are you hoping to achieve through this partnership? Any details about your brand, audience, or goals..."></textarea></div>
         </div>
-        <div id="sponsor-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+        <div id="sponsor-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
         <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSponsorInquiry()">send inquiry &rarr;</button></div>
       </div>
     </div>
 
     <!-- Previous sponsors -->
     <div style="padding: 2.5rem 1.5rem 2rem; border-top: 1px solid var(--rule-mid); margin-top: 1rem;">
-      <span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
+      <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
       <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0;"></div>
     </div>
 
@@ -2683,9 +2743,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div class="form-field"><label for="n-source">How did you find us?</label>
           <select id="n-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
         </div>
-        <div class="form-field"><label for="n-instagram">Instagram <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="n-instagram" placeholder="@oanunoby"></div>
+        <div class="form-field"><label for="n-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="n-instagram" placeholder="@oanunoby"></div>
       </div>
-      <div id="notify-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div id="notify-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1rem"><button class="btn-primary" onclick="submitNotify()">add me to the list</button></div>
     </div>
     </div>
@@ -2699,9 +2759,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     </div>
     <div id="private-toast" class="toast"></div>
     <div id="private-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-      <p style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
-      <p style="font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
-      <p style="font-size:0.95rem;font-style:italic;color:var(--ink-mid)">Thank you for reaching out — we look forward to learning more about your event.</p>
+      <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
+      <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
+      <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">Thank you for reaching out — we look forward to learning more about your event.</p>
     </div>
     <div id="private-form-wrap">
       <p class="form-title">Tell us about your event</p>
@@ -2737,7 +2797,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         </div>
       </div>
       <div class="form-grid">
-        <div class="form-field"><label for="pi-date">Preferred date <span style="font-style:italic;opacity:0.6">(flexible is fine)</span></label><input type="text" id="pi-date" placeholder="e.g. June 2026, flexible"></div>
+        <div class="form-field"><label for="pi-date">Preferred date <span style="font-style:normal;opacity:0.6">(flexible is fine)</span></label><input type="text" id="pi-date" placeholder="e.g. June 2026, flexible"></div>
         <div class="form-field">
           <label for="pi-source">How did you hear about us</label>
           <select id="pi-source">
@@ -2753,7 +2813,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
       <div class="form-grid full">
         <div class="form-field"><label for="pi-vision">Tell us about your vision</label><textarea id="pi-vision" rows="5" placeholder="What are you envisioning? Any details about the occasion, vibe, dietary needs, or anything else we should know..."></textarea></div>
       </div>
-      <div id="private-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div id="private-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1rem"><button class="btn-primary" onclick="submitPrivateInquiry()">send inquiry &rarr;</button></div>
     </div>
     </div>
@@ -2767,16 +2827,16 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     </div>
     <div id="artist-toast" class="toast"></div>
     <div id="artist-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-      <p style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
-      <p style="font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We&rsquo;ll be in touch.</p>
-      <p style="font-size:0.95rem;font-style:italic;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit.</p>
+      <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
+      <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We&rsquo;ll be in touch.</p>
+      <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit.</p>
     </div>
     <div id="artist-form-wrap">
 
       <!-- Mode toggle -->
       <div style="display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--rule-mid);width:fit-content">
-        <button id="ar-mode-self" onclick="setArtistMode('self')" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:var(--ink);color:var(--paper);transition:all 0.15s">I&rsquo;m the artist</button>
-        <button id="ar-mode-nom" onclick="setArtistMode('nominate')" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:transparent;color:var(--ink-low);transition:all 0.15s">Nominate someone</button>
+        <button id="ar-mode-self" onclick="setArtistMode('self')" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:var(--ink);color:var(--paper);transition:all 0.15s">I&rsquo;m the artist</button>
+        <button id="ar-mode-nom" onclick="setArtistMode('nominate')" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:transparent;color:var(--ink-low);transition:all 0.15s">Nominate someone</button>
       </div>
 
       <!-- Self section -->
@@ -2792,16 +2852,16 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         </div>
         <div class="form-grid">
           <div class="form-field"><label for="ar-discipline">Discipline</label><input type="text" id="ar-discipline" placeholder="e.g. Painter, Designer, Photographer"></div>
-          <div class="form-field"><label for="ar-portfolio">Website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-portfolio" placeholder="https://"></div>
+          <div class="form-field"><label for="ar-portfolio">Website <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="url" id="ar-portfolio" placeholder="https://"></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-bio">Tell us about yourself <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-bio" rows="4" placeholder="A little about who you are and what you make..."></textarea></div>
+          <div class="form-field"><label for="ar-bio">Tell us about yourself <span style="font-style:normal;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-bio" rows="4" placeholder="A little about who you are and what you make..."></textarea></div>
         </div>
         <div class="form-grid full">
           <div class="form-field"><label for="ar-why">Why Life Thru Food?</label><textarea id="ar-why" rows="4" placeholder="What draws you to LTF, and how does food connect to your creative life?"></textarea></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-timeline">Timeline &amp; upcoming projects <span style="font-style:italic;opacity:0.6">(optional)</span></label><textarea id="ar-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where you are in your work right now..."></textarea></div>
+          <div class="form-field"><label for="ar-timeline">Timeline &amp; upcoming projects <span style="font-style:normal;opacity:0.6">(optional)</span></label><textarea id="ar-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where you are in your work right now..."></textarea></div>
         </div>
       </div>
 
@@ -2817,16 +2877,16 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
           <div class="form-field"><label for="ar-nom-discipline">Discipline</label><input type="text" id="ar-nom-discipline" placeholder="e.g. Sculptor, Musician, Chef"></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-nom-portfolio">Their website <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="url" id="ar-nom-portfolio" placeholder="https://"></div>
+          <div class="form-field"><label for="ar-nom-portfolio">Their website <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="url" id="ar-nom-portfolio" placeholder="https://"></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-nom-bio">Tell us about them <span style="font-style:italic;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-nom-bio" rows="4" placeholder="Who are they and what do they make?"></textarea></div>
+          <div class="form-field"><label for="ar-nom-bio">Tell us about them <span style="font-style:normal;opacity:0.6">(ethnic background, inspirations, relationship with food, aspirations, etc.)</span></label><textarea id="ar-nom-bio" rows="4" placeholder="Who are they and what do they make?"></textarea></div>
         </div>
         <div class="form-grid full">
           <div class="form-field"><label for="ar-nom-why">Why would they be a great fit for LTF?</label><textarea id="ar-nom-why" rows="4" placeholder="What makes their story worth gathering around?"></textarea></div>
         </div>
         <div class="form-grid full">
-          <div class="form-field"><label for="ar-nom-timeline">Their timeline &amp; upcoming projects <span style="font-style:italic;opacity:0.6">(optional)</span></label><textarea id="ar-nom-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where they are in their work right now..."></textarea></div>
+          <div class="form-field"><label for="ar-nom-timeline">Their timeline &amp; upcoming projects <span style="font-style:normal;opacity:0.6">(optional)</span></label><textarea id="ar-nom-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where they are in their work right now..."></textarea></div>
         </div>
         <div style="border-top:1px solid var(--rule-mid);margin-top:2rem;padding-top:2rem">
           <p class="form-title">About you</p>
@@ -2835,12 +2895,12 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
             <div class="form-field"><label for="ar-ref-email">Your email</label><input type="email" id="ar-ref-email" placeholder="you@email.com"></div>
           </div>
           <div class="form-grid full">
-            <div class="form-field"><label for="ar-ref-relation">Your relationship to the artist <span style="font-style:italic;opacity:0.6">(optional)</span></label><input type="text" id="ar-ref-relation" placeholder="e.g. Friend, collaborator, fan of their work"></div>
+            <div class="form-field"><label for="ar-ref-relation">Your relationship to the artist <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="ar-ref-relation" placeholder="e.g. Friend, collaborator, fan of their work"></div>
           </div>
         </div>
       </div>
 
-      <div id="artist-inline-error" style="display:none;font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div id="artist-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1.5rem"><button class="btn-primary" id="ar-submit-btn" onclick="submitArtistInquiry()">send submission &rarr;</button></div>
     </div>
     </div>
@@ -2857,13 +2917,13 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   </div>
   <div class="panel-body">
     <div id="admin-pw-gate" style="padding:4rem 0;max-width:360px;margin:0 auto">
-      <div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--olive);opacity:0.8;margin-bottom:1.5rem">Admin access</div>
+      <div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.22em;text-transform:uppercase;color:var(--olive);opacity:0.95;margin-bottom:1.5rem">Admin access</div>
       <div style="display:flex;gap:10px;align-items:stretch">
         <input type="password" id="admin-pw-input" placeholder="password" style="flex:1"
           onkeydown="if(event.key==='Enter')checkAdminPassword()">
         <button class="btn-ghost" onclick="checkAdminPassword()">enter →</button>
       </div>
-      <div id="admin-pw-error" style="font-family:'Fragment Mono',monospace;font-size:9px;color:var(--danger);margin-top:0.75rem;min-height:1rem"></div>
+      <div id="admin-pw-error" style="font-family:'Crimson Pro',serif;font-size: 13px;color:var(--danger);margin-top:0.75rem;min-height:1rem"></div>
     </div>
     <div id="admin-panel-inner" style="display:none">
     <div class="admin-section-toggle" onclick="toggleEventAdmin()">Manage events <span id="ev-toggle-icon">+</span></div>
@@ -2892,7 +2952,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
         <div style="display:flex;gap:10px;margin-top:1.25rem;align-items:center">
           <button class="btn-primary" id="ev-save-btn" onclick="saveEvent()">save event</button>
           <button class="btn-ghost" onclick="clearEventForm()">clear</button>
-          <span id="ev-save-status" style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--olive);display:none"></span>
+          <span id="ev-save-status" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.1em;color:var(--olive);display:none"></span>
         </div>
       </div>
     </div>
@@ -2921,8 +2981,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
       <div class="admin-section-toggle" onclick="toggleNotifyAdmin()">Notify list <span id="notify-toggle-icon">+</span></div>
       <div id="notify-admin-panel" style="display:none;overflow-x:auto;margin-top:1rem">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-          <span style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low)" id="notify-list-count"></span>
-          <button class="btn-ghost" onclick="exportNotifyCSV()" style="font-size:9px">export csv</button>
+          <span style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low)" id="notify-list-count"></span>
+          <button class="btn-ghost" onclick="exportNotifyCSV()" style="font-size: 13px">export csv</button>
         </div>
         <table>
           <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Instagram</th><th>Source</th><th>Date</th></tr></thead>
@@ -2945,7 +3005,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   <div class="ltf-modal">
     <h4 id="remove-modal-title">Remove guest</h4>
     <p id="remove-modal-desc"></p>
-    <label style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:0.5rem">Message to guest <span style="opacity:0.6">(optional)</span></label>
+    <label style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:0.5rem">Message to guest <span style="opacity:0.6">(optional)</span></label>
     <textarea id="remove-modal-note" placeholder="Add a personal note to their cancellation email…"></textarea>
     <div class="ltf-modal-actions">
       <button class="btn-ghost" onclick="closeRemoveModal()">cancel</button>
@@ -3004,8 +3064,8 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     <!-- All-volumes list -->
     <div id="drawer-vol-list">
       <div style="padding:1.5rem 0 1rem;border-bottom:1px solid var(--rule-mid);margin:0 -1.5rem;padding-left:1.5rem;padding-right:1.5rem">
-        <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1;color:var(--ink)">Archive</div>
-        <div style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-low);margin-top:0.35rem">8 Volumes &middot; Active Since 2025</div>
+        <div style="font-family:'Crimson Pro',serif;font-style:normal;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1;color:var(--ink)">Archive</div>
+        <div style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-low);margin-top:0.35rem">8 Volumes &middot; Active Since 2025</div>
       </div>
 
       <div class="arc-vol-row arc-upcoming" onclick="closeDrawer(); openPanel('current')">
@@ -3046,7 +3106,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
       <div class="arc-vol-row arc-ghost">
         <div class="arc-vnum">VOL. 001&ndash;002</div>
-        <div><div class="arc-vname" style="font-style:italic;color:rgba(68,51,42,0.38)">Earlier volumes</div><div class="arc-vsub">Two Bridges &middot; 2025&ndash;2026</div></div>
+        <div><div class="arc-vname" style="font-style:normal;color:rgba(68,51,42,0.38)">Earlier volumes</div><div class="arc-vsub">Two Bridges &middot; 2025&ndash;2026</div></div>
         <div class="arc-vright">2025&ndash;26</div>
       </div>
 
@@ -3537,7 +3597,7 @@ function clearCompCode() {
   activeCompCode = null;
   clearCompDim();
   document.getElementById('comp-code-wrap').innerHTML =
-    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    `<div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
     <div class="gate-row">
       <input type="text" id="gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate()">
       <button class="btn-ghost" id="gate-apply-btn" onclick="checkGate()">apply &rarr;</button>
@@ -3585,7 +3645,7 @@ function clearCompCode5() {
   activeCompCode5 = null;
   clearCompDim();
   document.getElementById('v5-comp-code-wrap').innerHTML =
-    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    `<div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
     <div class="gate-row">
       <input type="text" id="v5-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate5()">
       <button class="btn-ghost" id="v5-gate-apply-btn" onclick="checkGate5()">apply &rarr;</button>
@@ -4349,7 +4409,7 @@ function clearCompCode8() {
   activeCompCode8 = null;
   clearCompDim();
   document.getElementById('v8-comp-code-wrap').innerHTML =
-    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    `<div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
     <div class="gate-row"><input type="text" id="v8-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate8()"><button class="btn-ghost" id="v8-gate-apply-btn" onclick="checkGate8()">apply &rarr;</button></div>
     <div id="v8-gate-error" class="gate-error"></div>`;
   document.getElementById('v8-comp-notice').style.display = 'none';
@@ -4514,7 +4574,7 @@ function clearCompCode7() {
   activeCompCode7 = null;
   clearCompDim();
   document.getElementById('v7-comp-code-wrap').innerHTML =
-    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    `<div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
     <div class="gate-row">
       <input type="text" id="v7-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGate7()">
       <button class="btn-ghost" id="v7-gate-apply-btn" onclick="checkGate7()">apply &rarr;</button>
@@ -4971,7 +5031,7 @@ function clearCompCodeMay() {
   activeCompCodeMay = null;
   clearCompDim();
   document.getElementById('may-comp-code-wrap').innerHTML =
-    `<div style="font-family:'Fragment Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
+    `<div style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-low);margin-bottom:0.85rem">Have a comp code?</div>
     <div class="gate-row">
       <input type="text" id="may-gate-password" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')checkGateMay()">
       <button class="btn-ghost" id="may-gate-apply-btn" onclick="checkGateMay()">apply &rarr;</button>
@@ -5167,7 +5227,7 @@ async function loadAdminEvents() {
 function renderAdminEvents() {
   const el = document.getElementById('event-admin-list');
   if (!el) return;
-  if (!adminEvents.length) { el.innerHTML = '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:italic;padding:0.5rem 0">No events yet.</p>'; return; }
+  if (!adminEvents.length) { el.innerHTML = '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:normal;padding:0.5rem 0">No events yet.</p>'; return; }
   el.innerHTML = adminEvents.map(ev => {
     const d = ev.event_date ? new Date(ev.event_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'No date';
     const price = ev.price_cents ? `$${ev.price_cents/100}` : '—';
@@ -5175,8 +5235,8 @@ function renderAdminEvents() {
     const statusColor = ev.is_active ? 'var(--success)' : 'var(--ink-low)';
     return `<div class="sp-admin-row">
       <div style="flex:1">
-        <div style="font-style:italic;color:var(--ink)">${ev.name}</div>
-        <div style="font-family:'Fragment Mono',monospace;font-size:9px;color:var(--ink-low);margin-top:3px;letter-spacing:0.06em">${d} &middot; ${ev.location||'No location'} &middot; ${price}/person &middot; ${rem}/${ev.total_capacity||0} seats &middot; <span style="color:${statusColor}">${ev.is_active?'active':'inactive'}</span></div>
+        <div style="font-style:normal;color:var(--ink)">${ev.name}</div>
+        <div style="font-family:'Crimson Pro',serif;font-size: 13px;color:var(--ink-low);margin-top:3px;letter-spacing:0.06em">${d} &middot; ${ev.location||'No location'} &middot; ${price}/person &middot; ${rem}/${ev.total_capacity||0} seats &middot; <span style="color:${statusColor}">${ev.is_active?'active':'inactive'}</span></div>
       </div>
       <button class="rm-btn" onclick="editEvent('${ev.id}')">edit</button>
       <button class="rm-btn" onclick="toggleEventActive('${ev.id}',${!ev.is_active})">${ev.is_active?'deactivate':'activate'}</button>
@@ -5555,7 +5615,7 @@ function renderContent(volFilter) {
     html += `<div class="ed-acc-header" onclick="toggleAccordion('${k}')">`;
     html += `<div class="ed-acc-meta-row">`;
     if (ed.artistFlyer) {
-      html += `<div class="ed-head-flyer"><img src="${ed.artistFlyer}" alt="Vol. ${ed.num} flyer" loading="lazy"></div>`;
+      html += `<div class="ed-head-flyer"><img decoding="async" src="${ed.artistFlyer}" alt="Vol. ${ed.num} flyer" loading="lazy"></div>`;
     } else {
       html += `<div class="ed-num">${ed.num}</div>`;
     }
@@ -5568,10 +5628,10 @@ function renderContent(volFilter) {
       </div>`;
     if (ed.artistPhotos && ed.artistPhotos.length) {
       html += `<div class="ed-head-portraits">`;
-      ed.artistPhotos.forEach(src => { html += `<div class="ed-head-portrait"><img src="${src}" alt="${ed.name}" loading="lazy"></div>`; });
+      ed.artistPhotos.forEach(src => { html += `<div class="ed-head-portrait"><img decoding="async" src="${src}" alt="${ed.name}" loading="lazy"></div>`; });
       html += `</div>`;
     } else if (ed.artistPhoto) {
-      html += `<div class="ed-head-portrait"><img src="${ed.artistPhoto}" alt="${ed.name}" loading="lazy"></div>`;
+      html += `<div class="ed-head-portrait"><img decoding="async" src="${ed.artistPhoto}" alt="${ed.name}" loading="lazy"></div>`;
     }
     html += `</div>`; // close meta-row
 
@@ -5583,7 +5643,7 @@ function renderContent(volFilter) {
       const stripPhotos = Array.from({ length: stripCount }, (_, i) => allPhotos[(off + i) % allPhotos.length]);
       const fewerClass = stripCount < 4 ? ' has-fewer' : '';
       html += `<div class="ed-mini-strip${fewerClass}" onclick="event.stopPropagation(); openGallery('${k}')">`;
-      stripPhotos.forEach(p => { html += `<img src="${p.photo}" alt="" loading="lazy">`; });
+      stripPhotos.forEach(p => { html += `<img decoding="async" src="${p.photo}" alt="" loading="lazy">`; });
       html += `</div>`;
     } else {
       html += `<div class="ed-mini-strip-empty"></div>`;
@@ -5594,7 +5654,7 @@ function renderContent(volFilter) {
     // Expand/collapse hint + photo count
     html += `<div class="ed-acc-foot" onclick="toggleAccordion('${k}')" style="cursor:pointer">`;
     html += `<span class="ed-acc-hint"></span>`;
-    if (allPhotos.length) html += `<span style="font-family:'Fragment Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--ink-low);text-transform:uppercase">${allPhotos.length} photos</span>`;
+    if (allPhotos.length) html += `<span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.1em;color:var(--ink-low);text-transform:uppercase">${allPhotos.length} photos</span>`;
     html += `</div>`;
 
     // ── Expandable body ──
@@ -5613,7 +5673,7 @@ function renderContent(volFilter) {
           html += `<div>`;
           if (item.course) html += `<span class="ed-course-num">${item.course}</span>`;
           html += `<p class="ed-course-name">${item.name}</p>`;
-          if (item.note) html += `<p class="ed-course-note" style="font-style:italic;color:var(--ink-mid);font-size:0.92rem;margin:0.15rem 0 0.4rem;">${item.note}</p>`;
+          if (item.note) html += `<p class="ed-course-note" style="font-style:normal;color:var(--ink-mid);font-size:0.92rem;margin:0.15rem 0 0.4rem;">${item.note}</p>`;
           if (item.body) html += `<p class="ed-course-body">${item.body}</p>`;
           html += `</div>`;
         });
@@ -5649,7 +5709,7 @@ function renderContent(volFilter) {
       const preview = [photos[off % photos.length], photos[(off + 1) % photos.length]];
       html += `<div class="ed-gallery-label" id="sec-gallery"><span>Gallery</span><button class="ed-gallery-cta" onclick="openGallery('${k}')">view all ${allPhotos.length} &rarr;</button></div>`;
       html += `<div class="ed-gallery-preview">`;
-      preview.forEach(p => { html += `<img src="${p.photo}" alt="" loading="lazy" onclick="openGallery('${k}')">`; });
+      preview.forEach(p => { html += `<img decoding="async" src="${p.photo}" alt="" loading="lazy" onclick="openGallery('${k}')">`; });
       html += `</div>`;
     } else if (!allPhotos.length) {
       const hasDetail = !!(ed.desc || ed.bio || ed.menu);
@@ -5683,7 +5743,7 @@ function openLightbox(id) {
   const p = contentPieces.find(x => x.id === id); if (!p) return;
   const isLong = t => t === 'profile' || t === 'recap';
   let inner = '';
-  if (p.type === 'photo') inner += `<img src="${p.photo}" alt="${p.title||''}">`;
+  if (p.type === 'photo') inner += `<img decoding="async" src="${p.photo}" alt="${p.title||''}">`;
   inner += `<div class="lb-kind">${p.ts}${p.type === 'photo' ? ' &nbsp;&middot;&nbsp; © LTF only' : ' &middot; ' + (p.platform||'')}</div>`;
   if (p.lede) inner += `<div class="lb-lede">${p.lede}</div>`;
   if (p.body) inner += isLong(p.type) ? `<div class="lb-body">${p.body.split('\n\n').map(x=>`<p>${x}</p>`).join('')}</div>` : `<div class="lb-body"><p>${p.body.replace(/\n/g,'<br>')}</p></div>`;
@@ -5717,7 +5777,7 @@ function openGallery(edition) {
       <button class="gm-close-btn" onclick="closeGallery()">close &times;</button>
     </div>
     <div class="gm-grid">
-      ${photos.map(p => `<div class="gm-item" onclick="closeGallery();openLightbox(${p.id})"><img src="${p.photo}" alt="" loading="lazy"></div>`).join('')}
+      ${photos.map(p => `<div class="gm-item" onclick="closeGallery();openLightbox(${p.id})"><img decoding="async" src="${p.photo}" alt="" loading="lazy"></div>`).join('')}
     </div>`;
   document.getElementById('gallery-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -5736,18 +5796,17 @@ document.addEventListener('keydown', e => {
 
 function renderSponsors() {
   const grid = document.getElementById('sponsors-grid');
-  const gridAbout = document.getElementById('sponsors-grid-about');
   const gridSponsor = document.getElementById('sponsors-grid-sponsor');
   const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
   const cardHtml = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
-  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:italic">No partners yet.</div>';
-  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridAbout) gridAbout.innerHTML = emptyHtml; if (gridSponsor) gridSponsor.innerHTML = emptyHtml; return; }
+  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:normal">No partners yet.</div>';
+  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridSponsor) gridSponsor.innerHTML = emptyHtml; return; }
   // Split sponsors: odd → left, even → right (both columns in landing-bottom)
   const leftCards = sorted.filter((_,i) => i % 2 === 0);
   const rightCards = sorted.filter((_,i) => i % 2 !== 0);
   const toHtml = arr => arr.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
   grid.innerHTML = cardHtml;
-  if (gridAbout) gridAbout.innerHTML = cardHtml;
+  if (gridSponsor) gridSponsor.innerHTML = cardHtml;
   if (gridSponsor) gridSponsor.innerHTML = cardHtml;
   const gl = document.getElementById('sponsors-grid-left');
   const gr = document.getElementById('sponsors-grid-right');
@@ -5755,7 +5814,7 @@ function renderSponsors() {
   if (gr) gr.innerHTML = rightCards.length ? toHtml(rightCards) : '';
   const al = document.getElementById('sponsor-list-admin');
   if (!al) return;
-  al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:italic">No sponsors yet.</p>' :
+  al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:normal">No sponsors yet.</p>' :
     sponsors.map(s => `<div class="sp-admin-row"><span class="sp-admin-name">${s.name}</span><span class="sp-admin-tier">${TIER_LABELS[s.tier]}</span><button class="rm-btn" onclick="removeSponsor(${s.id})">remove</button></div>`).join('');
 }
 function toggleSponsorAdmin() { document.getElementById('sponsor-admin-panel').classList.toggle('open'); renderSponsors(); }
@@ -5842,7 +5901,7 @@ function renderLandingGallery() {
   const pick = pool.slice(0, 12);
   gallery.innerHTML = pick.map(p =>
     `<div class="lb-gallery-item" onclick="openGallery('${p.edition}')">` +
-    `<img src="${p.photo}" alt="${(p.title||'').replace(/"/g,'&quot;')}" loading="lazy"></div>`
+    `<img decoding="async" src="${p.photo}" alt="${(p.title||'').replace(/"/g,'&quot;')}" loading="lazy"></div>`
   ).join('');
 }
 
