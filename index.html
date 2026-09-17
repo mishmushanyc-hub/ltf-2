@@ -1496,7 +1496,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Popup hand-drawn annotation */
 #popup-annot {
   position: fixed;
-  bottom: calc(2rem + 390px); /* raised further — arrows still landing too low */
+  bottom: calc(2rem + 390px);
   left: 6px;
   width: 310px;
   height: 155px;
@@ -1766,6 +1766,19 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
   #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
+
+  /* Compact popup for mobile */
+  #rsvp-popup { width: calc(100vw - 2rem); }
+  .popup-inner { padding: 0.75rem 1rem 0.8rem; }
+  .popup-lbl { font-size: 11px; padding-bottom: 0.55rem; margin-bottom: 0.6rem; }
+  .popup-sitting { font-size: 11px; margin-bottom: 0.2rem; }
+  .popup-name { font-size: 1.5rem; margin-bottom: 0.2rem; }
+  .popup-disc { font-size: 0.85rem; margin-bottom: 0; }
+  .popup-meta { display: none; }
+  .popup-cta { font-size: 11px; padding: 0.6rem 1rem; margin-top: 0.75rem; }
+
+  /* Hide annotation on mobile — arrows don't align with full-width popup */
+  #popup-annot { display: none !important; }
 }
 
 
