@@ -1911,7 +1911,7 @@ h1, h2, h3, h4 {
     <div class="popup-meta">
       Sun, Sep 27 &middot; 2026<br>
       Bushwick, Brooklyn<br>
-      Doors 5:00 pm &middot; $100 / seat
+      Doors 5:00 pm &middot; $80 / seat
     </div>
     <button class="popup-cta" onclick="closePopup(); openPanel('current')">Claim your seat &rarr;</button>
   </div>
@@ -2473,7 +2473,7 @@ h1, h2, h3, h4 {
       <div class="event-meta-row">
         <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">5:00 pm</span></div>
         <div class="ev-cell"><span class="ev-cell-label">Site</span><span class="ev-cell-val">Bushwick, Brooklyn</span></div>
-        <div class="ev-cell"><span class="ev-cell-label">Per seat</span><span class="ev-cell-val" id="v8-ev-price">$100</span></div>
+        <div class="ev-cell"><span class="ev-cell-label">Per seat</span><span class="ev-cell-val" id="v8-ev-price">$80</span></div>
       </div>
       <div class="event-desc">
         <p>Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic. Site address shared one week prior.</p>
@@ -2515,7 +2515,7 @@ h1, h2, h3, h4 {
           <div class="form-field">
             <label class="toggle-row" for="v8r-plus-one">
               <input type="checkbox" id="v8r-plus-one" onchange="updatePaymentTotal8()">
-              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v8-plus-one-price">+$100</span></span>
+              <span class="toggle-label">Bring a +1 <span class="toggle-price" id="v8-plus-one-price">+$80</span></span>
             </label>
             <div id="v8-plus-one-details-row" style="display:none;padding-left:1.5rem;margin-top:0.75rem">
               <div class="form-grid" style="margin-bottom:0.5rem">
@@ -2527,7 +2527,7 @@ h1, h2, h3, h4 {
           <div class="form-field">
             <label class="toggle-row" for="v8r-drinks">
               <input type="checkbox" id="v8r-drinks" onchange="updatePaymentTotal8()">
-              <span class="toggle-label">Add drink package <span class="toggle-price" id="v8-drinks-price">+$25 / person</span></span>
+              <span class="toggle-label">Add bottomless drinks (beer, wine &amp; cocktails) <span class="toggle-price" id="v8-drinks-price">+$20 / person</span></span>
             </label>
           </div>
         </div>
@@ -2560,8 +2560,8 @@ h1, h2, h3, h4 {
           <div class="payment-header">
             <span class="payment-label">Payment</span>
             <span>
-              <span class="payment-total" id="v8-payment-total">$100</span>
-              <span class="payment-total-sub" id="v8-payment-breakdown">1 guest &times; $100</span>
+              <span class="payment-total" id="v8-payment-total">$80</span>
+              <span class="payment-total-sub" id="v8-payment-breakdown">1 guest &times; $80</span>
             </span>
           </div>
           <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p>
@@ -3209,7 +3209,7 @@ const EDITIONS = {
     ]
   },
   '08': {
-    num:'08', eventDate:'2026-09-27', eventDateDisplay:'Sunday, September 27 · 2026', doors:'5:00 pm', price:'$100',
+    num:'08', eventDate:'2026-09-27', eventDateDisplay:'Sunday, September 27 · 2026', doors:'5:00 pm', price:'$80',
     name:'Nicole Ko', discipline:'Floral Artist', location:'Bushwick, Brooklyn',
     artistFlyer: 'images/artist-profiles/LTF-SITTING01-FLYER.PNG',
     instagram:[{url:'https://www.instagram.com/e_p_h_e_m_e_r_a/',handle:'@e_p_h_e_m_e_r_a'}],
@@ -4360,7 +4360,7 @@ function updateSeats8() {
 
 function updatePaymentTotal8() {
   const price = selectedEvent8 ? selectedEvent8.price_cents / 100 : 100;
-  const drinkPrice = 25;
+  const drinkPrice = 20;
   const plusOne = document.getElementById('v8r-plus-one')?.checked;
   const drinks = document.getElementById('v8r-drinks')?.checked;
   const numGuests = plusOne ? 2 : 1;
@@ -4508,8 +4508,8 @@ async function submitRSVP8() {
 
   // ── STRIPE PATH ──────────────────────────────────────────────
   try {
-    const price = selectedEvent8 ? selectedEvent8.price_cents : 10000;
-    const drinkPriceCents = 2500;
+    const price = selectedEvent8 ? selectedEvent8.price_cents : 8000;
+    const drinkPriceCents = 2000;
     const isHalfOff8 = activeCompCode8 && (activeCompCode8.discount_percent || 100) === 50;
     const unitPrice = isHalfOff8 ? Math.round(price * 0.5) : price;
     const checkoutRes = await fetch(`${FN_URL}/stripe-checkout`, {
