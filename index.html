@@ -648,6 +648,8 @@ tbody td.dim { color: var(--ink-low); font-size: 0.82rem; }
 .ed-archive-bio p { font-size: 1.05rem; line-height: 1.9; color: var(--ink-mid); margin-bottom: 1rem; }
 .ed-archive-bio p:last-child { margin-bottom: 0; }
 .ed-archive-menu { padding-top: 1.75rem; border-top: 1px solid var(--rule-mid); margin-bottom: 2rem; }
+details.menu-dropdown summary::-webkit-details-marker { display: none; }
+details.menu-dropdown[open] .menu-dropdown-arrow { transform: rotate(180deg); }
 .ed-archive-courses { display: grid; gap: 1.75rem; margin-top: 1.25rem; }
 .ed-course-num { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-low); display: block; margin-bottom: 6px; }
 .ed-course-name { font-family: 'Crimson Pro', serif; font-size: 1.1rem; color: var(--ink); margin: 0 0 4px; font-style: normal; }
@@ -2476,8 +2478,69 @@ h1, h2, h3, h4 {
         <div class="ev-cell"><span class="ev-cell-label">Per seat</span><span class="ev-cell-val" id="v8-ev-price">$80</span></div>
       </div>
       <div class="event-desc">
-        <p>Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic. Site address shared one week prior.</p>
+        <p>Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. Site address shared one week prior.</p>
       </div>
+
+      <details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+        <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
+          <span>Subject Notes</span>
+          <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+        </summary>
+        <div style="padding-bottom:1.75rem">
+          <div class="ed-archive-courses">
+            <div>
+              <p class="ed-course-body">Nicole Ko is a floral artist and the founder of Ephemera, a wedding floral design studio established in 2019. Nicole has been working with the floral medium since 2012, carefully refining a craft that lives within the intersection of fine art and living material.</p>
+            </div>
+            <div>
+              <p class="ed-course-body">Nicole grew up in the rural South. A place where nature was simply the world around her. Her move to NY only deepened that relationship. She was drawn to the botanic gardens, her eye fixed on the transitions of each season.</p>
+            </div>
+            <div>
+              <p class="ed-course-body">Ephemera, meaning transient, fleeting, and beautiful. Here one minute, gone the next. Today it is her life's work and she approaches every wedding with this sacred mindset. The flowers will not last, but the memories they enhance surely will.</p>
+            </div>
+            <div>
+              <p class="ed-course-body">Her work is known for its expressive use of line, its intuitive relationship with color, and an approach to floral design that feels less like arrangement and more like composition. She believes beauty is not a luxury but a need. Something essential. To her, beauty is food for the soul.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+        <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
+          <span>Findings (Menu)</span>
+          <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+        </summary>
+        <div style="padding-bottom:1.75rem">
+        <div class="ed-archive-courses">
+
+          <div>
+            <span class="ed-course-num">Course 01</span>
+            <p class="ed-course-name">Fried Green Tomatoes w/ Smoked Herring and Pumpkin Crema</p>
+            <p class="ed-course-body">Nicole's story began on the creekbeds of Georgia developing a deeply personal relationship with the world around her. The first course of this menu is an homage to this chapter of her life. Fried Green Tomatoes serve as a touchpoint for her early memories in Georgia. At 10 she was first exposed to Kiki's Delivery Service. Hayao Miyazaki's feminine protagonist pushed her to nurture her own creative ecosystem and continues to remind her to enjoy life and leave space for new creative ideas. In reference to this foundational inspiration, her fried green tomatoes are topped with a smoked herring and pumpkin crema, our take on Kiki's most difficult delivery.</p>
+          </div>
+
+          <div>
+            <span class="ed-course-num">Course 02</span>
+            <p class="ed-course-name">Dumplings 2 Ways</p>
+            <p class="ed-course-note">Chicken and Dumpling Gazpacho w/ Citrus Poulet Compos&eacute;&thinsp;&#9475;&thinsp;Fried Dumplings w/ Baby Corn and Chrysanthemum Leaves</p>
+            <p class="ed-course-body">When Nicole needs to think of family she makes Chicken and Dumplings. She was raised in a military family which meant constantly moving around. Our second course plays on this constant change, taking what is usually hot and making it cold, what is usually straightforward and creating something bold.<br><br>Chinese food can be found everywhere, but like so many cuisines it feels almost inherent to NY. There is no understanding Nicole's art without first understanding how NY has shaped her. A painter turned florist. NY carves a path for all those who call her home and our fried dumpling course pays tribute to this truth.</p>
+          </div>
+
+          <div>
+            <span class="ed-course-num">Course 03</span>
+            <p class="ed-course-name">Pasta al Nasturtium w/ Brown Butter, Morel Mushroom, and Green Apple</p>
+            <p class="ed-course-body">Ephemera means something that lasts only a short while. Flowers, pasta sauce emulsions, an event of this very nature. With Nicole, there is so much more than what meets the eye. Like a flower we only see what has budded thru the surface. Our final savory course tells this very story. A sauce simple in color, bursting with flavor. Eat it while it's hot, its truest form is fast fleeting.</p>
+          </div>
+
+          <div>
+            <span class="ed-course-num">Dessert</span>
+            <p class="ed-course-name">Chocolate Fire and Ice Cream</p>
+            <p class="ed-course-body">Our dessert is a glimpse into the future for Nicole. Her dream is to create a book that highlights not only her own work but the spectrum of emotions that flowers convey. Her art is intrinsically focused on pulling people into the present moment. Stunning arrangements that grant people permission to enjoy themselves and allow the beauty of the world to penetrate deep. Our dessert marries her love of chocolate with this momentous artistic responsibility. A play on all the senses, a grand finale for a subject whose work is so often the explosion of color that makes memories last forever.</p>
+          </div>
+
+        </div>
+        </div>
+      </details>
+
       <div id="v8-rsvp-toast" class="toast"></div>
       <div id="v8-rsvp-form-wrap">
         <div class="seats-wrap" style="margin-bottom:1.75rem">
@@ -3225,7 +3288,7 @@ const EDITIONS = {
       {
         course: 'Course 02',
         name: 'Dumplings 2 Ways',
-        note: 'Chicken and Dumpling Gazpacho w/ Citrus Poulet Composé ┃ Fried Dumplings w/ Chrysanthemum Leaves and Chinese Broccoli',
+        note: 'Chicken and Dumpling Gazpacho w/ Citrus Poulet Composé┃Fried Dumplings w/ Baby Corn and Chrysanthemum Leaves',
         body: 'When Nicole needs to think of family she makes Chicken and Dumplings. She was raised in a military family which meant constantly moving around. Our second course plays on this constant change, taking what is usually hot and making it cold, what is usually straightforward and creating something bold.\n\nChinese food can be found everywhere, but like so many cuisines it feels almost inherent to NY. There is no understanding Nicole\'s art without first understanding how NY has shaped her. A painter turned florist. NY carves a path for all those who call her home and our fried dumpling course pays tribute to this truth.'
       },
       {
@@ -4341,7 +4404,7 @@ function selectVol8Event(ev) {
   selectedEvent8 = ev;
   seatsTotal8 = ev.total_capacity || ev.max_capacity || 0;
   if (eventChanged8) seatsUsed8 = ev.seats_booked || 0;
-  const price = ev.price_cents ? ev.price_cents / 100 : 100;
+  const price = ev.price_cents ? ev.price_cents / 100 : 80;
   const priceEl = document.getElementById('v8-ev-price');
   if (priceEl) priceEl.textContent = '$' + price;
   const plusPriceEl = document.getElementById('v8-plus-one-price');
@@ -4359,7 +4422,7 @@ function updateSeats8() {
 }
 
 function updatePaymentTotal8() {
-  const price = selectedEvent8 ? selectedEvent8.price_cents / 100 : 100;
+  const price = selectedEvent8 ? selectedEvent8.price_cents / 100 : 80;
   const drinkPrice = 20;
   const plusOne = document.getElementById('v8r-plus-one')?.checked;
   const drinks = document.getElementById('v8r-drinks')?.checked;
