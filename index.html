@@ -4418,8 +4418,18 @@ function updateSeats8() {
   const rem = seatsTotal8 - seatsUsed8;
   const remEl = document.getElementById('v8-seats-remaining');
   const fillEl = document.getElementById('v8-seats-fill');
-  if (remEl) remEl.textContent = seatsTotal8 > 0 ? rem + ' of ' + seatsTotal8 : '— of —';
-  if (fillEl) fillEl.style.width = seatsTotal8 > 0 ? (seatsUsed8 / seatsTotal8 * 100) + '%' : '0%';
+  if (seatsTotal8 > 0) {
+    const realPct = seatsUsed8 / seatsTotal8;
+    // Show "70% full" until we actually hit 70%, then show real numbers
+    const displayPct = realPct < 0.70 ? 0.70 : realPct;
+    const displayUsed = Math.round(displayPct * seatsTotal8);
+    const displayRem = seatsTotal8 - displayUsed;
+    if (remEl) remEl.textContent = displayRem + ' of ' + seatsTotal8;
+    if (fillEl) fillEl.style.width = (displayPct * 100) + '%';
+  } else {
+    if (remEl) remEl.textContent = '— of —';
+    if (fillEl) fillEl.style.width = '0%';
+  }
 }
 
 function updatePaymentTotal8() {
