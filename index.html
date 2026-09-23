@@ -3806,7 +3806,7 @@ async function submitRSVP() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode.id, email);
+        await redeemCompCode(activeCompCode.id, email, activeCompCode.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
         if (document.getElementById('r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -3841,7 +3841,7 @@ async function submitRSVP() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode.id, email);
+        await redeemCompCode(activeCompCode.id, email, activeCompCode.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
         if (document.getElementById('r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -4252,11 +4252,12 @@ function clearCompDim() {
 
 async function lookupCompCode(code) {
   // Throws on network/Supabase error — let callers handle it
-  const data = await sbGet(`comp_codes?code=eq.${encodeURIComponent(code.toUpperCase())}&used=eq.false&select=id,code,event_id,discount_percent`);
+  const data = await sbGet(`comp_codes?code=eq.${encodeURIComponent(code.toUpperCase())}&used=eq.false&select=id,code,event_id,discount_percent,reusable`);
   return Array.isArray(data) && data.length > 0 ? data[0] : null;
 }
 
-async function redeemCompCode(codeId, email) {
+async function redeemCompCode(codeId, email, reusable = false) {
+  if (reusable) return; // reusable codes are never marked used
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/comp_codes?id=eq.${codeId}`, {
       method: 'PATCH',
@@ -4550,7 +4551,7 @@ async function submitRSVP8() {
   if (activeCompCode8 && (activeCompCode8.discount_percent || 100) === 100 && !plusOne) {
     try {
       await sbPost('guests', { event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status: 'comp' });
-      await redeemCompCode(activeCompCode8.id, email);
+      await redeemCompCode(activeCompCode8.id, email, activeCompCode8.reusable);
       await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime: '5:00 pm' });
       if (document.getElementById('v8r-notify')?.checked) {
         fetch(`${FN_URL}/add-to-list`, { method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'}, body: JSON.stringify({ first_name:first, last_name:last, email, phone, instagram, source:'rsvp-comp-vol8' }) }).catch(()=>{});
@@ -4583,7 +4584,7 @@ async function submitRSVP8() {
     if (!checkoutData.url) throw new Error(checkoutData.error || 'No checkout URL returned');
 
     await sbPost('guests', { event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name:`${first} ${last}`, email, phone, party_size: numGuests, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status:'pending', stripe_session_id: checkoutData.session_id || null });
-    if (activeCompCode8) await redeemCompCode(activeCompCode8.id, email).catch(() => {});
+    if (activeCompCode8) await redeemCompCode(activeCompCode8.id, email, activeCompCode8.reusable).catch(() => {});
     if (document.getElementById('v8r-notify')?.checked) {
       fetch(`${FN_URL}/add-to-list`, { method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'}, body: JSON.stringify({ first_name:first, last_name:last, email, phone, instagram, source:'rsvp-vol8' }) }).catch(()=>{});
     }
@@ -4729,7 +4730,7 @@ async function submitRSVP7() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode7.id, email);
+        await redeemCompCode(activeCompCode7.id, email, activeCompCode7.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -4763,7 +4764,7 @@ async function submitRSVP7() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode7.id, email);
+        await redeemCompCode(activeCompCode7.id, email, activeCompCode7.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -4897,7 +4898,7 @@ async function submitRSVP5() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode5.id, email);
+        await redeemCompCode(activeCompCode5.id, email, activeCompCode5.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
         if (document.getElementById('v5r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -4932,7 +4933,7 @@ async function submitRSVP5() {
           instagram,
           payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCode5.id, email);
+        await redeemCompCode(activeCompCode5.id, email, activeCompCode5.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
         if (document.getElementById('v5r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
@@ -5179,7 +5180,7 @@ async function submitRSVPMay() {
           full_name: `${first} ${last}`, email, phone, party_size: 1,
           dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp'
         });
-        await redeemCompCode(activeCompCodeMay.id, email);
+        await redeemCompCode(activeCompCodeMay.id, email, activeCompCodeMay.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
         if (document.getElementById('mayr-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol05' }) }).catch(() => {});
@@ -5201,7 +5202,7 @@ async function submitRSVPMay() {
       // Comp + paid +1
       try {
         await sbPost('guests', { event_id: selectedEventMay?.id, event_name: selectedEventMay?.name, full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp' });
-        await redeemCompCode(activeCompCodeMay.id, email);
+        await redeemCompCode(activeCompCodeMay.id, email, activeCompCodeMay.reusable);
         await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
         if (document.getElementById('mayr-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol05' }) }).catch(() => {});
