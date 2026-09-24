@@ -4427,9 +4427,13 @@ function updateSeats8() {
     if (fillEl) fillEl.style.width = '0%';
     return;
   }
-  // Floor: always display at least 70% full; once real > 70%, use real
+  // Floor: display at least 70% full; follow real once it exceeds 70%
   const floor = Math.max(seatsUsed8, Math.round(0.70 * seatsTotal8));
-  if (displayUsed8 < 0) {
+  const floorRem = seatsTotal8 - floor;
+  if (floorRem <= 3) {
+    // Floor itself is at or below 3 remaining — no countdown room, just hold at floor
+    displayUsed8 = floor;
+  } else if (displayUsed8 < 0) {
     // First load — start at floor
     displayUsed8 = floor;
   } else {
@@ -4462,21 +4466,23 @@ function updatePaymentTotal8() {
     const compNotice = document.getElementById('v8-comp-notice');
     const payBlock = document.getElementById('v8-payment-block-wrap');
     const submitBtn = document.getElementById('v8-rsvp-submit-btn');
-    const isHalfOff8 = (activeCompCode8.discount_percent || 100) === 50;
-    if (!isHalfOff8 && !plusOne && !drinks) {
+    const discPct8u = activeCompCode8.discount_percent || 100;
+    const isFullComp8u = discPct8u === 100;
+    if (isFullComp8u && !plusOne && !drinks) {
       if (compNotice) compNotice.style.display = 'block';
       if (payBlock) payBlock.style.display = 'none';
       if (submitBtn) submitBtn.textContent = 'confirm your seat →';
       return;
     }
-    const baseTotal = plusOne ? (isHalfOff8 ? Math.round(price * 0.5) + price : price) : (isHalfOff8 ? Math.round(price * 0.5) : 0);
+    const discountedPrice8 = isFullComp8u ? 0 : Math.round(price * (1 - discPct8u / 100));
+    const baseTotal = (isFullComp8u ? 0 : discountedPrice8) + (plusOne ? price : 0);
     const total = baseTotal + drinkTotal;
     const totEl = document.getElementById('v8-payment-total');
     const brkEl = document.getElementById('v8-payment-breakdown');
     if (totEl) totEl.textContent = '$' + total;
     const brkParts = [];
-    if (isHalfOff8) brkParts.push(plusOne ? '50% off + +1 \xd7 $' + price : '50% off \xd7 $' + price);
-    else if (plusOne) brkParts.push('+1 \xd7 $' + price);
+    if (!isFullComp8u) brkParts.push('1 ticket \xd7 $' + discountedPrice8 + ' (' + discPct8u + '% off)');
+    if (plusOne) brkParts.push('+1 \xd7 $' + price);
     if (drinks) brkParts.push('drinks \xd7 ' + numGuests + ' \xd7 $' + drinkPrice);
     if (brkEl) brkEl.textContent = brkParts.join(' + ');
     if (payBlock) payBlock.style.display = 'block';
@@ -4503,12 +4509,13 @@ async function checkGate8() {
     if (comp) {
       activeCompCode8 = comp;
       applyCompDim(comp.event_id);
-      const isHalfOff8 = (comp.discount_percent || 100) === 50;
+      const discPct8 = comp.discount_percent || 100;
+      const isFullComp8 = discPct8 === 100;
       document.getElementById('v8-comp-code-wrap').innerHTML =
-        `<div class="gate-success-banner"><div><div class="gsb-label">✓ ${isHalfOff8 ? '50% discount applied' : 'Comp code applied'}</div><div class="gsb-msg">${isHalfOff8 ? 'Half-off applied — updated total below.' : 'Your ticket is complimentary — no payment needed.'}</div></div><span class="gsb-remove" onclick="clearCompCode8()">remove</span></div>`;
-      document.getElementById('v8-comp-notice').style.display = isHalfOff8 ? 'none' : 'block';
-      document.getElementById('v8-payment-block-wrap').style.display = isHalfOff8 ? '' : 'none';
-      document.getElementById('v8-rsvp-submit-btn').textContent = isHalfOff8 ? 'continue to payment →' : 'confirm your seat →';
+        `<div class="gate-success-banner"><div><div class="gsb-label">✓ ${isFullComp8 ? 'Comp code applied' : discPct8 + '% discount applied'}</div><div class="gsb-msg">${isFullComp8 ? 'Your ticket is complimentary — no payment needed.' : discPct8 + '% off applied — updated total below.'}</div></div><span class="gsb-remove" onclick="clearCompCode8()">remove</span></div>`;
+      document.getElementById('v8-comp-notice').style.display = isFullComp8 ? 'block' : 'none';
+      document.getElementById('v8-payment-block-wrap').style.display = isFullComp8 ? 'none' : '';
+      document.getElementById('v8-rsvp-submit-btn').textContent = isFullComp8 ? 'confirm your seat →' : 'continue to payment →';
       updatePaymentTotal8();
     } else {
       showGateError('v8-gate-error', 'v8-gate-password', 'v8-gate-apply-btn', 'That code wasn’t found or has already been used. Double-check and try again.');
@@ -4597,8 +4604,8 @@ async function submitRSVP8() {
   try {
     const price = selectedEvent8 ? selectedEvent8.price_cents : 8000;
     const drinkPriceCents = 2000;
-    const isHalfOff8 = activeCompCode8 && (activeCompCode8.discount_percent || 100) === 50;
-    const unitPrice = isHalfOff8 ? Math.round(price * 0.5) : price;
+    const discPct8s = activeCompCode8 ? (activeCompCode8.discount_percent || 100) : 0;
+    const unitPrice = discPct8s > 0 ? Math.round(price * (1 - discPct8s / 100)) : price;
     const checkoutRes = await fetch(`${FN_URL}/stripe-checkout`, {
       method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'},
       body: JSON.stringify({ eventId: v8evId, eventName: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime:'5:00 pm', fullName:`${first} ${last}`, email, phone, partySize: numGuests, plusOne: plusOne || false, unitPrice: unitPrice, drinkAddon: drinks || false, drinkAddonPlusOne: (drinks && plusOne) || false, drinkPrice: drinkPriceCents, source })
