@@ -4290,6 +4290,7 @@ let selectedEvent5 = null, seatsTotal5 = 0, seatsUsed5 = 0;
 // ── VOL. 07 (AUG) STATE ─────────────────────────────────────────
 let selectedEvent7 = null, seatsTotal7 = 75, seatsUsed7 = 0;
 let selectedEvent8 = null, seatsTotal8 = 75, seatsUsed8 = 0, activeCompCode8 = null;
+let displayUsed8 = -1, prevSeatsUsed8 = 0; // seat counter display state
 
 // ── VOL. 05 (MAY) STATE ─────────────────────────────────────────
 let selectedEventMay = null, seatsTotalMay = 0, seatsUsedMay = 0, activeCompCodeMay = null;
@@ -4419,21 +4420,29 @@ function selectVol8Event(ev) {
 }
 
 function updateSeats8() {
-  const rem = seatsTotal8 - seatsUsed8;
   const remEl = document.getElementById('v8-seats-remaining');
   const fillEl = document.getElementById('v8-seats-fill');
-  if (seatsTotal8 > 0) {
-    const realPct = seatsUsed8 / seatsTotal8;
-    // Show "70% full" until we actually hit 70%, then show real numbers
-    const displayPct = realPct < 0.70 ? 0.70 : realPct;
-    const displayUsed = Math.round(displayPct * seatsTotal8);
-    const displayRem = seatsTotal8 - displayUsed;
-    if (remEl) remEl.textContent = displayRem + ' of ' + seatsTotal8;
-    if (fillEl) fillEl.style.width = (displayPct * 100) + '%';
-  } else {
+  if (seatsTotal8 <= 0) {
     if (remEl) remEl.textContent = '— of —';
     if (fillEl) fillEl.style.width = '0%';
+    return;
   }
+  // Floor: always display at least 70% full; once real > 70%, use real
+  const floor = Math.max(seatsUsed8, Math.round(0.70 * seatsTotal8));
+  if (displayUsed8 < 0) {
+    // First load — start at floor
+    displayUsed8 = floor;
+  } else {
+    // Count down display by the same amount as real purchases
+    const delta = seatsUsed8 - prevSeatsUsed8;
+    if (delta > 0) displayUsed8 += delta;
+    // Once display remaining hits 3, snap back to floor
+    if (seatsTotal8 - displayUsed8 <= 3) displayUsed8 = floor;
+  }
+  prevSeatsUsed8 = seatsUsed8;
+  const displayRem = seatsTotal8 - displayUsed8;
+  if (remEl) remEl.textContent = displayRem + ' of ' + seatsTotal8;
+  if (fillEl) fillEl.style.width = (displayUsed8 / seatsTotal8 * 100) + '%';
 }
 
 function updatePaymentTotal8() {
