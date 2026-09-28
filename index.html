@@ -1915,7 +1915,7 @@ h1, h2, h3, h4 {
       Bushwick, Brooklyn<br>
       Doors 5:00 pm &middot; $80 / seat
     </div>
-    <button class="popup-cta" onclick="closePopup(); openPanel('current')">Claim your seat &rarr;</button>
+    <button class="popup-cta" onclick="closePopup(); openDrawer('08')">View in archive &rarr;</button>
   </div>
 </div>
 
@@ -2465,7 +2465,7 @@ h1, h2, h3, h4 {
         <span class="ev-date">Sunday, September 27 &middot; 2026</span>
         <h2>Nicole Ko</h2>
         <p class="ev-discipline"><em>Ephemera</em> &nbsp;&middot;&nbsp; Floral Artist</p>
-        <p class="ev-location-ref">Site: Bushwick, Brooklyn</p>
+        <p class="ev-location-ref">Site: 13 Grattan St, Suite 406, Brooklyn</p>
         <div class="ed-ig-links" style="margin-top:0.6rem">
           <a href="https://www.instagram.com/e_p_h_e_m_e_r_a/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@e_p_h_e_m_e_r_a</a>
         </div>
@@ -2478,7 +2478,7 @@ h1, h2, h3, h4 {
         <div class="ev-cell"><span class="ev-cell-label">Per seat</span><span class="ev-cell-val" id="v8-ev-price">$80</span></div>
       </div>
       <div class="event-desc">
-        <p>Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. Site address shared one week prior.</p>
+        <p>Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. 13 Grattan St, Suite 406, Brooklyn.</p>
       </div>
 
       <div style="margin:1.75rem 0;line-height:0">
@@ -2650,7 +2650,7 @@ h1, h2, h3, h4 {
           <div class="conf-detail"><span class="conf-detail-label">Sitting</span><span class="conf-detail-val">01 &middot; Nicole Ko (Ephemera)</span></div>
           <div class="conf-detail"><span class="conf-detail-label">Date</span><span class="conf-detail-val">Sunday, September 27</span></div>
           <div class="conf-detail"><span class="conf-detail-label">Doors</span><span class="conf-detail-val">5:00 pm</span></div>
-          <div class="conf-detail"><span class="conf-detail-label">Site</span><span class="conf-detail-val">Bushwick, Brooklyn (address to follow)</span></div>
+          <div class="conf-detail"><span class="conf-detail-label">Site</span><span class="conf-detail-val">13 Grattan St, Suite 406, Brooklyn</span></div>
         </div>
         <div class="confirmation-note">Questions? Reach us at <a href="mailto:info@lifethrufood.com" style="color:var(--olive)">info@lifethrufood.com</a>.</div>
       </div>
@@ -3160,10 +3160,10 @@ h1, h2, h3, h4 {
         <div style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-low);margin-top:0.35rem">8 Volumes &middot; Active Since 2025</div>
       </div>
 
-      <div class="arc-vol-row arc-upcoming" onclick="closeDrawer(); openPanel('current')">
+      <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('08')">
         <div class="arc-vnum">VOL. 008</div>
         <div><div class="arc-vname">Nicole Ko</div><div class="arc-vsub">Ephemera &middot; Floral Artist &middot; Bushwick</div></div>
-        <div class="arc-vright">Sep 27, 2026<span class="arc-vstatus arc-upc">UPCOMING</span></div>
+        <div class="arc-vright">Sep 27, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
       </div>
 
       <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('07')">
@@ -3277,7 +3277,7 @@ const EDITIONS = {
   },
   '08': {
     num:'08', eventDate:'2026-09-27', eventDateDisplay:'Sunday, September 27 · 2026', doors:'5:00 pm', price:'$80',
-    name:'Nicole Ko', discipline:'Floral Artist', location:'Bushwick, Brooklyn',
+    name:'Nicole Ko', discipline:'Floral Artist', location:'13 Grattan St, Suite 406, Brooklyn',
     artistFlyer: 'images/artist-profiles/LTF-SITTING01-FLYER.PNG',
     instagram:[{url:'https://www.instagram.com/e_p_h_e_m_e_r_a/',handle:'@e_p_h_e_m_e_r_a'}],
     desc:'Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic.',
@@ -6133,7 +6133,7 @@ function initMap() {
   L.control.zoom({ position: 'bottomright' }).addTo(ltfMap);
 
   const EVENT_PINS = [
-    { num:'08', lat:40.6949, lng:-73.9213, upcoming:true },
+    { num:'08', lat:40.6949, lng:-73.9213 },
     { num:'07', lat:40.7151, lng:-73.9601, upcoming:false },
     { num:'06', lat:40.6747, lng:-74.0052, upcoming:false },
     { num:'05', lat:40.7264, lng:-73.9818, upcoming:false },
@@ -6278,15 +6278,8 @@ function closePopup() {
   if (a) a.classList.remove('visible');
 }
 
-setTimeout(function() {
-  var p = document.getElementById('rsvp-popup');
-  var a = document.getElementById('popup-annot');
-  if (!p) return;
-  requestAnimationFrame(function() { requestAnimationFrame(function() {
-    p.classList.add('visible');
-    if (a) a.classList.add('visible');
-  }); });
-}, 5000);
+// Popup disabled — no upcoming event. Re-enable when next Sitting is announced.
+// setTimeout(function() { ... }, 5000);
 
 // ── Legacy compatibility ─────────────────────────────────────────
 function showTab(tab, btn) {
