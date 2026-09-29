@@ -3161,7 +3161,7 @@ h1, h2, h3, h4 {
       </div>
 
       <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('08')">
-        <div class="arc-vnum">VOL. 008</div>
+        <div class="arc-vnum">Sitting No. 1</div>
         <div><div class="arc-vname">Nicole Ko</div><div class="arc-vsub">Ephemera &middot; Floral Artist &middot; Bushwick</div></div>
         <div class="arc-vright">Sep 27, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
       </div>
@@ -5740,7 +5740,7 @@ function renderContent(volFilter) {
       html += `<div class="ed-num">${ed.num}</div>`;
     }
     html += `<div class="ed-info" style="flex:1">
-        <div class="ed-vol">${ed.num === '08' ? 'Sitting 01' : 'Vol. ' + ed.num}</div>
+        <div class="ed-vol">${ed.num === '08' ? 'Sitting No. 1' : 'Vol. ' + ed.num}</div>
         <div class="ed-artist">${ed.name || 'TBA'}</div>
         ${ed.discipline ? `<div class="ed-discipline">${ed.discipline}${ed.location ? ' &middot; ' + ed.location : ''}</div>` : (ed.location ? `<div class="ed-discipline">${ed.location}</div>` : '')}
         ${ed.eventDateDisplay ? `<div class="ed-location" style="margin-top:4px">${ed.eventDateDisplay}</div>` : ''}
@@ -5783,21 +5783,31 @@ function renderContent(volFilter) {
     if (ed.desc || ed.bio || ed.menu) {
       if (ed.desc) html += `<p class="ed-archive-desc">${ed.desc}</p>`;
       if (ed.bio && ed.bio.length) {
-        html += `<div class="ed-archive-bio" id="sec-bio"><span class="ed-archive-section-label">Guest Profile — ${ed.name}</span>`;
-        ed.bio.forEach(p => { html += `<p>${p}</p>`; });
-        html += `</div>`;
+        html += `<details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+          <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
+            <span>Subject Notes</span>
+            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+          </summary>
+          <div style="padding-bottom:1.75rem"><div class="ed-archive-courses">`;
+        ed.bio.forEach(p => { html += `<div><p class="ed-course-body">${p}</p></div>`; });
+        html += `</div></div></details>`;
       }
       if (ed.menu && ed.menu.length) {
-        html += `<div class="ed-archive-menu" id="sec-menu"><span class="ed-archive-section-label">The Menu</span><div class="ed-archive-courses">`;
+        html += `<details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+          <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
+            <span>Findings (Menu)</span>
+            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+          </summary>
+          <div style="padding-bottom:1.75rem"><div class="ed-archive-courses">`;
         ed.menu.forEach(item => {
           html += `<div>`;
           if (item.course) html += `<span class="ed-course-num">${item.course}</span>`;
           html += `<p class="ed-course-name">${item.name}</p>`;
           if (item.note) html += `<p class="ed-course-note" style="font-style:normal;color:var(--ink-mid);font-size:0.92rem;margin:0.15rem 0 0.4rem;">${item.note}</p>`;
-          if (item.body) html += `<p class="ed-course-body">${item.body}</p>`;
+          if (item.body) html += `<p class="ed-course-body">${item.body.replace(/\n/g,'<br>')}</p>`;
           html += `</div>`;
         });
-        html += `</div></div>`;
+        html += `</div></div></details>`;
       }
     }
 
@@ -6159,7 +6169,7 @@ function initMap() {
 
     var descText = ed.desc || '';
     var descTrimmed = descText.length > 130 ? descText.slice(0, 127) + '&hellip;' : descText;
-    var volLabel = p.num === '08' ? 'Sitting 01' : ('VOL. ' + p.num);
+    var volLabel = p.num === '08' ? 'Sitting No. 1' : ('VOL. ' + p.num);
     const ttHtml = '<div class="pt-vol">' + volLabel + (p.upcoming ? ' &nbsp;&middot;&nbsp; Upcoming' : '') + '</div>' +
       '<div class="pt-name">' + (ed.name || '') + '</div>' +
       (ed.discipline ? '<div class="pt-disc">' + ed.discipline + '</div>' : '') +
