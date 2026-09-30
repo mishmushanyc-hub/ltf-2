@@ -1922,7 +1922,7 @@ h1, h2, h3, h4 {
   <!-- RSVP PANEL -->
   <div id="tab-current" class="section">
   <div class="panel-hd">
-    <div class="panel-hd-title">Sitting 01 &nbsp;&middot;&nbsp; Nicole Ko</div>
+    <div class="panel-hd-title">Upcoming</div>
     <button class="panel-close" onclick="closePanel('current')" aria-label="Close">&times;</button>
   </div>
   <div class="panel-body">
@@ -2458,7 +2458,16 @@ h1, h2, h3, h4 {
     </div>
 
     <!-- VOL. 08 — NICOLE KO / EPHEMERA — SITTING 01 -->
-    <div class="event-block" id="event-block-8" style="margin-top:2rem">
+    <div id="no-upcoming-events" style="display:none;padding:3rem 0 2rem;text-align:left">
+      <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1.25rem">Next Sitting</p>
+      <p style="font-family:'Georgia',serif;font-size:1.05rem;color:var(--ink);line-height:1.75;margin:0 0 2rem">Nothing on the calendar yet. Follow us on Instagram for the announcement.</p>
+      <a href="https://www.instagram.com/lifethrufood/" target="_blank" rel="noopener" class="btn-ghost" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        @lifethrufood
+      </a>
+    </div>
+
+    <div class="event-block" id="event-block-8" style="display:none;margin-top:2rem">
       <div class="event-masthead">
         <div class="event-masthead-body">
         <span class="ev-no">Sitting 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
@@ -3279,6 +3288,7 @@ const EDITIONS = {
     num:'08', eventDate:'2026-09-27', eventDateDisplay:'Sunday, September 27 · 2026', doors:'5:00 pm', price:'$80',
     name:'Nicole Ko', discipline:'Floral Artist', location:'13 Grattan St, Suite 406, Brooklyn',
     artistFlyer: 'images/artist-profiles/LTF-SITTING01-FLYER.PNG',
+    artistPhoto: 'images/artist-profiles/Artist Photos/Nicole.jpg',
     instagram:[{url:'https://www.instagram.com/e_p_h_e_m_e_r_a/',handle:'@e_p_h_e_m_e_r_a'}],
     desc:'Sitting 01 centers on Nicole Ko, the floral artist behind Ephemera. Her practice is built on impermanence: arrangements made to be experienced once, then released. The menu follows that same logic.',
     bio:['Nicole Ko is a floral artist and the founder of Ephemera, a wedding floral design studio established in 2019. Nicole has been working with the floral medium since 2012, carefully refining a craft that lives within the intersection of fine art and living material.','Nicole grew up in the rural South. A place where nature was simply the world around her. Her move to NY only deepened that relationship. She was drawn to the botanic gardens, her eye fixed on the transitions of each season.','Ephemera, meaning transient, fleeting, and beautiful. Here one minute, gone the next. Today it is her life\'s work and she approaches every wedding with this sacred mindset. The flowers will not last, but the memories they enhance surely will.','Her work is known for its expressive use of line, its intuitive relationship with color, and an approach to floral design that feels less like arrangement and more like composition. She believes beauty is not a luxury but a need. Something essential. To her, beauty is food for the soul.'],
@@ -3444,10 +3454,23 @@ async function loadEvents() {
 
     // Vol. 08 block (Sep 27) — wire up seat counter if event exists in DB
     const vol8Ev = activeEvents.find(e => dateStr(e) >= '2026-09-01');
+    const block8 = document.getElementById('event-block-8');
+    const noUpcoming = document.getElementById('no-upcoming-events');
     if (vol8Ev) {
+      if (block8) block8.style.display = '';
+      if (noUpcoming) noUpcoming.style.display = 'none';
       selectVol8Event(vol8Ev);
       refreshSeatCount(vol8Ev, 'vol8');
     } else {
+      if (block8) block8.style.display = 'none';
+      // Show no-upcoming placeholder if no active event blocks are visible
+      const anyActive = !!(
+        activeEvents.find(e => dateStr(e) < '2026-05-01') ||
+        activeEvents.find(e => dateStr(e) >= '2026-05-01' && dateStr(e) < '2026-06-01') ||
+        activeEvents.find(e => dateStr(e) >= '2026-06-01' && dateStr(e) < '2026-08-01') ||
+        activeEvents.find(e => dateStr(e) >= '2026-08-01' && dateStr(e) < '2026-09-01')
+      );
+      if (noUpcoming) noUpcoming.style.display = anyActive ? 'none' : '';
       if (!seatsTotal8) seatsTotal8 = 75;
       updateSeats8();
     }
