@@ -1872,8 +1872,11 @@ h1, h2, h3, h4 {
 
   <!-- Landing copy overlay -->
   <div id="landing-copy">
-    <p><strong>LIFE THRU FOOD</strong> is a cultural programming, hospitality &amp; media company.</p>
-    <p>We translate human stories into immersive dining experiences.</p>
+    <p><strong>LIFE THRU FOOD</strong> is a dinner series and creative platform that translates human stories into immersive experiences.</p>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem">
+      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">submit an artist &rarr;</button>
+      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event inquiry &rarr;</button>
+    </div>
   </div>
 
 <!-- Hand-drawn notebook annotation pointing to popup -->
@@ -2722,7 +2725,7 @@ h1, h2, h3, h4 {
         <p class="about-body" style="margin:0 0 1.5rem">Know someone whose story should be told through food? Looking to host a private Sitting? We want to hear it.</p>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
           <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">submit an artist &rarr;</button>
-          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event inquiry &rarr;</button>
         </div>
       </div>
     </div>
