@@ -2717,6 +2717,14 @@ h1, h2, h3, h4 {
       <div class="about-heading">About</div>
       <p class="about-body">Life Thru Food is a monthly dinner series in New York City. Each Sitting is built around a Subject: someone whose background, culture, and creative life shapes every course.</p>
       <p class="about-body" style="margin-top:0.75rem">Food is not the subject of the story. It is how we communicate it.</p>
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+        <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 0.75rem">Get Involved</p>
+        <p class="about-body" style="margin:0 0 1.5rem">Know someone whose story should be told through food? Looking to host a private Sitting? We want to hear it.</p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">submit an artist &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event &rarr;</button>
+        </div>
+      </div>
     </div>
     <div class="team-intro">
       <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
