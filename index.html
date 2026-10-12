@@ -971,7 +971,22 @@ footer {
   margin-top: 3px;
   transition: color 0.2s;
 }
-.sn-nav { display: flex; }
+.sn-nav { display: flex; align-items: stretch; gap: 0; }
+.sn-group { display: flex; align-items: stretch; }
+.sn-group-label {
+  display: flex;
+  align-items: center;
+  padding: 0 0.6rem 0 1rem;
+  font-family: 'Crimson Pro', serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  opacity: 0.5;
+  white-space: nowrap;
+  border-left: 1px solid var(--rule-mid);
+}
+.sn-group:first-child .sn-group-label { border-left: none; padding-left: 0; }
 .sn-btn {
   background: none;
   border: none;
@@ -1304,7 +1319,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Other sections: slide-in panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+#tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
@@ -1322,7 +1337,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
   padding: 0 !important;
 }
-#tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
+#tab-current.open, #tab-sessions.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
   transform: translateX(0);
 }
 #tab-sponsor {
@@ -1333,7 +1348,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Editorial grid overlay on all panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
+#tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
   background-image:
     repeating-linear-gradient(
       rgba(68,51,42,0.06) 0px, rgba(68,51,42,0.06) 1px,
@@ -1766,7 +1781,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 /* Mobile */
 @media (max-width: 600px) {
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
-  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
+  #tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
 
   /* Nav: hide wordmark text, show Black Peter only */
@@ -1774,7 +1789,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   .sn-logo { height: 44px; margin-right: 0; }
 
   /* Panels: start below the nav so the X button is never hidden */
-  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+  #tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
     top: 54px !important;
     height: calc(100% - 54px) !important;
   }
@@ -1855,10 +1870,17 @@ h1, h2, h3, h4 {
     </div>
   </div>
   <div class="sn-nav">
-    <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
-    <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Upcoming Events</button>
-    <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Sponsors</button>
-    <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate')">Participate</button>
+    <div class="sn-group">
+      <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Sittings</button>
+      <button class="sn-btn" id="sn-btn-sessions" onclick="openPanel('sessions')">Sessions</button>
+      <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
+    </div>
+    <div class="sn-group">
+      <span class="sn-group-label">Work with us</span>
+      <button class="sn-btn" id="sn-btn-private" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">Private event</button>
+      <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Brand</button>
+      <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">Submit an artist</button>
+    </div>
     <button class="sn-btn" id="nav-admin-btn" onclick="openPanel('admin')" style="opacity:0;pointer-events:none;width:0;overflow:hidden;padding:0">Records</button>
   </div>
 </div>
@@ -2707,6 +2729,84 @@ h1, h2, h3, h4 {
   </div>
   </div><!-- panel-body -->
   </div><!-- tab-current -->
+
+  <!-- SESSIONS PANEL -->
+  <div id="tab-sessions" class="section">
+  <div class="panel-hd">
+    <div class="panel-hd-title">LTF Sessions</div>
+    <button class="panel-close" onclick="closePanel('sessions')" aria-label="Close">&times;</button>
+  </div>
+  <div class="panel-body">
+  <div class="panel-inner-content">
+
+    <div class="event-block" style="margin-top:2rem">
+      <div class="event-masthead">
+        <div class="event-masthead-body">
+        <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
+        <span class="ev-date">Sunday, November 15 &middot; Doors at 3pm</span>
+        <h2>Friendsgiving</h2>
+        <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Invite only &nbsp;&middot;&nbsp; New York City</p>
+        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:1rem;max-width:520px">Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.</p>
+        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:0.75rem;max-width:520px">Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.</p>
+        </div>
+      </div>
+
+      <div style="margin:2rem 0;padding:1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+        <p style="font-family:'Crimson Pro',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1rem">At the table</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem">
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A family style meal, cooked by our kitchen</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet creatives to collaborate with</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet the brands we work with</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">The company of creative leaders, influencers and tastemakers</p>
+        </div>
+        <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask — Show up, look good, and enjoy yourself and the company we curate.</p>
+      </div>
+
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+        <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+          <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
+          <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
+        </div>
+
+        <!-- Step 1: Code gate -->
+        <div id="sessions-gate">
+          <p class="form-title">Enter your invitation code</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">You should have received a one-time code with your invitation.</p>
+          <div id="v8-comp-code-wrap" style="margin-bottom:0;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+            <div class="gate-row">
+              <input type="text" id="sess-code-input" placeholder="enter code" autocomplete="off" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')checkSessionCode()">
+              <button class="btn-ghost" id="sess-code-apply-btn" onclick="checkSessionCode()">confirm &rarr;</button>
+            </div>
+            <div id="sess-code-error" class="gate-error"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: RSVP form (shown after valid code) -->
+        <div id="sessions-form-wrap" style="display:none;margin-top:1.5rem">
+          <p class="form-title">Confirm your seat</p>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-first">First name</label><input type="text" id="sess-first" placeholder="First"></div>
+            <div class="form-field"><label for="sess-last">Last name</label><input type="text" id="sess-last" placeholder="Last"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-email">Email</label><input type="email" id="sess-email" placeholder="you@example.com"></div>
+            <div class="form-field"><label for="sess-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="sess-phone" placeholder="+1 212 555 0100"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
+            <div class="form-field"><label for="sess-source">How did you find us?</label>
+              <select id="sess-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
+            </div>
+          </div>
+          <div id="sessions-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+          <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsRSVP()">RSVP</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div><!-- panel-body -->
+  </div><!-- tab-sessions -->
 
   <!-- ABOUT PANEL -->
   <div id="tab-about" class="section">
@@ -6121,7 +6221,7 @@ renderLandingGallery();
   // Attach observer to newly rendered .sr elements after tab switch
   const reObserve = () => { document.querySelectorAll('.sr:not(.visible)').forEach(el => obs.observe(el)); };
   // Re-observe on panel open events — triggered via MutationObserver on .open class changes
-  const panelEls = document.querySelectorAll('#tab-current,#tab-about,#tab-participate,#tab-admin,#archive-drawer');
+  const panelEls = document.querySelectorAll('#tab-current,#tab-sessions,#tab-about,#tab-participate,#tab-admin,#archive-drawer');
   panelEls.forEach(el => { const obs2 = new MutationObserver(() => setTimeout(reObserve,100)); obs2.observe(el,{attributes:true,attributeFilter:['class']}); });
 })();
 
@@ -6255,7 +6355,7 @@ function initMap() {
 // ── Panel control ────────────────────────────────────────────────
 function openPanel(id) {
   closeDrawer(false);
-  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
+  ['current','sessions','about','participate','admin','sponsor'].forEach(function(pid) {
     if (pid !== id) { var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open'); }
   });
   var el = document.getElementById('tab-' + id);
@@ -6272,7 +6372,7 @@ function closePanel(id) {
   var el = document.getElementById('tab-' + id);
   if (el) el.classList.remove('open');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
+  var anyOpen = ['current','sessions','about','participate','admin','sponsor'].some(function(pid) {
     var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
   });
   if (!anyOpen && !document.getElementById('archive-drawer').classList.contains('open')) {
@@ -6281,12 +6381,69 @@ function closePanel(id) {
 }
 
 function closeAllPanels() {
-  ['current','about','participate','admin'].forEach(function(pid) {
+  ['current','sessions','about','participate','admin','sponsor'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
   });
   closeDrawer(false);
   document.getElementById('panel-overlay').classList.remove('visible');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+}
+
+let activeSessionCode = null;
+
+async function checkSessionCode() {
+  const raw = document.getElementById('sess-code-input').value.trim().toUpperCase();
+  const errEl = document.getElementById('sess-code-error');
+  const btn = document.getElementById('sess-code-apply-btn');
+  errEl.textContent = '';
+  if (!raw) { errEl.textContent = 'Please enter your invitation code.'; return; }
+  btn.disabled = true; btn.textContent = 'checking…';
+  try {
+    const rows = await sbGet(`session_codes?code=eq.${encodeURIComponent(raw)}&session_id=eq.sessions-01&select=code,used`);
+    if (!rows || rows.length === 0) {
+      errEl.textContent = 'Code not recognised. Check your invitation and try again.';
+    } else if (rows[0].used) {
+      errEl.textContent = 'This code has already been used.';
+    } else {
+      activeSessionCode = raw;
+      document.getElementById('sessions-gate').style.display = 'none';
+      document.getElementById('sessions-form-wrap').style.display = '';
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again.';
+  }
+  btn.disabled = false; btn.textContent = 'confirm →';
+}
+
+async function submitSessionsRSVP() {
+  const first = document.getElementById('sess-first').value.trim();
+  const last  = document.getElementById('sess-last').value.trim();
+  const email = document.getElementById('sess-email').value.trim();
+  const phone = document.getElementById('sess-phone').value.trim();
+  const ig    = document.getElementById('sess-instagram').value.trim();
+  const src   = document.getElementById('sess-source').value;
+  const errEl = document.getElementById('sessions-inline-error');
+  errEl.style.display = 'none';
+  if (!first || !last || !email) {
+    errEl.textContent = 'Please fill in your name and email.';
+    errEl.style.display = '';
+    return;
+  }
+  try {
+    // Save the RSVP
+    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` });
+    // Mark code as used
+    await fetch(`${SUPABASE_URL}/rest/v1/session_codes?code=eq.${encodeURIComponent(activeSessionCode)}`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
+    });
+    document.getElementById('sessions-form-wrap').style.display = 'none';
+    document.getElementById('sessions-success').style.display = '';
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
+    errEl.style.display = '';
+  }
 }
 
 // ── Archive drawer control ───────────────────────────────────────
