@@ -1311,7 +1311,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Other sections: slide-in panels */
-#tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
@@ -1329,7 +1329,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
   padding: 0 !important;
 }
-#tab-current.open, #tab-sessions.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
+#tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
   transform: translateX(0);
 }
 #tab-sponsor {
@@ -1340,7 +1340,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Editorial grid overlay on all panels */
-#tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
+#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
   background-image:
     repeating-linear-gradient(
       rgba(68,51,42,0.06) 0px, rgba(68,51,42,0.06) 1px,
@@ -1790,7 +1790,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 /* Mobile */
 @media (max-width: 600px) {
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
-  #tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
+  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
 
   /* Nav: hide wordmark text, show Black Peter only */
@@ -1798,7 +1798,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   .sn-logo { height: 44px; margin-right: 0; }
 
   /* Panels: start below the nav so the X button is never hidden */
-  #tab-current, #tab-sessions, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
     top: 54px !important;
     height: calc(100% - 54px) !important;
   }
@@ -1864,6 +1864,18 @@ h1, h2, h3, h4 {
 .payment-total,
 .sp-admin h3 {
   letter-spacing: 0.01em;
+}
+
+/* ── EVENT SECTION LABELS ── */
+.events-section-label {
+  font-family: 'Crimson Pro', serif;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule-mid);
+  margin-bottom: 1.5rem;
 }
 
 /* ── ENTRY GATE ── */
@@ -1978,13 +1990,12 @@ h1, h2, h3, h4 {
     </div>
   </div>
   <div class="sn-nav">
-    <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Sittings</button>
-    <button class="sn-btn" id="sn-btn-sessions" onclick="openPanel('sessions')">Sessions</button>
+    <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Events</button>
     <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
     <span class="sn-divider"></span>
-    <button class="sn-btn" id="sn-btn-private" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">Private event</button>
+    <button class="sn-btn" id="sn-btn-private" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">Private event</button>
     <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Brand</button>
-    <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">Submit an artist</button>
+    <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">Submit an artist</button>
     <button class="sn-btn" id="nav-admin-btn" onclick="openPanel('admin')" style="opacity:0;pointer-events:none;width:0;overflow:hidden;padding:0">Records</button>
   </div>
 </div>
@@ -2000,8 +2011,8 @@ h1, h2, h3, h4 {
   <div id="landing-copy">
     <p><strong>LIFE THRU FOOD</strong> is a dinner series and creative platform that translates human stories into immersive experiences.</p>
     <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem">
-      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">submit an artist &rarr;</button>
-      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event inquiry &rarr;</button>
+      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">submit an artist &rarr;</button>
+      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">private event inquiry &rarr;</button>
     </div>
   </div>
 
@@ -2051,11 +2062,13 @@ h1, h2, h3, h4 {
   <!-- RSVP PANEL -->
   <div id="tab-current" class="section">
   <div class="panel-hd">
-    <div class="panel-hd-title">Upcoming</div>
+    <div class="panel-hd-title">Events</div>
     <button class="panel-close" onclick="closePanel('current')" aria-label="Close">&times;</button>
   </div>
   <div class="panel-body">
   <div class="panel-inner-content">
+
+    <div class="events-section-label">Sittings</div>
 
     <!-- VOL. 04 — PAST (hidden, preserved for JS compatibility) -->
     <div class="event-block" id="event-block-4" style="display:none">
@@ -2830,20 +2843,9 @@ h1, h2, h3, h4 {
       </div>
     </div>
 
-  </div>
-  </div><!-- panel-body -->
-  </div><!-- tab-current -->
+    <div class="events-section-label" style="margin-top:3rem">Sessions</div>
 
-  <!-- SESSIONS PANEL -->
-  <div id="tab-sessions" class="section">
-  <div class="panel-hd">
-    <div class="panel-hd-title">LTF Sessions</div>
-    <button class="panel-close" onclick="closePanel('sessions')" aria-label="Close">&times;</button>
-  </div>
-  <div class="panel-body">
-  <div class="panel-inner-content">
-
-    <div class="event-block" style="margin-top:2rem">
+    <div class="event-block" style="margin-top:1.5rem">
       <div class="event-masthead">
         <div class="event-masthead-body">
         <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
@@ -2938,7 +2940,7 @@ h1, h2, h3, h4 {
 
   </div>
   </div><!-- panel-body -->
-  </div><!-- tab-sessions -->
+  </div><!-- tab-current -->
 
   <!-- ABOUT PANEL -->
   <div id="tab-about" class="section">
@@ -2956,8 +2958,8 @@ h1, h2, h3, h4 {
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 0.75rem">Get Involved</p>
         <p class="about-body" style="margin:0 0 1.5rem">Know someone whose story should be told through food? Looking to host a private Sitting? We want to hear it.</p>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">submit an artist &rarr;</button>
-          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">private event inquiry &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">submit an artist &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">private event inquiry &rarr;</button>
         </div>
       </div>
     </div>
@@ -3059,9 +3061,9 @@ h1, h2, h3, h4 {
   </div>
   <!-- Participate nav tabs -->
   <div class="part-tabs">
-    <button class="part-tab active" onclick="showPartSection('part-informed', this)">Stay Informed</button>
-    <button class="part-tab" onclick="showPartSection('part-private', this)">Private Event</button>
-    <button class="part-tab" onclick="showPartSection('part-subject', this)">Submit an Artist</button>
+    <button class="part-tab active" id="part-tab-informed" onclick="showPartSection('part-informed', this)">Stay Informed</button>
+    <button class="part-tab" id="part-tab-private" onclick="showPartSection('part-private', this)">Private Event</button>
+    <button class="part-tab" id="part-tab-subject" onclick="showPartSection('part-subject', this)">Submit an Artist</button>
   </div>
   <div class="panel-body">
 
@@ -3411,6 +3413,8 @@ h1, h2, h3, h4 {
         <div style="font-family:'Crimson Pro',serif;font-style:normal;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1;color:var(--ink)">Archive</div>
         <div style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-low);margin-top:0.35rem">8 Volumes &middot; Active Since 2025</div>
       </div>
+
+      <div style="font-family:'Crimson Pro',serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-low);padding:1.25rem 0 0.6rem;border-bottom:1px solid var(--rule-mid);margin-bottom:0.5rem">Sittings</div>
 
       <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('08')">
         <div class="arc-vnum">Sitting No. 1</div>
@@ -6353,7 +6357,7 @@ renderLandingGallery();
   // Attach observer to newly rendered .sr elements after tab switch
   const reObserve = () => { document.querySelectorAll('.sr:not(.visible)').forEach(el => obs.observe(el)); };
   // Re-observe on panel open events — triggered via MutationObserver on .open class changes
-  const panelEls = document.querySelectorAll('#tab-current,#tab-sessions,#tab-about,#tab-participate,#tab-admin,#archive-drawer');
+  const panelEls = document.querySelectorAll('#tab-current,#tab-about,#tab-participate,#tab-admin,#archive-drawer');
   panelEls.forEach(el => { const obs2 = new MutationObserver(() => setTimeout(reObserve,100)); obs2.observe(el,{attributes:true,attributeFilter:['class']}); });
 })();
 
@@ -6492,7 +6496,7 @@ function initMap() {
 // ── Panel control ────────────────────────────────────────────────
 function openPanel(id) {
   closeDrawer(false);
-  ['current','sessions','about','participate','admin','sponsor'].forEach(function(pid) {
+  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
     if (pid !== id) { var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open'); }
   });
   var el = document.getElementById('tab-' + id);
@@ -6509,7 +6513,7 @@ function closePanel(id) {
   var el = document.getElementById('tab-' + id);
   if (el) el.classList.remove('open');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var anyOpen = ['current','sessions','about','participate','admin','sponsor'].some(function(pid) {
+  var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
     var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
   });
   if (!anyOpen && !document.getElementById('archive-drawer').classList.contains('open')) {
@@ -6518,7 +6522,7 @@ function closePanel(id) {
 }
 
 function closeAllPanels() {
-  ['current','sessions','about','participate','admin','sponsor'].forEach(function(pid) {
+  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
   });
   closeDrawer(false);
