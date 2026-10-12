@@ -1311,7 +1311,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 
 /* Other sections: slide-in panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+#tab-current, #tab-about, #tab-work, #tab-admin {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
@@ -1329,18 +1329,13 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
   padding: 0 !important;
 }
-#tab-current.open, #tab-about.open, #tab-participate.open, #tab-admin.open, #tab-sponsor.open {
+#tab-current.open, #tab-about.open, #tab-work.open, #tab-admin.open {
   transform: translateX(0);
 }
-#tab-sponsor {
-  width: min(900px, 100vw) !important;
-}
-#tab-sponsor .sp-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
+
 
 /* Editorial grid overlay on all panels */
-#tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor, #archive-drawer {
+#tab-current, #tab-about, #tab-work, #tab-admin, #archive-drawer {
   background-image:
     repeating-linear-gradient(
       rgba(68,51,42,0.06) 0px, rgba(68,51,42,0.06) 1px,
@@ -1704,7 +1699,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   border-radius: 0;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   font-family: 'Crimson Pro', serif;
-  max-width: 300px;
+  max-width: 360px;
   width: max-content;
   white-space: normal;
   word-break: break-word;
@@ -1715,7 +1710,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   gap: 0;
 }
 .pt-photo {
-  width: 72px;
+  width: 110px;
   flex-shrink: 0;
   object-fit: cover;
   object-position: top center;
@@ -1787,10 +1782,77 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Footer stays below the map but accessible */
 footer { position: relative; z-index: 5; margin-top: 100vh; }
 
+/* Newsletter strip */
+#newsletter-strip {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 90;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-top: 1px solid rgba(234,230,217,0.12);
+}
+.ns-label {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(234,230,217,0.55);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ns-fields {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  max-width: 540px;
+}
+.ns-fields input {
+  flex: 1;
+  background: rgba(234,230,217,0.08);
+  border: 1px solid rgba(234,230,217,0.18);
+  color: var(--canvas);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.75rem;
+  outline: none;
+  min-width: 0;
+}
+.ns-fields input::placeholder { color: rgba(234,230,217,0.35); }
+.ns-fields input:focus { border-color: rgba(234,230,217,0.45); }
+.ns-fields button {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--olive);
+  color: var(--canvas);
+  border: none;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.ns-fields button:hover { opacity: 0.82; }
+.ns-confirm {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--olive);
+}
+@media (max-width: 600px) {
+  #newsletter-strip { flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1rem; }
+  .ns-label { font-size: 10px; }
+  .ns-fields { width: 100%; max-width: 100%; }
+}
+
 /* Mobile */
 @media (max-width: 600px) {
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
-  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor { width: 100vw !important; border-left: none !important; }
+  #tab-current, #tab-about, #tab-work, #tab-admin { width: 100vw !important; border-left: none !important; }
   #archive-drawer { width: 100vw; border-left: none; }
 
   /* Nav: hide wordmark text, show Black Peter only */
@@ -1798,7 +1860,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   .sn-logo { height: 44px; margin-right: 0; }
 
   /* Panels: start below the nav so the X button is never hidden */
-  #tab-current, #tab-about, #tab-participate, #tab-admin, #tab-sponsor {
+  #tab-current, #tab-about, #tab-work, #tab-admin {
     top: 54px !important;
     height: calc(100% - 54px) !important;
   }
@@ -1993,9 +2055,7 @@ h1, h2, h3, h4 {
     <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Events</button>
     <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
     <span class="sn-divider"></span>
-    <button class="sn-btn" id="sn-btn-private" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">Private event</button>
-    <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Partner</button>
-    <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">Submit an artist</button>
+    <button class="sn-btn" id="sn-btn-work" onclick="openPanel('work')">Work with us</button>
     <button class="sn-btn" id="nav-admin-btn" onclick="openPanel('admin')" style="opacity:0;pointer-events:none;width:0;overflow:hidden;padding:0">Records</button>
   </div>
 </div>
@@ -2011,8 +2071,8 @@ h1, h2, h3, h4 {
   <div id="landing-copy">
     <p><strong>LIFE THRU FOOD</strong> is a dinner series and creative platform that translates human stories into immersive experiences.</p>
     <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem">
-      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">submit an artist &rarr;</button>
-      <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">private event inquiry &rarr;</button>
+      <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-subject', document.getElementById('work-tab-subject')); }, 50)">submit an artist &rarr;</button>
+      <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-private', document.getElementById('work-tab-private')); }, 50)">private event inquiry &rarr;</button>
     </div>
   </div>
 
@@ -2068,7 +2128,110 @@ h1, h2, h3, h4 {
   <div class="panel-body">
   <div class="panel-inner-content">
 
-    <div class="events-section-label">Sittings</div>
+    <div class="events-section-label">Sessions</div>
+
+    <div class="event-block" style="margin-top:1.5rem">
+      <div class="event-masthead">
+        <div class="event-masthead-body">
+        <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
+        <span class="ev-date">Sunday, November 15 &middot; Doors at 3pm</span>
+        <h2 style="font-family:'LTF Hand Ink','Crimson Pro',serif;font-weight:normal;letter-spacing:0.02em;font-size:clamp(1.6rem,5vw,2.4rem);overflow-wrap:break-word">Friendsgiving</h2>
+        <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Invite only &nbsp;&middot;&nbsp; New York City</p>
+        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:1rem;max-width:520px">Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.</p>
+        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:0.75rem;max-width:520px">Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.</p>
+        </div>
+      </div>
+
+      <div style="margin:2rem 0;padding:1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+        <p style="font-family:'Crimson Pro',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1rem">At the table</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem">
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A family style meal, cooked by our kitchen</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet creatives to collaborate with</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet brands</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">The company of creative leaders, influencers and tastemakers</p>
+        </div>
+        <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask — Show up, look good, and enjoy yourself and the company we curate.</p>
+      </div>
+
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+        <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+          <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
+          <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
+        </div>
+
+        <!-- Step 1: Code gate -->
+        <div id="sessions-gate">
+          <p class="form-title">Enter your invitation code</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">You should have received a one-time code with your invitation.</p>
+          <div id="v8-comp-code-wrap" style="margin-bottom:0;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
+            <div class="gate-row">
+              <input type="text" id="sess-code-input" placeholder="enter code" autocomplete="off" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')checkSessionCode()">
+              <button class="btn-ghost" id="sess-code-apply-btn" onclick="checkSessionCode()">confirm &rarr;</button>
+            </div>
+            <div id="sess-code-error" class="gate-error"></div>
+          </div>
+        </div>
+
+        <!-- Waitlist (no code) -->
+        <div id="sessions-waitlist-wrap" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <p class="form-title">Join the waitlist</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
+          <div id="sessions-waitlist-success" style="display:none;padding:1.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center;margin-bottom:1rem">
+            <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.5rem">You're on the list</p>
+            <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid)">We'll be in touch if a seat opens.</p>
+          </div>
+          <div id="sessions-waitlist-form">
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-first">First name</label><input type="text" id="wl-first" placeholder="First"></div>
+              <div class="form-field"><label for="wl-last">Last name</label><input type="text" id="wl-last" placeholder="Last"></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-email">Email</label><input type="email" id="wl-email" placeholder="you@example.com"></div>
+              <div class="form-field"><label for="wl-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="wl-phone" placeholder="+1 212 555 0100"></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="wl-instagram" placeholder="@handle"></div>
+              <div class="form-field"><label for="wl-source">How did you find us?</label>
+                <select id="wl-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
+              </div>
+            </div>
+            <div id="sessions-wl-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+            <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsWaitlist()">Join waitlist</button></div>
+          </div>
+        </div>
+
+        <!-- Step 2: RSVP form (shown after valid code) -->
+        <div id="sessions-form-wrap" style="display:none;margin-top:1.5rem">
+          <p class="form-title">Confirm your seat</p>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-first">First name</label><input type="text" id="sess-first" placeholder="First"></div>
+            <div class="form-field"><label for="sess-last">Last name</label><input type="text" id="sess-last" placeholder="Last"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-email">Email</label><input type="email" id="sess-email" placeholder="you@example.com"></div>
+            <div class="form-field"><label for="sess-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="sess-phone" placeholder="+1 212 555 0100"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
+            <div class="form-field"><label for="sess-source">How did you find us?</label>
+              <select id="sess-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
+            </div>
+          </div>
+          <div id="sessions-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+          <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsRSVP()">RSVP</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="no-upcoming-sessions" style="display:none;padding:2.5rem 0 2rem;text-align:left;border-top:1px solid var(--rule-mid)">
+      <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink-mid);line-height:1.8;margin:0 0 1.75rem;max-width:460px">Sessions are the quieter side of LTF. Lower guest count, served family style, and invite only. Each one brings together the creative leaders, influencers, and tastemakers who make up the community.</p>
+      <a href="https://www.instagram.com/lifethru___food/" target="_blank" rel="noopener" class="btn-ghost" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        follow for the next announcement
+      </a>
+    </div>
+
+<div class="events-section-label" style="margin-top:3rem">Sittings</div>
 
     <!-- VOL. 04 — PAST (hidden, preserved for JS compatibility) -->
     <div class="event-block" id="event-block-4" style="display:none">
@@ -2600,12 +2763,11 @@ h1, h2, h3, h4 {
     </div>
 
     <!-- VOL. 08 — NICOLE KO / EPHEMERA — SITTING 01 -->
-    <div id="no-upcoming-events" style="display:none;padding:3rem 0 2rem;text-align:left">
-      <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1.25rem">Next Sitting</p>
-      <p style="font-family:'Georgia',serif;font-size:1.05rem;color:var(--ink);line-height:1.75;margin:0 0 2rem">Nothing on the calendar yet. Follow us on Instagram for the announcement.</p>
+    <div id="no-upcoming-events" style="display:none;padding:2.5rem 0 2rem;text-align:left;border-top:1px solid var(--rule-mid)">
+      <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink-mid);line-height:1.8;margin:0 0 1.75rem;max-width:460px">A monthly dinner built around a Subject — a New York creative whose background, culture, and relationship with food shapes every course. All original recipes. Seated, ticketed, open to the public. No two Sittings are alike.</p>
       <a href="https://www.instagram.com/lifethru___food/" target="_blank" rel="noopener" class="btn-ghost" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none">
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
-        @lifethru___food
+        follow for the next announcement
       </a>
     </div>
 
@@ -2843,102 +3005,7 @@ h1, h2, h3, h4 {
       </div>
     </div>
 
-    <div class="events-section-label" style="margin-top:3rem">Sessions</div>
-
-    <div class="event-block" style="margin-top:1.5rem">
-      <div class="event-masthead">
-        <div class="event-masthead-body">
-        <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
-        <span class="ev-date">Sunday, November 15 &middot; Doors at 3pm</span>
-        <h2 style="font-family:'LTF Hand Ink','Crimson Pro',serif;font-weight:normal;letter-spacing:0.02em;font-size:clamp(1.6rem,5vw,2.4rem);overflow-wrap:break-word">Friendsgiving</h2>
-        <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Invite only &nbsp;&middot;&nbsp; New York City</p>
-        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:1rem;max-width:520px">Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.</p>
-        <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:0.75rem;max-width:520px">Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.</p>
-        </div>
       </div>
-
-      <div style="margin:2rem 0;padding:1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-        <p style="font-family:'Crimson Pro',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1rem">At the table</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem">
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A family style meal, cooked by our kitchen</p>
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet creatives to collaborate with</p>
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet brands</p>
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">The company of creative leaders, influencers and tastemakers</p>
-        </div>
-        <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask — Show up, look good, and enjoy yourself and the company we curate.</p>
-      </div>
-
-      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-        <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-          <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
-          <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
-        </div>
-
-        <!-- Step 1: Code gate -->
-        <div id="sessions-gate">
-          <p class="form-title">Enter your invitation code</p>
-          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">You should have received a one-time code with your invitation.</p>
-          <div id="v8-comp-code-wrap" style="margin-bottom:0;padding:1.25rem 1.5rem;background:var(--paper);border:1px solid var(--rule-mid)">
-            <div class="gate-row">
-              <input type="text" id="sess-code-input" placeholder="enter code" autocomplete="off" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')checkSessionCode()">
-              <button class="btn-ghost" id="sess-code-apply-btn" onclick="checkSessionCode()">confirm &rarr;</button>
-            </div>
-            <div id="sess-code-error" class="gate-error"></div>
-          </div>
-        </div>
-
-        <!-- Waitlist (no code) -->
-        <div id="sessions-waitlist-wrap" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <p class="form-title">Join the waitlist</p>
-          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
-          <div id="sessions-waitlist-success" style="display:none;padding:1.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center;margin-bottom:1rem">
-            <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.5rem">You're on the list</p>
-            <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid)">We'll be in touch if a seat opens.</p>
-          </div>
-          <div id="sessions-waitlist-form">
-            <div class="form-grid">
-              <div class="form-field"><label for="wl-first">First name</label><input type="text" id="wl-first" placeholder="First"></div>
-              <div class="form-field"><label for="wl-last">Last name</label><input type="text" id="wl-last" placeholder="Last"></div>
-            </div>
-            <div class="form-grid">
-              <div class="form-field"><label for="wl-email">Email</label><input type="email" id="wl-email" placeholder="you@example.com"></div>
-              <div class="form-field"><label for="wl-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="wl-phone" placeholder="+1 212 555 0100"></div>
-            </div>
-            <div class="form-grid">
-              <div class="form-field"><label for="wl-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="wl-instagram" placeholder="@handle"></div>
-              <div class="form-field"><label for="wl-source">How did you find us?</label>
-                <select id="wl-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
-              </div>
-            </div>
-            <div id="sessions-wl-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
-            <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsWaitlist()">Join waitlist</button></div>
-          </div>
-        </div>
-
-        <!-- Step 2: RSVP form (shown after valid code) -->
-        <div id="sessions-form-wrap" style="display:none;margin-top:1.5rem">
-          <p class="form-title">Confirm your seat</p>
-          <div class="form-grid">
-            <div class="form-field"><label for="sess-first">First name</label><input type="text" id="sess-first" placeholder="First"></div>
-            <div class="form-field"><label for="sess-last">Last name</label><input type="text" id="sess-last" placeholder="Last"></div>
-          </div>
-          <div class="form-grid">
-            <div class="form-field"><label for="sess-email">Email</label><input type="email" id="sess-email" placeholder="you@example.com"></div>
-            <div class="form-field"><label for="sess-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="sess-phone" placeholder="+1 212 555 0100"></div>
-          </div>
-          <div class="form-grid">
-            <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
-            <div class="form-field"><label for="sess-source">How did you find us?</label>
-              <select id="sess-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
-            </div>
-          </div>
-          <div id="sessions-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
-          <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsRSVP()">RSVP</button></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
   </div><!-- panel-body -->
   </div><!-- tab-current -->
 
@@ -2958,8 +3025,8 @@ h1, h2, h3, h4 {
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 0.75rem">Get Involved</p>
         <p class="about-body" style="margin:0 0 1.5rem">Know someone whose story should be told through food? Looking to host a private Sitting? We want to hear it.</p>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.getElementById('part-tab-subject')); }, 50)">submit an artist &rarr;</button>
-          <button class="btn-ghost" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.getElementById('part-tab-private')); }, 50)">private event inquiry &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-subject', document.getElementById('work-tab-subject')); }, 50)">submit an artist &rarr;</button>
+          <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-private', document.getElementById('work-tab-private')); }, 50)">private event inquiry &rarr;</button>
         </div>
       </div>
     </div>
@@ -2979,133 +3046,28 @@ h1, h2, h3, h4 {
   </div><!-- panel-body -->
   </div><!-- tab-about -->
 
-  <!-- SPONSOR PANEL -->
-  <div id="tab-sponsor" class="section">
+  <!-- WORK WITH US PANEL -->
+  <div id="tab-work" class="section">
   <div class="panel-hd">
-    <div class="panel-hd-title">Sponsors</div>
-    <button class="panel-close" onclick="closePanel('sponsor')" aria-label="Close">&times;</button>
+    <div class="panel-hd-title">Work with us</div>
+    <button class="panel-close" onclick="closePanel('work')" aria-label="Close">&times;</button>
   </div>
-  <div class="panel-body">
-
-    <!-- Intro -->
-    <div class="about-intro">
-      <div class="about-index-label">LTF &nbsp;&middot;&nbsp; Partnerships</div>
-      <div class="about-heading">Partner with us.</div>
-      <p class="about-body">Life Thru Food brings together culture, food, and community in intimate, intentional spaces. We work with brands and organizations who believe in the power of human storytelling.</p>
-    </div>
-
-    <!-- Inquiry form -->
-    <div style="padding: 2rem 1.5rem;">
-      <p class="form-title">Sponsor inquiry</p>
-      <div id="sponsor-toast" class="toast"></div>
-      <div id="sponsor-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-        <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
-        <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
-        <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">Thank you for your interest in partnering with Life Thru Food.</p>
-      </div>
-      <div id="sponsor-form-wrap">
-        <div class="form-grid">
-          <div class="form-field"><label for="sp-first">First name</label><input type="text" id="sp-first" placeholder="First"></div>
-          <div class="form-field"><label for="sp-last">Last name</label><input type="text" id="sp-last" placeholder="Last"></div>
-        </div>
-        <div class="form-grid">
-          <div class="form-field"><label for="sp-company">Company / Brand</label><input type="text" id="sp-company" placeholder="Organization name"></div>
-          <div class="form-field"><label for="sp-email">Email</label><input type="email" id="sp-email" placeholder="you@company.com"></div>
-        </div>
-        <div class="form-grid">
-          <div class="form-field">
-            <label for="sp-type">Partnership type</label>
-            <select id="sp-type">
-              <option value="">—</option>
-              <option>Presenting Sponsor</option>
-              <option>Event Partner</option>
-              <option>Product / Beverage Placement</option>
-              <option>Media Partner</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="sp-budget">Budget range <span style="font-style:normal;opacity:0.6">(optional)</span></label>
-            <select id="sp-budget">
-              <option value="">—</option>
-              <option>Under $1,000</option>
-              <option>$1,000 – $5,000</option>
-              <option>$5,000 – $15,000</option>
-              <option>$15,000+</option>
-              <option>Open to discussion</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-grid full">
-          <div class="form-field"><label for="sp-message">Tell us about your vision</label><textarea id="sp-message" rows="5" placeholder="What are you hoping to achieve through this partnership? Any details about your brand, audience, or goals..."></textarea></div>
-        </div>
-        <div id="sponsor-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
-        <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSponsorInquiry()">send inquiry &rarr;</button></div>
-      </div>
-    </div>
-
-    <!-- Previous sponsors -->
-    <div style="padding: 2.5rem 1.5rem 2rem; border-top: 1px solid var(--rule-mid); margin-top: 1rem;">
-      <span style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low);">Previous Partners</span>
-      <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0;"></div>
-    </div>
-
-  </div>
-  </div><!-- tab-sponsor -->
-
-  <!-- PARTICIPATE PANEL -->
-  <div id="tab-participate" class="section">
-  <div class="panel-hd">
-    <div class="panel-hd-title">Participate</div>
-    <button class="panel-close" onclick="closePanel('participate')" aria-label="Close">&times;</button>
-  </div>
-  <!-- Participate nav tabs -->
   <div class="part-tabs">
-    <button class="part-tab active" id="part-tab-informed" onclick="showPartSection('part-informed', this)">Stay Informed</button>
-    <button class="part-tab" id="part-tab-private" onclick="showPartSection('part-private', this)">Private Event</button>
-    <button class="part-tab" id="part-tab-subject" onclick="showPartSection('part-subject', this)">Submit an Artist</button>
+    <button class="work-tab part-tab active" id="work-tab-private" onclick="showWorkSection('work-private',this)">Private Event</button>
+    <button class="work-tab part-tab" id="work-tab-partner" onclick="showWorkSection('work-partner',this)">Partner</button>
+    <button class="work-tab part-tab" id="work-tab-subject" onclick="showWorkSection('work-subject',this)">Submit an Artist</button>
   </div>
   <div class="panel-body">
 
-    <!-- Stay informed -->
-    <div class="part-section" id="part-informed">
-    <span class="part-label">Stay informed</span>
-    <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
-      <h2>Be the first to know.</h2>
-      <p>New menus, new creatives, new evenings &mdash; in your inbox before anyone else.</p>
-    </div>
-    <div id="notify-toast" class="toast"></div>
-    <div>
-      <p class="form-title">Join the list</p>
-      <div class="form-grid">
-        <div class="form-field"><label for="n-first">First name</label><input type="text" id="n-first" placeholder="OG"></div>
-        <div class="form-field"><label for="n-last">Last name</label><input type="text" id="n-last" placeholder="Anunoby"></div>
-      </div>
-      <div class="form-grid">
-        <div class="form-field"><label for="n-email">Email</label><input type="email" id="n-email" placeholder="og.anunoby@gmail.com"></div>
-        <div class="form-field"><label for="n-phone">Phone</label><input type="tel" id="n-phone" placeholder="+1 212 555 0100"></div>
-      </div>
-      <div class="form-grid">
-        <div class="form-field"><label for="n-source">How did you find us?</label>
-          <select id="n-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Press / article</option><option>Other</option></select>
-        </div>
-        <div class="form-field"><label for="n-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="n-instagram" placeholder="@oanunoby"></div>
-      </div>
-      <div id="notify-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
-      <div style="margin-top:1rem"><button class="btn-primary" onclick="submitNotify()">add me to the list</button></div>
-    </div>
-    </div>
-
-    <!-- Private events -->
-    <div class="part-section" id="part-private">
-    <span class="part-label">Private events</span>
+    <!-- PRIVATE EVENT -->
+    <div class="work-section" id="work-private">
     <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
       <h2>Private Events</h2>
       <p>Intimate dinners, celebrations, and gatherings — shaped around your vision.</p>
     </div>
     <div id="private-toast" class="toast"></div>
     <div id="private-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-      <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
+      <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
       <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
       <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">Thank you for reaching out — we look forward to learning more about your event.</p>
     </div>
@@ -3159,33 +3121,86 @@ h1, h2, h3, h4 {
       <div class="form-grid full">
         <div class="form-field"><label for="pi-vision">Tell us about your vision</label><textarea id="pi-vision" rows="5" placeholder="What are you envisioning? Any details about the occasion, vibe, dietary needs, or anything else we should know..."></textarea></div>
       </div>
-      <div id="private-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div id="private-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1rem"><button class="btn-primary" onclick="submitPrivateInquiry()">send inquiry &rarr;</button></div>
     </div>
     </div>
 
-    <!-- Artist submission -->
-    <div class="part-section" id="part-subject">
-    <span class="part-label">Subject submission</span>
+    <!-- PARTNER -->
+    <div class="work-section" id="work-partner" style="display:none">
+    <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
+      <h2>Partner with us.</h2>
+      <p>Life Thru Food brings together culture, food, and community in intimate, intentional spaces. We work with brands and organizations who believe in the power of human storytelling.</p>
+    </div>
+    <div id="sponsor-toast" class="toast"></div>
+    <div id="sponsor-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+      <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
+      <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We'll be in touch shortly.</p>
+      <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">Thank you for your interest in partnering with Life Thru Food.</p>
+    </div>
+    <div id="sponsor-form-wrap">
+      <p class="form-title">Sponsor inquiry</p>
+      <div class="form-grid">
+        <div class="form-field"><label for="sp-first">First name</label><input type="text" id="sp-first" placeholder="First"></div>
+        <div class="form-field"><label for="sp-last">Last name</label><input type="text" id="sp-last" placeholder="Last"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field"><label for="sp-company">Company / Brand</label><input type="text" id="sp-company" placeholder="Organization name"></div>
+        <div class="form-field"><label for="sp-email">Email</label><input type="email" id="sp-email" placeholder="you@company.com"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="sp-type">Partnership type</label>
+          <select id="sp-type">
+            <option value="">—</option>
+            <option>Presenting Sponsor</option>
+            <option>Event Partner</option>
+            <option>Product / Beverage Placement</option>
+            <option>Media Partner</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="sp-budget">Budget range <span style="font-style:normal;opacity:0.6">(optional)</span></label>
+          <select id="sp-budget">
+            <option value="">—</option>
+            <option>Under $1,000</option>
+            <option>$1,000 – $5,000</option>
+            <option>$5,000 – $15,000</option>
+            <option>$15,000+</option>
+            <option>Open to discussion</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid full">
+        <div class="form-field"><label for="sp-message">Tell us about your vision</label><textarea id="sp-message" rows="5" placeholder="What are you hoping to achieve through this partnership? Any details about your brand, audience, or goals..."></textarea></div>
+      </div>
+      <div id="sponsor-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSponsorInquiry()">send inquiry &rarr;</button></div>
+    </div>
+    <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+      <span style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low)">Previous Partners</span>
+      <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0"></div>
+    </div>
+    </div>
+
+    <!-- SUBMIT AN ARTIST -->
+    <div class="work-section" id="work-subject" style="display:none">
     <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
       <h2>Nominate a Subject.</h2>
       <p>Life Thru Food is built around creatives whose work and relationship with food tells a story worth gathering around. Submit yourself or someone you think belongs at the table.</p>
     </div>
     <div id="artist-toast" class="toast"></div>
     <div id="artist-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
-      <p style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
+      <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
       <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We&rsquo;ll be in touch.</p>
       <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit.</p>
     </div>
     <div id="artist-form-wrap">
-
-      <!-- Mode toggle -->
       <div style="display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--rule-mid);width:fit-content">
-        <button id="ar-mode-self" onclick="setArtistMode('self')" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:var(--ink);color:var(--paper);transition:all 0.15s">I&rsquo;m the artist</button>
-        <button id="ar-mode-nom" onclick="setArtistMode('nominate')" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:transparent;color:var(--ink-low);transition:all 0.15s">Nominate someone</button>
+        <button id="ar-mode-self" onclick="setArtistMode('self')" style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:var(--ink);color:var(--paper);transition:all 0.15s">I&rsquo;m the artist</button>
+        <button id="ar-mode-nom" onclick="setArtistMode('nominate')" style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;padding:0.65rem 1.25rem;border:none;cursor:pointer;background:transparent;color:var(--ink-low);transition:all 0.15s">Nominate someone</button>
       </div>
-
-      <!-- Self section -->
       <div id="ar-self-section">
         <p class="form-title">Tell us about yourself</p>
         <div class="form-grid">
@@ -3210,8 +3225,6 @@ h1, h2, h3, h4 {
           <div class="form-field"><label for="ar-timeline">Timeline &amp; upcoming projects <span style="font-style:normal;opacity:0.6">(optional)</span></label><textarea id="ar-timeline" rows="4" placeholder="Anything on the horizon — shows, releases, collaborations, or a sense of where you are in your work right now..."></textarea></div>
         </div>
       </div>
-
-      <!-- Nomination section -->
       <div id="ar-nom-section" style="display:none">
         <p class="form-title">About the artist</p>
         <div class="form-grid">
@@ -3245,15 +3258,13 @@ h1, h2, h3, h4 {
           </div>
         </div>
       </div>
-
-      <div id="artist-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+      <div id="artist-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1.5rem"><button class="btn-primary" id="ar-submit-btn" onclick="submitArtistInquiry()">send submission &rarr;</button></div>
     </div>
     </div>
 
-  </div>
   </div><!-- panel-body -->
-  </div><!-- tab-participate -->
+  </div><!-- tab-work -->
 
   <!-- ADMIN PANEL -->
   <div id="tab-admin" class="section">
@@ -3489,6 +3500,17 @@ h1, h2, h3, h4 {
 </div>
 
 <!-- RSVP Calling Card Popup (shown after 5 seconds) --></div>
+
+<!-- Newsletter strip -->
+<div id="newsletter-strip">
+  <span class="ns-label">Stay in the loop</span>
+  <div class="ns-fields">
+    <input type="text" id="ns-first" placeholder="First name">
+    <input type="email" id="ns-email" placeholder="Email address">
+    <button onclick="submitNewsletterStrip()">Join</button>
+  </div>
+  <span id="ns-confirm" class="ns-confirm" style="display:none">You're on the list.</span>
+</div>
 
 <!-- Panel backdrop -->
 <div id="panel-overlay" onclick="closeAllPanels()"></div>
@@ -4274,6 +4296,30 @@ async function submitMayNotify() {
     toast.textContent = 'Something went wrong. Please try again.';
     toast.className = 'toast error';
     if (btn) btn.disabled = false;
+  }
+}
+
+// ── NEWSLETTER STRIP ─────────────────────────────────────────────
+async function submitNewsletterStrip() {
+  const first = document.getElementById('ns-first').value.trim();
+  const email = document.getElementById('ns-email').value.trim();
+  if (!email || !email.includes('@')) { return; }
+  const btn = document.querySelector('#newsletter-strip button');
+  if (btn) { btn.textContent = '...'; btn.disabled = true; }
+  try {
+    await sbPost('notify_list', {
+      first_name: first || null, email,
+      source: 'site_strip', created_at: new Date().toISOString()
+    });
+    fetch(`${FN_URL}/add-to-list`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name: first, email, source: 'site_strip' })
+    }).catch(() => {});
+    document.querySelector('.ns-fields').style.display = 'none';
+    document.getElementById('ns-confirm').style.display = 'inline';
+  } catch(e) {
+    if (btn) { btn.textContent = 'Join'; btn.disabled = false; }
   }
 }
 
@@ -6277,6 +6323,15 @@ function removeSponsor(id) { sponsors = sponsors.filter(s => s.id !== id); rende
   }
 })();
 
+// ── Work with us panel section tabs ──────────────────────────────────────────
+function showWorkSection(sectionId, btn) {
+  document.querySelectorAll('.work-section').forEach(function(s) { s.style.display = 'none'; });
+  document.querySelectorAll('.work-tab').forEach(function(b) { b.classList.remove('active'); });
+  var el = document.getElementById(sectionId);
+  if (el) el.style.display = 'block';
+  if (btn) btn.classList.add('active');
+}
+
 // ── Participate panel section tabs ───────────────────────────────────────────
 function showPartSection(sectionId, btn) {
   // Toggle tab active state
@@ -6357,7 +6412,7 @@ renderLandingGallery();
   // Attach observer to newly rendered .sr elements after tab switch
   const reObserve = () => { document.querySelectorAll('.sr:not(.visible)').forEach(el => obs.observe(el)); };
   // Re-observe on panel open events — triggered via MutationObserver on .open class changes
-  const panelEls = document.querySelectorAll('#tab-current,#tab-about,#tab-participate,#tab-admin,#archive-drawer');
+  const panelEls = document.querySelectorAll('#tab-current,#tab-about,#tab-work,#tab-admin,#archive-drawer');
   panelEls.forEach(el => { const obs2 = new MutationObserver(() => setTimeout(reObserve,100)); obs2.observe(el,{attributes:true,attributeFilter:['class']}); });
 })();
 
@@ -6496,7 +6551,7 @@ function initMap() {
 // ── Panel control ────────────────────────────────────────────────
 function openPanel(id) {
   closeDrawer(false);
-  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
+  ['current','about','work','admin'].forEach(function(pid) {
     if (pid !== id) { var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open'); }
   });
   var el = document.getElementById('tab-' + id);
@@ -6513,7 +6568,7 @@ function closePanel(id) {
   var el = document.getElementById('tab-' + id);
   if (el) el.classList.remove('open');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
+  var anyOpen = ['current','about','work','admin'].some(function(pid) {
     var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
   });
   if (!anyOpen && !document.getElementById('archive-drawer').classList.contains('open')) {
@@ -6522,7 +6577,7 @@ function closePanel(id) {
 }
 
 function closeAllPanels() {
-  ['current','about','participate','admin','sponsor'].forEach(function(pid) {
+  ['current','about','work','admin'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
   });
   closeDrawer(false);
@@ -6540,7 +6595,7 @@ function enterSite(choice) {
     if (choice === 'attend') {
       openPanel('current');
     } else {
-      openPanel('participate');
+      openPanel('work');
     }
   }, 500);
 }
@@ -6632,7 +6687,7 @@ async function submitSessionsWaitlist() {
 
 // ── Archive drawer control ───────────────────────────────────────
 function openDrawer(volNum) {
-  ['current','about','participate','admin'].forEach(function(pid) {
+  ['current','about','work','admin'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
   });
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -6654,7 +6709,7 @@ function closeDrawer(clearOverlay) {
   var d = document.getElementById('archive-drawer'); if (d) d.classList.remove('open');
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.remove('active');
   if (clearOverlay !== false) {
-    var anyOpen = ['current','about','participate','admin','sponsor'].some(function(pid) {
+    var anyOpen = ['current','about','work','admin'].some(function(pid) {
       var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
     });
     if (!anyOpen) document.getElementById('panel-overlay').classList.remove('visible');
@@ -6701,7 +6756,7 @@ function closePopup() {
 // ── Legacy compatibility ─────────────────────────────────────────
 function showTab(tab, btn) {
   var legacyMap = { current:'current', rsvp:'current', content:'archive', archive:'archive',
-                    notify:'participate', private:'participate', artist:'participate', team:'about' };
+                    notify:'work', private:'work', artist:'work', sponsor:'work', team:'about' };
   var mapped = legacyMap[tab] || tab;
   if (mapped === 'archive') { closeAllPanels(); return; }
   openPanel(mapped);
