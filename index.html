@@ -1857,10 +1857,109 @@ h1, h2, h3, h4 {
   letter-spacing: 0.01em;
 }
 
+/* ── ENTRY GATE ── */
+#site-entry {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(234,230,217,0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.45s ease;
+}
+.entry-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.entry-eyebrow {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin: 0;
+}
+.entry-question {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+.entry-btns {
+  display: flex;
+  gap: 1rem;
+}
+.entry-btn {
+  background: var(--canvas);
+  border: 1px solid var(--rule-mid);
+  cursor: pointer;
+  padding: 0;
+  width: 180px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.entry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+.entry-btn-img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  display: block;
+}
+.entry-btn-label {
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
+  font-size: 1.6rem;
+  color: var(--ink);
+  padding: 0.6rem 1rem 0.2rem;
+  display: block;
+  line-height: 1;
+}
+.entry-btn-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  padding: 0 1rem 0.75rem;
+  display: block;
+}
+
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+
+<!-- ── ENTRY GATE ── -->
+<div id="site-entry">
+  <div class="entry-card">
+    <p class="entry-eyebrow">Life Thru Food</p>
+    <p class="entry-question">What brings you here?</p>
+    <div class="entry-btns">
+      <button class="entry-btn" onclick="enterSite('attend')">
+        <img src="images/Audience.jpg" class="entry-btn-img" alt="">
+        <span class="entry-btn-label">Attend</span>
+        <span class="entry-btn-sub">Sittings &middot; Sessions &middot; Archive</span>
+      </button>
+      <button class="entry-btn" onclick="enterSite('collaborate')">
+        <img src="images/hug.jpg" class="entry-btn-img" alt="">
+        <span class="entry-btn-label" style="font-size:1.15rem">Work with us</span>
+        <span class="entry-btn-sub">Private events &middot; Brand events &middot; Artist submissions</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="site-nav">
   <div class="sn-left" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">
@@ -1870,13 +1969,13 @@ h1, h2, h3, h4 {
     </div>
   </div>
   <div class="sn-nav">
-    <div class="sn-group">
+    <div class="sn-group sn-group-attend">
       <button class="sn-btn" id="sn-btn-current" onclick="openPanel('current')">Sittings</button>
       <button class="sn-btn" id="sn-btn-sessions" onclick="openPanel('sessions')">Sessions</button>
       <button class="sn-btn" id="sn-btn-archive" onclick="openDrawer('all')">Archive</button>
     </div>
-    <div class="sn-group">
-      <span class="sn-group-label">Work with us</span>
+    <div class="sn-group sn-group-collab">
+      <span class="sn-group-label">Collaborate with us</span>
       <button class="sn-btn" id="sn-btn-private" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-private', document.querySelectorAll('.part-tab')[1]); }, 50)">Private event</button>
       <button class="sn-btn" id="sn-btn-sponsor" onclick="openPanel('sponsor')">Brand</button>
       <button class="sn-btn" id="sn-btn-participate" onclick="openPanel('participate'); setTimeout(function(){ showPartSection('part-subject', document.querySelectorAll('.part-tab')[2]); }, 50)">Submit an artist</button>
@@ -2744,7 +2843,7 @@ h1, h2, h3, h4 {
         <div class="event-masthead-body">
         <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
         <span class="ev-date">Sunday, November 15 &middot; Doors at 3pm</span>
-        <h2>Friendsgiving</h2>
+        <h2 style="font-family:'LTF Hand Ink','Crimson Pro',serif;font-weight:normal;letter-spacing:0.02em">Friendsgiving</h2>
         <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Invite only &nbsp;&middot;&nbsp; New York City</p>
         <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:1rem;max-width:520px">Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.</p>
         <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:0.75rem;max-width:520px">Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.</p>
@@ -2756,7 +2855,7 @@ h1, h2, h3, h4 {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem">
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A family style meal, cooked by our kitchen</p>
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet creatives to collaborate with</p>
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet the brands we work with</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A chance to meet brands</p>
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">The company of creative leaders, influencers and tastemakers</p>
         </div>
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask — Show up, look good, and enjoy yourself and the company we curate.</p>
@@ -2778,6 +2877,34 @@ h1, h2, h3, h4 {
               <button class="btn-ghost" id="sess-code-apply-btn" onclick="checkSessionCode()">confirm &rarr;</button>
             </div>
             <div id="sess-code-error" class="gate-error"></div>
+          </div>
+        </div>
+
+        <!-- Waitlist (no code) -->
+        <div id="sessions-waitlist-wrap" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+          <p class="form-title">Join the waitlist</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
+          <div id="sessions-waitlist-success" style="display:none;padding:1.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center;margin-bottom:1rem">
+            <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.5rem">You're on the list</p>
+            <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid)">We'll be in touch if a seat opens.</p>
+          </div>
+          <div id="sessions-waitlist-form">
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-first">First name</label><input type="text" id="wl-first" placeholder="First"></div>
+              <div class="form-field"><label for="wl-last">Last name</label><input type="text" id="wl-last" placeholder="Last"></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-email">Email</label><input type="email" id="wl-email" placeholder="you@example.com"></div>
+              <div class="form-field"><label for="wl-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="wl-phone" placeholder="+1 212 555 0100"></div>
+            </div>
+            <div class="form-grid">
+              <div class="form-field"><label for="wl-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="wl-instagram" placeholder="@handle"></div>
+              <div class="form-field"><label for="wl-source">How did you find us?</label>
+                <select id="wl-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
+              </div>
+            </div>
+            <div id="sessions-wl-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
+            <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSessionsWaitlist()">Join waitlist</button></div>
           </div>
         </div>
 
@@ -6389,6 +6516,21 @@ function closeAllPanels() {
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
 }
 
+// ── Entry gate ───────────────────────────────────────────────────
+function enterSite(choice) {
+  var entry = document.getElementById('site-entry');
+  entry.style.opacity = '0';
+  entry.style.pointerEvents = 'none';
+  setTimeout(function() {
+    entry.style.display = 'none';
+    if (choice === 'attend') {
+      openPanel('current');
+    } else {
+      openPanel('participate');
+    }
+  }, 500);
+}
+
 let activeSessionCode = null;
 
 async function checkSessionCode() {
@@ -6440,6 +6582,34 @@ async function submitSessionsRSVP() {
     });
     document.getElementById('sessions-form-wrap').style.display = 'none';
     document.getElementById('sessions-success').style.display = '';
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
+    errEl.style.display = '';
+  }
+}
+
+async function submitSessionsWaitlist() {
+  const first = document.getElementById('wl-first').value.trim();
+  const last  = document.getElementById('wl-last').value.trim();
+  const email = document.getElementById('wl-email').value.trim();
+  const phone = document.getElementById('wl-phone').value.trim();
+  const ig    = document.getElementById('wl-instagram').value.trim();
+  const src   = document.getElementById('wl-source').value;
+  const errEl = document.getElementById('sessions-wl-error');
+  errEl.style.display = 'none';
+  if (!first || !last || !email) {
+    errEl.textContent = 'Please fill in your name and email.';
+    errEl.style.display = '';
+    return;
+  }
+  try {
+    await sbPost('waitlist', {
+      first_name: first, last_name: last, email,
+      phone: phone || null, instagram: ig || null,
+      source: src || null, list_type: 'sessions-01-waitlist'
+    });
+    document.getElementById('sessions-waitlist-form').style.display = 'none';
+    document.getElementById('sessions-waitlist-success').style.display = '';
   } catch(e) {
     errEl.textContent = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
     errEl.style.display = '';
