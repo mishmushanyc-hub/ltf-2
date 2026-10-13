@@ -1879,6 +1879,16 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
   /* ── Mobile performance strip-down ─────────────────────────────── */
 
+  /* Kill entry animations — no stagger delays, just show content */
+  .h-heading, .h-body, .h-cta-wrap { animation: none; opacity: 1; }
+  .section.active { animation: none; }
+  @keyframes fadeIn { from { opacity:1; } to { opacity:1; } }
+  @keyframes h-enter { from { opacity:1; } to { opacity:1; } }
+
+  /* Kill hover states — not applicable on touch, saves style recalc */
+  .sn-btn:hover, .btn-ghost:hover, .btn-primary:hover,
+  .entry-btn:hover, .part-tab:hover { transform: none; opacity: 1; box-shadow: none; }
+
   /* Kill GPU-heavy backdrop blurs */
   #site-entry { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .lightbox { backdrop-filter: none; }
@@ -1979,66 +1989,66 @@ h1, h2, h3, h4 {
   inset: 0;
   z-index: 9999;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(234,230,217,0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  flex-direction: column;
+  background: #000;
   transition: opacity 0.45s ease;
 }
-.entry-card {
-  text-align: center;
+.entry-logo-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
+  padding: 1.75rem;
+  z-index: 2;
+  pointer-events: none;
 }
-.entry-eyebrow {
-  font-family: 'Crimson Pro', serif;
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--ink-low);
-  margin: 0;
-}
-.entry-question {
-  font-family: 'Crimson Pro', serif;
-  font-size: 1.1rem;
-  color: var(--ink);
-  margin: 0;
-  letter-spacing: 0.04em;
+.entry-logo {
+  height: 28px;
+  width: auto;
+  filter: invert(1); /* white on dark photo */
 }
 .entry-btns {
   display: flex;
-  gap: 1rem;
+  flex-direction: row;
+  flex: 1;
+  height: 100vh;
 }
 .entry-btn {
-  background: var(--canvas);
-  border: 1px solid var(--rule-mid);
-  cursor: pointer;
-  padding: 0;
-  width: 180px;
+  flex: 1;
+  position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  padding: 0;
+  background: none;
 }
-.entry-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-}
+.entry-btn:last-child { border-right: none; }
 .entry-btn-img {
   width: 100%;
-  height: 130px;
+  height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
+  filter: grayscale(100%);
+  transition: transform 0.45s ease;
+}
+.entry-btn:hover .entry-btn-img { transform: scale(1.04); }
+.entry-btn-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 3rem 1.5rem 2.5rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
 }
 .entry-btn-label {
   font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
-  font-size: 1.6rem;
-  color: var(--ink);
-  padding: 0.6rem 1rem 0.2rem;
+  font-size: 2.2rem;
+  color: #fff;
   display: block;
   line-height: 1;
 }
@@ -2047,9 +2057,14 @@ h1, h2, h3, h4 {
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-low);
-  padding: 0 1rem 0.75rem;
+  color: rgba(255,255,255,0.65);
   display: block;
+}
+@media (max-width: 600px) {
+  .entry-btns { flex-direction: column; }
+  .entry-btn { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); height: 50vh; }
+  .entry-btn:last-child { border-bottom: none; }
+  .entry-btn-label { font-size: 1.8rem; }
 }
 
 </style>
@@ -2059,21 +2074,24 @@ h1, h2, h3, h4 {
 
 <!-- ── ENTRY GATE ── -->
 <div id="site-entry">
-  <div class="entry-card">
-    <p class="entry-eyebrow">Life Thru Food</p>
-    <p class="entry-question">What brings you here?</p>
-    <div class="entry-btns">
-      <button class="entry-btn" onclick="enterSite('attend')">
-        <img src="images/Audience.jpg" class="entry-btn-img" alt="">
-        <span class="entry-btn-label">Attend</span>
+  <div class="entry-logo-bar">
+    <img src="images/Black-Peter.png" alt="LTF" class="entry-logo">
+  </div>
+  <div class="entry-btns">
+    <button class="entry-btn" onclick="enterSite('attend')">
+      <img src="images/Audience.jpg" class="entry-btn-img" alt="">
+      <div class="entry-btn-overlay">
+        <span class="entry-btn-label">Dinner</span>
         <span class="entry-btn-sub">Sittings &middot; Sessions &middot; Archive</span>
-      </button>
-      <button class="entry-btn" onclick="enterSite('collaborate')">
-        <img src="images/hug.jpg" class="entry-btn-img" alt="">
-        <span class="entry-btn-label" style="font-size:1.15rem">Work with us</span>
+      </div>
+    </button>
+    <button class="entry-btn" onclick="enterSite('collaborate')">
+      <img src="images/hug.jpg" class="entry-btn-img" alt="">
+      <div class="entry-btn-overlay">
+        <span class="entry-btn-label">Partnerships</span>
         <span class="entry-btn-sub">Private events &middot; Brand events &middot; Artist submissions</span>
-      </button>
-    </div>
+      </div>
+    </button>
   </div>
 </div>
 
@@ -6429,11 +6447,18 @@ function renderLandingGallery() {
 loadEvents();
 renderContent();
 renderSponsors();
-renderLandingGallery();
+// Defer gallery render on mobile — runs only when About panel first opens
+if (window.innerWidth > 600) {
+  renderLandingGallery();
+} else {
+  document.addEventListener('ltf:panelOpen', function handler(e) {
+    if (e.detail === 'about') { renderLandingGallery(); document.removeEventListener('ltf:panelOpen', handler); }
+  });
+}
 
 // ── SCROLL REVEAL (IntersectionObserver) ────────────────────────
 (function initScrollReveal() {
-  if (!window.IntersectionObserver) return;
+  if (!window.IntersectionObserver || window.innerWidth <= 600) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
@@ -6449,8 +6474,8 @@ renderLandingGallery();
   panelEls.forEach(el => { const obs2 = new MutationObserver(() => setTimeout(reObserve,100)); obs2.observe(el,{attributes:true,attributeFilter:['class']}); });
 })();
 
-// Poll seat counts every 60s so the counter stays accurate without a page refresh
-setInterval(() => {
+// Poll seat counts every 60s — skip on mobile to save battery and bandwidth
+if (window.innerWidth > 600) setInterval(() => {
   const dstr = e => (e.event_date || '').slice(0, 10);
   const vol4Ev = activeEvents.find(e => dstr(e) < '2026-05-01');
   if (vol4Ev) refreshSeatCount(vol4Ev, 'vol4');
@@ -6462,7 +6487,7 @@ setInterval(() => {
   if (v7) refreshSeatCount(v7, 'vol7');
   const v8 = activeEvents.find(e => dstr(e) >= '2026-09-01');
   if (v8) refreshSeatCount(v8, 'vol8');
-}, 60000);
+}, 60000); // end mobile guard
 
 // Handle Stripe payment success redirect
 (function() {
@@ -6514,6 +6539,7 @@ function initMap() {
     L.latLng(40.477, -74.310), // SW — southern Staten Island
     L.latLng(40.930, -73.650)  // NE — northern Bronx
   );
+  const isMobile = window.innerWidth <= 600;
   ltfMap = L.map('map', {
     center: [40.700, -73.960],
     zoom: 12,
@@ -6522,7 +6548,12 @@ function initMap() {
     maxBounds: nycBounds,
     maxBoundsViscosity: 1.0,
     minZoom: 12,
-    maxZoom: 16
+    maxZoom: 16,
+    preferCanvas: true,       // canvas renderer — far faster than SVG on mobile
+    tap: !isMobile,           // disable Leaflet's tap handler on mobile (avoids 300ms delay)
+    dragging: true,
+    inertia: !isMobile,       // skip inertia physics on mobile
+    zoomAnimation: !isMobile  // skip zoom animation on mobile
   });
 
   L.tileLayer('https://api.maptiler.com/maps/positron/{z}/{x}/{y}.png?key=a3E3HEHn9AgRiPTBv3RH', {
@@ -6561,7 +6592,7 @@ function initMap() {
     var descTrimmed = descText.length > 130 ? descText.slice(0, 127) + '&hellip;' : descText;
     var volLabel = p.num === '08' ? 'Sitting No. 1' : ('VOL. ' + p.num);
     var photoSrc = ed.artistPhoto || (ed.artistPhotos && ed.artistPhotos[0]) || '';
-    var photoHtml = photoSrc ? '<img src="' + photoSrc + '" class="pt-photo" alt="' + (ed.name || '') + '">' : '';
+    var photoHtml = photoSrc ? '<img src="' + photoSrc + '" class="pt-photo" alt="' + (ed.name || '') + '" loading="lazy" decoding="async">' : '';
     var textHtml = '<div class="pt-text">' +
       '<div class="pt-vol">' + volLabel + (p.upcoming ? ' &nbsp;&middot;&nbsp; Upcoming' : '') + '</div>' +
       '<div class="pt-name">' + (ed.name || '') + '</div>' +
@@ -6592,6 +6623,7 @@ function openPanel(id) {
   el.classList.add('open');
   document.getElementById('panel-overlay').classList.add('visible');
   if (id === 'admin') loadGuests();
+  document.dispatchEvent(new CustomEvent('ltf:panelOpen', { detail: id }));
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
   var btn = document.getElementById('sn-btn-' + id) || (id === 'admin' ? document.getElementById('nav-admin-btn') : null);
   if (btn) btn.classList.add('active');
