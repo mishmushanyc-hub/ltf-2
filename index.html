@@ -1327,7 +1327,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .hg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.18) 55%, transparent 100%);
   opacity: 0;
   transition: opacity 0.25s ease;
   display: flex;
@@ -1358,6 +1358,20 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   color: rgba(255,255,255,0.55);
   margin-top: 0.25rem;
 }
+.hg-ov-cta {
+  font-family: 'Crimson Pro', serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hg-ov-cta::after { content: '→'; font-size: 10px; }
 @media (max-width: 900px) { .home-gallery { columns: 3; } }
 @media (max-width: 600px) { .home-gallery { columns: 2; } }
 
@@ -6640,6 +6654,7 @@ function renderHomeGallery() {
         (label ? `<span class="hg-ov-label">${label}</span>` : '') +
         (name  ? `<span class="hg-ov-name">${name}</span>` : '') +
         (disc  ? `<span class="hg-ov-disc">${disc}</span>` : '') +
+        `<span class="hg-ov-cta">View event</span>` +
       `</div>` +
     `</div>`;
   }).join('');
