@@ -7030,7 +7030,6 @@ function openDrawer(volNum) {
     if (ov) ov.classList.add('open'); // slide in full event detail
   }
   document.getElementById('archive-drawer').classList.add('open');
-  document.getElementById('panel-overlay').classList.add('visible');
   // Give drawer time to render before telling Leaflet to recalculate its size
   setTimeout(function() { if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize(); }, 350);
 }
@@ -7079,7 +7078,6 @@ function showDrawerVolume(volNum) {
   var drawer = document.getElementById('archive-drawer');
   if (!drawer.classList.contains('open')) {
     drawer.classList.add('open');
-    document.getElementById('panel-overlay').classList.add('visible');
     document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
     var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
   }
