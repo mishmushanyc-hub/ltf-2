@@ -1560,48 +1560,88 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 #archive-drawer #map { width: 100%; flex: 1; height: auto; min-height: 0; }
 
 /* Archive volume list — floating overlay panel */
+/* Event detail drawer — slides in from right on pin click */
 #archive-vol-overlay {
   position: absolute;
-  top: 54px; left: 0; /* 54px = arc-topbar height */
-  width: min(420px, 100vw);
-  height: calc(100% - 54px);
+  top: 0; right: 0;
+  width: min(460px, 100%);
+  height: 100%;
   background: var(--canvas);
-  transform: translateX(-100%);
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
   overflow-y: auto;
   overscroll-behavior: contain;
-  z-index: 5;
-  border-right: 1px solid var(--rule-mid);
+  z-index: 10;
+  border-left: 1px solid var(--rule-mid);
   will-change: transform;
-  pointer-events: none; /* never intercept map clicks when off-screen */
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
 }
 #archive-vol-overlay.open { transform: translateX(0); pointer-events: all; }
 
-/* When opened from a map pin, slide in from the right */
-#archive-vol-overlay.from-right {
-  left: auto;
-  right: 0;
-  border-right: none;
-  border-left: 1px solid var(--rule-mid);
-  transform: translateX(100%);
+@media (max-width: 768px) {
+  #archive-vol-overlay { width: 100%; border-left: none; }
 }
-#archive-vol-overlay.from-right.open { transform: translateX(0); }
 
-/* Archive header bar */
-.arc-topbar {
-  position: relative;
-  z-index: 10;
-  height: 54px;
-  background: rgba(0,0,0,0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+/* Detail drawer header */
+.arc-detail-hd {
+  position: sticky;
+  top: 0;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--rule-mid);
+  padding: 1rem 1.25rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 0 1.25rem;
+  gap: 1rem;
+  z-index: 5;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+.arc-detail-vol {
+  font-family: 'Crimson Pro', serif;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-bottom: 0.3rem;
+}
+.arc-detail-close {
+  background: none;
+  border: 1px solid var(--rule-mid);
+  color: var(--ink-low);
+  font-size: 1rem;
+  width: 34px; height: 34px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+.arc-detail-close:hover { color: var(--ink); border-color: var(--ink-mid); }
+
+/* Floating close button on the map */
+.arc-map-close {
+  position: absolute;
+  top: 0.85rem; right: 1rem;
+  z-index: 15;
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85);
+  font-size: 1.1rem;
+  width: 36px; height: 36px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.arc-map-close:hover { background: rgba(0,0,0,0.88); color: #fff; }
+
+/* Stale arc-topbar styles — kept for reference */
 .arc-topbar-title {
   font-family: 'Crimson Pro', serif;
   font-size: 12px;
@@ -3651,101 +3691,35 @@ h1, h2, h3, h4 {
 <!-- Archive drawer (slides in from right) -->
 <div id="archive-drawer">
   <!-- Top bar: title + volumes toggle + close -->
-  <div class="arc-topbar">
-    <span class="arc-topbar-title" id="drawer-breadcrumb">Archive</span>
-    <div style="display:flex;gap:0.6rem;align-items:center">
-      <button class="arc-vol-toggle" onclick="toggleVolOverlay()">Volumes</button>
-      <button class="arc-close-btn" onclick="closeDrawer()" aria-label="Close">&times;</button>
-    </div>
-  </div>
-
-  <!-- Map fills everything below the top bar -->
+  <!-- Map fills the full archive screen -->
   <div id="map"></div>
 
-  <!-- Volume list as floating overlay panel -->
+  <!-- Floating button to close archive and return to gallery -->
+  <button class="arc-map-close" onclick="closeDrawer()" aria-label="Close archive">&times;</button>
+
+  <!-- Event detail drawer — slides in from the right on pin click -->
   <div id="archive-vol-overlay">
-  <div id="drawer-body">
-
-    <!-- All-volumes list -->
-    <div id="drawer-vol-list">
-      <div style="padding:1.5rem 0 1rem;border-bottom:1px solid var(--rule-mid);margin:0 -1.5rem;padding-left:1.5rem;padding-right:1.5rem">
-        <div style="font-family:'Crimson Pro',serif;font-style:normal;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1;color:var(--ink)">Archive</div>
-        <div style="font-family:'Crimson Pro',serif;font-size: 12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-low);margin-top:0.35rem">8 Volumes &middot; Active Since 2025</div>
-      </div>
-
-      <div style="font-family:'Crimson Pro',serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-low);padding:1.25rem 0 0.6rem;border-bottom:1px solid var(--rule-mid);margin-bottom:0.5rem">Sittings</div>
-
-      <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('08')">
-        <div class="arc-vnum">Sitting No. 1</div>
-        <div><div class="arc-vname">Nicole Ko</div><div class="arc-vsub">Ephemera &middot; Floral Artist &middot; Bushwick</div></div>
-        <div class="arc-vright">Sep 27, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row arc-lg" onclick="showDrawerVolume('07')">
-        <div class="arc-vnum">VOL. 007</div>
-        <div><div class="arc-vname">Ned &amp; Merv (Quell)</div><div class="arc-vsub">Co-Founders &middot; Williamsburg Rooftop</div></div>
-        <div class="arc-vright">Aug 1, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row" onclick="showDrawerVolume('06')">
-        <div class="arc-vnum">VOL. 006</div>
-        <div><div class="arc-vname">Miles Dixon &amp; Elijuh Vuhlet</div><div class="arc-vsub">Clothing Designers &middot; Red Hook</div></div>
-        <div class="arc-vright">Jun 28, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row" onclick="showDrawerVolume('05')">
-        <div class="arc-vnum">VOL. 005</div>
-        <div><div class="arc-vname">Ekaterina Semenova Conway</div><div class="arc-vsub">Painter &amp; Tattoo Artist &middot; East Village</div></div>
-        <div class="arc-vright">May 17, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row" onclick="showDrawerVolume('04')">
-        <div class="arc-vnum">VOL. 004</div>
-        <div><div class="arc-vname">Heidi Cannon</div><div class="arc-vsub">Stylist &middot; Williamsburg</div></div>
-        <div class="arc-vright">Apr 18, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row" onclick="showDrawerVolume('03')">
-        <div class="arc-vnum">VOL. 003</div>
-        <div><div class="arc-vname">Georgia Janelle</div><div class="arc-vsub">Womenswear Designer &middot; Lower East Side</div></div>
-        <div class="arc-vright">Mar 30, 2026<span class="arc-vstatus arc-archived">ARCHIVED</span></div>
-      </div>
-
-      <div class="arc-vol-row arc-ghost">
-        <div class="arc-vnum">VOL. 001&ndash;002</div>
-        <div><div class="arc-vname" style="font-style:normal;color:rgba(68,51,42,0.38)">Earlier volumes</div><div class="arc-vsub">Two Bridges &middot; 2025&ndash;2026</div></div>
-        <div class="arc-vright">2025&ndash;26</div>
-      </div>
-
-      <div class="arc-stats">
-        <span>06 Volumes Archived</span>
-        <span>01 Upcoming</span>
-        <span>61+ Photographs</span>
-        <span>04 Full Menus</span>
-      </div>
-    </div>
-
-    <!-- Volume detail view -->
-    <div id="drawer-vol-detail" style="display:none">
-      <div class="arc-back-row">
-        <button class="arc-back-btn" onclick="showDrawerList()">&larr; All Volumes</button>
-      </div>
-      <div class="archive-header sr">
-        <div class="archive-title" id="arc-vol-title">Archive</div>
+    <div class="arc-detail-hd">
+      <div>
+        <div class="arc-detail-vol" id="drawer-breadcrumb"></div>
+        <div class="archive-title" id="arc-vol-title"></div>
         <div class="archive-meta" id="arc-vol-meta"></div>
       </div>
-      <div class="board-toolbar" style="margin-top:1rem">
-        <div class="filter-bar" id="filter-bar" style="display:flex;align-items:center;gap:0.5rem">
-          <button class="fpill on" onclick="scrollToSection('sec-bio',this)">Bio</button>
-          <button class="fpill" onclick="scrollToSection('sec-menu',this)">Menu</button>
-          <button class="fpill" onclick="scrollToSection('sec-gallery',this)">Gallery</button>
-        </div>
-      </div>
-      <div id="content-list"></div>
+      <button class="arc-detail-close" onclick="closeEventDetail()" aria-label="Close">&times;</button>
     </div>
-
+    <div id="drawer-body">
+      <div id="drawer-vol-detail">
+        <div class="board-toolbar" style="margin-bottom:1rem">
+          <div class="filter-bar" id="filter-bar" style="display:flex;align-items:center;gap:0.5rem">
+            <button class="fpill on" onclick="scrollToSection('sec-bio',this)">Bio</button>
+            <button class="fpill" onclick="scrollToSection('sec-menu',this)">Menu</button>
+            <button class="fpill" onclick="scrollToSection('sec-gallery',this)">Gallery</button>
+          </div>
+        </div>
+        <div id="content-list"></div>
+      </div>
+    </div>
   </div>
-  </div><!-- /archive-vol-overlay -->
 </div><!-- /archive-drawer -->
 
 <!-- RSVP Calling Card Popup (shown after 5 seconds) -->
@@ -6959,45 +6933,24 @@ function openDrawer(volNum) {
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
   var ov = document.getElementById('archive-vol-overlay');
-  if (volNum === 'all') {
-    // Show clean map by default; overlay stays hidden until user clicks a pin or taps Volumes
-    if (ov) { ov.classList.remove('from-right'); ov.classList.remove('open'); }
-    showDrawerList();
-  } else {
-    // Map pin: slide in detail drawer from the right
-    if (ov) { ov.classList.add('from-right'); ov.classList.remove('open'); }
+  // Close event detail if switching events; keep map open
+  if (ov) ov.classList.remove('open');
+  if (volNum !== 'all') {
     showDrawerVolume(volNum);
     requestAnimationFrame(function() { if (ov) ov.classList.add('open'); });
   }
   document.getElementById('archive-drawer').classList.add('open');
-  // Give drawer time to render before telling Leaflet to recalculate its size
   setTimeout(function() { if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize(); }, 350);
 }
 
-function scrollToSection(id, btn) {
-  document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  var el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function toggleVolOverlay() {
+function closeEventDetail() {
   var ov = document.getElementById('archive-vol-overlay');
-  if (!ov) return;
-  if (ov.classList.contains('open')) {
-    ov.classList.remove('open');
-  } else {
-    // Volumes button always shows the list from the left
-    ov.classList.remove('from-right');
-    showDrawerList();
-    ov.classList.add('open');
-  }
+  if (ov) ov.classList.remove('open');
 }
 
 function closeDrawer(clearOverlay) {
   var d = document.getElementById('archive-drawer'); if (d) d.classList.remove('open');
-  var ov = document.getElementById('archive-vol-overlay');
-  if (ov) { ov.classList.remove('open'); ov.classList.remove('from-right'); }
+  var ov = document.getElementById('archive-vol-overlay'); if (ov) ov.classList.remove('open');
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.remove('active');
   if (clearOverlay !== false) {
     var anyOpen = ['current','about','work','admin'].some(function(pid) {
@@ -7007,30 +6960,35 @@ function closeDrawer(clearOverlay) {
   }
 }
 
-function showDrawerList() {
-  document.getElementById('drawer-vol-list').style.display = '';
-  document.getElementById('drawer-vol-detail').style.display = 'none';
-  document.getElementById('drawer-breadcrumb').textContent = 'All Volumes';
-}
+// Keep for any legacy callers
+function showDrawerList() {}
 
 function showDrawerVolume(volNum) {
-  document.getElementById('drawer-vol-list').style.display = 'none';
-  document.getElementById('drawer-vol-detail').style.display = '';
   var ed = EDITIONS[volNum] || {};
   var titleEl = document.getElementById('arc-vol-title');
-  var metaEl = document.getElementById('arc-vol-meta');
+  var metaEl  = document.getElementById('arc-vol-meta');
+  var breadEl = document.getElementById('drawer-breadcrumb');
   if (titleEl) titleEl.textContent = ed.name || ('Vol. ' + volNum);
-  if (metaEl) metaEl.textContent = (ed.discipline || '') + (ed.location ? ' · ' + ed.location : '') + (ed.eventDateDisplay ? ' · ' + ed.eventDateDisplay : '');
-  document.getElementById('drawer-breadcrumb').textContent = volNum === '08' ? 'SITTING 01' : 'VOL. ' + String(volNum).padStart(3,'0');
+  if (metaEl)  metaEl.textContent  = (ed.discipline || '') + (ed.location ? ' · ' + ed.location : '') + (ed.eventDateDisplay ? ' · ' + ed.eventDateDisplay : '');
+  if (breadEl) breadEl.textContent = volNum === '08' ? 'Sitting No. 1' : 'Vol. ' + String(volNum).padStart(3,'0');
   renderContent(volNum);
-  // Open drawer directly — avoid calling openDrawer() to prevent recursion
+  // Ensure the archive drawer itself is open
   var drawer = document.getElementById('archive-drawer');
-  if (!drawer.classList.contains('open')) {
+  if (drawer && !drawer.classList.contains('open')) {
     drawer.classList.add('open');
     document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
     var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
   }
 }
+
+function scrollToSection(id, btn) {
+  document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleVolOverlay() { /* no-op — topbar removed */ }
 
 // ── Popup ────────────────────────────────────────────────────────
 function closePopup() {
