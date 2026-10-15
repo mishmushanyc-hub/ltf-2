@@ -1405,14 +1405,15 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   }
 }
 
-/* Full-screen takeover panels */
+/* Full-screen takeover panels — sit below the sticky nav */
 #tab-current, #tab-about, #tab-work, #tab-admin {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
-  inset: 0 !important;
+  top: 54px !important;
+  left: 0 !important; right: 0 !important; bottom: 0 !important;
   width: 100vw !important;
-  height: 100vh !important;
+  height: calc(100vh - 54px) !important;
   z-index: 145 !important;
   background: var(--canvas) !important;
   border-left: none !important;
@@ -1536,12 +1537,12 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 #panel-overlay.visible { opacity: 1; pointer-events: auto; }
 
-/* Archive — full-screen with map filling the frame */
+/* Archive — full-screen with map filling the frame, sits below sticky nav */
 #archive-drawer {
   position: fixed;
-  inset: 0;
+  top: 54px; left: 0; right: 0; bottom: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 54px);
   background: #000;
   border-left: none;
   opacity: 0;
@@ -1549,7 +1550,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: opacity 0.44s var(--ease-out);
   will-change: opacity;
   z-index: 150;
-  overflow: hidden;
+  overflow: visible; /* allow overlay to slide in/out without clipping */
   display: flex;
   flex-direction: column;
 }
@@ -1561,7 +1562,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Archive volume list — floating overlay panel */
 #archive-vol-overlay {
   position: absolute;
-  top: 54px; left: 0;
+  top: 54px; left: 0; /* 54px = arc-topbar height */
   width: min(420px, 100vw);
   height: calc(100% - 54px);
   background: var(--canvas);
@@ -2036,12 +2037,6 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   /* Nav: hide wordmark text, show Black Peter only */
   .sn-logo-text { display: none; }
   .sn-logo { height: 44px; margin-right: 0; }
-
-  /* Panels: start below the nav so the X button is never hidden */
-  #tab-current, #tab-about, #tab-work, #tab-admin {
-    top: 54px !important;
-    height: calc(100% - 54px) !important;
-  }
 
   /* Compact popup for mobile */
   .popup-inner { padding: 0.75rem 1rem 0.8rem; }
