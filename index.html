@@ -1566,7 +1566,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 #archive-vol-overlay {
   position: absolute;
   top: 0; right: 0;
-  width: min(460px, 100%);
+  width: min(680px, 100%);
   height: 100%;
   background: var(--canvas);
   transform: translateX(100%);
@@ -1708,7 +1708,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   transition: color 0.15s;
 }
 .drw-close:hover { color: var(--ink); }
-#drawer-body { padding: 0 1.5rem 5rem; flex: 1; }
+#drawer-body { padding: 1.25rem 1.5rem 5rem; flex: 1; }
 
 /* Arc vol rows in drawer — fix margin override */
 #archive-drawer .arc-vol-row {
@@ -6354,22 +6354,25 @@ function renderContent(volFilter) {
     html += `<div class="ed-accordion-body"><div class="ed-acc-inner"><div class="ed-acc-content">`;
 
     if (ed.desc || ed.bio || ed.menu) {
+      html += `<div id="sec-bio">`;
       if (ed.desc) html += `<p class="ed-archive-desc">${ed.desc}</p>`;
       if (ed.bio && ed.bio.length) {
-        html += `<details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+        html += `<details class="menu-dropdown" open style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
           <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
             <span>Subject Notes</span>
-            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9650;</span>
           </summary>
           <div style="padding-bottom:1.75rem"><div class="ed-archive-courses">`;
         ed.bio.forEach(p => { html += `<div><p class="ed-course-body">${p}</p></div>`; });
         html += `</div></div></details>`;
       }
+      html += `</div>`;
       if (ed.menu && ed.menu.length) {
-        html += `<details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+        html += `<div id="sec-menu">`;
+        html += `<details class="menu-dropdown" open style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
           <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive)">
             <span>Findings (Menu)</span>
-            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+            <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9650;</span>
           </summary>
           <div style="padding-bottom:1.75rem"><div class="ed-archive-courses">`;
         ed.menu.forEach(item => {
@@ -6381,6 +6384,7 @@ function renderContent(volFilter) {
           html += `</div>`;
         });
         html += `</div></div></details>`;
+        html += `</div>`;
       }
     }
 
@@ -6630,7 +6634,7 @@ function renderHomeGallery() {
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
     const disc = ed.discipline || '';
-    return `<div class="hg-item" onclick="openGallery('${p.edition}')" title="${name}">` +
+    return `<div class="hg-item" onclick="openDrawer('${p.edition}')" title="${name}">` +
       `<img decoding="async" src="${p.photo}" alt="${name}" loading="lazy">` +
       `<div class="hg-overlay">` +
         (label ? `<span class="hg-ov-label">${label}</span>` : '') +
@@ -6988,7 +6992,15 @@ function scrollToSection(id, btn) {
   document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
   if (btn) btn.classList.add('on');
   var el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!el) return;
+  // Scroll within the overlay container, not the page
+  var scroller = document.getElementById('archive-vol-overlay');
+  if (scroller) {
+    var top = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+    scroller.scrollTo({ top: top, behavior: 'smooth' });
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function toggleVolOverlay() { /* no-op — topbar removed */ }
