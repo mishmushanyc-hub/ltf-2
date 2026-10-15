@@ -1556,8 +1556,10 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 #archive-drawer.open { opacity: 1; pointer-events: all; }
 
-/* Map fills the full archive screen */
-#archive-drawer #map { width: 100%; flex: 1; height: auto; min-height: 0; }
+/* Map fills the full archive screen.
+   z-index: 1 creates a stacking context so Leaflet's internal z-indices (200/400)
+   stay contained within #map and don't paint over #archive-vol-overlay. */
+#archive-drawer #map { width: 100%; flex: 1; height: auto; min-height: 0; position: relative; z-index: 1; }
 
 /* Archive volume list — floating overlay panel */
 /* Event detail drawer — slides in from right on pin click */
@@ -6935,11 +6937,12 @@ function openDrawer(volNum) {
   var ov = document.getElementById('archive-vol-overlay');
   // Close event detail if switching events; keep map open
   if (ov) ov.classList.remove('open');
-  if (volNum !== 'all') {
-    showDrawerVolume(volNum);
-    requestAnimationFrame(function() { if (ov) ov.classList.add('open'); });
-  }
   document.getElementById('archive-drawer').classList.add('open');
+  if (volNum !== 'all') {
+    try { showDrawerVolume(volNum); } catch(e) { console.error('showDrawerVolume error:', e); }
+    // Use a short timeout so the remove('open') → add('open') cycle always triggers the CSS transition
+    setTimeout(function() { if (ov) ov.classList.add('open'); }, 16);
+  }
   setTimeout(function() { if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize(); }, 350);
 }
 
