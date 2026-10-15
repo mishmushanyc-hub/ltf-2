@@ -1272,21 +1272,28 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   position: absolute;
   inset: 0;
   overflow-y: auto;
-  columns: 4;
-  column-gap: 3px;
-  padding: 3px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 26vh;
+  gap: 3px;
   background: #111;
+  padding: 3px;
+  box-sizing: border-box;
+  align-content: start;
 }
 .hg-item {
-  break-inside: avoid;
   position: relative;
   overflow: hidden;
-  margin-bottom: 3px;
   cursor: pointer;
-  display: block;
 }
+/* Taller cells for visual rhythm — every 7th, 4th of a 7-cycle */
+.hg-item:nth-child(7n+1),
+.hg-item:nth-child(7n+4) { grid-row: span 2; }
 .hg-item img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
   transition: transform 0.45s ease;
 }
@@ -1372,27 +1379,28 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   }
 }
 
-/* Other sections: slide-in panels */
+/* Full-screen takeover panels */
 #tab-current, #tab-about, #tab-work, #tab-admin {
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
-  top: 0 !important;
-  right: 0 !important;
-  height: 100% !important;
-  width: min(640px, 100vw) !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: 145 !important;
   background: var(--canvas) !important;
-  border-left: 1px solid var(--rule-mid) !important;
-  box-shadow: -8px 0 32px rgba(68,51,42,0.12) !important;
+  border-left: none !important;
+  box-shadow: none !important;
   overflow-y: auto !important;
   overscroll-behavior: contain;
-  transform: translateX(110%);
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.38s ease;
   padding: 0 !important;
 }
 #tab-current.open, #tab-about.open, #tab-work.open, #tab-admin.open {
-  transform: translateX(0);
+  opacity: 1;
+  pointer-events: all;
 }
 
 
@@ -1497,24 +1505,88 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 #panel-overlay.visible { opacity: 1; pointer-events: auto; }
 
-/* Archive Drawer */
+/* Archive — full-screen with map filling the frame */
 #archive-drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: min(750px, 100vw);
-  background: var(--canvas);
-  border-left: 1px solid var(--rule-mid);
-  transform: translateX(110%);
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  border-left: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.38s ease;
   z-index: 150;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
-#archive-drawer.open { transform: translateX(0); }
+#archive-drawer.open { opacity: 1; pointer-events: all; }
+
+/* Map fills the full archive screen */
+#archive-drawer #map { width: 100%; flex: 1; height: auto; min-height: 0; }
+
+/* Archive volume list — floating overlay panel */
+#archive-vol-overlay {
+  position: absolute;
+  top: 54px; left: 0;
+  width: min(400px, 100vw);
+  height: calc(100% - 54px);
+  background: var(--canvas);
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 5;
+  border-right: 1px solid var(--rule-mid);
+}
+#archive-vol-overlay.open { transform: translateX(0); }
+
+/* Archive header bar */
+.arc-topbar {
+  position: relative;
+  z-index: 10;
+  height: 54px;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.arc-topbar-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+.arc-vol-toggle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 0.35rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.arc-vol-toggle:hover { background: rgba(255,255,255,0.16); }
+.arc-close-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  line-height: 1;
+}
+.arc-close-btn:hover { color: #fff; }
 .drw-hd {
   position: sticky;
   top: 0;
@@ -1915,7 +1987,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 @media (max-width: 600px) {
   #rsvp-popup { right: 1rem; bottom: 1rem; width: calc(100vw - 2rem); }
   #tab-current, #tab-about, #tab-work, #tab-admin { width: 100vw !important; border-left: none !important; }
-  #archive-drawer { width: 100vw; border-left: none; }
+  /* archive-drawer is already full-screen */
 
   /* Nav: hide wordmark text, show Black Peter only */
   .sn-logo-text { display: none; }
@@ -1985,6 +2057,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
   /* ── Mobile performance strip-down ─────────────────────────────── */
 
+  /* Archive vol overlay full width on mobile */
+  #archive-vol-overlay { width: 100vw; }
+
   /* New editorial blocks — stack on mobile */
   .partner-stats { flex-direction:column; }
   .pstat { border-right:none; border-bottom:1px solid var(--rule-mid); }
@@ -2015,9 +2090,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
     background-image: none !important;
   }
 
-  /* Simplify panel slide transition */
+  /* Panels already use opacity fade — no transform override needed */
   #tab-current, #tab-about, #tab-work, #tab-admin {
-    transition: transform 0.22s ease !important;
+    transition: opacity 0.22s ease !important;
     box-shadow: none !important;
   }
 
@@ -2309,7 +2384,7 @@ h1, h2, h3, h4 {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem">
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">A Classic Thanksgiving Spread prepared with love.</p>
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">Artists we admire.</p>
-          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">Brands we love.</p>
+          <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">Brands we trust.</p>
           <p style="font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink-mid);line-height:1.6;margin:0">Creative thinkers, influencers, and tastemakers.</p>
         </div>
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask: Show up, look good, and enjoy yourself and the company we curate.</p>
@@ -3624,13 +3699,20 @@ h1, h2, h3, h4 {
 
 <!-- Archive drawer (slides in from right) -->
 <div id="archive-drawer">
-  <div class="drw-hd">
-    <div class="drw-breadcrumb" id="drawer-breadcrumb">All Volumes</div>
-    <button class="drw-close" onclick="closeDrawer()" aria-label="Close">&times;</button>
+  <!-- Top bar: title + volumes toggle + close -->
+  <div class="arc-topbar">
+    <span class="arc-topbar-title" id="drawer-breadcrumb">Archive</span>
+    <div style="display:flex;gap:0.6rem;align-items:center">
+      <button class="arc-vol-toggle" onclick="toggleVolOverlay()">Volumes</button>
+      <button class="arc-close-btn" onclick="closeDrawer()" aria-label="Close">&times;</button>
+    </div>
   </div>
-  <!-- Map lives in the drawer now -->
+
+  <!-- Map fills everything below the top bar -->
   <div id="map"></div>
 
+  <!-- Volume list as floating overlay panel -->
+  <div id="archive-vol-overlay">
   <div id="drawer-body">
 
     <!-- All-volumes list -->
@@ -3712,9 +3794,10 @@ h1, h2, h3, h4 {
     </div>
 
   </div>
-</div>
+  </div><!-- /archive-vol-overlay -->
+</div><!-- /archive-drawer -->
 
-<!-- RSVP Calling Card Popup (shown after 5 seconds) --></div>
+<!-- RSVP Calling Card Popup (shown after 5 seconds) -->
 
 <!-- Newsletter strip -->
 <div id="newsletter-strip">
@@ -6803,7 +6886,6 @@ function openPanel(id) {
   var el = document.getElementById('tab-' + id);
   if (!el) return;
   el.classList.add('open');
-  document.getElementById('panel-overlay').classList.add('visible');
   if (id === 'admin') loadGuests();
   document.dispatchEvent(new CustomEvent('ltf:panelOpen', { detail: id }));
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -6939,8 +7021,14 @@ function openDrawer(volNum) {
   });
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
-  if (volNum === 'all') { showDrawerList(); }
-  else { showDrawerVolume(volNum); }
+  var ov = document.getElementById('archive-vol-overlay');
+  if (volNum === 'all') {
+    showDrawerList();
+    if (ov) ov.classList.add('open'); // open volume list panel automatically
+  } else {
+    showDrawerVolume(volNum);
+    if (ov) ov.classList.remove('open'); // show clean map when opening a specific volume
+  }
   document.getElementById('archive-drawer').classList.add('open');
   document.getElementById('panel-overlay').classList.add('visible');
   // Give drawer time to render before telling Leaflet to recalculate its size
@@ -6954,8 +7042,14 @@ function scrollToSection(id, btn) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function toggleVolOverlay() {
+  var ov = document.getElementById('archive-vol-overlay');
+  if (ov) ov.classList.toggle('open');
+}
+
 function closeDrawer(clearOverlay) {
   var d = document.getElementById('archive-drawer'); if (d) d.classList.remove('open');
+  var ov = document.getElementById('archive-vol-overlay'); if (ov) ov.classList.remove('open');
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.remove('active');
   if (clearOverlay !== false) {
     var anyOpen = ['current','about','work','admin'].some(function(pid) {
