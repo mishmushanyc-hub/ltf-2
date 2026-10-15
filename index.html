@@ -1266,13 +1266,20 @@ footer {
 /* Full-screen map landing */
 main { max-width: none !important; margin: 0 !important; padding: 0 !important; }
 
-/* Site nav: always on top */
+/* Site nav: hidden on landing, visible when panel is open */
 .site-nav {
   position: fixed !important;
   top: 0; left: 0; right: 0;
   background: var(--canvas) !important;
   border-bottom: 1px solid rgba(68,51,42,0.10) !important;
   z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.site-nav.nav-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 .sn-locator { display: none !important; }
 
@@ -1287,6 +1294,106 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   z-index: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
+}
+
+/* ── Minimal landing nav ──────────────────────────────────────────── */
+#landing-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--canvas);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+#landing-nav.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
+/* Left column: logo */
+.ln-logo-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3rem,6vw,6rem) clamp(2rem,4vw,4rem) clamp(3rem,6vw,6rem) clamp(2rem,8vw,8rem);
+  border-right: 1px solid rgba(68,51,42,0.10);
+}
+.ln-logo {
+  width: min(360px, 85%);
+  height: auto;
+  display: block;
+  opacity: 0.92;
+}
+/* Right column: nav items */
+.ln-nav-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3rem,6vw,6rem) clamp(2rem,8vw,8rem) clamp(3rem,6vw,6rem) clamp(2rem,4vw,4rem);
+}
+.ln-wordmark {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 2.5rem;
+  display: block;
+}
+.ln-items {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.ln-item {
+  overflow: hidden;
+}
+.ln-btn {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  font-weight: normal;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-align: left;
+  transition: color 0.18s ease, transform 0.18s ease;
+  transform-origin: left center;
+}
+.ln-btn:hover {
+  color: var(--olive);
+  transform: translateX(0.35rem);
+}
+.ln-footer {
+  margin-top: 2.5rem;
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+}
+@media (max-width: 700px) {
+  #landing-nav {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .ln-logo-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(68,51,42,0.10);
+    padding: 2.5rem 2rem 2rem;
+  }
+  .ln-logo { width: min(180px, 55%); }
+  .ln-nav-col { padding: 2rem 2rem 3rem; }
+  .ln-btn { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+  .ln-wordmark { margin-bottom: 1.5rem; }
 }
 
 /* Map inside archive drawer */
@@ -2313,6 +2420,26 @@ h1, h2, h3, h4 {
 
 <main>
 
+<!-- Minimal landing nav -->
+<div id="landing-nav">
+  <!-- Left: logo -->
+  <div class="ln-logo-col">
+    <img src="images/logos/LTF PETE LOGO.png" alt="Life Thru Food" class="ln-logo">
+  </div>
+  <!-- Right: nav -->
+  <div class="ln-nav-col">
+    <span class="ln-wordmark">Life Thru Food</span>
+    <ul class="ln-items">
+      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('current')">Events</button></li>
+      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('gallery')">Gallery</button></li>
+      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('archive')">Archive</button></li>
+      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('work')">Work with us</button></li>
+      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('about')">About</button></li>
+    </ul>
+    <span class="ln-footer">New York City</span>
+  </div>
+</div>
+
   <!-- HOME — full-screen photo mosaic -->
   <div id="tab-archive" class="section active">
     <div id="home-gallery" class="home-gallery"></div>
@@ -3276,6 +3403,11 @@ h1, h2, h3, h4 {
         <p class="about-body" style="margin-top:0.75rem">Over a year, twelve Sittings become a running record: twelve subjects, twelve original menus, one table.</p>
       </div>
 
+      <div style="margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid var(--rule-mid)">
+        <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 1rem">The Session</p>
+        <p class="about-body">Sessions are smaller, family-style dinners shared with our community. Where a Sitting is built around getting to know one Subject, a Session is built around getting to know our guests. Each one is invite only.</p>
+      </div>
+
       <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin:0 0 0.75rem">Get Involved</p>
         <p class="about-body" style="margin:0 0 1.5rem">Know someone whose story should be told through food? Looking to host a private Sitting? We want to hear it.</p>
@@ -3289,11 +3421,10 @@ h1, h2, h3, h4 {
       <p>The people behind Life Thru Food — in the kitchen, behind the camera, and shaping every room we walk into.</p>
     </div>
     <div class="team-grid">
-      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna" loading="lazy"></div><div class="team-name">Micho Hanna</div><div class="team-role">Cofounder / CEO</div><a href="https://www.instagram.com/michohanna_/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@michohanna_</a></div>
+      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Micho Profile.jpg" alt="Micho Hanna" loading="lazy"></div><div class="team-name">Micho Hanna</div><div class="team-role">Cofounder / Producer</div><a href="https://www.instagram.com/michohanna_/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@michohanna_</a></div>
       <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Zach Profile.jpg" alt="Zach Amato" loading="lazy"></div><div class="team-name">Zach Amato</div><div class="team-role">Cofounder / Chef</div><a href="https://www.instagram.com/zach.amato/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@zach.amato</a></div>
       <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/John Profile.jpg" alt="John Stets" loading="lazy"></div><div class="team-name">John Stets</div><div class="team-role">Chef De Cuisine</div><a href="https://www.instagram.com/stets_jk/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@stets_jk</a></div>
-      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/Lea Workman.JPG" alt="Lea Workman" loading="lazy"></div><div class="team-name">Lea Workman</div><div class="team-role">Director of Growth &amp; Partnerships</div><a href="https://www.instagram.com/leamassaro/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leamassaro</a></div>
-      <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/leo-profile.jpg" alt="Leo Velleu" loading="lazy"></div><div class="team-name">Leo Velleu</div><div class="team-role">Head of Service &amp; Graphic Designer</div><a href="https://www.instagram.com/leo_velleu/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leo_velleu</a></div>
+<div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/leo-profile.jpg" alt="Leo Velleu" loading="lazy"></div><div class="team-name">Leo Velleu</div><div class="team-role">Head of Service &amp; Graphic Designer</div><a href="https://www.instagram.com/leo_velleu/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@leo_velleu</a></div>
       <div class="team-card"><div class="team-photo"><img decoding="async" src="images/team-profiles/andreo-profile.jpg" alt="Andreo Otiniano" loading="lazy"></div><div class="team-name">Andreo Otiniano</div><div class="team-role">Head of Photography</div><a href="https://www.instagram.com/andreo.otiniano/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@andreo.otiniano</a></div>
     </div>
 
@@ -6799,6 +6930,26 @@ function initMap() {
     { num:'01', lat:40.7116, lng:-73.9960, upcoming:false },
   ];
 
+  // Sessions pin — Friendsgiving, Kips Bay
+  (function() {
+    var sessIcon = L.divIcon({
+      className: '',
+      html: '<div class="ltf-pin ltf-pin-upcoming ltf-pin-sessions"><div class="ltf-pin-dot"></div><div class="ltf-pin-pulse"></div></div>',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      tooltipAnchor: [0, -14]
+    });
+    var sessMarker = L.marker([40.7440, -73.9775], { icon: sessIcon }).addTo(ltfMap);
+    sessMarker.bindTooltip(
+      '<div class="pt-inner"><div class="pt-text">' +
+        '<div class="pt-vol" style="color:#F2BE4B">SESSIONS No. 1</div>' +
+        '<div class="pt-name">Friendsgiving</div>' +
+        '<div class="pt-disc">Kips Bay · Upcoming</div>' +
+      '</div></div>',
+      { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false }
+    );
+  })();
+
   EVENT_PINS.forEach(p => {
     const ed = EDITIONS[p.num] || {};
     const icon = L.divIcon({
@@ -6838,7 +6989,37 @@ function initMap() {
 }
 
 // ── Panel control ────────────────────────────────────────────────
+// ── Landing nav helpers ───────────────────────────────────────────
+function showLanding() {
+  var ln = document.getElementById('landing-nav');
+  if (ln) ln.classList.remove('hidden');
+  document.querySelector('.site-nav').classList.remove('nav-visible');
+}
+function hideLanding() {
+  var ln = document.getElementById('landing-nav');
+  if (ln) ln.classList.add('hidden');
+  document.querySelector('.site-nav').classList.add('nav-visible');
+}
+function landingOpen(dest) {
+  hideLanding();
+  if (dest === 'gallery') {
+    // Gallery: show the home mosaic full-screen (no panel)
+    closeDrawer(false);
+    ['current','about','work','admin'].forEach(function(pid) {
+      var e = document.getElementById('tab-' + pid); if (e) e.classList.remove('open');
+    });
+    document.getElementById('panel-overlay').classList.remove('visible');
+    document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+  } else if (dest === 'archive') {
+    openDrawer('all');
+  } else {
+    openPanel(dest);
+  }
+}
+// ─────────────────────────────────────────────────────────────────
+
 function openPanel(id) {
+  hideLanding();
   closeDrawer(false);
   ['current','about','work','admin'].forEach(function(pid) {
     if (pid !== id) { var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open'); }
@@ -6860,8 +7041,10 @@ function closePanel(id) {
   var anyOpen = ['current','about','work','admin'].some(function(pid) {
     var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
   });
-  if (!anyOpen && !document.getElementById('archive-drawer').classList.contains('open')) {
+  var drawerOpen = document.getElementById('archive-drawer').classList.contains('open');
+  if (!anyOpen && !drawerOpen) {
     document.getElementById('panel-overlay').classList.remove('visible');
+    showLanding();
   }
 }
 
@@ -6872,6 +7055,7 @@ function closeAllPanels() {
   closeDrawer(false);
   document.getElementById('panel-overlay').classList.remove('visible');
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+  showLanding();
 }
 
 
@@ -6962,6 +7146,7 @@ async function submitSessionsWaitlist() {
 
 // ── Archive drawer control ───────────────────────────────────────
 function openDrawer(volNum) {
+  hideLanding();
   ['current','about','work','admin'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
   });
@@ -6992,7 +7177,10 @@ function closeDrawer(clearOverlay) {
     var anyOpen = ['current','about','work','admin'].some(function(pid) {
       var e = document.getElementById('tab-' + pid); return e && e.classList.contains('open');
     });
-    if (!anyOpen) document.getElementById('panel-overlay').classList.remove('visible');
+    if (!anyOpen) {
+      document.getElementById('panel-overlay').classList.remove('visible');
+      showLanding();
+    }
   }
 }
 
