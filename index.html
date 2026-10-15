@@ -6698,7 +6698,7 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  gallery.innerHTML = pool.map(p => {
+  gallery.innerHTML = pool.slice(0, 25).map(p => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
@@ -7024,10 +7024,10 @@ function openDrawer(volNum) {
   var ov = document.getElementById('archive-vol-overlay');
   if (volNum === 'all') {
     showDrawerList();
-    if (ov) ov.classList.add('open'); // open volume list panel automatically
+    if (ov) ov.classList.add('open');
   } else {
     showDrawerVolume(volNum);
-    if (ov) ov.classList.remove('open'); // show clean map when opening a specific volume
+    if (ov) ov.classList.add('open'); // slide in full event detail
   }
   document.getElementById('archive-drawer').classList.add('open');
   document.getElementById('panel-overlay').classList.add('visible');
