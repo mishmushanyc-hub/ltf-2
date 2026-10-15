@@ -1471,15 +1471,17 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .panel-close {
   background: none;
-  border: none;
-  font-size: 1.25rem;
+  border: 1px solid var(--rule-mid);
+  border-radius: 2px;
+  font-size: 1rem;
   color: var(--ink-low);
   cursor: pointer;
-  padding: 0.4rem;
-  transition: color 0.15s;
+  padding: 0.3rem 0.65rem;
+  transition: color 0.15s, border-color 0.15s;
   line-height: 1;
+  letter-spacing: 0.04em;
 }
-.panel-close:hover { color: var(--ink); }
+.panel-close:hover { color: var(--ink); border-color: var(--ink-mid); }
 .panel-body { padding: 0 1.5rem 5rem; flex: 1; }
 
 /* Panel overlay backdrop */
@@ -1564,14 +1566,15 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   height: calc(100% - 54px);
   background: var(--canvas);
   transform: translateX(-100%);
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1), opacity 0.38s var(--ease-out);
+  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
   overflow-y: auto;
   overscroll-behavior: contain;
   z-index: 5;
   border-right: 1px solid var(--rule-mid);
   will-change: transform;
+  pointer-events: none; /* never intercept map clicks when off-screen */
 }
-#archive-vol-overlay.open { transform: translateX(0); }
+#archive-vol-overlay.open { transform: translateX(0); pointer-events: all; }
 
 /* When opened from a map pin, slide in from the right */
 #archive-vol-overlay.from-right {
@@ -2052,16 +2055,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   /* Hide annotation on mobile — arrows don't align with full-width popup */
   #popup-annot { display: none !important; }
 
-  /* ── Partner tab editorial ──────────────────────────────────────── */
-  .partner-stats { display:flex; gap:0; border:1px solid var(--rule-mid); margin-bottom:2rem; }
-  .pstat { flex:1; padding:1.1rem 1rem; text-align:center; border-right:1px solid var(--rule-mid); }
-  .pstat:last-child { border-right:none; }
-  .pstat-n { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.8rem; color:var(--olive); line-height:1; }
-  .pstat-l { display:block; font-family:'Crimson Pro',serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-low); margin-top:0.3rem; }
-  .partner-pullquote { font-family:'Georgia',serif; font-style:italic; font-size:1.05rem; color:var(--ink-mid); border-left:2px solid var(--olive); padding:0.5rem 0 0.5rem 1.1rem; margin:0 0 1.75rem; line-height:1.6; }
-  .partner-data { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
-  .pdata-item { background:var(--canvas); padding:1rem; }
-  .pdata-pct { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.5rem; color:var(--olive); line-height:1; margin-bottom:0.25rem; }
+  /* (partner tab editorial styles moved to global scope) */
   .pdata-label { display:block; font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); margin-bottom:0.5rem; }
   .pdata-desc { font-family:'Georgia',serif; font-size:0.78rem; color:var(--ink-mid); line-height:1.55; }
   .partner-tiers { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
@@ -2074,27 +2068,7 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   .ptier-name { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.1rem; color:var(--ink); margin-bottom:0.5rem; line-height:1.1; }
   .ptier-desc { font-family:'Georgia',serif; font-size:0.8rem; color:var(--ink-mid); line-height:1.55; }
 
-  /* ── Artist tab editorial ────────────────────────────────────────── */
-  .artist-exchange { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
-  .aex-col { background:var(--canvas); padding:1.1rem; }
-  .aex-label { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); display:block; margin-bottom:0.5rem; }
-  .aex-col p { font-family:'Georgia',serif; font-size:0.88rem; color:var(--ink-mid); line-height:1.6; margin:0; }
-  .artist-services { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1.5rem; margin-bottom:2rem; padding:1.1rem 1.25rem; border:1px solid var(--rule-mid); background:var(--paper); }
-  .asvc-item { font-family:'Georgia',serif; font-size:0.82rem; color:var(--ink-mid); line-height:1.5; display:flex; align-items:flex-start; gap:0.5rem; }
-  .asvc-item::before { content:counter(svc); counter-increment:svc; font-family:'Crimson Pro',serif; font-size:10px; color:var(--olive); margin-top:1px; min-width:1rem; }
-  .artist-services { counter-reset:svc; }
-
-  /* ── Sponsor gallery ─────────────────────────────────────────────── */
-  .sg-gallery { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; align-items:center; }
-  .sg-item { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
-  .sg-item img { height:44px; width:auto; max-width:110px; object-fit:contain; filter:grayscale(100%); opacity:0.7; transition:opacity 0.2s; }
-  .sg-item img:hover { opacity:1; filter:none; }
-  .sg-item .sg-name { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); text-align:center; }
-
-  /* ── Footer social / contact ─────────────────────────────────────── */
-  .foot-contact { display:flex; align-items:center; gap:1.5rem; padding:1.25rem 0; border-top:1px solid var(--rule-mid); margin-top:1.5rem; flex-wrap:wrap; }
-  .foot-contact a { font-family:'Crimson Pro',serif; font-size:13px; letter-spacing:0.12em; color:var(--ink-low); text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
-  .foot-contact a:hover { color:var(--ink); }
+  /* (artist tab, sponsor gallery, footer contact styles moved to global scope) */
 
   /* ── Mobile performance strip-down ─────────────────────────────── */
 
@@ -2118,10 +2092,9 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
 
   /* Kill hover states — not applicable on touch, saves style recalc */
   .sn-btn:hover, .btn-ghost:hover, .btn-primary:hover,
-  .entry-btn:hover, .part-tab:hover { transform: none; opacity: 1; box-shadow: none; }
+  .part-tab:hover { transform: none; opacity: 1; box-shadow: none; }
 
   /* Kill GPU-heavy backdrop blurs */
-  #site-entry { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .lightbox { backdrop-filter: none; }
   #gallery-modal { backdrop-filter: none; }
   #rsvp-popup { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(242,237,227,0.97); }
@@ -2215,116 +2188,50 @@ h1, h2, h3, h4 {
 }
 
 /* ── ENTRY GATE ── */
-#site-entry {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  background: #000;
-  transition: opacity 0.55s var(--ease-out);
-}
-.entry-logo-bar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.75rem;
-  z-index: 2;
-  pointer-events: none;
-}
-.entry-logo {
-  height: 28px;
-  width: auto;
-  filter: invert(1); /* white on dark photo */
-}
-.entry-btns {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: 100vh;
-}
-.entry-btn {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  border: none;
-  border-right: 1px solid rgba(255,255,255,0.15);
-  padding: 0;
-  background: none;
-}
-.entry-btn:last-child { border-right: none; }
-.entry-btn-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  filter: grayscale(100%);
-  transition: transform 0.45s ease;
-}
-.entry-btn:hover .entry-btn-img { transform: scale(1.04); }
-.entry-btn-overlay {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 3rem 1.5rem 2.5rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-}
-.entry-btn-label {
-  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
-  font-size: 2.2rem;
-  color: #fff;
-  display: block;
-  line-height: 1;
-}
-.entry-btn-sub {
-  font-family: 'Crimson Pro', serif;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
-  display: block;
-}
-@media (max-width: 600px) {
-  .entry-btns { flex-direction: column; }
-  .entry-btn { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); height: 50vh; }
-  .entry-btn:last-child { border-bottom: none; }
-  .entry-btn-label { font-size: 1.8rem; }
-}
 
+/* ── Partner tab editorial ──────────────────────────────────── */
+.partner-stats { display:flex; gap:0; border:1px solid var(--rule-mid); margin-bottom:2rem; }
+.pstat { flex:1; padding:1.1rem 1rem; text-align:center; border-right:1px solid var(--rule-mid); }
+.pstat:last-child { border-right:none; }
+.pstat-n { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.8rem; color:var(--olive); line-height:1; }
+.pstat-l { display:block; font-family:'Crimson Pro',serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-low); margin-top:0.3rem; }
+.partner-pullquote { font-family:'Georgia',serif; font-style:italic; font-size:1.05rem; color:var(--ink-mid); border-left:2px solid var(--olive); padding:0.5rem 0 0.5rem 1.1rem; margin:0 0 1.75rem; line-height:1.6; }
+
+/* ── Artist tab editorial ────────────────────────────────────── */
+.artist-exchange { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
+.aex-col { background:var(--canvas); padding:1.25rem; }
+.aex-label { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); display:block; margin-bottom:0.5rem; }
+.aex-col p { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); line-height:1.65; margin:0; }
+.artist-services { counter-reset:svc; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1.5rem; margin-bottom:2rem; padding:1.1rem 1.25rem; border:1px solid var(--rule-mid); background:var(--paper); }
+.asvc-item { font-family:'Georgia',serif; font-size:0.82rem; color:var(--ink-mid); line-height:1.5; display:flex; align-items:flex-start; gap:0.5rem; }
+.asvc-item::before { content:counter(svc); counter-increment:svc; font-family:'Crimson Pro',serif; font-size:10px; color:var(--olive); margin-top:1px; min-width:1rem; }
+
+/* ── Sponsor gallery ─────────────────────────────────────────── */
+.sg-gallery { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; align-items:center; }
+.sg-item { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
+.sg-item img { height:44px; width:auto; max-width:110px; object-fit:contain; filter:grayscale(100%); opacity:0.7; transition:opacity 0.2s; }
+.sg-item img:hover { opacity:1; filter:none; }
+.sg-item .sg-name { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); text-align:center; }
+
+/* ── Footer social / contact ─────────────────────────────────── */
+.foot-contact { display:flex; align-items:center; gap:1.5rem; padding:1.25rem 0; border-top:1px solid var(--rule-mid); margin-top:1.5rem; flex-wrap:wrap; }
+.foot-contact a { font-family:'Crimson Pro',serif; font-size:13px; letter-spacing:0.12em; color:var(--ink-low); text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.foot-contact a:hover { color:var(--ink); }
+
+/* Mobile adjustments for editorial components */
+@media (max-width: 600px) {
+  .partner-stats { flex-direction:column; }
+  .pstat { border-right:none; border-bottom:1px solid var(--rule-mid); }
+  .pstat:last-child { border-bottom:none; }
+  .artist-exchange { grid-template-columns:1fr; }
+  .artist-services { grid-template-columns:1fr; }
+}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
 <!-- ── ENTRY GATE ── -->
-<div id="site-entry">
-  <div class="entry-logo-bar">
-    <img src="images/Black-Peter.png" alt="LTF" class="entry-logo">
-  </div>
-  <div class="entry-btns">
-    <button class="entry-btn" onclick="enterSite('attend')">
-      <img src="images/Audience.jpg" class="entry-btn-img" alt="">
-      <div class="entry-btn-overlay">
-        <span class="entry-btn-label">Dinner</span>
-        <span class="entry-btn-sub">Sittings &middot; Sessions &middot; Archive</span>
-      </div>
-    </button>
-    <button class="entry-btn" onclick="enterSite('collaborate')">
-      <img src="images/hug.jpg" class="entry-btn-img" alt="">
-      <div class="entry-btn-overlay">
-        <span class="entry-btn-label">Partnerships</span>
-        <span class="entry-btn-sub">Private events &middot; Brand events &middot; Artist submissions</span>
-      </div>
-    </button>
-  </div>
-</div>
 
 <div class="site-nav">
   <div class="sn-left" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">
@@ -6963,18 +6870,6 @@ function closeAllPanels() {
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
 }
 
-// ── Entry gate ───────────────────────────────────────────────────
-function enterSite(choice) {
-  var entry = document.getElementById('site-entry');
-  entry.style.opacity = '0';
-  entry.style.pointerEvents = 'none';
-  // Start the panel slightly before the gate fully disappears — crossfade feel
-  setTimeout(function() {
-    if (choice === 'attend') openPanel('current');
-    else openPanel('work');
-  }, 300);
-  setTimeout(function() { entry.style.display = 'none'; }, 620);
-}
 
 let activeSessionCode = null;
 
@@ -7070,12 +6965,11 @@ function openDrawer(volNum) {
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
   var ov = document.getElementById('archive-vol-overlay');
   if (volNum === 'all') {
-    // List: slide in from left
+    // Show clean map by default; overlay stays hidden until user clicks a pin or taps Volumes
     if (ov) { ov.classList.remove('from-right'); ov.classList.remove('open'); }
     showDrawerList();
-    requestAnimationFrame(function() { if (ov) ov.classList.add('open'); });
   } else {
-    // Specific event (map pin): slide in from right as a detail drawer
+    // Map pin: slide in detail drawer from the right
     if (ov) { ov.classList.add('from-right'); ov.classList.remove('open'); }
     showDrawerVolume(volNum);
     requestAnimationFrame(function() { if (ov) ov.classList.add('open'); });
@@ -7094,7 +6988,15 @@ function scrollToSection(id, btn) {
 
 function toggleVolOverlay() {
   var ov = document.getElementById('archive-vol-overlay');
-  if (ov) ov.classList.toggle('open');
+  if (!ov) return;
+  if (ov.classList.contains('open')) {
+    ov.classList.remove('open');
+  } else {
+    // Volumes button always shows the list from the left
+    ov.classList.remove('from-right');
+    showDrawerList();
+    ov.classList.add('open');
+  }
 }
 
 function closeDrawer(clearOverlay) {
