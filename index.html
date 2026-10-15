@@ -1264,11 +1264,73 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   overflow: hidden !important;
 }
 
-/* Leaflet map fills viewport */
-#map { width: 100%; height: 100%; }
+/* Map inside archive drawer */
+#map { width: 100%; height: 220px; flex-shrink: 0; }
+
+/* ── Home gallery (full-screen mosaic) ───────────────────────────── */
+.home-gallery {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  columns: 4;
+  column-gap: 3px;
+  padding: 3px;
+  background: #111;
+}
+.hg-item {
+  break-inside: avoid;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 3px;
+  cursor: pointer;
+  display: block;
+}
+.hg-item img {
+  width: 100%;
+  display: block;
+  transition: transform 0.45s ease;
+}
+.hg-item:hover img { transform: scale(1.06); }
+.hg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.9rem 0.85rem;
+  pointer-events: none;
+}
+.hg-item:hover .hg-overlay { opacity: 1; }
+.hg-ov-label {
+  font-family: 'Crimson Pro', serif;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 0.2rem;
+}
+.hg-ov-name {
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  color: #fff;
+  line-height: 1.1;
+}
+.hg-ov-disc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.55);
+  margin-top: 0.25rem;
+}
+@media (max-width: 900px) { .home-gallery { columns: 3; } }
+@media (max-width: 600px) { .home-gallery { columns: 2; } }
 
 /* Landing copy — fixed overlay on map */
 #landing-copy {
+  display: none; /* map moved to archive drawer — landing copy no longer needed */
   position: fixed;
   bottom: 2.5rem;
   left: 50%;
@@ -1877,7 +1939,60 @@ footer { position: relative; z-index: 5; margin-top: 100vh; }
   /* Hide annotation on mobile — arrows don't align with full-width popup */
   #popup-annot { display: none !important; }
 
+  /* ── Partner tab editorial ──────────────────────────────────────── */
+  .partner-stats { display:flex; gap:0; border:1px solid var(--rule-mid); margin-bottom:2rem; }
+  .pstat { flex:1; padding:1.1rem 1rem; text-align:center; border-right:1px solid var(--rule-mid); }
+  .pstat:last-child { border-right:none; }
+  .pstat-n { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.8rem; color:var(--olive); line-height:1; }
+  .pstat-l { display:block; font-family:'Crimson Pro',serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-low); margin-top:0.3rem; }
+  .partner-pullquote { font-family:'Georgia',serif; font-style:italic; font-size:1.05rem; color:var(--ink-mid); border-left:2px solid var(--olive); padding:0.5rem 0 0.5rem 1.1rem; margin:0 0 1.75rem; line-height:1.6; }
+  .partner-data { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
+  .pdata-item { background:var(--canvas); padding:1rem; }
+  .pdata-pct { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.5rem; color:var(--olive); line-height:1; margin-bottom:0.25rem; }
+  .pdata-label { display:block; font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); margin-bottom:0.5rem; }
+  .pdata-desc { font-family:'Georgia',serif; font-size:0.78rem; color:var(--ink-mid); line-height:1.55; }
+  .partner-tiers { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
+  .ptier { background:var(--canvas); padding:1.1rem; }
+  .ptier.ptier-season { background:var(--olive); }
+  .ptier.ptier-season .ptier-num,
+  .ptier.ptier-season .ptier-name,
+  .ptier.ptier-season .ptier-desc { color:#fff; }
+  .ptier-num { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-low); margin-bottom:0.5rem; display:block; }
+  .ptier-name { display:block; font-family:'LTF Hand Ink','Crimson Pro',serif; font-size:1.1rem; color:var(--ink); margin-bottom:0.5rem; line-height:1.1; }
+  .ptier-desc { font-family:'Georgia',serif; font-size:0.8rem; color:var(--ink-mid); line-height:1.55; }
+
+  /* ── Artist tab editorial ────────────────────────────────────────── */
+  .artist-exchange { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--rule-mid); border:1px solid var(--rule-mid); margin-bottom:2rem; }
+  .aex-col { background:var(--canvas); padding:1.1rem; }
+  .aex-label { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); display:block; margin-bottom:0.5rem; }
+  .aex-col p { font-family:'Georgia',serif; font-size:0.88rem; color:var(--ink-mid); line-height:1.6; margin:0; }
+  .artist-services { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1.5rem; margin-bottom:2rem; padding:1.1rem 1.25rem; border:1px solid var(--rule-mid); background:var(--paper); }
+  .asvc-item { font-family:'Georgia',serif; font-size:0.82rem; color:var(--ink-mid); line-height:1.5; display:flex; align-items:flex-start; gap:0.5rem; }
+  .asvc-item::before { content:counter(svc); counter-increment:svc; font-family:'Crimson Pro',serif; font-size:10px; color:var(--olive); margin-top:1px; min-width:1rem; }
+  .artist-services { counter-reset:svc; }
+
+  /* ── Sponsor gallery ─────────────────────────────────────────────── */
+  .sg-gallery { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; align-items:center; }
+  .sg-item { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
+  .sg-item img { height:44px; width:auto; max-width:110px; object-fit:contain; filter:grayscale(100%); opacity:0.7; transition:opacity 0.2s; }
+  .sg-item img:hover { opacity:1; filter:none; }
+  .sg-item .sg-name { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); text-align:center; }
+
+  /* ── Footer social / contact ─────────────────────────────────────── */
+  .foot-contact { display:flex; align-items:center; gap:1.5rem; padding:1.25rem 0; border-top:1px solid var(--rule-mid); margin-top:1.5rem; flex-wrap:wrap; }
+  .foot-contact a { font-family:'Crimson Pro',serif; font-size:13px; letter-spacing:0.12em; color:var(--ink-low); text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+  .foot-contact a:hover { color:var(--ink); }
+
   /* ── Mobile performance strip-down ─────────────────────────────── */
+
+  /* New editorial blocks — stack on mobile */
+  .partner-stats { flex-direction:column; }
+  .pstat { border-right:none; border-bottom:1px solid var(--rule-mid); }
+  .pstat:last-child { border-bottom:none; }
+  .partner-data { grid-template-columns:1fr; }
+  .partner-tiers { grid-template-columns:1fr; }
+  .artist-exchange { grid-template-columns:1fr; }
+  .foot-contact { gap:1rem; }
 
   /* Kill entry animations — no stagger delays, just show content */
   .h-heading, .h-body, .h-cta-wrap { animation: none; opacity: 1; }
@@ -2113,18 +2228,14 @@ h1, h2, h3, h4 {
 
 <main>
 
-  <!-- ARCHIVE — full-screen map -->
+  <!-- HOME — full-screen photo mosaic -->
   <div id="tab-archive" class="section active">
-    <div id="map"></div>
+    <div id="home-gallery" class="home-gallery"></div>
   </div>
 
   <!-- Landing copy overlay -->
   <div id="landing-copy">
     <p><strong>LIFE THRU FOOD</strong> is a dinner series and creative platform that translates human stories into immersive experiences.</p>
-    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem">
-      <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-subject', document.getElementById('work-tab-subject')); }, 50)">submit an artist &rarr;</button>
-      <button class="btn-ghost" onclick="openPanel('work'); setTimeout(function(){ showWorkSection('work-private', document.getElementById('work-tab-private')); }, 50)">private event inquiry &rarr;</button>
-    </div>
   </div>
 
 <!-- Hand-drawn notebook annotation pointing to popup -->
@@ -2187,7 +2298,7 @@ h1, h2, h3, h4 {
         <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
         <span class="ev-date">Sunday, November 15 &middot; Doors at 3pm</span>
         <h2 style="font-family:'LTF Hand Ink','Crimson Pro',serif;font-weight:normal;letter-spacing:0.02em;font-size:clamp(1.6rem,5vw,2.4rem);overflow-wrap:break-word">Friendsgiving</h2>
-        <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Join the waitlist &nbsp;&middot;&nbsp; New York City</p>
+        <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Request an invite &nbsp;&middot;&nbsp; New York City</p>
         <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:1rem;max-width:520px">Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.</p>
         <p style="font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink-mid);line-height:1.75;margin-top:0.75rem;max-width:520px">Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.</p>
         </div>
@@ -2225,7 +2336,7 @@ h1, h2, h3, h4 {
 
         <!-- Waitlist (no code) -->
         <div id="sessions-waitlist-wrap" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-          <p class="form-title">Join the waitlist</p>
+          <p class="form-title">Request an invite</p>
           <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
           <div id="sessions-waitlist-success" style="display:none;padding:1.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center;margin-bottom:1rem">
             <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.5rem">You're on the list</p>
@@ -3179,10 +3290,20 @@ h1, h2, h3, h4 {
 
     <!-- PARTNER -->
     <div class="work-section" id="work-partner" style="display:none">
-    <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
+    <div class="notify-intro" style="text-align:left;margin-bottom:1.5rem">
       <h2>Partner with us.</h2>
-      <p>Life Thru Food brings together culture, food, and community in intimate, intentional spaces. We work with brands and organizations who believe in the power of human storytelling.</p>
+      <p>Life Thru Food is a cultural programming, hospitality and media company. We transform life stories into dining experiences that connect communities and create diverse culture thru food.</p>
     </div>
+
+    <!-- Stats -->
+    <div class="partner-stats">
+      <div class="pstat"><span class="pstat-n">8</span><span class="pstat-l">Sittings Hosted</span></div>
+      <div class="pstat"><span class="pstat-n">500+</span><span class="pstat-l">Hospes Served</span></div>
+      <div class="pstat"><span class="pstat-n">35%</span><span class="pstat-l">Repeat Attendance</span></div>
+    </div>
+
+    <!-- Pull quote -->
+    <blockquote class="partner-pullquote">The food is not the product. It is the medium.</blockquote>
     <div id="sponsor-toast" class="toast"></div>
     <div id="sponsor-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
       <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Inquiry received</p>
@@ -3231,15 +3352,44 @@ h1, h2, h3, h4 {
     </div>
     <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
       <span style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low)">Previous Partners</span>
+      <div class="sg-gallery" id="sponsor-gallery-partner" style="margin-top:1.25rem"></div>
       <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0"></div>
     </div>
     </div>
 
     <!-- SUBMIT AN ARTIST -->
     <div class="work-section" id="work-subject" style="display:none">
-    <div class="notify-intro" style="text-align:left;margin-bottom:2rem">
+    <div class="notify-intro" style="text-align:left;margin-bottom:1.5rem">
       <h2>Nominate a Subject.</h2>
       <p>Life Thru Food is built around creatives whose work and relationship with food tells a story worth gathering around. Submit yourself or someone you think belongs at the table.</p>
+    </div>
+
+    <!-- The Exchange -->
+    <div class="artist-exchange">
+      <div class="aex-col">
+        <span class="aex-label">You bring</span>
+        <p>Your story, your work, your time and your community.</p>
+      </div>
+      <div class="aex-col">
+        <span class="aex-label">We bring</span>
+        <p>The menu, the Site and the production.</p>
+      </div>
+      <div class="aex-col">
+        <span class="aex-label">You keep</span>
+        <p>Shared use of every photo and film from your Sitting, and all the friends you made along the way!</p>
+      </div>
+    </div>
+
+    <!-- What we do -->
+    <div class="artist-services">
+      <div class="asvc-item">Menu curation and execution</div>
+      <div class="asvc-item">Full event production</div>
+      <div class="asvc-item">Brand activation</div>
+      <div class="asvc-item">Brand relationships</div>
+      <div class="asvc-item">Project promotion</div>
+      <div class="asvc-item">Full media coverage</div>
+      <div class="asvc-item">Full media roll out</div>
+      <div class="asvc-item">Community integration</div>
     </div>
     <div id="artist-toast" class="toast"></div>
     <div id="artist-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
@@ -3436,10 +3586,21 @@ h1, h2, h3, h4 {
 <footer>
   <div class="foot-inner">
     <div class="foot-label">Previous Partners</div>
+    <div class="sg-gallery" id="sponsor-gallery-footer" style="margin-bottom:1.25rem"></div>
     <div class="sp-grid" id="sponsors-grid"></div>
     <div class="foot-cta">
       <p>Interested in collaborating? We partner with makers, wineries, restaurants, and cultural institutions who share our sensibility.</p>
       <a class="btn-ghost" href="mailto:info@lifethrufood.com">get in touch</a>
+    </div>
+    <div class="foot-contact">
+      <a href="https://instagram.com/lifethru___food" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        @lifethru___food
+      </a>
+      <a href="mailto:info@lifethrufood.com">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+        info@lifethrufood.com
+      </a>
     </div>
     <div id="sponsor-admin-panel" class="sp-admin">
       <h3>Manage sponsors</h3>
@@ -3467,6 +3628,9 @@ h1, h2, h3, h4 {
     <div class="drw-breadcrumb" id="drawer-breadcrumb">All Volumes</div>
     <button class="drw-close" onclick="closeDrawer()" aria-label="Close">&times;</button>
   </div>
+  <!-- Map lives in the drawer now -->
+  <div id="map"></div>
+
   <div id="drawer-body">
 
     <!-- All-volumes list -->
@@ -6323,7 +6487,20 @@ document.addEventListener('keydown', e => {
   }
 });
 
+function slugify(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+function renderSponsorGallery(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = sponsors.map(s => {
+    const slug = slugify(s.name);
+    return `<div class="sg-item"><img src="images/sponsors/${slug}.jpg" alt="${s.name}" loading="lazy" onerror="this.closest('.sg-item').style.display='none'"><span class="sg-name">${s.name}</span></div>`;
+  }).join('');
+}
+
 function renderSponsors() {
+  renderSponsorGallery('sponsor-gallery-partner');
+  renderSponsorGallery('sponsor-gallery-footer');
   const grid = document.getElementById('sponsors-grid');
   const gridSponsor = document.getElementById('sponsors-grid-sponsor');
   const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
@@ -6422,39 +6599,44 @@ function isoWeekSeed() {
   return d.getUTCFullYear() * 100 + week;
 }
 function renderLandingGallery() {
-  const gallery = document.getElementById('landing-gallery');
+  // Legacy — kept for any callers; now delegates to renderHomeGallery
+  renderHomeGallery();
+}
+
+function renderHomeGallery() {
+  const gallery = document.getElementById('home-gallery');
   if (!gallery) return;
   const photos = contentPieces.filter(p => p.type === 'photo' && p.photo);
-  if (!photos.length) {
-    gallery.innerHTML = '<div class="lb-gallery-empty">No photos yet.</div>';
-    return;
-  }
+  if (!photos.length) return;
+  // Shuffle with seeded RNG so order is stable per week but varied
   const rng = seededRng(isoWeekSeed());
-  // Fisher-Yates with seeded RNG
   const pool = [...photos];
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const pick = pool.slice(0, 12);
-  gallery.innerHTML = pick.map(p =>
-    `<div class="lb-gallery-item" onclick="openGallery('${p.edition}')">` +
-    `<img decoding="async" src="${p.photo}" alt="${(p.title||'').replace(/"/g,'&quot;')}" loading="lazy"></div>`
-  ).join('');
+  gallery.innerHTML = pool.map(p => {
+    const ed = EDITIONS[p.edition] || {};
+    const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
+    const name = ed.name || '';
+    const disc = ed.discipline || '';
+    return `<div class="hg-item" onclick="openGallery('${p.edition}')" title="${name}">` +
+      `<img decoding="async" src="${p.photo}" alt="${name}" loading="lazy">` +
+      `<div class="hg-overlay">` +
+        (label ? `<span class="hg-ov-label">${label}</span>` : '') +
+        (name  ? `<span class="hg-ov-name">${name}</span>` : '') +
+        (disc  ? `<span class="hg-ov-disc">${disc}</span>` : '') +
+      `</div>` +
+    `</div>`;
+  }).join('');
 }
 
 
 loadEvents();
 renderContent();
 renderSponsors();
-// Defer gallery render on mobile — runs only when About panel first opens
-if (window.innerWidth > 600) {
-  renderLandingGallery();
-} else {
-  document.addEventListener('ltf:panelOpen', function handler(e) {
-    if (e.detail === 'about') { renderLandingGallery(); document.removeEventListener('ltf:panelOpen', handler); }
-  });
-}
+// Render home gallery for all screen sizes
+renderHomeGallery();
 
 // ── SCROLL REVEAL (IntersectionObserver) ────────────────────────
 (function initScrollReveal() {
@@ -6761,6 +6943,8 @@ function openDrawer(volNum) {
   else { showDrawerVolume(volNum); }
   document.getElementById('archive-drawer').classList.add('open');
   document.getElementById('panel-overlay').classList.add('visible');
+  // Give drawer time to render before telling Leaflet to recalculate its size
+  setTimeout(function() { if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize(); }, 350);
 }
 
 function scrollToSection(id, btn) {
