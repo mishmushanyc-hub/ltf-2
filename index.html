@@ -1398,7 +1398,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   }
   .ln-logo-col {
     border-right: none;
-    border-bottom: 1px solid rgba(68,51,42,0.10);
+    border-bottom: none;
     padding: 2.5rem 2rem 2rem;
   }
   .ln-logo { width: min(180px, 55%); }
@@ -1467,6 +1467,9 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 1.05rem;
   color: #fff;
   line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .hg-ov-disc {
   font-family: 'Crimson Pro', serif;
@@ -1474,6 +1477,9 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   letter-spacing: 0.12em;
   color: rgba(255,255,255,0.55);
   margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .hg-ov-cta {
   font-family: 'Crimson Pro', serif;
@@ -1489,8 +1495,28 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   gap: 0.4rem;
 }
 .hg-ov-cta::after { content: '→'; font-size: 10px; }
-@media (max-width: 900px) { .home-gallery { columns: 3; } }
-@media (max-width: 600px) { .home-gallery { columns: 2; } }
+@media (max-width: 900px) {
+  .home-gallery { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .home-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 32vw;
+  }
+  /* On touch: always show overlay so text is readable without hover */
+  .hg-overlay { opacity: 1; }
+  .hg-ov-name {
+    font-size: 0.78rem;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+    overflow: visible;
+    text-overflow: unset;
+  }
+  .hg-ov-label { font-size: 7px; }
+  .hg-ov-disc, .hg-ov-cta { display: none; }
+  .hg-overlay { padding: 0.5rem 0.55rem; }
+}
 
 /* Landing copy — fixed overlay on map */
 #landing-copy {
@@ -1778,6 +1804,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   line-height: 1;
 }
 .arc-map-close:hover { background: rgba(0,0,0,0.88); color: #fff; }
+/* Hide the map X when the event detail overlay is open — one X at a time */
+#archive-drawer:has(#archive-vol-overlay.open) .arc-map-close { display: none; }
 
 /* Stale arc-topbar styles — kept for reference */
 .arc-topbar-title {
@@ -2387,11 +2415,50 @@ h1, h2, h3, h4 {
 .asvc-item::before { content:counter(svc); counter-increment:svc; font-family:'Crimson Pro',serif; font-size:10px; color:var(--olive); margin-top:1px; min-width:1rem; }
 
 /* ── Sponsor gallery ─────────────────────────────────────────── */
-.sg-gallery { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; align-items:center; }
-.sg-item { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
-.sg-item img { height:44px; width:auto; max-width:110px; object-fit:contain; filter:grayscale(100%); opacity:0.7; transition:opacity 0.2s; }
-.sg-item img:hover { opacity:1; filter:none; }
-.sg-item .sg-name { font-family:'Crimson Pro',serif; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); text-align:center; }
+.sg-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.sg-item {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--paper);
+  cursor: default;
+}
+.sg-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(15%);
+  transition: filter 0.3s ease, transform 0.35s ease;
+}
+.sg-item:hover img { filter: none; transform: scale(1.04); }
+.sg-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.12) 55%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0.9rem 0.85rem;
+  pointer-events: none;
+}
+.sg-item:hover .sg-overlay { opacity: 1; }
+.sg-overlay-name {
+  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+.sg-overlay-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.45;
+}
 
 /* ── Footer social / contact ─────────────────────────────────── */
 .foot-contact { display:flex; align-items:center; gap:1.5rem; padding:1.25rem 0; border-top:1px solid var(--rule-mid); margin-top:1.5rem; flex-wrap:wrap; }
@@ -3529,6 +3596,9 @@ h1, h2, h3, h4 {
       <p>Life Thru Food is a cultural programming, hospitality and media company. We transform life stories into dining experiences that connect communities and create diverse culture thru food.</p>
     </div>
 
+    <!-- Partner photo gallery (above stats) -->
+    <div class="sg-gallery" id="sponsor-gallery-partner"></div>
+
     <!-- Stats -->
     <div class="partner-stats">
       <div class="pstat"><span class="pstat-n">8</span><span class="pstat-l">Sittings Hosted</span></div>
@@ -3583,11 +3653,6 @@ h1, h2, h3, h4 {
       </div>
       <div id="sponsor-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
       <div style="margin-top:1rem"><button class="btn-primary" onclick="submitSponsorInquiry()">send inquiry &rarr;</button></div>
-    </div>
-    <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
-      <span style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-low)">Previous Partners</span>
-      <div class="sg-gallery" id="sponsor-gallery-partner" style="margin-top:1.25rem"></div>
-      <div class="sp-grid" id="sponsors-grid-sponsor" style="margin-top:1.25rem;margin-bottom:0"></div>
     </div>
     </div>
 
@@ -3873,7 +3938,7 @@ h1, h2, h3, h4 {
         <div class="archive-title" id="arc-vol-title"></div>
         <div class="archive-meta" id="arc-vol-meta"></div>
       </div>
-      <button class="arc-detail-close" onclick="closeEventDetail()" aria-label="Close">&times;</button>
+      <button class="arc-detail-close" onclick="closeDrawer(false)" aria-label="Close">&times;</button>
     </div>
     <div id="drawer-body">
       <div id="drawer-vol-detail">
@@ -6406,8 +6471,8 @@ contentPieces = [
 ];
 
 sponsors = [
-  {id:7,name:'Madre Mezcal',tier:'presenting',desc:'Small-batch mezcal crafted by a multi-generational family of palenqueros in the mountains of Oaxaca. Clay pot distilled, the traditional way. Providing complimentary cocktails at Vol. 04.',url:'madremezcal.com',location:'Oaxaca, Mexico'},
-  {id:8,name:'Good Mood Kombucha',tier:'partner',desc:'A Brooklyn-based kombucha brewery crafting small-batch, live-culture kombucha with real fruit and botanicals. Raw, naturally effervescent, and made with intention. Providing complimentary drinks at Vol. 04.',url:'goodmoodkombucha.com',location:'Brooklyn, NY'},
+  {id:7,name:'Madre Mezcal',tier:'presenting',desc:'Small-batch mezcal crafted by a multi-generational family of palenqueros in the mountains of Oaxaca. Clay pot distilled, the traditional way. Providing complimentary cocktails at Vol. 04.',url:'madremezcal.com',location:'Oaxaca, Mexico',photo:'madre'},
+  {id:8,name:'Good Mood Kombucha',tier:'partner',desc:'A Brooklyn-based kombucha brewery crafting small-batch, live-culture kombucha with real fruit and botanicals. Raw, naturally effervescent, and made with intention. Providing complimentary drinks at Vol. 04.',url:'goodmoodkombucha.com',location:'Brooklyn, NY',photo:'goodmood'},
   {id:9,name:'3BR Distillery',tier:'partner',desc:'A New Jersey craft distillery run by two twin brothers carrying on their grandfather\'s vodka recipe — originally crafted during the Soviet prohibition era. Small-batch, family-rooted, and made with intention. Providing complimentary vodka martinis and espresso martinis at Vol. 05.',url:'3brdistillery.com',location:'New Jersey'},
   {id:1,name:'Aqua Best',tier:'presenting',desc:'A family-run seafood market offering sushi-grade fish and fresh seafood sourced directly from fishermen.',url:'aquabestnyc.com',location:'276 Grand St, Chinatown'},
   {id:2,name:'S.O.S Chef',tier:'partner',desc:'A curated specialty ingredients store carrying over 1,200 ethically sourced spices, herbs, oils, and homemade infusions.',url:'sos-chefs.com',location:'104 Avenue B, East Village'},
@@ -6416,13 +6481,14 @@ sponsors = [
   {id:5,name:'Di Palo Fine Foods',tier:'supporting',desc:'A century-old Italian specialty food store carrying imported cheeses, cured meats, pastas, and wines from all 20 regions of Italy.',url:'dipalofinefoods.com',location:'200 Grand St, Little Italy'},
   {id:6,name:"Mike's Hot Honey",tier:'friend',desc:'Raw wildflower honey infused with Brazilian chilies — the original American hot honey, made in Brooklyn.',url:'mikeshothoney.com',location:'Brooklyn, NY'},
   {id:10,name:'The Pathfinder Hemp & Root',tier:'partner',desc:'A botanical non-alcoholic spirit from Seattle, distilled from hemp with roots, herbs, and wild botanicals. Their Phony Negroni was featured at LTF Vol. 05.',url:'drinkthepathfinder.com',location:'Seattle, WA'},
-  {id:11,name:'Parch',tier:'partner',desc:'Non-alcoholic agave cocktails drawn from the Sonoran Desert — adaptogenic, plant-based, and built around the philosophy that what grows together, goes together. Complex enough to hold their own at any table. Provided complimentary drinks at LTF Vol. 06.',url:'drinkparch.com',location:'Sonoran Desert, AZ'},
-  {id:12,name:'Juan Please',tier:'partner',desc:'A New York based canned cocktail brand making drinks that actually taste like someone cared. Their flagship, the TLT, is worth seeking out. Provided complimentary drinks at LTF Vol. 06.',url:'drinkjuanplease.com',location:'New York, NY'},
-  {id:13,name:'Esspo',tier:'supporting',desc:'A Brooklyn-born espresso soda launched by the founders of Refinery29. Each can packs 120mg of caffeine from real cold brew extract, a touch of organic agave, and clean effervescence — built for the afternoon slump.',url:'drinkesspo.com',location:'Brooklyn, NY'},
-  {id:14,name:'Kirin',tier:'supporting',desc:'One of Japan\'s most storied breweries, founded in Yokohama in 1885. Kirin Ichiban is brewed using a "first press" process — drawing only from the first run of the mash for a clean, refined lager.',url:'kirinusa.com',location:'Yokohama, Japan'},
+  {id:11,name:'Parch',tier:'partner',desc:'Non-alcoholic agave cocktails drawn from the Sonoran Desert — adaptogenic, plant-based, and built around the philosophy that what grows together, goes together. Complex enough to hold their own at any table. Provided complimentary drinks at LTF Vol. 06.',url:'drinkparch.com',location:'Sonoran Desert, AZ',photo:'parch'},
+  {id:12,name:'Juan Please',tier:'partner',desc:'A New York based canned cocktail brand making drinks that actually taste like someone cared. Their flagship, the TLT, is worth seeking out. Provided complimentary drinks at LTF Vol. 06.',url:'drinkjuanplease.com',location:'New York, NY',photo:'juan'},
+  {id:13,name:'Esspo',tier:'supporting',desc:'A Brooklyn-born espresso soda launched by the founders of Refinery29. Each can packs 120mg of caffeine from real cold brew extract, a touch of organic agave, and clean effervescence — built for the afternoon slump.',url:'drinkesspo.com',location:'Brooklyn, NY',photo:'esspo'},
+  {id:14,name:'Kirin',tier:'supporting',desc:'One of Japan\'s most storied breweries, founded in Yokohama in 1885. Kirin Ichiban is brewed using a "first press" process — drawing only from the first run of the mash for a clean, refined lager.',url:'kirinusa.com',location:'Yokohama, Japan',photo:'kirin'},
   {id:15,name:'Unified Ferments',tier:'friend',desc:'A Brooklyn-based producer of non-alcoholic fermented teas made from single-origin leaves sourced from China, Taiwan, and India. Complex and dynamic, built more like natural wine than kombucha. Providing complimentary beverages at LTF Vol. 07.',url:'unifiedferments.com',location:'Brooklyn, NY'},
-  {id:16,name:'Hustard',tier:'supporting',desc:'A clean honey mustard made with no seed oils, no preservatives, and no artificial sweeteners. Bold and balanced, it goes with everything. A portion of every sale supports pollinator conservation.',url:'tryhustard.com',location:'New York, NY'},
-  {id:17,name:'Hampton Water',tier:'friend',desc:'A French rosé co-created by Jon Bon Jovi and his son Jesse Bongiovi alongside Languedoc winemaker Gérard Bertrand. Four-time 90-point Wine Spectator rated. Light, fresh, and built for warm rooms.',url:'hamptonwaterwine.com',location:'South of France'},
+  {id:16,name:'Hustard',tier:'supporting',desc:'A clean honey mustard made with no seed oils, no preservatives, and no artificial sweeteners. Bold and balanced, it goes with everything. A portion of every sale supports pollinator conservation.',url:'tryhustard.com',location:'New York, NY',photo:'hustard'},
+  {id:17,name:'Hampton Water',tier:'friend',desc:'A French rosé co-created by Jon Bon Jovi and his son Jesse Bongiovi alongside Languedoc winemaker Gérard Bertrand. Four-time 90-point Wine Spectator rated. Light, fresh, and built for warm rooms.',url:'hamptonwaterwine.com',location:'South of France',photo:'hamptons'},
+  {id:18,name:"Lambert's Beer",tier:'supporting',desc:"New York's original mid-strength lager. 2.5% ABV, 77 calories, full character. Named after Henry Lambert, brewed the way beer always was — simple, honest, and worth your time.",url:'lambertsbeer.com',location:'New York, NY',photo:'lamberts'},
 ];
 
 function filterContent(f, btn) {
@@ -6675,9 +6741,17 @@ function slugify(str) { return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').repl
 function renderSponsorGallery(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
+  if (!sponsors.length) { el.innerHTML = ''; return; }
   el.innerHTML = sponsors.map(s => {
-    const slug = slugify(s.name);
-    return `<div class="sg-item"><img src="images/sponsors/${slug}.jpg" alt="${s.name}" loading="lazy" onerror="this.closest('.sg-item').style.display='none'"><span class="sg-name">${s.name}</span></div>`;
+    const imgKey = s.photo || slugify(s.name);
+    const descHtml = s.desc ? `<div class="sg-overlay-desc">${s.desc}</div>` : '';
+    return `<div class="sg-item">` +
+      `<img src="images/sponsors/${imgKey}.jpg" alt="${s.name}" loading="lazy" onerror="this.closest('.sg-item').style.display='none'">` +
+      `<div class="sg-overlay">` +
+        `<div class="sg-overlay-name">${s.name}</div>` +
+        descHtml +
+      `</div>` +
+    `</div>`;
   }).join('');
 }
 
