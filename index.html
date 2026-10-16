@@ -2888,6 +2888,14 @@ body[data-x="uev"] .panel-close,
 body[data-x="modal"] .panel-close { opacity: 0; visibility: hidden; }
 /* Popup X never floats over a panel, drawer or overlay */
 body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opacity: 0 !important; pointer-events: none !important; }
+
+/* Home gallery: 22 tiles fill the grid edge to edge. The last tile is
+   single height so it plugs the final gap instead of opening a new row.
+   On the 3-column tablet layout 21 tiles fill exactly, so the 22nd hides. */
+.hg-item:last-child { grid-row: span 1; }
+@media (min-width: 601px) and (max-width: 900px) {
+  .hg-item:nth-child(22) { display: none; }
+}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -7555,7 +7563,7 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  gallery.innerHTML = pool.slice(0, 21).map((p, idx) => {
+  gallery.innerHTML = pool.slice(0, 22).map((p, idx) => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
