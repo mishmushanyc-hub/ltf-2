@@ -1383,6 +1383,36 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   color: var(--olive);
   transform: translateX(0.35rem);
 }
+/* Work with us submenu */
+.ln-subitems {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.38s cubic-bezier(0.16,1,0.3,1);
+}
+.ln-subitems.open { max-height: 280px; }
+.ln-subbtn {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0.1rem 0;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(1.1rem, 2.8vw, 1.9rem);
+  font-weight: normal;
+  color: var(--ink-low);
+  letter-spacing: 0.02em;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.15s ease, transform 0.15s ease;
+  transform-origin: left center;
+}
+.ln-subbtn:hover { color: var(--olive); transform: translateX(0.25rem); }
+.ln-item-work .ln-btn { transition: color 0.18s ease, transform 0.18s ease; }
+.ln-item-work .ln-btn.expanded { color: var(--olive); }
+
 .ln-footer {
   margin-top: 2.5rem;
   font-family: 'Crimson Pro', serif;
@@ -1747,6 +1777,74 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 /* Archive volume list — floating overlay panel */
 /* Event detail drawer — slides in from right on pin click */
+/* ── Upcoming event overlay ──────────────────────────────────────── */
+#upcoming-event-overlay {
+  position: fixed;
+  top: 54px; right: 0;
+  width: min(520px, 100%);
+  height: calc(100vh - 54px);
+  background: var(--canvas);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  z-index: 160;
+  border-left: 1px solid var(--rule-mid);
+  will-change: transform;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+#upcoming-event-overlay.open { transform: translateX(0); pointer-events: all; }
+@media (max-width: 768px) { #upcoming-event-overlay { width: 100%; border-left: none; } }
+#uev-body {
+  padding: 2rem 2.5rem 5rem;
+  flex: 1;
+}
+@media (max-width: 600px) { #uev-body { padding: 1.25rem 1.25rem 4rem; } }
+.uev-desc {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  color: var(--ink-mid);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.uev-detail-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 0.65rem;
+}
+.uev-cta {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: var(--ink);
+  color: var(--canvas);
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.uev-cta:hover { background: var(--olive); }
+#uev-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 159;
+  cursor: default;
+}
+#uev-backdrop.active { display: block; }
+
 /* Backdrop behind the vol overlay — tap outside to dismiss */
 #vol-overlay-backdrop {
   display: none;
@@ -2597,12 +2695,12 @@ h1, h2, h3, h4 {
 }
 .sg-track {
   display: flex;
-  gap: 0.75rem;
+  gap: 4px;
   transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
   will-change: transform;
 }
 .sg-item {
-  flex: 0 0 calc((100% - 1.5rem) / 3);
+  flex: 0 0 calc((100% - 8px) / 3);
   flex-shrink: 0;
   position: relative;
   background: none;
@@ -2610,46 +2708,40 @@ h1, h2, h3, h4 {
   padding: 0;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
   height: clamp(100px, 28vh, 180px);
 }
 @media (max-width: 600px) {
-  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); padding: 0; height: clamp(80px, 22vh, 130px); }
+  .sg-item { flex: 0 0 calc((100% - 4px) / 2); height: clamp(80px, 22vh, 130px); }
 }
 .sg-item img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: calc(100% - 1.4rem);
   width: auto;
   height: auto;
   display: block;
   object-fit: contain;
   filter: grayscale(15%);
   transition: filter 0.3s ease;
+  flex-shrink: 1;
 }
 .sg-item:hover img { filter: none; }
-.sg-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.12) 55%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 0.9rem 0.85rem;
-  pointer-events: none;
-}
-.sg-item:hover .sg-overlay { opacity: 1; }
-.sg-overlay-name {
-  font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
-  font-size: 1.05rem;
-  color: #fff;
-  line-height: 1.1;
-  margin-bottom: 0.25rem;
-}
-.sg-overlay-desc {
+.sg-caption {
   font-family: 'Crimson Pro', serif;
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.72);
-  line-height: 1.45;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* ── Footer social / contact ─────────────────────────────────── */
@@ -2703,7 +2795,14 @@ h1, h2, h3, h4 {
       <li class="ln-item"><button class="ln-btn" onclick="landingOpen('current')">Events</button></li>
       <li class="ln-item"><button class="ln-btn" onclick="landingOpen('gallery')">Gallery</button></li>
       <li class="ln-item"><button class="ln-btn" onclick="landingOpen('archive')">Archive</button></li>
-      <li class="ln-item"><button class="ln-btn" onclick="landingOpen('work')">Work with us</button></li>
+      <li class="ln-item ln-item-work">
+        <button class="ln-btn" onclick="toggleWorkSubmenu(this)">Work with us</button>
+        <ul class="ln-subitems" id="work-subitems">
+          <li><button class="ln-subbtn" onclick="landingOpenWork('work-private','work-tab-private')">Private Events</button></li>
+          <li><button class="ln-subbtn" onclick="landingOpenWork('work-partner','work-tab-partner')">Brands</button></li>
+          <li><button class="ln-subbtn" onclick="landingOpenWork('work-subject','work-tab-subject')">Artists</button></li>
+        </ul>
+      </li>
       <li class="ln-item"><button class="ln-btn" onclick="landingOpen('about')">About</button></li>
     </ul>
   </div>
@@ -4227,6 +4326,22 @@ h1, h2, h3, h4 {
     </div>
   </div>
 </div>
+
+<!-- Upcoming event overlay — slides in from right when a pulsing pin is clicked -->
+<div id="upcoming-event-overlay">
+  <div class="arc-detail-hd">
+    <div>
+      <div class="arc-detail-vol" id="uev-breadcrumb"></div>
+      <div class="archive-title" id="uev-title"></div>
+      <div class="archive-meta" id="uev-meta"></div>
+    </div>
+    <button class="arc-detail-close" onclick="closeUpcomingOverlay()" aria-label="Close">&times;</button>
+  </div>
+  <div id="uev-body"></div>
+</div>
+
+<!-- Backdrop for upcoming overlay -->
+<div id="uev-backdrop" onclick="closeUpcomingOverlay()"></div>
 
 <!-- RSVP Calling Card Popup (shown after 5 seconds) -->
 
@@ -7017,10 +7132,9 @@ function renderSponsorGallery(containerId) {
   if (!sponsors.length) { el.innerHTML = ''; return; }
   const makeItem = s => {
     const imgKey = s.photo || slugify(s.name);
-    const descHtml = s.desc ? `<div class="sg-overlay-desc">${s.desc}</div>` : '';
     return `<div class="sg-item">` +
       `<img src="images/sponsors/${imgKey}.jpg" alt="${s.name}" loading="lazy" onerror="this.closest('.sg-item').style.display='none'">` +
-      `<div class="sg-overlay"><div class="sg-overlay-name">${s.name}</div>${descHtml}</div>` +
+      `<div class="sg-caption">${s.name}</div>` +
     `</div>`;
   };
   // Duplicate list for seamless infinite loop
@@ -7045,7 +7159,7 @@ function sgAdvance(containerId) {
   const items = track.querySelectorAll('.sg-item');
   if (!items.length) return;
   const itemW = items[0].getBoundingClientRect().width;
-  const gap = 12;
+  const gap = 4;
   const current = parseInt(el.dataset.sgOffset || '0');
   const next = current + 1;
   el.dataset.sgOffset = next;
@@ -7102,6 +7216,25 @@ function removeSponsor(id) { sponsors = sponsors.filter(s => s.id !== id); rende
 })();
 
 // ── Work with us panel section tabs ──────────────────────────────────────────
+function toggleWorkSubmenu(btn) {
+  var sub = document.getElementById('work-subitems');
+  var open = sub.classList.toggle('open');
+  btn.classList.toggle('expanded', open);
+}
+
+function landingOpenWork(sectionId, tabId) {
+  // Close submenu
+  var sub = document.getElementById('work-subitems');
+  if (sub) sub.classList.remove('open');
+  var wb = document.querySelector('.ln-item-work .ln-btn');
+  if (wb) wb.classList.remove('expanded');
+  // Open the work panel then switch to the right section
+  landingOpen('work');
+  setTimeout(function() {
+    showWorkSection(sectionId, document.getElementById(tabId));
+  }, 50);
+}
+
 function showWorkSection(sectionId, btn) {
   document.querySelectorAll('.work-section').forEach(function(s) { s.style.display = 'none'; });
   document.querySelectorAll('.work-tab').forEach(function(b) { b.classList.remove('active'); });
@@ -7321,11 +7454,14 @@ function initMap() {
     var sessMarker = L.marker([40.71295, -73.98954], { icon: sessIcon }).addTo(ltfMap);
     ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.71295, lng: -73.98954 };
     sessMarker.on('click', function() {
-      openPanel('current');
-      setTimeout(function() {
-        var el = document.querySelector('.events-section-label');
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 420);
+      openUpcomingOverlay({
+        breadcrumb: 'Sessions No. 1',
+        title: 'Friendsgiving',
+        meta: '207 Madison St · Lower East Side',
+        desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
+        ctaText: 'Get Invited',
+        ctaAction: "openPanel('current')"
+      });
     });
     sessMarker.bindTooltip(
       '<div class="pt-inner"><div class="pt-text">' +
@@ -7370,7 +7506,18 @@ function initMap() {
     ltfMarkers[p.num] = { marker, lat: p.lat, lng: p.lng };
 
     marker.on('click', function() {
-      openDrawer(p.num);
+      if (p.upcoming) {
+        openUpcomingOverlay({
+          breadcrumb: volLabel + ' · Upcoming',
+          title: ed.name || '',
+          meta: (ed.eventDateDisplay || '') + (ed.location ? ' · ' + ed.location : ''),
+          desc: ed.desc || '',
+          ctaText: 'Reserve a Seat',
+          ctaAction: "openPanel('current')"
+        });
+      } else {
+        openDrawer(p.num);
+      }
     });
   });
 
@@ -7580,6 +7727,35 @@ function openDrawer(volNum) {
 function closeEventDetail() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
+}
+
+function openUpcomingOverlay(cfg) {
+  // Populate
+  var br = document.getElementById('uev-breadcrumb');
+  var ti = document.getElementById('uev-title');
+  var me = document.getElementById('uev-meta');
+  var bd = document.getElementById('uev-body');
+  if (br) br.textContent = cfg.breadcrumb || '';
+  if (ti) ti.textContent = cfg.title || '';
+  if (me) me.textContent = cfg.meta || '';
+  if (bd) bd.innerHTML =
+    (cfg.desc ? '<p class="uev-desc">' + cfg.desc + '</p>' : '') +
+    (cfg.details ? cfg.details.map(function(d) {
+      return '<div class="uev-detail-row"><span>' + d + '</span></div>';
+    }).join('') : '') +
+    (cfg.ctaText ? '<button class="uev-cta" onclick="' + cfg.ctaAction + '; closeUpcomingOverlay();">' + cfg.ctaText + '</button>' : '');
+  // Open
+  var ov = document.getElementById('upcoming-event-overlay');
+  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
+  var backdrop = document.getElementById('uev-backdrop');
+  if (backdrop) backdrop.classList.add('active');
+}
+
+function closeUpcomingOverlay() {
+  var ov = document.getElementById('upcoming-event-overlay');
+  if (ov) ov.classList.remove('open');
+  var backdrop = document.getElementById('uev-backdrop');
+  if (backdrop) backdrop.classList.remove('active');
 }
 
 function setBackdrop(on) {
