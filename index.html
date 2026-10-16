@@ -1747,6 +1747,16 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 /* Archive volume list — floating overlay panel */
 /* Event detail drawer — slides in from right on pin click */
+/* Backdrop behind the vol overlay — tap outside to dismiss */
+#vol-overlay-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 159;
+  cursor: default;
+}
+#vol-overlay-backdrop.active { display: block; }
+
 #archive-vol-overlay {
   position: fixed;
   top: 54px; right: 0;
@@ -4201,6 +4211,9 @@ h1, h2, h3, h4 {
 
 </div><!-- /archive-drawer -->
 
+<!-- Backdrop: closes overlay when user taps outside it -->
+<div id="vol-overlay-backdrop" onclick="closeVolOverlay()"></div>
+
 <!-- Event detail overlay — position: fixed sibling of archive-drawer so pointer-events work regardless of drawer state -->
 <div id="archive-vol-overlay">
   <div class="arc-detail-hd">
@@ -4395,7 +4408,7 @@ const EDITIONS = {
     ]
   },
   '03': { num:'03', eventDate:'2026-03-30', name:'Georgia Janelle', discipline:'Womenswear Designer', location:'Early Terrible, Lower East Side', artistPhoto:'images/artist-profiles/Artist Photos/Georgia.jpg', artistFlyer:'images/artist-profiles/Georgia Flyer.PNG', instagram: [{ handle:'@georgia.janelle', url:'https://www.instagram.com/georgia.janelle/' }, { handle:'@grgjnastudio', url:'https://www.instagram.com/grgjnastudio/' }] },
-  '02': { num:'02', name:'Yuseph Kim', discipline:'Graphic Designer', location:'Two Bridges Pub', artistPhoto:'images/artist-profiles/Artist Photos/YUSEPH.JPG', artistFlyer:'images/artist-profiles/yuseph flyer.jpg', instagram: [{ handle:'@yusephkim', url:'https://www.instagram.com/yusephkim/' }, { handle:'@graphicflavor_', url:'https://www.instagram.com/graphicflavor_/' }] },
+  '02': { num:'02', name:'Yuseph Kim', discipline:'Graphic Designer', location:'49 Monroe St', artistPhoto:'images/artist-profiles/Artist Photos/YUSEPH.JPG', artistFlyer:'images/artist-profiles/yuseph flyer.jpg', instagram: [{ handle:'@yusephkim', url:'https://www.instagram.com/yusephkim/' }, { handle:'@graphicflavor_', url:'https://www.instagram.com/graphicflavor_/' }] },
   '01': { num:'01', name:'Taylar Herman', discipline:'Creative Producer', location:'Two Bridges Apartment', artistPhoto:'images/artist-profiles/Artist Photos/Tay.JPG', artistFlyer:'images/artist-profiles/tay flyer v2.png', instagram: [{ handle:'@sorealnyc', url:'https://www.instagram.com/sorealnyc/' }] },
 };
 
@@ -7294,7 +7307,7 @@ function initMap() {
     { num:'05', lat:40.7264, lng:-73.9818, upcoming:false },
     { num:'04', lat:40.7081, lng:-73.9571, upcoming:false },
     { num:'03', lat:40.7150, lng:-73.9840, upcoming:false },
-    { num:'02', lat:40.7126, lng:-73.9950, upcoming:false },
+    { num:'02', lat:40.7130, lng:-73.9962, upcoming:false },
     { num:'01', lat:40.7116, lng:-73.9960, upcoming:false },
   ];
 
@@ -7307,8 +7320,8 @@ function initMap() {
       iconAnchor: [12, 12],
       tooltipAnchor: [0, -14]
     });
-    var sessMarker = L.marker([40.7440, -73.9775], { icon: sessIcon }).addTo(ltfMap);
-    ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.7440, lng: -73.9775 };
+    var sessMarker = L.marker([40.71295, -73.98954], { icon: sessIcon }).addTo(ltfMap);
+    ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.71295, lng: -73.98954 };
     sessMarker.on('click', function() {
       openPanel('current');
       setTimeout(function() {
@@ -7558,7 +7571,7 @@ function openDrawer(volNum) {
   if (volNum !== 'all') {
     try { showDrawerVolume(volNum); } catch(e) { console.error('showDrawerVolume error:', e); }
     // Use a short timeout so the remove('open') → add('open') cycle always triggers the CSS transition
-    setTimeout(function() { if (ov) { ov.classList.add('open'); drw.classList.add('vol-overlay-open'); } }, 16);
+    setTimeout(function() { if (ov) { ov.classList.add('open'); drw.classList.add('vol-overlay-open'); setBackdrop(true); } }, 16);
   }
   setTimeout(function() {
     if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize();
@@ -7571,12 +7584,18 @@ function closeEventDetail() {
   if (ov) ov.classList.remove('open');
 }
 
+function setBackdrop(on) {
+  var bd = document.getElementById('vol-overlay-backdrop');
+  if (bd) bd.classList.toggle('active', on);
+}
+
 // Context-aware close: from gallery → back to gallery; from map → back to map
 function closeVolOverlay() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
   var drw = document.getElementById('archive-drawer');
   if (drw) drw.classList.remove('vol-overlay-open');
+  setBackdrop(false);
   if (drawerSource === 'gallery') {
     // Return to gallery view — restore the gallery X button, keep gallery visible
     var gbb = document.getElementById('gallery-back-btn');
@@ -7595,7 +7614,7 @@ function openFromGallery(volNum) {
   // Populate content without opening the full-screen archive-drawer (which has a black bg)
   showDrawerVolume(volNum);
   var ov = document.getElementById('archive-vol-overlay');
-  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
+  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); setBackdrop(true); }, 16); }
 }
 
 function openSessionsDrawer() {
