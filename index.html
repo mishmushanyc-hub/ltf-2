@@ -1785,6 +1785,110 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .arc-detail-close:hover { color: var(--ink); border-color: var(--ink-mid); }
 
+/* Archive guide — floating bottom-left on the map */
+.arc-guide {
+  position: absolute;
+  bottom: 2rem;
+  left: 1rem;
+  z-index: 15;
+  background: rgba(234,230,217,0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(68,51,42,0.18);
+  border-radius: 2px;
+  width: 220px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+.arc-guide-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem 0.55rem;
+  border-bottom: 1px solid rgba(68,51,42,0.12);
+  cursor: default;
+}
+.arc-guide-label {
+  font-family: 'Crimson Pro', serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+}
+.arc-guide-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-low);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s ease, color 0.15s;
+  transform: rotate(180deg);
+}
+.arc-guide.collapsed .arc-guide-toggle { transform: rotate(0deg); }
+.arc-guide-body {
+  max-height: 400px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0.4rem 0;
+}
+.arc-guide.collapsed .arc-guide-body { max-height: 0; padding: 0; }
+.arc-guide-item, .arc-guide-sessions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.arc-guide-item:hover { background: rgba(68,51,42,0.06); }
+.arc-guide-sessions:hover { background: rgba(0,136,99,0.07); }
+.arc-guide-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ink-mid);
+  flex-shrink: 0;
+}
+.arc-guide-pulse-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--olive);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(0,136,99,0.5);
+  animation: guide-pulse 1.8s ease-out infinite;
+}
+@keyframes guide-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,136,99,0.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(0,136,99,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,136,99,0); }
+}
+.arc-guide-item-name {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  color: var(--ink);
+  line-height: 1.1;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.arc-guide-item-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.7rem;
+  color: var(--ink-low);
+  display: none;
+}
+.arc-guide-item:hover .arc-guide-item-name,
+.arc-guide-sessions:hover .arc-guide-item-name { color: var(--olive); }
+.arc-guide-divider { height: 1px; background: rgba(68,51,42,0.10); margin: 0.3rem 0; }
+@media (max-width: 600px) {
+  .arc-guide { width: 180px; bottom: 1rem; }
+}
+
 /* Floating close button on the map */
 .arc-map-close {
   position: absolute;
@@ -3925,6 +4029,62 @@ h1, h2, h3, h4 {
 
   <!-- Floating button to close archive and return to gallery -->
   <button class="arc-map-close" onclick="closeDrawer()" aria-label="Close archive">&times;</button>
+
+  <!-- Archive guide — floating bottom-left -->
+  <div class="arc-guide" id="arc-guide">
+    <div class="arc-guide-hd">
+      <span class="arc-guide-label">Archive</span>
+      <button class="arc-guide-toggle" onclick="this.closest('.arc-guide').classList.toggle('collapsed')" aria-label="Toggle guide">&#8963;</button>
+    </div>
+    <div class="arc-guide-body">
+      <div class="arc-guide-sessions" onclick="openPanel('current'); setTimeout(function(){ var el=document.querySelector('.events-section-label'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },420)">
+        <span class="arc-guide-pulse-dot"></span>
+        <span class="arc-guide-item-name">Sessions No. 1</span>
+        <span class="arc-guide-item-sub">Friendsgiving &middot; Upcoming</span>
+      </div>
+      <div class="arc-guide-divider"></div>
+      <div class="arc-guide-item" onclick="openDrawer('08')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Sitting No. 1</span>
+        <span class="arc-guide-item-sub">Nicole Ko</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('07')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 007</span>
+        <span class="arc-guide-item-sub">Ned &amp; Merv</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('06')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 006</span>
+        <span class="arc-guide-item-sub">Miles Dixon &amp; Elijuh Vuhlet</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('05')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 005</span>
+        <span class="arc-guide-item-sub">Ekaterina Semenova Conway</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('04')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 004</span>
+        <span class="arc-guide-item-sub">Heidi Cannon</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('03')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 003</span>
+        <span class="arc-guide-item-sub">Georgia Janelle</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('02')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 002</span>
+        <span class="arc-guide-item-sub">Yuseph Kim</span>
+      </div>
+      <div class="arc-guide-item" onclick="openDrawer('01')">
+        <span class="arc-guide-dot"></span>
+        <span class="arc-guide-item-name">Vol. 001</span>
+        <span class="arc-guide-item-sub">Taylar Herman</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Event detail drawer — slides in from the right on pin click -->
   <div id="archive-vol-overlay">
