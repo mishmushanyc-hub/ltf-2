@@ -1410,6 +1410,29 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Map inside archive drawer */
 #map { width: 100%; height: 220px; flex-shrink: 0; }
 
+/* Gallery back button */
+#gallery-back-btn {
+  position: fixed;
+  top: calc(54px + 0.75rem);
+  right: 1rem;
+  z-index: 210;
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.88);
+  font-size: 1.1rem;
+  width: 36px; height: 36px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  line-height: 1;
+}
+#gallery-back-btn:hover { background: rgba(0,0,0,0.88); color: #fff; }
+
 /* ── Home gallery (full-screen mosaic) ───────────────────────────── */
 .home-gallery {
   position: absolute;
@@ -2585,10 +2608,10 @@ h1, h2, h3, h4 {
 <!-- ── ENTRY GATE ── -->
 
 <div class="site-nav">
-  <div class="sn-left" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">
+  <div class="sn-left">
     <div class="sn-wordmark">
-      <img decoding="async" src="images/Black-Peter.png" alt="Life Thru Food" class="sn-logo" fetchpriority="high">
-      <span class="sn-logo-text">Life Thru Food</span>
+      <img decoding="async" src="images/Black-Peter.png" alt="Life Thru Food" class="sn-logo" onclick="showLanding()" style="cursor:pointer" fetchpriority="high">
+      <span class="sn-logo-text" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">Life Thru Food</span>
     </div>
   </div>
   <div class="sn-nav">
@@ -2606,7 +2629,7 @@ h1, h2, h3, h4 {
 <div id="landing-nav">
   <!-- Left: logo -->
   <div class="ln-logo-col">
-    <img src="images/logos/LTF PETE LOGO.png" alt="Life Thru Food" class="ln-logo">
+    <img src="images/logos/LTF PETE LOGO.png" alt="Life Thru Food" class="ln-logo" onclick="showLanding()" style="cursor:pointer">
     <span class="ln-logo-city">New York City</span>
   </div>
   <!-- Right: nav -->
@@ -2625,6 +2648,11 @@ h1, h2, h3, h4 {
   <div id="tab-archive" class="section active">
     <div id="home-gallery" class="home-gallery"></div>
   </div>
+
+  <!-- Gallery-mode back button — visible only when gallery is active with no panels -->
+  <button id="gallery-back-btn" onclick="showLanding()" aria-label="Back to home" style="display:none">
+    &times;
+  </button>
 
   <!-- Landing copy overlay -->
   <div id="landing-copy">
@@ -3700,6 +3728,10 @@ h1, h2, h3, h4 {
       <p>Life Thru Food is a cultural programming, hospitality and media company. We transform life stories into dining experiences that connect communities and create diverse culture thru food.</p>
     </div>
 
+    <!-- Previous partner photo gallery -->
+    <div class="foot-label" style="margin-bottom:1rem">Previous Partners</div>
+    <div class="sg-gallery" id="sponsor-gallery-partner"></div>
+
     <!-- Stats -->
     <div class="partner-stats">
       <div class="pstat"><span class="pstat-n">8</span><span class="pstat-l">Sittings Hosted</span></div>
@@ -3985,8 +4017,6 @@ h1, h2, h3, h4 {
 
 <footer>
   <div class="foot-inner">
-    <div class="foot-label">Previous Partners</div>
-    <div class="sg-gallery" id="sponsor-gallery-footer"></div>
     <div class="foot-cta">
       <p>Interested in collaborating? We partner with makers, wineries, restaurants, and cultural institutions who share our sensibility.</p>
       <a class="btn-ghost" href="mailto:info@lifethrufood.com">get in touch</a>
@@ -6912,7 +6942,7 @@ function renderSponsorGallery(containerId) {
 }
 
 function renderSponsors() {
-  renderSponsorGallery('sponsor-gallery-footer');
+  renderSponsorGallery('sponsor-gallery-partner');
   const al = document.getElementById('sponsor-list-admin');
   if (!al) return;
   al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:normal">No sponsors yet.</p>' :
@@ -7223,6 +7253,8 @@ function showLanding() {
   var ln = document.getElementById('landing-nav');
   if (ln) ln.classList.remove('hidden');
   document.querySelector('.site-nav').classList.remove('nav-visible');
+  var gbb = document.getElementById('gallery-back-btn');
+  if (gbb) gbb.style.display = 'none';
 }
 function hideLanding() {
   var ln = document.getElementById('landing-nav');
@@ -7231,6 +7263,7 @@ function hideLanding() {
 }
 function landingOpen(dest) {
   hideLanding();
+  var gbb = document.getElementById('gallery-back-btn');
   if (dest === 'gallery') {
     // Gallery: show the home mosaic full-screen (no panel)
     closeDrawer(false);
@@ -7239,10 +7272,14 @@ function landingOpen(dest) {
     });
     document.getElementById('panel-overlay').classList.remove('visible');
     document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
-  } else if (dest === 'archive') {
-    openDrawer('all');
+    if (gbb) gbb.style.display = 'flex';
   } else {
-    openPanel(dest);
+    if (gbb) gbb.style.display = 'none';
+    if (dest === 'archive') {
+      openDrawer('all');
+    } else {
+      openPanel(dest);
+    }
   }
 }
 // ─────────────────────────────────────────────────────────────────
