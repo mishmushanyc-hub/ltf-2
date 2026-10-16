@@ -1291,7 +1291,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   display: block !important;
   position: fixed !important;
   inset: 0 !important;
-  z-index: 0 !important;
+  z-index: 6 !important;
   padding: 0 !important;
   overflow: visible !important;
 }
@@ -2607,6 +2607,11 @@ h1, h2, h3, h4 {
   overflow: hidden;
   background: var(--paper);
   cursor: default;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .sg-arrow {
   position: absolute;
@@ -2628,7 +2633,7 @@ h1, h2, h3, h4 {
 .sg-arrow-prev { left: 0.35rem; }
 .sg-arrow-next { right: 0.35rem; }
 @media (max-width: 600px) {
-  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); }
+  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); padding: 0.75rem; }
 }
 .sg-item img {
   width: 100%;
@@ -7167,7 +7172,7 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  gallery.innerHTML = pool.slice(0, 18).map(p => {
+  gallery.innerHTML = pool.slice(0, 21).map(p => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
