@@ -2595,6 +2595,7 @@ h1, h2, h3, h4 {
 .sg-item img {
   width: 100%; height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
   filter: grayscale(15%);
   transition: filter 0.3s ease, transform 0.35s ease;
@@ -7546,21 +7547,19 @@ function closeVolOverlay() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
   if (drawerSource === 'gallery') {
-    // Close the archive drawer too and return to gallery
-    var d = document.getElementById('archive-drawer');
-    if (d) { d.classList.remove('open'); d.classList.remove('from-gallery'); }
     showLanding();
   }
 }
 
-// Open event detail as overlay over the gallery (no map)
+// Open event detail as overlay over the gallery (no map opens)
 function openFromGallery(volNum) {
   drawerSource = 'gallery';
   hideLanding();
-  // Mark archive drawer but don't make it visually dominant — overlay does the work
-  var d = document.getElementById('archive-drawer');
-  if (d) { d.classList.add('open'); d.classList.add('from-gallery'); }
+  // Hide the gallery X — the overlay's own X handles closing
+  var gbb = document.getElementById('gallery-back-btn');
+  if (gbb) gbb.style.display = 'none';
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+  // Populate content without opening the full-screen archive-drawer (which has a black bg)
   try { showDrawerVolume(volNum); } catch(e) {}
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
