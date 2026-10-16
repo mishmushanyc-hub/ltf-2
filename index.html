@@ -2860,16 +2860,32 @@ a, button, [onclick], summary, label, select, .leaflet-marker-icon { touch-actio
   .hg-item:hover img { transform: none; }
 }
 
-/* ── One X at a time (body[data-x] is set by the JS controller) ── */
-body[data-x] #gallery-back-btn { display: none !important; }
-body[data-x="gallery"] #gallery-back-btn { display: flex !important; }
-body[data-x]:not([data-x="map"]) .arc-map-close { display: none !important; }
+/* ── One X at a time (body[data-x] is set by the JS controller) ──
+   Losers fade out instantly. The winner fades in only after the layer
+   above it has finished sliding/fading away, so two X's never overlap
+   mid-transition. */
+#gallery-back-btn, .arc-map-close, .arc-detail-close, .panel-close {
+  transition: opacity 0.12s ease, visibility 0s linear 0.12s, background 0.15s, color 0.15s;
+}
+body[data-x] #gallery-back-btn { display: flex !important; }
+body[data-x] #gallery-back-btn,
+body[data-x] .arc-map-close { opacity: 0; visibility: hidden; pointer-events: none; }
+body[data-x="gallery"] #gallery-back-btn,
+body[data-x="map"] .arc-map-close {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity 0.2s ease 0.4s, visibility 0s linear 0.4s, background 0.15s, color 0.15s;
+}
+/* An overlay or panel that is closing hides its own X right away */
+#archive-vol-overlay:not(.open) .arc-detail-close,
+#upcoming-event-overlay:not(.open) .arc-detail-close,
+#tab-current:not(.open) .panel-close, #tab-about:not(.open) .panel-close,
+#tab-work:not(.open) .panel-close, #tab-admin:not(.open) .panel-close { opacity: 0; visibility: hidden; }
+/* Lower layers' X stays hidden while something sits on top of them */
 body[data-x="uev"] #archive-vol-overlay .arc-detail-close,
-body[data-x="modal"] #archive-vol-overlay .arc-detail-close,
-body[data-x="modal"] #upcoming-event-overlay .arc-detail-close { visibility: hidden; }
+body[data-x="modal"] .arc-detail-close,
 body[data-x="vol"] .panel-close,
 body[data-x="uev"] .panel-close,
-body[data-x="modal"] .panel-close { visibility: hidden; }
+body[data-x="modal"] .panel-close { opacity: 0; visibility: hidden; }
 /* Popup X never floats over a panel, drawer or overlay */
 body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opacity: 0 !important; pointer-events: none !important; }
 </style>
@@ -7684,7 +7700,7 @@ function initMap() {
     { num:'01', lat:40.7116, lng:-73.9960, upcoming:false },
   ];
 
-  // Sessions pin — Friendsgiving, Kips Bay
+  // Sessions pin — Friendsgiving, Lower East Side
   (function() {
     var sessIcon = L.divIcon({
       className: '',
@@ -7709,7 +7725,7 @@ function initMap() {
       '<div class="pt-inner"><div class="pt-text">' +
         '<div class="pt-vol" style="color:#F2BE4B">SESSIONS No. 1</div>' +
         '<div class="pt-name">Friendsgiving</div>' +
-        '<div class="pt-disc">Kips Bay · Upcoming</div>' +
+        '<div class="pt-disc">Lower East Side · Upcoming</div>' +
       '</div></div>',
       { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false }
     );
@@ -7959,6 +7975,7 @@ async function submitSessionsWaitlist() {
 // ── Archive drawer control ───────────────────────────────────────
 function openDrawer(volNum) {
   drawerSource = 'map';
+  if (typeof closeUpcomingOverlay === 'function') closeUpcomingOverlay();
   var d = document.getElementById('archive-drawer');
   if (d) d.classList.remove('from-gallery');
   hideLanding();
@@ -7989,6 +8006,13 @@ function closeEventDetail() {
 }
 
 function openUpcomingOverlay(cfg) {
+  // Only one side overlay at a time
+  var vo = document.getElementById('archive-vol-overlay');
+  if (vo && vo.classList.contains('open')) {
+    vo.classList.remove('open');
+    var dr = document.getElementById('archive-drawer'); if (dr) dr.classList.remove('vol-overlay-open');
+    if (typeof setBackdrop === 'function') setBackdrop(false);
+  }
   // Populate
   var br = document.getElementById('uev-breadcrumb');
   var ti = document.getElementById('uev-title');
@@ -8039,6 +8063,7 @@ function closeVolOverlay() {
 // Open event detail as overlay over the gallery (no map opens)
 function openFromGallery(volNum) {
   drawerSource = 'gallery';
+  if (typeof closeUpcomingOverlay === 'function') closeUpcomingOverlay();
   hideLanding();
   // Hide the gallery X — the overlay's own X handles closing
   var gbb = document.getElementById('gallery-back-btn');
@@ -8058,28 +8083,19 @@ function openSessionsDrawer() {
   });
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
+  if (typeof closeVolOverlay === 'function') closeVolOverlay();
   document.getElementById('archive-drawer').classList.add('open');
-
-  // Populate overlay with Sessions content
-  var breadEl = document.getElementById('drawer-breadcrumb');
-  var titleEl = document.getElementById('arc-vol-title');
-  var metaEl  = document.getElementById('arc-vol-meta');
-  var bodyEl  = document.getElementById('drawer-body');
-  if (breadEl) breadEl.textContent = 'Sessions No. 1';
-  if (titleEl) titleEl.textContent = 'Friendsgiving';
-  if (metaEl)  metaEl.textContent  = 'Kips Bay · Upcoming';
-  if (bodyEl)  bodyEl.innerHTML =
-    '<div style="padding:1.5rem 3rem 3rem">' +
-      '<p style="font-family:\'Georgia\',serif;font-size:1rem;color:var(--ink-mid);line-height:1.8;margin-bottom:2rem;max-width:520px">' +
-        'Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. ' +
-        'LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.' +
-      '</p>' +
-      '<button class="btn-primary" onclick="openPanel(\'current\'); setTimeout(function(){ var el=document.querySelector(\'.events-section-label\'); if(el) el.scrollIntoView({behavior:\'smooth\',block:\'start\'}); }, 420)">RSVP &rarr;</button>' +
-    '</div>';
-
-  // Open overlay
-  var ov = document.getElementById('archive-vol-overlay');
-  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
+  drawerSource = 'map';
+  // Same overlay as the Sessions pin. (This used to overwrite #drawer-body,
+  // which wiped the Bio/Menu/Gallery view for every event opened afterwards.)
+  openUpcomingOverlay({
+    breadcrumb: 'Sessions No. 1',
+    title: 'Friendsgiving',
+    meta: '207 Madison St · Lower East Side',
+    desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
+    ctaText: 'Get Invited',
+    ctaAction: "openPanel('current')"
+  });
 
   // Fly map to Sessions pin
   setTimeout(function() {
