@@ -2859,6 +2859,19 @@ a, button, [onclick], summary, label, select, .leaflet-marker-icon { touch-actio
   html { scroll-behavior: auto; }
   .hg-item:hover img { transform: none; }
 }
+
+/* ── One X at a time (body[data-x] is set by the JS controller) ── */
+body[data-x] #gallery-back-btn { display: none !important; }
+body[data-x="gallery"] #gallery-back-btn { display: flex !important; }
+body[data-x]:not([data-x="map"]) .arc-map-close { display: none !important; }
+body[data-x="uev"] #archive-vol-overlay .arc-detail-close,
+body[data-x="modal"] #archive-vol-overlay .arc-detail-close,
+body[data-x="modal"] #upcoming-event-overlay .arc-detail-close { visibility: hidden; }
+body[data-x="vol"] .panel-close,
+body[data-x="uev"] .panel-close,
+body[data-x="modal"] .panel-close { visibility: hidden; }
+/* Popup X never floats over a panel, drawer or overlay */
+body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opacity: 0 !important; pointer-events: none !important; }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -2869,7 +2882,7 @@ a, button, [onclick], summary, label, select, .leaflet-marker-icon { touch-actio
 <div class="site-nav">
   <div class="sn-left">
     <div class="sn-wordmark">
-      <img decoding="async" src="images/Black-Peter.png" alt="Life Thru Food" class="sn-logo" onclick="showLanding()" style="cursor:pointer" fetchpriority="high">
+      <img decoding="async" src="images/Black-Peter.png" alt="Life Thru Food" class="sn-logo" onclick="goHome()" style="cursor:pointer" role="button" tabindex="0" aria-label="Life Thru Food, back to home" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}" fetchpriority="high">
       <span class="sn-logo-text" onclick="openPanel('about')" style="cursor:pointer" title="About Life Thru Food">Life Thru Food</span>
     </div>
   </div>
@@ -2888,7 +2901,7 @@ a, button, [onclick], summary, label, select, .leaflet-marker-icon { touch-actio
 <div id="landing-nav">
   <!-- Left: logo -->
   <div class="ln-logo-col">
-    <img src="images/logos/LTF PETE LOGO.png" alt="Life Thru Food" class="ln-logo" onclick="showLanding()" style="cursor:pointer">
+    <img src="images/logos/LTF PETE LOGO.png" alt="Life Thru Food" class="ln-logo" onclick="goHome()" style="cursor:pointer" role="button" tabindex="0" aria-label="Life Thru Food, back to home" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}">
     <span class="ln-logo-city">New York City</span>
   </div>
   <!-- Right: nav -->
@@ -7254,6 +7267,36 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ── ONE X AT A TIME ──────────────────────────────────────────────
+// Every screen layer has its own close button. Rather than each open/close
+// function hiding the others, this watches what is open and tags <body>
+// with the top-most layer. CSS then shows only that layer's X.
+(function() {
+  var $ = function(id) { return document.getElementById(id); };
+  var isOpen = function(id, cls) { var e = $(id); return !!(e && e.classList.contains(cls || 'open')); };
+  function topLayer() {
+    if (isOpen('gallery-modal') || isOpen('lightbox')) return 'modal';
+    if (isOpen('upcoming-event-overlay')) return 'uev';
+    if (isOpen('archive-vol-overlay')) return 'vol';
+    if (['current','about','work','admin'].some(function(p) { return isOpen('tab-' + p); })) return 'panel';
+    if (isOpen('archive-drawer')) return 'map';
+    var ln = $('landing-nav');
+    if (ln && !ln.classList.contains('hidden')) return 'landing';
+    return 'gallery';
+  }
+  function sync() {
+    var layer = topLayer();
+    if (document.body.getAttribute('data-x') !== layer) document.body.setAttribute('data-x', layer);
+  }
+  function init() {
+    sync();
+    var mo = new MutationObserver(sync);
+    ['landing-nav','archive-drawer','archive-vol-overlay','upcoming-event-overlay','tab-current','tab-about','tab-work','tab-admin','lightbox','gallery-modal']
+      .forEach(function(id) { var e = $(id); if (e) mo.observe(e, { attributes: true, attributeFilter: ['class'] }); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
 // ── SWIPE TO CLOSE (side overlays) ───────────────────────────────
 // Overlays slide in from the right, so a rightward swipe sends them back.
 // Ignored when the gesture starts inside something that scrolls sideways.
@@ -7810,6 +7853,23 @@ function closeAllPanels() {
   showLanding();
 }
 
+// Griffin logo: from any screen, close every layer and return to the landing page
+function goHome() {
+  ['lightbox','gallery-modal'].forEach(function(id) {
+    var e = document.getElementById(id); if (e) e.classList.remove('open');
+  });
+  document.body.style.overflow = '';
+  if (typeof closeUpcomingOverlay === 'function') closeUpcomingOverlay();
+  if (typeof closeVolOverlay === 'function') closeVolOverlay();
+  if (typeof closePopup === 'function') closePopup();
+  var sub = document.getElementById('work-subitems');
+  if (sub) sub.classList.remove('open');
+  var wb = document.querySelector('.ln-item-work .ln-btn');
+  if (wb) wb.classList.remove('expanded');
+  drawerSource = 'map';
+  closeAllPanels(); // closes panels + map drawer, then shows the landing
+}
+
 
 let activeSessionCode = null;
 
@@ -8029,8 +8089,9 @@ function openSessionsDrawer() {
 }
 
 function closeDrawer(clearOverlay) {
-  var d = document.getElementById('archive-drawer'); if (d) d.classList.remove('open');
+  var d = document.getElementById('archive-drawer'); if (d) { d.classList.remove('open'); d.classList.remove('vol-overlay-open'); }
   var ov = document.getElementById('archive-vol-overlay'); if (ov) ov.classList.remove('open');
+  if (typeof setBackdrop === 'function') setBackdrop(false);
   var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.remove('active');
   if (clearOverlay !== false) {
     var anyOpen = ['current','about','work','admin'].some(function(pid) {
