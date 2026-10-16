@@ -2417,14 +2417,14 @@ h1, h2, h3, h4 {
 /* ── Sponsor gallery ─────────────────────────────────────────── */
 .sg-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 .sg-item {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/3;
+  aspect-ratio: 3/2;
   background: var(--paper);
   cursor: default;
 }
@@ -3596,9 +3596,6 @@ h1, h2, h3, h4 {
       <p>Life Thru Food is a cultural programming, hospitality and media company. We transform life stories into dining experiences that connect communities and create diverse culture thru food.</p>
     </div>
 
-    <!-- Partner photo gallery (above stats) -->
-    <div class="sg-gallery" id="sponsor-gallery-partner"></div>
-
     <!-- Stats -->
     <div class="partner-stats">
       <div class="pstat"><span class="pstat-n">8</span><span class="pstat-l">Sittings Hosted</span></div>
@@ -3885,8 +3882,7 @@ h1, h2, h3, h4 {
 <footer>
   <div class="foot-inner">
     <div class="foot-label">Previous Partners</div>
-    <div class="sg-gallery" id="sponsor-gallery-footer" style="margin-bottom:1.25rem"></div>
-    <div class="sp-grid" id="sponsors-grid"></div>
+    <div class="sg-gallery" id="sponsor-gallery-footer"></div>
     <div class="foot-cta">
       <p>Interested in collaborating? We partner with makers, wineries, restaurants, and cultural institutions who share our sensibility.</p>
       <a class="btn-ghost" href="mailto:info@lifethrufood.com">get in touch</a>
@@ -6756,25 +6752,7 @@ function renderSponsorGallery(containerId) {
 }
 
 function renderSponsors() {
-  renderSponsorGallery('sponsor-gallery-partner');
   renderSponsorGallery('sponsor-gallery-footer');
-  const grid = document.getElementById('sponsors-grid');
-  const gridSponsor = document.getElementById('sponsors-grid-sponsor');
-  const sorted = [...sponsors].sort((a,b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
-  const cardHtml = sorted.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.location?`<div class="sp-location">${s.location}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
-  const emptyHtml = '<div style="padding:1.5rem;color:var(--ink-mid);font-size:0.9rem;font-style:normal">No partners yet.</div>';
-  if (!sorted.length) { grid.innerHTML = emptyHtml; if (gridSponsor) gridSponsor.innerHTML = emptyHtml; return; }
-  // Split sponsors: odd → left, even → right (both columns in landing-bottom)
-  const leftCards = sorted.filter((_,i) => i % 2 === 0);
-  const rightCards = sorted.filter((_,i) => i % 2 !== 0);
-  const toHtml = arr => arr.map(s => `<div class="sp-card${s.tier==='presenting'?' pres':''}"><div class="sp-tier">${TIER_LABELS[s.tier]}</div><div class="sp-name">${s.name}</div>${s.desc?`<div class="sp-desc">${s.desc}</div>`:''}${s.url?`<a class="sp-url" href="https://${s.url.replace(/^https?:\/\//,'')}" target="_blank">${s.url}</a>`:''}</div>`).join('');
-  grid.innerHTML = cardHtml;
-  if (gridSponsor) gridSponsor.innerHTML = cardHtml;
-  if (gridSponsor) gridSponsor.innerHTML = cardHtml;
-  const gl = document.getElementById('sponsors-grid-left');
-  const gr = document.getElementById('sponsors-grid-right');
-  if (gl) gl.innerHTML = leftCards.length ? toHtml(leftCards) : '';
-  if (gr) gr.innerHTML = rightCards.length ? toHtml(rightCards) : '';
   const al = document.getElementById('sponsor-list-admin');
   if (!al) return;
   al.innerHTML = !sponsors.length ? '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:normal">No sponsors yet.</p>' :
