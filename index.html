@@ -2603,42 +2603,27 @@ h1, h2, h3, h4 {
 }
 .sg-item {
   flex: 0 0 calc((100% - 1.5rem) / 3);
+  flex-shrink: 0;
   position: relative;
-  overflow: hidden;
   background: var(--paper);
   cursor: default;
-  padding: 1.25rem;
+  padding: 1rem;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: clamp(100px, 28vh, 180px);
 }
-.sg-arrow {
-  position: absolute;
-  top: 40%; transform: translateY(-50%);
-  z-index: 2;
-  background: rgba(234,230,217,0.92);
-  border: 1px solid rgba(68,51,42,0.18);
-  color: var(--ink);
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.15s, opacity 0.15s;
-  border-radius: 2px;
-  backdrop-filter: blur(4px);
-}
-.sg-arrow:hover { background: var(--canvas); }
-.sg-arrow.disabled { opacity: 0.25; pointer-events: none; }
-.sg-arrow-prev { left: 0.35rem; }
-.sg-arrow-next { right: 0.35rem; }
 @media (max-width: 600px) {
-  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); padding: 0.75rem; }
+  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); padding: 0.65rem; height: clamp(80px, 22vh, 130px); }
 }
 .sg-item img {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
   display: block;
+  object-fit: contain;
   filter: grayscale(15%);
   transition: filter 0.3s ease;
 }
@@ -7030,48 +7015,56 @@ function renderSponsorGallery(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
   if (!sponsors.length) { el.innerHTML = ''; return; }
-  const itemsHtml = sponsors.map(s => {
+  const makeItem = s => {
     const imgKey = s.photo || slugify(s.name);
     const descHtml = s.desc ? `<div class="sg-overlay-desc">${s.desc}</div>` : '';
     return `<div class="sg-item">` +
       `<img src="images/sponsors/${imgKey}.jpg" alt="${s.name}" loading="lazy" onerror="this.closest('.sg-item').style.display='none'">` +
-      `<div class="sg-overlay">` +
-        `<div class="sg-overlay-name">${s.name}</div>` +
-        descHtml +
-      `</div>` +
+      `<div class="sg-overlay"><div class="sg-overlay-name">${s.name}</div>${descHtml}</div>` +
     `</div>`;
-  }).join('');
-  el.innerHTML =
-    `<button class="sg-arrow sg-arrow-prev disabled" onclick="sgSlide('${containerId}',-1)" aria-label="Previous">&#8249;</button>` +
-    `<div class="sg-track-wrap"><div class="sg-track" id="${containerId}-track">${itemsHtml}</div></div>` +
-    `<button class="sg-arrow sg-arrow-next" onclick="sgSlide('${containerId}',1)" aria-label="Next">&#8250;</button>`;
-  // Hide arrow if not enough items to slide
+  };
+  // Duplicate list for seamless infinite loop
+  const itemsHtml = [...sponsors, ...sponsors].map(makeItem).join('');
+  el.innerHTML = `<div class="sg-track-wrap"><div class="sg-track" id="${containerId}-track">${itemsHtml}</div></div>`;
+  el.dataset.sgOffset = '0';
+  sgStartAutoplay(containerId);
+}
+
+var sgTimers = {};
+function sgStartAutoplay(containerId) {
+  clearInterval(sgTimers[containerId]);
+  sgTimers[containerId] = setInterval(function() { sgAdvance(containerId); }, 3200);
+}
+
+function sgAdvance(containerId) {
+  const el = document.getElementById(containerId);
+  const track = document.getElementById(containerId + '-track');
+  if (!el || !track) return;
   const perPage = window.innerWidth <= 600 ? 2 : 3;
-  const visibleItems = el.querySelectorAll('.sg-item');
-  if (visibleItems.length <= perPage) {
-    el.querySelectorAll('.sg-arrow').forEach(a => a.style.display = 'none');
+  const origCount = sponsors.length;
+  const items = track.querySelectorAll('.sg-item');
+  if (!items.length) return;
+  const itemW = items[0].getBoundingClientRect().width;
+  const gap = 12;
+  const current = parseInt(el.dataset.sgOffset || '0');
+  const next = current + 1;
+  el.dataset.sgOffset = next;
+  track.style.transition = 'transform 0.55s cubic-bezier(0.16,1,0.3,1)';
+  track.style.transform = `translateX(-${next * (itemW + gap)}px)`;
+  // When we've scrolled through the original set, silently snap back
+  if (next >= origCount) {
+    setTimeout(function() {
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0)';
+      el.dataset.sgOffset = '0';
+      setTimeout(function() {
+        track.style.transition = 'transform 0.55s cubic-bezier(0.16,1,0.3,1)';
+      }, 40);
+    }, 580);
   }
 }
 
-function sgSlide(containerId, dir) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const track = document.getElementById(containerId + '-track');
-  if (!track) return;
-  const perPage = window.innerWidth <= 600 ? 2 : 3;
-  const items = [...track.querySelectorAll('.sg-item')].filter(i => i.style.display !== 'none');
-  const total = items.length;
-  if (total <= perPage) return;
-  const current = parseInt(el.dataset.sgOffset || '0');
-  const max = total - perPage;
-  const next = Math.max(0, Math.min(max, current + dir));
-  el.dataset.sgOffset = next;
-  const itemW = items[0].getBoundingClientRect().width;
-  const gap = 12; // 0.75rem
-  track.style.transform = `translateX(-${next * (itemW + gap)}px)`;
-  el.querySelector('.sg-arrow-prev').classList.toggle('disabled', next === 0);
-  el.querySelector('.sg-arrow-next').classList.toggle('disabled', next >= max);
-}
+function sgSlide(containerId, dir) { sgAdvance(containerId); }
 
 function renderSponsors() {
   renderSponsorGallery('sponsor-gallery-partner');
