@@ -1744,16 +1744,16 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 /* Archive volume list — floating overlay panel */
 /* Event detail drawer — slides in from right on pin click */
 #archive-vol-overlay {
-  position: absolute;
-  top: 0; right: 0;
+  position: fixed;
+  top: 54px; right: 0;
   width: min(860px, 100%);
-  height: 100%;
+  height: calc(100vh - 54px);
   background: var(--canvas);
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
   overflow-y: auto;
   overscroll-behavior: contain;
-  z-index: 10;
+  z-index: 160;
   border-left: 1px solid var(--rule-mid);
   will-change: transform;
   pointer-events: none;
@@ -1775,7 +1775,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   top: 0;
   background: var(--canvas);
   border-bottom: 1px solid var(--rule-mid);
-  padding: 1rem 3rem;
+  padding: 0.55rem 3rem 0.75rem;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -1791,7 +1791,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--olive);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.15rem;
 }
 .arc-detail-close {
   background: none;
@@ -1938,6 +1938,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 .arc-map-close:hover { background: rgba(0,0,0,0.88); color: #fff; }
 /* Hide the map X when the event detail overlay is open — one X at a time */
 #archive-drawer:has(#archive-vol-overlay.open) .arc-map-close { display: none; }
+/* Hide map X entirely when overlay was opened from gallery (no map beneath) */
+#archive-drawer.from-gallery .arc-map-close { display: none; }
 
 /* Stale arc-topbar styles — kept for reference */
 .arc-topbar-title {
@@ -2546,19 +2548,49 @@ h1, h2, h3, h4 {
 .asvc-item { font-family:'Georgia',serif; font-size:0.82rem; color:var(--ink-mid); line-height:1.5; display:flex; align-items:flex-start; gap:0.5rem; }
 .asvc-item::before { content:counter(svc); counter-increment:svc; font-family:'Crimson Pro',serif; font-size:10px; color:var(--olive); margin-top:1px; min-width:1rem; }
 
-/* ── Sponsor gallery ─────────────────────────────────────────── */
+/* ── Sponsor gallery slider ──────────────────────────────────── */
 .sg-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.75rem;
+  position: relative;
   margin-bottom: 2rem;
 }
+.sg-track-wrap {
+  overflow: hidden;
+}
+.sg-track {
+  display: flex;
+  gap: 0.75rem;
+  transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
 .sg-item {
+  flex: 0 0 calc((100% - 1.5rem) / 3);
   position: relative;
   overflow: hidden;
   aspect-ratio: 3/2;
   background: var(--paper);
   cursor: default;
+}
+.sg-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(234,230,217,0.92);
+  border: 1px solid rgba(68,51,42,0.18);
+  color: var(--ink);
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.15s, opacity 0.15s;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+.sg-arrow:hover { background: var(--canvas); }
+.sg-arrow.disabled { opacity: 0.25; pointer-events: none; }
+.sg-arrow-prev { left: 0.35rem; }
+.sg-arrow-next { right: 0.35rem; }
+@media (max-width: 600px) {
+  .sg-item { flex: 0 0 calc((100% - 0.75rem) / 2); }
 }
 .sg-item img {
   width: 100%; height: 100%;
@@ -4147,7 +4179,7 @@ h1, h2, h3, h4 {
         <div class="archive-title" id="arc-vol-title"></div>
         <div class="archive-meta" id="arc-vol-meta"></div>
       </div>
-      <button class="arc-detail-close" onclick="closeEventDetail()" aria-label="Close">&times;</button>
+      <button class="arc-detail-close" onclick="closeVolOverlay()" aria-label="Close">&times;</button>
     </div>
     <div id="drawer-body">
       <div id="drawer-vol-detail">
@@ -6951,7 +6983,7 @@ function renderSponsorGallery(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
   if (!sponsors.length) { el.innerHTML = ''; return; }
-  el.innerHTML = sponsors.map(s => {
+  const itemsHtml = sponsors.map(s => {
     const imgKey = s.photo || slugify(s.name);
     const descHtml = s.desc ? `<div class="sg-overlay-desc">${s.desc}</div>` : '';
     return `<div class="sg-item">` +
@@ -6962,6 +6994,36 @@ function renderSponsorGallery(containerId) {
       `</div>` +
     `</div>`;
   }).join('');
+  el.innerHTML =
+    `<button class="sg-arrow sg-arrow-prev disabled" onclick="sgSlide('${containerId}',-1)" aria-label="Previous">&#8249;</button>` +
+    `<div class="sg-track-wrap"><div class="sg-track" id="${containerId}-track">${itemsHtml}</div></div>` +
+    `<button class="sg-arrow sg-arrow-next" onclick="sgSlide('${containerId}',1)" aria-label="Next">&#8250;</button>`;
+  // Hide arrow if not enough items to slide
+  const perPage = window.innerWidth <= 600 ? 2 : 3;
+  const visibleItems = el.querySelectorAll('.sg-item');
+  if (visibleItems.length <= perPage) {
+    el.querySelectorAll('.sg-arrow').forEach(a => a.style.display = 'none');
+  }
+}
+
+function sgSlide(containerId, dir) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const track = document.getElementById(containerId + '-track');
+  if (!track) return;
+  const perPage = window.innerWidth <= 600 ? 2 : 3;
+  const items = [...track.querySelectorAll('.sg-item')].filter(i => i.style.display !== 'none');
+  const total = items.length;
+  if (total <= perPage) return;
+  const current = parseInt(el.dataset.sgOffset || '0');
+  const max = total - perPage;
+  const next = Math.max(0, Math.min(max, current + dir));
+  el.dataset.sgOffset = next;
+  const itemW = items[0].getBoundingClientRect().width;
+  const gap = 12; // 0.75rem
+  track.style.transform = `translateX(-${next * (itemW + gap)}px)`;
+  el.querySelector('.sg-arrow-prev').classList.toggle('disabled', next === 0);
+  el.querySelector('.sg-arrow-next').classList.toggle('disabled', next >= max);
 }
 
 function renderSponsors() {
@@ -7068,7 +7130,7 @@ function renderHomeGallery() {
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
     const disc = ed.discipline || '';
-    return `<div class="hg-item" onclick="openDrawer('${p.edition}')" title="${name}">` +
+    return `<div class="hg-item" onclick="openFromGallery('${p.edition}')" title="${name}">` +
       `<img decoding="async" src="${p.photo}" alt="${name}" loading="lazy">` +
       `<div class="hg-overlay">` +
         (label ? `<span class="hg-ov-label">${label}</span>` : '') +
@@ -7165,6 +7227,7 @@ if (window.innerWidth > 600) setInterval(() => {
 
 let ltfMap;
 const ltfMarkers = {}; // keyed by vol num string, e.g. '08', '07'
+let drawerSource = 'map'; // 'gallery' | 'map' — controls X button behaviour
 
 function initMap() {
   var nycBounds = L.latLngBounds(
@@ -7449,6 +7512,9 @@ async function submitSessionsWaitlist() {
 
 // ── Archive drawer control ───────────────────────────────────────
 function openDrawer(volNum) {
+  drawerSource = 'map';
+  var d = document.getElementById('archive-drawer');
+  if (d) d.classList.remove('from-gallery');
   hideLanding();
   ['current','about','work','admin'].forEach(function(pid) {
     var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
@@ -7473,6 +7539,31 @@ function openDrawer(volNum) {
 function closeEventDetail() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
+}
+
+// Context-aware close: from gallery → back to gallery; from map → back to map
+function closeVolOverlay() {
+  var ov = document.getElementById('archive-vol-overlay');
+  if (ov) ov.classList.remove('open');
+  if (drawerSource === 'gallery') {
+    // Close the archive drawer too and return to gallery
+    var d = document.getElementById('archive-drawer');
+    if (d) { d.classList.remove('open'); d.classList.remove('from-gallery'); }
+    showLanding();
+  }
+}
+
+// Open event detail as overlay over the gallery (no map)
+function openFromGallery(volNum) {
+  drawerSource = 'gallery';
+  hideLanding();
+  // Mark archive drawer but don't make it visually dominant — overlay does the work
+  var d = document.getElementById('archive-drawer');
+  if (d) { d.classList.add('open'); d.classList.add('from-gallery'); }
+  document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+  try { showDrawerVolume(volNum); } catch(e) {}
+  var ov = document.getElementById('archive-vol-overlay');
+  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
 }
 
 function openSessionsDrawer() {
