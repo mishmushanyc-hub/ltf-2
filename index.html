@@ -4072,7 +4072,7 @@ h1, h2, h3, h4 {
       <button class="arc-guide-toggle" onclick="this.closest('.arc-guide').classList.toggle('collapsed')" aria-label="Toggle guide">&#8963;</button>
     </div>
     <div class="arc-guide-body">
-      <div class="arc-guide-sessions" onclick="openPanel('current'); setTimeout(function(){ var el=document.querySelector('.events-section-label'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },420)">
+      <div class="arc-guide-sessions" onclick="openSessionsDrawer()">
         <span class="arc-guide-pulse-dot"></span>
         <div class="arc-guide-text">
           <span class="arc-guide-item-name">Sessions No. 1</span>
@@ -4147,7 +4147,7 @@ h1, h2, h3, h4 {
         <div class="archive-title" id="arc-vol-title"></div>
         <div class="archive-meta" id="arc-vol-meta"></div>
       </div>
-      <button class="arc-detail-close" onclick="closeDrawer(false)" aria-label="Close">&times;</button>
+      <button class="arc-detail-close" onclick="closeEventDetail()" aria-label="Close">&times;</button>
     </div>
     <div id="drawer-body">
       <div id="drawer-vol-detail">
@@ -7473,6 +7473,44 @@ function openDrawer(volNum) {
 function closeEventDetail() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
+}
+
+function openSessionsDrawer() {
+  // Ensure the archive map is open
+  hideLanding();
+  ['current','about','work','admin'].forEach(function(pid) {
+    var el = document.getElementById('tab-' + pid); if (el) el.classList.remove('open');
+  });
+  document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
+  var ab = document.getElementById('sn-btn-archive'); if (ab) ab.classList.add('active');
+  document.getElementById('archive-drawer').classList.add('open');
+
+  // Populate overlay with Sessions content
+  var breadEl = document.getElementById('drawer-breadcrumb');
+  var titleEl = document.getElementById('arc-vol-title');
+  var metaEl  = document.getElementById('arc-vol-meta');
+  var bodyEl  = document.getElementById('drawer-body');
+  if (breadEl) breadEl.textContent = 'Sessions No. 1';
+  if (titleEl) titleEl.textContent = 'Friendsgiving';
+  if (metaEl)  metaEl.textContent  = 'Kips Bay · Upcoming';
+  if (bodyEl)  bodyEl.innerHTML =
+    '<div style="padding:1.5rem 3rem 3rem">' +
+      '<p style="font-family:\'Georgia\',serif;font-size:1rem;color:var(--ink-mid);line-height:1.8;margin-bottom:2rem;max-width:520px">' +
+        'Over eight Sittings, Life Thru Food has built dinners around the lives of New York artists and served more than 500 guests. ' +
+        'LTF Sessions are the quieter side of that work: a lower guest count, served family style, and invite only.' +
+      '</p>' +
+      '<button class="btn-primary" onclick="openPanel(\'current\'); setTimeout(function(){ var el=document.querySelector(\'.events-section-label\'); if(el) el.scrollIntoView({behavior:\'smooth\',block:\'start\'}); }, 420)">RSVP &rarr;</button>' +
+    '</div>';
+
+  // Open overlay
+  var ov = document.getElementById('archive-vol-overlay');
+  if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
+
+  // Fly map to Sessions pin
+  setTimeout(function() {
+    if (ltfMap) ltfMap.invalidateSize();
+    focusMapPin('sessions');
+  }, 350);
 }
 
 function closeDrawer(clearOverlay) {
