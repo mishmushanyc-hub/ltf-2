@@ -6982,7 +6982,7 @@ function initMap() {
   L.control.zoom({ position: 'bottomright' }).addTo(ltfMap);
 
   const EVENT_PINS = [
-    { num:'08', lat:40.6949, lng:-73.9213 },
+    { num:'08', lat:40.6949, lng:-73.9213, upcoming:true },
     { num:'07', lat:40.7151, lng:-73.9601, upcoming:false },
     { num:'06', lat:40.6747, lng:-74.0052, upcoming:false },
     { num:'05', lat:40.7264, lng:-73.9818, upcoming:false },
@@ -7043,7 +7043,11 @@ function initMap() {
       .bindTooltip(ttHtml, { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false });
 
     marker.on('click', function() {
-      openDrawer(p.num);
+      if (p.upcoming) {
+        openPanel('current');
+      } else {
+        openDrawer(p.num);
+      }
     });
   });
 
