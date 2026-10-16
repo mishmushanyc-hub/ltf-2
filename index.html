@@ -6982,7 +6982,7 @@ function initMap() {
   L.control.zoom({ position: 'bottomright' }).addTo(ltfMap);
 
   const EVENT_PINS = [
-    { num:'08', lat:40.6949, lng:-73.9213, upcoming:true },
+    { num:'08', lat:40.6949, lng:-73.9213, upcoming:false },
     { num:'07', lat:40.7151, lng:-73.9601, upcoming:false },
     { num:'06', lat:40.6747, lng:-74.0052, upcoming:false },
     { num:'05', lat:40.7264, lng:-73.9818, upcoming:false },
@@ -7002,6 +7002,13 @@ function initMap() {
       tooltipAnchor: [0, -14]
     });
     var sessMarker = L.marker([40.7440, -73.9775], { icon: sessIcon }).addTo(ltfMap);
+    sessMarker.on('click', function() {
+      openPanel('current');
+      setTimeout(function() {
+        var el = document.querySelector('.events-section-label');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 420);
+    });
     sessMarker.bindTooltip(
       '<div class="pt-inner"><div class="pt-text">' +
         '<div class="pt-vol" style="color:#F2BE4B">SESSIONS No. 1</div>' +
@@ -7043,11 +7050,7 @@ function initMap() {
       .bindTooltip(ttHtml, { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false });
 
     marker.on('click', function() {
-      if (p.upcoming) {
-        openPanel('current');
-      } else {
-        openDrawer(p.num);
-      }
+      openDrawer(p.num);
     });
   });
 
