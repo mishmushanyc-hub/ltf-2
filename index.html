@@ -1293,7 +1293,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   inset: 0 !important;
   z-index: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 /* ── Minimal landing nav ──────────────────────────────────────────── */
@@ -1435,11 +1435,8 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 
 /* ── Home gallery (full-screen mosaic) ───────────────────────────── */
 .home-gallery {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: absolute;
+  inset: 0;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
@@ -7156,7 +7153,7 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  gallery.innerHTML = pool.slice(0, 25).map(p => {
+  gallery.innerHTML = pool.slice(0, 15).map(p => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
