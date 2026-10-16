@@ -1966,7 +1966,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
 }
 .arc-map-close:hover { background: rgba(0,0,0,0.88); color: #fff; }
 /* Hide the map X when the event detail overlay is open — one X at a time */
-#archive-drawer:has(#archive-vol-overlay.open) .arc-map-close { display: none; }
+#archive-drawer.vol-overlay-open .arc-map-close { display: none; }
 /* Hide map X entirely when overlay was opened from gallery (no map beneath) */
 #archive-drawer.from-gallery .arc-map-close { display: none; }
 
@@ -4199,30 +4199,31 @@ h1, h2, h3, h4 {
     </div>
   </div>
 
-  <!-- Event detail drawer — slides in from the right on pin click -->
-  <div id="archive-vol-overlay">
-    <div class="arc-detail-hd">
-      <div>
-        <div class="arc-detail-vol" id="drawer-breadcrumb"></div>
-        <div class="archive-title" id="arc-vol-title"></div>
-        <div class="archive-meta" id="arc-vol-meta"></div>
-      </div>
-      <button class="arc-detail-close" onclick="closeVolOverlay()" aria-label="Close">&times;</button>
+</div><!-- /archive-drawer -->
+
+<!-- Event detail overlay — position: fixed sibling of archive-drawer so pointer-events work regardless of drawer state -->
+<div id="archive-vol-overlay">
+  <div class="arc-detail-hd">
+    <div>
+      <div class="arc-detail-vol" id="drawer-breadcrumb"></div>
+      <div class="archive-title" id="arc-vol-title"></div>
+      <div class="archive-meta" id="arc-vol-meta"></div>
     </div>
-    <div id="drawer-body">
-      <div id="drawer-vol-detail">
-        <div class="board-toolbar" style="margin-bottom:1rem">
-          <div class="filter-bar" id="filter-bar" style="display:flex;align-items:center;gap:0.5rem">
-            <button class="fpill on" onclick="scrollToSection('sec-bio',this)">Bio</button>
-            <button class="fpill" onclick="scrollToSection('sec-menu',this)">Menu</button>
-            <button class="fpill" onclick="scrollToSection('sec-gallery',this)">Gallery</button>
-          </div>
+    <button class="arc-detail-close" onclick="closeVolOverlay()" aria-label="Close">&times;</button>
+  </div>
+  <div id="drawer-body">
+    <div id="drawer-vol-detail">
+      <div class="board-toolbar" style="margin-bottom:1rem">
+        <div class="filter-bar" id="filter-bar" style="display:flex;align-items:center;gap:0.5rem">
+          <button class="fpill on" onclick="scrollToSection('sec-bio',this)">Bio</button>
+          <button class="fpill" onclick="scrollToSection('sec-menu',this)">Menu</button>
+          <button class="fpill" onclick="scrollToSection('sec-gallery',this)">Gallery</button>
         </div>
-        <div id="content-list"></div>
       </div>
+      <div id="content-list"></div>
     </div>
   </div>
-</div><!-- /archive-drawer -->
+</div>
 
 <!-- RSVP Calling Card Popup (shown after 5 seconds) -->
 
@@ -7153,7 +7154,7 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  gallery.innerHTML = pool.slice(0, 15).map(p => {
+  gallery.innerHTML = pool.slice(0, 18).map(p => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
@@ -7552,11 +7553,12 @@ function openDrawer(volNum) {
   var ov = document.getElementById('archive-vol-overlay');
   // Close event detail if switching events; keep map open
   if (ov) ov.classList.remove('open');
-  document.getElementById('archive-drawer').classList.add('open');
+  var drw = document.getElementById('archive-drawer');
+  drw.classList.add('open');
   if (volNum !== 'all') {
     try { showDrawerVolume(volNum); } catch(e) { console.error('showDrawerVolume error:', e); }
     // Use a short timeout so the remove('open') → add('open') cycle always triggers the CSS transition
-    setTimeout(function() { if (ov) ov.classList.add('open'); }, 16);
+    setTimeout(function() { if (ov) { ov.classList.add('open'); drw.classList.add('vol-overlay-open'); } }, 16);
   }
   setTimeout(function() {
     if (typeof ltfMap !== 'undefined' && ltfMap) ltfMap.invalidateSize();
@@ -7573,6 +7575,8 @@ function closeEventDetail() {
 function closeVolOverlay() {
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) ov.classList.remove('open');
+  var drw = document.getElementById('archive-drawer');
+  if (drw) drw.classList.remove('vol-overlay-open');
   if (drawerSource === 'gallery') {
     // Return to gallery view — restore the gallery X button, keep gallery visible
     var gbb = document.getElementById('gallery-back-btn');
@@ -7589,7 +7593,7 @@ function openFromGallery(volNum) {
   if (gbb) gbb.style.display = 'none';
   document.querySelectorAll('.sn-btn').forEach(function(b) { b.classList.remove('active'); });
   // Populate content without opening the full-screen archive-drawer (which has a black bg)
-  try { showDrawerVolume(volNum); } catch(e) {}
+  showDrawerVolume(volNum);
   var ov = document.getElementById('archive-vol-overlay');
   if (ov) { ov.classList.remove('open'); setTimeout(function() { ov.classList.add('open'); }, 16); }
 }
