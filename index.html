@@ -2896,6 +2896,14 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 @media (min-width: 601px) and (max-width: 900px) {
   .hg-item:nth-child(22) { display: none; }
 }
+
+/* Sessions RSVP: request a +1 */
+.sess-plusone { margin-top: 1.25rem; padding: 1rem 1.25rem; border: 1px solid var(--rule-mid); background: var(--canvas); }
+.sess-plusone-toggle { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); min-height: 32px; }
+.sess-plusone-toggle input { width: 18px; height: 18px; accent-color: var(--olive); flex-shrink: 0; }
+.sess-plusone-note { font-family: 'Georgia', serif; font-size: 0.82rem; color: var(--ink-low); line-height: 1.6; margin: 0.35rem 0 0 calc(18px + 0.6rem); }
+#sess-plusone-fields { margin-top: 1rem; }
+@media (max-width: 600px) { .sess-plusone input[type="checkbox"] { width: 22px; height: 22px; } }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3043,6 +3051,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
           <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
           <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
+          <p id="sessions-plusone-confirm" style="display:none;font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.75rem">Your +1 request is in. We will email you once it is confirmed.</p>
         </div>
 
         <!-- Step 1: Code gate -->
@@ -3101,6 +3110,20 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
             <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
             <div class="form-field"><label for="sess-source">How did you find us?</label>
               <select id="sess-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Other</option></select>
+            </div>
+          </div>
+          <div class="sess-plusone">
+            <label class="sess-plusone-toggle" for="sess-plusone-check">
+              <input type="checkbox" id="sess-plusone-check" onchange="toggleSessPlusOne(this.checked)">
+              <span>Request a +1</span>
+            </label>
+            <p class="sess-plusone-note">Seats are limited, so a +1 is a request. We will confirm by email.</p>
+            <div id="sess-plusone-fields" style="display:none">
+              <div class="form-grid">
+                <div class="form-field"><label for="sess-p1-first">+1 first name</label><input type="text" id="sess-p1-first" placeholder="First" autocomplete="off"></div>
+                <div class="form-field"><label for="sess-p1-last">+1 last name</label><input type="text" id="sess-p1-last" placeholder="Last" autocomplete="off"></div>
+              </div>
+              <div class="form-field"><label for="sess-p1-ig">+1 Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-p1-ig" placeholder="@handle" autocomplete="off"></div>
             </div>
           </div>
           <div id="sessions-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
@@ -7921,6 +7944,12 @@ async function checkSessionCode() {
   btn.disabled = false; btn.textContent = 'confirm →';
 }
 
+function toggleSessPlusOne(on) {
+  var f = document.getElementById('sess-plusone-fields');
+  if (f) f.style.display = on ? '' : 'none';
+  if (on) { var i = document.getElementById('sess-p1-first'); if (i) i.focus(); }
+}
+
 async function submitSessionsRSVP() {
   const first = document.getElementById('sess-first').value.trim();
   const last  = document.getElementById('sess-last').value.trim();
@@ -7935,9 +7964,24 @@ async function submitSessionsRSVP() {
     errEl.style.display = '';
     return;
   }
+  const wantsPlusOne = document.getElementById('sess-plusone-check').checked;
+  const p1First = document.getElementById('sess-p1-first').value.trim();
+  const p1Last  = document.getElementById('sess-p1-last').value.trim();
+  const p1Ig    = document.getElementById('sess-p1-ig').value.trim();
+  if (wantsPlusOne && (!p1First || !p1Last)) {
+    errEl.textContent = 'Please add your +1\'s first and last name, or untick the +1 request.';
+    errEl.style.display = '';
+    return;
+  }
+  const btn = document.querySelector('#sessions-form-wrap .btn-primary');
+  if (btn) btn.disabled = true;
   try {
     // Save the RSVP
-    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` });
+    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` + (wantsPlusOne ? ` | +1 requested: ${p1First} ${p1Last}` : '') });
+    // Save the +1 request as its own row so it is easy to review and approve
+    if (wantsPlusOne) {
+      await sbPost('waitlist', { first_name: p1First, last_name: p1Last, email, instagram: p1Ig || null, list_type: 'sessions-01-plus-one-request', notes: `requested by ${first} ${last} (${email}) | code:${activeSessionCode}` });
+    }
     // Mark code as used
     await fetch(`${SUPABASE_URL}/rest/v1/session_codes?code=eq.${encodeURIComponent(activeSessionCode)}`, {
       method: 'PATCH',
@@ -7946,7 +7990,10 @@ async function submitSessionsRSVP() {
     });
     document.getElementById('sessions-form-wrap').style.display = 'none';
     document.getElementById('sessions-success').style.display = '';
+    var pc = document.getElementById('sessions-plusone-confirm');
+    if (pc) pc.style.display = wantsPlusOne ? '' : 'none';
   } catch(e) {
+    if (btn) btn.disabled = false;
     errEl.textContent = 'Something went wrong. Please try again or email us at info@lifethrufood.com.';
     errEl.style.display = '';
   }
