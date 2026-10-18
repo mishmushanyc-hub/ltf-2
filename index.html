@@ -3051,6 +3051,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
           <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
           <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.5rem">A confirmation with the address, 207 Madison St, is on its way to your inbox.</p>
           <p id="sessions-plusone-confirm" style="display:none;font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.75rem">Your +1 request is in. We will email you once it is confirmed.</p>
         </div>
 
@@ -3073,7 +3074,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.25rem">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
           <div id="sessions-waitlist-success" style="display:none;padding:1.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center;margin-bottom:1rem">
             <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.5rem">You're on the list</p>
-            <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid)">We'll be in touch if a seat opens.</p>
+            <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid)">This is a request, not a confirmed seat. We sent a confirmation to your inbox and will be in touch if a seat opens.</p>
           </div>
           <div id="sessions-waitlist-form">
             <div class="form-grid">
@@ -5168,7 +5169,7 @@ async function submitRSVP() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode.id, email, activeCompCode.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
+        await sendCompConfirmation({ eventId: selectedEvent?.id, fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
         if (document.getElementById('r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -5203,7 +5204,7 @@ async function submitRSVP() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode.id, email, activeCompCode.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
+        await sendCompConfirmation({ eventId: selectedEvent?.id, fullName: `${first} ${last}`, email, eventName: selectedEvent?.name, eventDate: selectedEvent?.event_date, eventTime: selectedEvent?.doors_time || selectedEvent?.event_time });
         if (document.getElementById('r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -5437,6 +5438,7 @@ async function submitPrivateInquiry() {
       vision: vision || null,
       created_at: new Date().toISOString()
     });
+    sendFormConfirmation('private_inquiry', { first_name: first, last_name: last, email, phone, event_type: type, guest_count: guests, preferred_date: date, source, vision });
     document.getElementById('private-form-wrap').style.display = 'none';
     document.getElementById('private-success').style.display = 'block';
   } catch (err) {
@@ -5483,6 +5485,7 @@ async function submitSponsorInquiry() {
       message: message || null,
       created_at: new Date().toISOString()
     });
+    sendFormConfirmation('sponsor_inquiry', { first_name: first, last_name: last, email, company, partnership_type: type, budget_range: budget, message });
     document.getElementById('sponsor-form-wrap').style.display = 'none';
     document.getElementById('sponsor-success').style.display = 'block';
   } catch (err) {
@@ -5594,6 +5597,7 @@ async function submitArtistInquiry() {
       body: JSON.stringify(payload)
     }).catch(e => console.warn('Artist submission notification failed:', e));
 
+    sendFormConfirmation(payload.submission_type === 'nomination' ? 'artist_nomination' : 'artist_submission', payload);
     document.getElementById('artist-form-wrap').style.display = 'none';
     document.getElementById('artist-success').style.display = 'block';
   } catch (err) {
@@ -5652,13 +5656,32 @@ async function redeemCompCode(codeId, email, reusable = false) {
   } catch(e) { console.warn('Could not mark comp code used:', e); }
 }
 
-async function sendCompConfirmation({ fullName, email, eventName, eventDate, eventTime }) {
+// Every form on the site sends a confirmation email (send-form-confirmation edge function).
+// Fire and forget: a mail hiccup never blocks the on-page success state.
+function sendFormConfirmation(formType, data) {
+  try {
+    fetch(`${FN_URL}/send-form-confirmation`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ form_type: formType, ...data })
+    }).then(r => { if (!r.ok) console.warn('Confirmation email failed:', formType, r.status); })
+      .catch(e => console.warn('Confirmation email failed:', formType, e));
+  } catch (e) { console.warn('Confirmation email failed:', formType, e); }
+}
+
+async function sendCompConfirmation({ fullName, email, eventName, eventDate, eventTime, eventId, partySize }) {
   try {
     console.log('sendCompConfirmation called:', { fullName, email, eventName });
+    // Match the event so the email includes its address (server also looks it up by id/name)
+    const ev = (typeof activeEvents !== 'undefined' && activeEvents || []).find(e => (eventId && e.id == eventId) || (eventName && e.name === eventName)) || {};
     const res = await fetch(`${FN_URL}/send-confirmation`, {
       method: 'POST',
       headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ full_name: fullName, email, event_name: eventName, event_date: eventDate, event_time: eventTime, payment_status: 'comp' })
+      body: JSON.stringify({
+        full_name: fullName, email, event_name: eventName, event_date: eventDate || ev.event_date, event_time: eventTime,
+        event_id: eventId || ev.id || null, event_location: ev.location || '', event_address: ev.address || '',
+        party_size: partySize || 1, payment_status: 'comp'
+      })
     });
     const data = await res.json();
     console.log('send-confirmation response:', res.status, data);
@@ -5963,7 +5986,7 @@ async function submitRSVP8() {
     try {
       await sbPost('guests', { event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status: 'comp' });
       await redeemCompCode(activeCompCode8.id, email, activeCompCode8.reusable);
-      await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime: '5:00 pm' });
+      await sendCompConfirmation({ eventId: selectedEvent8?.id || 8, fullName: `${first} ${last}`, email, eventName: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime: '5:00 pm' });
       if (document.getElementById('v8r-notify')?.checked) {
         fetch(`${FN_URL}/add-to-list`, { method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'}, body: JSON.stringify({ first_name:first, last_name:last, email, phone, instagram, source:'rsvp-comp-vol8' }) }).catch(()=>{});
       }
@@ -6142,7 +6165,7 @@ async function submitRSVP7() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode7.id, email, activeCompCode7.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
+        await sendCompConfirmation({ eventId: selectedEvent7?.id, fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -6176,7 +6199,7 @@ async function submitRSVP7() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode7.id, email, activeCompCode7.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
+        await sendCompConfirmation({ eventId: selectedEvent7?.id, fullName: `${first} ${last}`, email, eventName: v7evName, eventDate: v7evDate, eventTime: v7evTime });
         if (document.getElementById('v7r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -6310,7 +6333,7 @@ async function submitRSVP5() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode5.id, email, activeCompCode5.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
+        await sendCompConfirmation({ eventId: selectedEvent5?.id, fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
         if (document.getElementById('v5r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -6345,7 +6368,7 @@ async function submitRSVP5() {
           payment_status: 'comp'
         });
         await redeemCompCode(activeCompCode5.id, email, activeCompCode5.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
+        await sendCompConfirmation({ eventId: selectedEvent5?.id, fullName: `${first} ${last}`, email, eventName: selectedEvent5?.name, eventDate: selectedEvent5?.event_date, eventTime: selectedEvent5?.doors_time || selectedEvent5?.event_time });
         if (document.getElementById('v5r-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, {
             method: 'POST',
@@ -6592,7 +6615,7 @@ async function submitRSVPMay() {
           dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp'
         });
         await redeemCompCode(activeCompCodeMay.id, email, activeCompCodeMay.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
+        await sendCompConfirmation({ eventId: selectedEventMay?.id, fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
         if (document.getElementById('mayr-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol05' }) }).catch(() => {});
         }
@@ -6614,7 +6637,7 @@ async function submitRSVPMay() {
       try {
         await sbPost('guests', { event_id: selectedEventMay?.id, event_name: selectedEventMay?.name, full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp' });
         await redeemCompCode(activeCompCodeMay.id, email, activeCompCodeMay.reusable);
-        await sendCompConfirmation({ fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
+        await sendCompConfirmation({ eventId: selectedEventMay?.id, fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
         if (document.getElementById('mayr-notify')?.checked) {
           fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: 'rsvp-comp-vol05' }) }).catch(() => {});
         }
@@ -7988,6 +8011,7 @@ async function submitSessionsRSVP() {
       headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
       body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
     });
+    sendFormConfirmation('session_seat', { session_id: 'sessions-01', first_name: first, last_name: last, email, phone, instagram: ig, code: activeSessionCode, plus_one_name: wantsPlusOne ? `${p1First} ${p1Last}` : '' });
     document.getElementById('sessions-form-wrap').style.display = 'none';
     document.getElementById('sessions-success').style.display = '';
     var pc = document.getElementById('sessions-plusone-confirm');
@@ -8019,6 +8043,7 @@ async function submitSessionsWaitlist() {
       phone: phone || null, instagram: ig || null,
       source: src || null, list_type: 'sessions-01-waitlist'
     });
+    sendFormConfirmation('session_invite_request', { session_id: 'sessions-01', first_name: first, last_name: last, email, phone, instagram: ig, source: src });
     document.getElementById('sessions-waitlist-form').style.display = 'none';
     document.getElementById('sessions-waitlist-success').style.display = '';
   } catch(e) {
