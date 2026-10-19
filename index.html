@@ -3182,10 +3182,9 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
             <p class="sess-plusone-note">Seats are limited, so a +1 is a request. We will confirm by email.</p>
             <div id="sess-plusone-fields" style="display:none">
               <div class="form-grid">
-                <div class="form-field"><label for="sess-p1-first">+1 first name</label><input type="text" id="sess-p1-first" placeholder="First" autocomplete="off"></div>
-                <div class="form-field"><label for="sess-p1-last">+1 last name</label><input type="text" id="sess-p1-last" placeholder="Last" autocomplete="off"></div>
+                <div class="form-field"><label for="sess-p1-name">+1 full name</label><input type="text" id="sess-p1-name" placeholder="First and last name" autocomplete="off"></div>
+                <div class="form-field"><label for="sess-p1-phone">+1 phone</label><input type="tel" id="sess-p1-phone" placeholder="+1 212 555 0100" autocomplete="off"></div>
               </div>
-              <div class="form-field"><label for="sess-p1-ig">+1 Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-p1-ig" placeholder="@handle" autocomplete="off"></div>
             </div>
           </div>
           <div id="sessions-inline-error" style="display:none;font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.12em;color:var(--danger);margin-top:1rem;padding:0.85rem 1rem;border:1px solid var(--danger);line-height:1.7"></div>
@@ -8161,6 +8160,8 @@ async function checkSessionCode() {
     } else {
       activeSessionCode = raw;
       document.getElementById('sessions-gate').style.display = 'none';
+      // They have a code, so the "Request an invite" form no longer applies
+      var wl = document.getElementById('sessions-waitlist-wrap'); if (wl) wl.style.display = 'none';
       document.getElementById('sessions-form-wrap').style.display = '';
     }
   } catch(e) {
@@ -8172,7 +8173,7 @@ async function checkSessionCode() {
 function toggleSessPlusOne(on) {
   var f = document.getElementById('sess-plusone-fields');
   if (f) f.style.display = on ? '' : 'none';
-  if (on) { var i = document.getElementById('sess-p1-first'); if (i) i.focus(); }
+  if (on) { var i = document.getElementById('sess-p1-name'); if (i) i.focus(); }
 }
 
 async function submitSessionsRSVP() {
@@ -8190,11 +8191,12 @@ async function submitSessionsRSVP() {
     return;
   }
   const wantsPlusOne = document.getElementById('sess-plusone-check').checked;
-  const p1First = document.getElementById('sess-p1-first').value.trim();
-  const p1Last  = document.getElementById('sess-p1-last').value.trim();
-  const p1Ig    = document.getElementById('sess-p1-ig').value.trim();
-  if (wantsPlusOne && (!p1First || !p1Last)) {
-    errEl.textContent = 'Please add your +1\'s first and last name, or untick the +1 request.';
+  const p1Name  = document.getElementById('sess-p1-name').value.trim().replace(/\s+/g, ' ');
+  const p1Phone = document.getElementById('sess-p1-phone').value.trim();
+  const p1First = p1Name.split(' ')[0] || '';
+  const p1Last  = p1Name.split(' ').slice(1).join(' ');
+  if (wantsPlusOne && (!p1Name || !p1Phone)) {
+    errEl.textContent = 'Please add your +1\'s name and phone number, or untick the +1 request.';
     errEl.style.display = '';
     return;
   }
@@ -8202,10 +8204,10 @@ async function submitSessionsRSVP() {
   if (btn) btn.disabled = true;
   try {
     // Save the RSVP
-    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` + (wantsPlusOne ? ` | +1 requested: ${p1First} ${p1Last}` : '') });
+    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` + (wantsPlusOne ? ` | +1 requested: ${p1Name} (${p1Phone})` : '') });
     // Save the +1 request as its own row so it is easy to review and approve
     if (wantsPlusOne) {
-      await sbPost('waitlist', { first_name: p1First, last_name: p1Last, email, instagram: p1Ig || null, list_type: 'sessions-01-plus-one-request', notes: `requested by ${first} ${last} (${email}) | code:${activeSessionCode}` });
+      await sbPost('waitlist', { first_name: p1First, last_name: p1Last, email, phone: p1Phone, list_type: 'sessions-01-plus-one-request', notes: `requested by ${first} ${last} (${email}) | code:${activeSessionCode}` });
     }
     // Mark code as used
     await fetch(`${SUPABASE_URL}/rest/v1/session_codes?code=eq.${encodeURIComponent(activeSessionCode)}`, {
@@ -8213,7 +8215,7 @@ async function submitSessionsRSVP() {
       headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
       body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
     });
-    sendFormConfirmation('session_seat', { session_id: 'sessions-01', first_name: first, last_name: last, email, phone, instagram: ig, code: activeSessionCode, plus_one_name: wantsPlusOne ? `${p1First} ${p1Last}` : '' });
+    sendFormConfirmation('session_seat', { session_id: 'sessions-01', first_name: first, last_name: last, email, phone, instagram: ig, code: activeSessionCode, plus_one_name: wantsPlusOne ? p1Name : '', plus_one_phone: wantsPlusOne ? p1Phone : '' });
     document.getElementById('sessions-form-wrap').style.display = 'none';
     document.getElementById('sessions-success').style.display = '';
     var pc = document.getElementById('sessions-plusone-confirm');
