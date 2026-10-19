@@ -2904,6 +2904,67 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sess-plusone-note { font-family: 'Georgia', serif; font-size: 0.82rem; color: var(--ink-low); line-height: 1.6; margin: 0.35rem 0 0 calc(18px + 0.6rem); }
 #sess-plusone-fields { margin-top: 1rem; }
 @media (max-width: 600px) { .sess-plusone input[type="checkbox"] { width: 22px; height: 22px; } }
+
+/* ── Gallery preview ── */
+#gallery-preview {
+  position: fixed; inset: 0; z-index: 250;
+  background: rgba(10,10,10,0.94);
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+}
+#gallery-preview.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.25s ease, visibility 0s; }
+.gp-figure { margin: 0; display: flex; flex-direction: column; align-items: center; max-width: min(1100px, 100%); max-height: 100%; }
+#gp-img {
+  display: block; max-width: 100%;
+  max-height: calc(100dvh - 11rem); max-height: calc(100vh - 11rem);
+  width: auto; height: auto; object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+@supports (height: 100dvh) { #gp-img { max-height: calc(100dvh - 11rem); } }
+.gp-caption { width: 100%; display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; padding-top: 1rem; flex-wrap: wrap; }
+.gp-meta { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.gp-label { font-family: 'Crimson Pro', serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #6FC3A8; }
+.gp-name { font-family: 'LTF Hand Ink', 'Crimson Pro', serif; font-size: clamp(1.2rem, 3vw, 1.9rem); color: #EAE6D9; line-height: 1.1; }
+.gp-disc { font-family: 'Crimson Pro', serif; font-size: 12px; letter-spacing: 0.08em; color: rgba(234,230,217,0.6); }
+.gp-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.gp-btn { font-family: 'Crimson Pro', serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.8rem 1.2rem; min-height: 44px; cursor: pointer; border-radius: 2px; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.gp-btn-ghost { background: transparent; color: #EAE6D9; border: 1px solid rgba(234,230,217,0.35); }
+.gp-btn-ghost:hover { border-color: #EAE6D9; }
+.gp-btn-primary { background: var(--olive); color: #EAE6D9; border: 1px solid var(--olive); }
+.gp-btn-primary:hover { background: #00a376; border-color: #00a376; }
+.gp-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 72px; background: rgba(255,255,255,0.06); border: none; color: #EAE6D9;
+  font-size: 2.2rem; line-height: 1; cursor: pointer; border-radius: 2px; transition: background 0.15s;
+}
+.gp-nav:hover { background: rgba(255,255,255,0.14); }
+.gp-prev { left: 0.75rem; } .gp-next { right: 0.75rem; }
+@media (max-width: 600px) {
+  #gallery-preview { padding: 0.75rem; align-items: center; }
+  .gp-nav { display: none; }                 /* swipe instead */
+  #gp-img { max-height: calc(100vh - 13rem); }
+  @supports (height: 100dvh) { #gp-img { max-height: calc(100dvh - 13rem); } }
+  .gp-caption { flex-direction: column; align-items: stretch; }
+  .gp-actions { width: 100%; }
+  .gp-btn { flex: 1; }
+}
+
+/* Gallery clears the fixed "Stay in the loop" strip (height set by JS as --ns-h) */
+.home-gallery { padding-bottom: calc(3px + var(--ns-h, 0px)); scroll-padding-bottom: var(--ns-h, 0px); }
+
+/* Photo viewer: sits above the event gallery grid (z 300) so Back returns to it */
+#gallery-preview { z-index: 320; }
+#gp-img { cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+#gp-img.gp-in { animation: gpIn 0.22s ease; }
+@keyframes gpIn { from { opacity: 0.35; } to { opacity: 1; } }
+.gp-count { margin-left: 0.75rem; color: rgba(234,230,217,0.5); letter-spacing: 0.14em; }
+@media (max-width: 600px) {
+  .gp-nav { display: block; width: 40px; height: 56px; font-size: 1.8rem; background: rgba(0,0,0,0.35); top: 40%; }
+  .gp-prev { left: 0.25rem; } .gp-next { right: 0.25rem; }
+}
+@media (prefers-reduced-motion: reduce) { #gp-img.gp-in { animation: none; } }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -4154,7 +4215,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
     <div id="artist-success" style="display:none;padding:2.5rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
       <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:1rem">Submission received</p>
       <p style="font-family:'Crimson Pro',serif;font-size:1.2rem;color:var(--ink);margin-bottom:0.5rem">We&rsquo;ll be in touch.</p>
-      <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit.</p>
+      <p style="font-size:0.95rem;font-style:normal;color:var(--ink-mid)">We review every submission and will reach out if there&rsquo;s a fit. A confirmation is on its way to your inbox.</p>
     </div>
     <div id="artist-form-wrap">
       <div style="display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--rule-mid);width:fit-content">
@@ -4465,6 +4526,26 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 
 <!-- Backdrop: closes overlay when user taps outside it -->
 <div id="vol-overlay-backdrop" onclick="closeVolOverlay()"></div>
+
+<!-- Gallery preview: larger view of a gallery photo, with event / back actions -->
+<div id="gallery-preview" role="dialog" aria-modal="true" aria-label="Photo preview" onclick="if(event.target===this)closeGalleryPreview()">
+  <button class="gp-nav gp-prev" onclick="stepGalleryPreview(-1)" aria-label="Previous photo">&#8249;</button>
+  <figure class="gp-figure">
+    <img id="gp-img" alt="" onclick="photoViewerClick(event)">
+    <figcaption class="gp-caption">
+      <div class="gp-meta">
+        <span class="gp-label"><span id="gp-label"></span><span class="gp-count" id="gp-count"></span></span>
+        <span class="gp-name" id="gp-name"></span>
+        <span class="gp-disc" id="gp-disc"></span>
+      </div>
+      <div class="gp-actions">
+        <button class="gp-btn gp-btn-ghost" id="gp-back-btn" onclick="closeGalleryPreview()">&larr; Back to gallery</button>
+        <button class="gp-btn gp-btn-primary" id="gp-event-btn" onclick="galleryPreviewToEvent()">View the event &rarr;</button>
+      </div>
+    </figcaption>
+  </figure>
+  <button class="gp-nav gp-next" onclick="stepGalleryPreview(1)" aria-label="Next photo">&#8250;</button>
+</div>
 
 <!-- Event detail overlay — position: fixed sibling of archive-drawer so pointer-events work regardless of drawer state -->
 <div id="archive-vol-overlay">
@@ -7248,7 +7329,7 @@ function renderContent(volFilter) {
       const preview = [photos[off % photos.length], photos[(off + 1) % photos.length]];
       html += `<div class="ed-gallery-label" id="sec-gallery"><span>Gallery</span><button class="ed-gallery-cta" onclick="openGallery('${k}')">view all ${allPhotos.length} &rarr;</button></div>`;
       html += `<div class="ed-gallery-preview">`;
-      preview.forEach(p => { html += `<img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, 33vw')} alt="" loading="lazy" onclick="openGallery('${k}')">`; });
+      preview.forEach(p => { html += `<img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, 33vw')} alt="" loading="lazy" style="cursor:pointer" onclick="openEditionPhoto('${k}', ${p.id})">`; });
       html += `</div>`;
     } else if (!allPhotos.length) {
       const hasDetail = !!(ed.desc || ed.bio || ed.menu);
@@ -7311,12 +7392,12 @@ function openGallery(edition) {
     <div class="gm-header">
       <div>
         <div class="gm-title">${ed.name}</div>
-        <div class="gm-sub">Life Thru Food &mdash; Vol. ${ed.num} &middot; ${photos.length} photos</div>
+        <div class="gm-sub">Life Thru Food &middot; ${edLabel(ed)} &middot; ${photos.length} photos</div>
       </div>
       <button class="gm-close-btn" onclick="closeGallery()">close &times;</button>
     </div>
     <div class="gm-grid">
-      ${photos.map(p => `<div class="gm-item" onclick="closeGallery();openLightbox(${p.id})"><img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, 33vw')} alt="" loading="lazy"></div>`).join('')}
+      ${photos.map(p => `<div class="gm-item" onclick="openEditionPhoto('${edition}', ${p.id})"><img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, 33vw')} alt="" loading="lazy"></div>`).join('')}
     </div>`;
   document.getElementById('gallery-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -7337,6 +7418,126 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// Keep --ns-h equal to the newsletter strip's visible height so the gallery
+// can scroll its last row clear of it
+(function() {
+  function setNsH() {
+    var ns = document.getElementById('newsletter-strip');
+    var h = ns && getComputedStyle(ns).display !== 'none' ? ns.getBoundingClientRect().height : 0;
+    document.documentElement.style.setProperty('--ns-h', Math.ceil(h) + 'px');
+  }
+  function init() {
+    setNsH();
+    var ns = document.getElementById('newsletter-strip');
+    if (ns && 'ResizeObserver' in window) new ResizeObserver(setNsH).observe(ns);
+    window.addEventListener('resize', setNsH);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+// ── PHOTO VIEWER (every gallery on the site) ─────────────────────
+// One viewer for the home gallery, the event gallery grid and the archive
+// gallery previews. One click/tap flips: right side of the photo (or the ›
+// arrow) = next, left side (or ‹) = previous. Swipe works too on phones.
+var pv = { list: [], index: -1, showEvent: false, prevOverflow: '' };
+function edLabel(ed) {
+  return ed && ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : '';
+}
+function openPhotoViewer(list, idx, opts) {
+  opts = opts || {};
+  var ov = document.getElementById('gallery-preview');
+  if (!ov.classList.contains('open')) pv.prevOverflow = document.body.style.overflow;
+  pv.list = list || []; pv.showEvent = !!opts.showEvent;
+  document.getElementById('gp-back-btn').innerHTML = '&larr; ' + (opts.backLabel || 'Back to gallery');
+  showPhotoAt(idx);
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function showPhotoAt(idx) {
+  var list = pv.list; if (!list.length) return;
+  idx = (idx + list.length) % list.length;
+  pv.index = idx;
+  var p = list[idx];
+  var ed = EDITIONS[p.edition] || {};
+  var img = document.getElementById('gp-img');
+  img.classList.remove('gp-in'); void img.offsetWidth; img.classList.add('gp-in');
+  img.removeAttribute('srcset'); img.removeAttribute('sizes'); img.onerror = null;
+  if (typeof IMG_OPT !== 'undefined' && IMG_OPT && !/^(data:|https?:|blob:)/.test(p.photo)) {
+    img.dataset.orig = p.photo;
+    img.onerror = function() { imgFallback(img); };
+    img.srcset = optSrc(p.photo, 1080) + ' 1080w, ' + optSrc(p.photo, 1920) + ' 1920w';
+    img.sizes = '90vw';
+    img.src = optSrc(p.photo, 1080);
+  } else {
+    img.src = p.photo;
+  }
+  img.alt = ed.name || '';
+  document.getElementById('gp-label').textContent = edLabel(ed) || p.ts || '';
+  document.getElementById('gp-name').textContent = ed.name || '';
+  document.getElementById('gp-disc').textContent = ed.discipline || '';
+  document.getElementById('gp-count').textContent = list.length > 1 ? (idx + 1) + ' / ' + list.length : '';
+  document.getElementById('gp-event-btn').style.display = pv.showEvent && p.edition && EDITIONS[p.edition] ? '' : 'none';
+  document.querySelectorAll('#gallery-preview .gp-nav').forEach(function(b) { b.style.display = list.length > 1 ? '' : 'none'; });
+  // Preload neighbours so the next flip is instant
+  [idx - 1, idx + 1].forEach(function(n) {
+    var q = list[(n + list.length) % list.length];
+    if (q) { var im = new Image(); im.src = (typeof optSrc === 'function') ? optSrc(q.photo, 1080) : q.photo; }
+  });
+}
+function stepGalleryPreview(dir) { if (pv.list.length > 1) showPhotoAt(pv.index + dir); }
+function closeGalleryPreview() {
+  var ov = document.getElementById('gallery-preview');
+  if (ov) ov.classList.remove('open');
+  document.body.style.overflow = pv.prevOverflow || '';
+}
+function galleryPreviewToEvent() {
+  var p = pv.list[pv.index];
+  closeGalleryPreview();
+  if (p && p.edition) openFromGallery(p.edition);
+}
+// One click on the photo itself: left third = previous, otherwise next
+function photoViewerClick(e) {
+  if (pv.list.length < 2) return;
+  var r = e.currentTarget.getBoundingClientRect();
+  stepGalleryPreview((e.clientX - r.left) < r.width / 3 ? -1 : 1);
+}
+// Entry points
+function openGalleryPreview(idx) { openPhotoViewer(window.__galleryPool || [], idx, { showEvent: true }); }
+function editionPhotos(edition) { return contentPieces.filter(function(p) { return p.edition === edition && p.type === 'photo' && p.photo; }); }
+function openEditionPhoto(edition, photoId) {
+  var list = editionPhotos(edition);
+  var idx = Math.max(0, list.findIndex(function(p) { return p.id === photoId; }));
+  openPhotoViewer(list, idx, { showEvent: false });
+}
+(function() {
+  // Capture phase so Escape closes only the viewer, not the gallery grid beneath it
+  document.addEventListener('keydown', function(e) {
+    var ov = document.getElementById('gallery-preview');
+    if (!ov || !ov.classList.contains('open')) return;
+    if (e.key === 'Escape') { e.stopImmediatePropagation(); closeGalleryPreview(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); stepGalleryPreview(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); stepGalleryPreview(-1); }
+  }, true);
+  var x0 = null, y0 = null, swiped = false;
+  document.addEventListener('touchstart', function(e) {
+    var ov = document.getElementById('gallery-preview');
+    swiped = false;
+    if (!ov || !ov.classList.contains('open') || e.target.closest('.gp-actions')) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { swiped = true; stepGalleryPreview(dx < 0 ? 1 : -1); }
+    else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.5) { swiped = true; closeGalleryPreview(); }
+  }, { passive: true });
+  // A swipe also fires a click on the photo; ignore that one so it flips once
+  document.addEventListener('click', function(e) {
+    if (swiped && e.target.closest && e.target.closest('#gp-img')) { e.stopPropagation(); e.preventDefault(); swiped = false; }
+  }, true);
+})();
+
 // ── ONE X AT A TIME ──────────────────────────────────────────────
 // Every screen layer has its own close button. Rather than each open/close
 // function hiding the others, this watches what is open and tags <body>
@@ -7345,7 +7546,7 @@ document.addEventListener('keydown', e => {
   var $ = function(id) { return document.getElementById(id); };
   var isOpen = function(id, cls) { var e = $(id); return !!(e && e.classList.contains(cls || 'open')); };
   function topLayer() {
-    if (isOpen('gallery-modal') || isOpen('lightbox')) return 'modal';
+    if (isOpen('gallery-modal') || isOpen('lightbox') || isOpen('gallery-preview')) return 'modal';
     if (isOpen('upcoming-event-overlay')) return 'uev';
     if (isOpen('archive-vol-overlay')) return 'vol';
     if (['current','about','work','admin'].some(function(p) { return isOpen('tab-' + p); })) return 'panel';
@@ -7361,7 +7562,7 @@ document.addEventListener('keydown', e => {
   function init() {
     sync();
     var mo = new MutationObserver(sync);
-    ['landing-nav','archive-drawer','archive-vol-overlay','upcoming-event-overlay','tab-current','tab-about','tab-work','tab-admin','lightbox','gallery-modal']
+    ['landing-nav','archive-drawer','archive-vol-overlay','upcoming-event-overlay','tab-current','tab-about','tab-work','tab-admin','lightbox','gallery-modal','gallery-preview']
       .forEach(function(id) { var e = $(id); if (e) mo.observe(e, { attributes: true, attributeFilter: ['class'] }); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
@@ -7609,18 +7810,19 @@ function renderHomeGallery() {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
+  window.__galleryPool = pool.slice(0, 22);
   gallery.innerHTML = pool.slice(0, 22).map((p, idx) => {
     const ed = EDITIONS[p.edition] || {};
     const label = ed.num ? (parseInt(ed.num) >= 8 ? 'Sitting No. ' + (parseInt(ed.num) - 7) : 'Vol. ' + ed.num) : (p.ts || '');
     const name = ed.name || '';
     const disc = ed.discipline || '';
-    return `<div class="hg-item" onclick="openFromGallery('${p.edition}')" title="${name}">` +
+    return `<div class="hg-item" onclick="openGalleryPreview(${idx})" title="${name}">` +
       `<img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, (max-width: 900px) 33vw, 25vw')} alt="${name}" ${idx < 8 ? 'fetchpriority="' + (idx < 4 ? 'high' : 'auto') + '"' : 'loading="lazy"'}>` +
       `<div class="hg-overlay">` +
         (label ? `<span class="hg-ov-label">${label}</span>` : '') +
         (name  ? `<span class="hg-ov-name">${name}</span>` : '') +
         (disc  ? `<span class="hg-ov-disc">${disc}</span>` : '') +
-        `<span class="hg-ov-cta">View event</span>` +
+        `<span class="hg-ov-cta">View larger</span>` +
       `</div>` +
     `</div>`;
   }).join('');
@@ -7925,7 +8127,7 @@ function closeAllPanels() {
 
 // Griffin logo: from any screen, close every layer and return to the landing page
 function goHome() {
-  ['lightbox','gallery-modal'].forEach(function(id) {
+  ['lightbox','gallery-modal','gallery-preview'].forEach(function(id) {
     var e = document.getElementById(id); if (e) e.classList.remove('open');
   });
   document.body.style.overflow = '';
