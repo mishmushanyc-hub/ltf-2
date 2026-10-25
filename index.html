@@ -2992,6 +2992,9 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent input { flex-shrink:0; width:16px; height:16px; margin-top:2px; accent-color:var(--ink); cursor:pointer; }
 .sms-consent span { white-space:normal; overflow-wrap:break-word; }
 .sms-consent a { color:var(--ink-mid); text-decoration:underline; }
+.sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
+.sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
+.sms-consent input { width:18px; height:18px; margin-top:3px; }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3173,7 +3176,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
               <div class="form-field"><label for="wl-email">Email</label><input type="email" id="wl-email" placeholder="you@example.com"></div>
               <div class="form-field"><label for="wl-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="wl-phone" placeholder="+1 212 555 0100"></div>
             </div>
-            <label class="sms-consent" for="wl-sms"><input type="checkbox" id="wl-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+            <label class="sms-consent" for="wl-sms"><input type="checkbox" id="wl-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
             <div class="form-grid">
               <div class="form-field"><label for="wl-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="wl-instagram" placeholder="@handle"></div>
               <div class="form-field"><label for="wl-source">How did you find us?</label>
@@ -3196,7 +3199,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
             <div class="form-field"><label for="sess-email">Email</label><input type="email" id="sess-email" placeholder="you@example.com"></div>
             <div class="form-field"><label for="sess-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="sess-phone" placeholder="+1 212 555 0100"></div>
           </div>
-          <label class="sms-consent" for="sess-sms"><input type="checkbox" id="sess-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+          <label class="sms-consent" for="sess-sms"><input type="checkbox" id="sess-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
           <div class="form-grid">
             <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
             <div class="form-field"><label for="sess-source">How did you find us?</label>
@@ -3330,7 +3333,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="r-email">Email</label><input type="email" id="r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="r-phone">Phone</label><input type="tel" id="r-phone" placeholder="+1 212 555 0100"></div>
         </div>
-        <label class="sms-consent" for="r-sms"><input type="checkbox" id="r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+        <label class="sms-consent" for="r-sms"><input type="checkbox" id="r-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="r-source">How did you hear about us?</label>
@@ -3510,7 +3513,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="mayr-email">Email</label><input type="email" id="mayr-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="mayr-phone">Phone</label><input type="tel" id="mayr-phone" placeholder="+1 212 555 0100"></div>
         </div>
-        <label class="sms-consent" for="mayr-sms"><input type="checkbox" id="mayr-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+        <label class="sms-consent" for="mayr-sms"><input type="checkbox" id="mayr-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="mayr-source">How did you hear about us?</label>
@@ -3696,7 +3699,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="v5r-email">Email</label><input type="email" id="v5r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="v5r-phone">Phone</label><input type="tel" id="v5r-phone" placeholder="+1 212 555 0100"></div>
         </div>
-        <label class="sms-consent" for="v5r-sms"><input type="checkbox" id="v5r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+        <label class="sms-consent" for="v5r-sms"><input type="checkbox" id="v5r-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="v5r-source">How did you hear about us?</label>
@@ -3886,7 +3889,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="v8r-email">Email</label><input type="email" id="v8r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="v8r-phone">Phone</label><input type="tel" id="v8r-phone" placeholder="+1 212 555 0100"></div>
         </div>
-        <label class="sms-consent" for="v8r-sms"><input type="checkbox" id="v8r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+        <label class="sms-consent" for="v8r-sms"><input type="checkbox" id="v8r-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="v8r-source">How did you hear about us?</label>
@@ -4096,7 +4099,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div class="form-field"><label for="pi-email">Email</label><input type="email" id="pi-email" placeholder="you@email.com"></div>
         <div class="form-field"><label for="pi-phone">Phone</label><input type="tel" id="pi-phone" placeholder="(212) 000-0000"></div>
       </div>
-      <label class="sms-consent" for="pi-sms"><input type="checkbox" id="pi-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
+      <label class="sms-consent" for="pi-sms"><input type="checkbox" id="pi-sms"><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
       <div class="form-grid">
         <div class="form-field">
           <label for="pi-type">Event type</label>
@@ -4855,7 +4858,7 @@ async function sbGet(path) {
   return r.json();
 }
 // ── SMS consent log (proof of opt-in for carriers; never shared) ─────────
-const SMS_CONSENT_TEXT = 'I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg & data rates may apply. Reply STOP to cancel, HELP for help.';
+const SMS_CONSENT_TEXT = 'Text me event updates. Day-of details, arrival time, and reminders for events I sign up for. I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg & data rates may apply. Reply STOP to cancel, HELP for help.';
 function logSmsConsent(prefix, source) {
   try {
     const box = document.getElementById(prefix + '-sms');
