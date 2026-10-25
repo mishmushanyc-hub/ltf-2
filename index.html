@@ -2965,6 +2965,33 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
   .gp-prev { left: 0.25rem; } .gp-next { right: 0.25rem; }
 }
 @media (prefers-reduced-motion: reduce) { #gp-img.gp-in { animation: none; } }
+
+/* ── Sessions approvals (admin) ── */
+.ap-badge { display:inline-block; min-width:18px; padding:0 6px; margin-left:6px; border-radius:9px; background:var(--olive); color:#EAE6D9; font-size:11px; line-height:18px; text-align:center; letter-spacing:0; }
+.ap-bar { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem; }
+.ap-bank { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--olive); }
+.ap-bank-low { color:var(--danger); }
+.ap-error { font-family:'Crimson Pro',serif; font-size:13px; color:var(--danger); border:1px solid var(--danger); padding:0.7rem 0.9rem; margin:0.75rem 0; }
+.ap-h { font-family:'Crimson Pro',serif; font-weight:600; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink); margin:1.5rem 0 0.6rem; }
+.ap-h span { color:var(--ink-low); font-weight:400; letter-spacing:0.06em; text-transform:none; }
+.ap-card { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:0.85rem 1rem; border:1px solid var(--rule-mid); background:var(--canvas); margin-bottom:6px; flex-wrap:wrap; }
+.ap-who { min-width:0; flex:1; }
+.ap-name { font-family:'Georgia',serif; font-size:1rem; color:var(--ink); }
+.ap-sub { font-family:'Crimson Pro',serif; font-size:12px; color:var(--ink-low); }
+.ap-meta { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-mid); margin-top:2px; word-break:break-word; }
+.ap-actions { display:flex; gap:6px; flex-shrink:0; }
+.ap-actions .btn-primary, .ap-actions .btn-ghost { padding:0.55rem 0.9rem; font-size:11px; min-height:38px; }
+.ap-history { margin-top:1.5rem; }
+.ap-history summary { cursor:pointer; font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); }
+.ap-row { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); padding:0.45rem 0; border-bottom:1px solid var(--rule); }
+.ap-pill { display:inline-block; font-family:'Crimson Pro',serif; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; padding:1px 7px; border:1px solid currentColor; margin-right:6px; }
+.ap-approved { color:var(--olive); } .ap-declined { color:var(--ink-low); }
+@media (max-width:600px) { .ap-actions { width:100%; } .ap-actions button { flex:1; } }
+/* SMS consent (carrier compliance: optional, unchecked by default) */
+.sms-consent { display:flex; gap:0.6rem; align-items:flex-start; margin:0.25rem 0 1rem; cursor:pointer; font-family:'Crimson Pro',serif; font-size:12.5px; line-height:1.45; color:var(--ink-low); }
+.sms-consent input { flex-shrink:0; width:16px; height:16px; margin-top:2px; accent-color:var(--ink); cursor:pointer; }
+.sms-consent span { white-space:normal; overflow-wrap:break-word; }
+.sms-consent a { color:var(--ink-mid); text-decoration:underline; }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3146,6 +3173,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
               <div class="form-field"><label for="wl-email">Email</label><input type="email" id="wl-email" placeholder="you@example.com"></div>
               <div class="form-field"><label for="wl-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="wl-phone" placeholder="+1 212 555 0100"></div>
             </div>
+            <label class="sms-consent" for="wl-sms"><input type="checkbox" id="wl-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
             <div class="form-grid">
               <div class="form-field"><label for="wl-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="wl-instagram" placeholder="@handle"></div>
               <div class="form-field"><label for="wl-source">How did you find us?</label>
@@ -3168,6 +3196,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
             <div class="form-field"><label for="sess-email">Email</label><input type="email" id="sess-email" placeholder="you@example.com"></div>
             <div class="form-field"><label for="sess-phone">Phone <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="tel" id="sess-phone" placeholder="+1 212 555 0100"></div>
           </div>
+          <label class="sms-consent" for="sess-sms"><input type="checkbox" id="sess-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
           <div class="form-grid">
             <div class="form-field"><label for="sess-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="sess-instagram" placeholder="@handle"></div>
             <div class="form-field"><label for="sess-source">How did you find us?</label>
@@ -3301,6 +3330,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="r-email">Email</label><input type="email" id="r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="r-phone">Phone</label><input type="tel" id="r-phone" placeholder="+1 212 555 0100"></div>
         </div>
+        <label class="sms-consent" for="r-sms"><input type="checkbox" id="r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="r-source">How did you hear about us?</label>
@@ -3480,6 +3510,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="mayr-email">Email</label><input type="email" id="mayr-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="mayr-phone">Phone</label><input type="tel" id="mayr-phone" placeholder="+1 212 555 0100"></div>
         </div>
+        <label class="sms-consent" for="mayr-sms"><input type="checkbox" id="mayr-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="mayr-source">How did you hear about us?</label>
@@ -3665,6 +3696,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="v5r-email">Email</label><input type="email" id="v5r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="v5r-phone">Phone</label><input type="tel" id="v5r-phone" placeholder="+1 212 555 0100"></div>
         </div>
+        <label class="sms-consent" for="v5r-sms"><input type="checkbox" id="v5r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="v5r-source">How did you hear about us?</label>
@@ -3854,6 +3886,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <div class="form-field"><label for="v8r-email">Email</label><input type="email" id="v8r-email" placeholder="og.anunoby@gmail.com"></div>
           <div class="form-field"><label for="v8r-phone">Phone</label><input type="tel" id="v8r-phone" placeholder="+1 212 555 0100"></div>
         </div>
+        <label class="sms-consent" for="v8r-sms"><input type="checkbox" id="v8r-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
         <div class="form-grid">
           <div class="form-field">
             <label for="v8r-source">How did you hear about us?</label>
@@ -4063,6 +4096,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div class="form-field"><label for="pi-email">Email</label><input type="email" id="pi-email" placeholder="you@email.com"></div>
         <div class="form-field"><label for="pi-phone">Phone</label><input type="tel" id="pi-phone" placeholder="(212) 000-0000"></div>
       </div>
+      <label class="sms-consent" for="pi-sms"><input type="checkbox" id="pi-sms"><span>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>
       <div class="form-grid">
         <div class="form-field">
           <label for="pi-type">Event type</label>
@@ -4353,6 +4387,28 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
       </table>
     </div>
 
+    <!-- SESSIONS APPROVALS -->
+    <div style="margin-top:2.5rem" id="approvals-section">
+      <div class="admin-section-toggle" onclick="toggleApprovals()"><span>Sessions approvals <span id="approvals-badge" class="ap-badge" style="display:none"></span></span> <span id="approvals-toggle-icon">&minus;</span></div>
+      <div id="approvals-panel" style="margin-top:1rem">
+        <div class="ap-bar">
+          <span id="ap-bank" class="ap-bank">Approval codes: loading…</span>
+          <button class="btn-ghost" onclick="loadApprovals()">refresh</button>
+        </div>
+        <div id="ap-key-wrap" style="display:none;margin:1rem 0;max-width:420px">
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.5rem">Enter the approvals key (the ADMIN_KEY secret in Supabase).</p>
+          <div style="display:flex;gap:8px"><input type="password" id="ap-key-input" placeholder="approvals key" style="flex:1" onkeydown="if(event.key==='Enter')setApprovalsKey()"><button class="btn-ghost" onclick="setApprovalsKey()">unlock</button></div>
+        </div>
+        <div id="ap-error" class="ap-error" style="display:none"></div>
+        <div id="admin-toast" class="toast"></div>
+        <h4 class="ap-h">Invite requests <span id="ap-inv-count"></span></h4>
+        <div id="ap-invites"><div class="empty-msg">Loading…</div></div>
+        <h4 class="ap-h">+1 requests <span id="ap-p1-count"></span></h4>
+        <div id="ap-plusones"><div class="empty-msg">Loading…</div></div>
+        <details class="ap-history"><summary>Decided requests</summary><div id="ap-decided"></div></details>
+      </div>
+    </div>
+
     <!-- NOTIFY LIST -->
     <div style="margin-top:2.5rem">
       <div class="admin-section-toggle" onclick="toggleNotifyAdmin()">Notify list <span id="notify-toggle-icon">+</span></div>
@@ -4409,6 +4465,8 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
       <a class="btn-ghost" href="mailto:info@lifethrufood.com">get in touch</a>
     </div>
     <div class="foot-contact">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
       <a href="https://instagram.com/lifethru___food" target="_blank" rel="noopener">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
         @lifethru___food
@@ -4796,6 +4854,22 @@ async function sbGet(path) {
   }
   return r.json();
 }
+// ── SMS consent log (proof of opt-in for carriers; never shared) ─────────
+const SMS_CONSENT_TEXT = 'I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg & data rates may apply. Reply STOP to cancel, HELP for help.';
+function logSmsConsent(prefix, source) {
+  try {
+    const box = document.getElementById(prefix + '-sms');
+    const val = id => (document.getElementById(prefix + '-' + id)?.value || '').trim();
+    const phone = val('phone');
+    if (!box || !box.checked || !phone) return;
+    sbPost('sms_consents', {
+      phone, email: val('email').toLowerCase() || null,
+      full_name: `${val('first')} ${val('last')}`.trim() || null,
+      source, consent_text: SMS_CONSENT_TEXT, page_url: location.href.slice(0, 300)
+    }).catch(() => {});
+  } catch (e) {}
+}
+
 async function sbPost(path, body) {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     method: 'POST',
@@ -4997,6 +5071,8 @@ function checkAdminPassword() {
     document.getElementById('admin-pw-gate').style.display = 'none';
     document.getElementById('admin-panel-inner').style.display = 'block';
     loadGuests();
+    approvalsKey = approvalsKey || val;
+    loadApprovals();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -5205,6 +5281,7 @@ async function submitRSVP() {
   const last = document.getElementById('r-last').value.trim();
   const email = document.getElementById('r-email').value.trim();
   const phone = document.getElementById('r-phone').value.trim();
+  logSmsConsent('r', 'rsvp');
   const plusOne = document.getElementById('r-plus-one')?.checked;
   const wine = false; // drinks are complimentary for Vol. 4 — Madre Mezcal sponsorship, no charge
   const winePlusOne = false; // +1 drinks also complimentary for Vol. 4
@@ -5486,6 +5563,7 @@ async function submitPrivateInquiry() {
   const last    = document.getElementById('pi-last').value.trim();
   const email   = document.getElementById('pi-email').value.trim();
   const phone   = document.getElementById('pi-phone').value.trim();
+  logSmsConsent('pi', 'private_inquiry');
   const type    = document.getElementById('pi-type').value;
   const guests  = document.getElementById('pi-guests').value;
   const date    = document.getElementById('pi-date').value.trim();
@@ -6031,6 +6109,7 @@ async function submitRSVP8() {
   const last = document.getElementById('v8r-last').value.trim();
   const email = document.getElementById('v8r-email').value.trim();
   const phone = document.getElementById('v8r-phone').value.trim();
+  logSmsConsent('v8r', 'rsvp-vol8');
   const plusOne = document.getElementById('v8r-plus-one')?.checked;
   const drinks = document.getElementById('v8r-drinks')?.checked;
   const source = document.getElementById('v8r-source').value;
@@ -6369,6 +6448,7 @@ async function submitRSVP5() {
   const last = document.getElementById('v5r-last').value.trim();
   const email = document.getElementById('v5r-email').value.trim();
   const phone = document.getElementById('v5r-phone').value.trim();
+  logSmsConsent('v5r', 'rsvp-vol5');
   const plusOne = document.getElementById('v5r-plus-one')?.checked;
   const drink = document.getElementById('v5r-drink').checked;
   const drinkPlusOne = document.getElementById('v5r-drink-plus-one')?.checked || false;
@@ -6656,6 +6736,7 @@ async function submitRSVPMay() {
   const last     = document.getElementById('mayr-last').value.trim();
   const email    = document.getElementById('mayr-email').value.trim();
   const phone    = document.getElementById('mayr-phone').value.trim();
+  logSmsConsent('mayr', 'rsvp-may');
   const plusOne  = document.getElementById('mayr-plus-one')?.checked;
   const drink    = document.getElementById('mayr-drink')?.checked;
   const drinkP1  = document.getElementById('mayr-drink-plus-one')?.checked || false;
@@ -6753,6 +6834,129 @@ async function submitRSVPMay() {
     toast('may-rsvp-toast', err.message || 'Something went wrong. Please try again.', 'error');
     btn.disabled = false; btn.textContent = 'continue to payment →';
   }
+}
+
+// ── SESSIONS APPROVALS (admin) ───────────────────────────────────
+// Lists pending invite requests and +1 requests. Approve draws a code from the
+// reserved APPROVAL bank (never from codes you hand out yourselves) and emails it.
+// All privileged work happens in the session-approvals edge function, which
+// checks the approvals key against the ADMIN_KEY secret.
+let approvalsKey = null;
+let approvalsData = null;
+const APPROVALS_SESSION = 'sessions-01';
+
+function toggleApprovals() {
+  const panel = document.getElementById('approvals-panel');
+  const icon = document.getElementById('approvals-toggle-icon');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  icon.innerHTML = open ? '&minus;' : '+';
+}
+function setApprovalsKey() {
+  const v = document.getElementById('ap-key-input').value.trim();
+  if (!v) return;
+  approvalsKey = v;
+  loadApprovals();
+}
+async function approvalsCall(body) {
+  const r = await fetch(`${FN_URL}/session-approvals`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, 'Content-Type': 'application/json', 'x-admin-key': approvalsKey || '' },
+    body: JSON.stringify(body)
+  });
+  const data = await r.json().catch(() => ({}));
+  if (r.status === 401) { const e = new Error('unauthorized'); e.code = 401; throw e; }
+  if (!r.ok) throw new Error(data.error || ('Request failed (' + r.status + ')'));
+  return data;
+}
+function apEsc(v) { return String(v == null ? '' : v).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function apDate(d) { return d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; }
+function apShowError(msg) {
+  const el = document.getElementById('ap-error');
+  el.textContent = msg || ''; el.style.display = msg ? '' : 'none';
+}
+
+async function loadApprovals() {
+  apShowError('');
+  try {
+    approvalsData = await approvalsCall({ action: 'list', session_id: APPROVALS_SESSION });
+    document.getElementById('ap-key-wrap').style.display = 'none';
+    renderApprovals();
+  } catch (e) {
+    if (e.code === 401) {
+      document.getElementById('ap-key-wrap').style.display = '';
+      document.getElementById('ap-bank').textContent = 'Approval codes: locked';
+      ['ap-invites','ap-plusones'].forEach(id => document.getElementById(id).innerHTML = '<div class="empty-msg">Enter the approvals key to see requests.</div>');
+    } else {
+      apShowError('Could not load approvals: ' + e.message);
+    }
+  }
+}
+
+function renderApprovals() {
+  const d = approvalsData || { requests: [], bank: {} };
+  const reqs = d.requests || [];
+  const inv = reqs.filter(r => r.list_type.endsWith('-waitlist'));
+  const p1  = reqs.filter(r => r.list_type.endsWith('-plus-one-request'));
+  const pendInv = inv.filter(r => r.status === 'pending');
+  const pendP1  = p1.filter(r => r.status === 'pending');
+  const decided = reqs.filter(r => r.status !== 'pending').sort((a, b) => String(b.decided_at).localeCompare(String(a.decided_at)));
+
+  const b = d.bank || {};
+  const bankEl = document.getElementById('ap-bank');
+  bankEl.textContent = `Approval codes: ${b.available ?? 0} available of ${b.total ?? 0}`;
+  bankEl.classList.toggle('ap-bank-low', (b.available ?? 0) < 5);
+
+  const pending = pendInv.length + pendP1.length;
+  const badge = document.getElementById('approvals-badge');
+  badge.textContent = pending; badge.style.display = pending ? '' : 'none';
+  document.getElementById('ap-inv-count').textContent = pendInv.length ? `(${pendInv.length} pending)` : '';
+  document.getElementById('ap-p1-count').textContent  = pendP1.length  ? `(${pendP1.length} pending)`  : '';
+
+  const card = (r, kind) => {
+    const name = apEsc(`${r.first_name} ${r.last_name}`.trim());
+    const guest = kind === 'p1' ? apEsc((String(r.notes || '').match(/requested by ([^(|]+)/) || [])[1] || r.email) : '';
+    return `<div class="ap-card">
+      <div class="ap-who">
+        <div class="ap-name">${name}${kind === 'p1' ? ` <span class="ap-sub">+1 for ${guest.trim()}</span>` : ''}</div>
+        <div class="ap-meta">${[kind === 'p1' ? '' : apEsc(r.email), apEsc(r.phone), apEsc(r.instagram), kind === 'p1' ? '' : apEsc(r.source), apDate(r.created_at)].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div class="ap-actions">
+        <button class="btn-primary ap-approve" onclick="approveRequest(${r.id}, '${kind}', this)">${kind === 'p1' ? 'Approve +1' : 'Approve &amp; send code'}</button>
+        <button class="btn-ghost ap-decline" onclick="declineRequest(${r.id}, this)">Decline</button>
+      </div>
+    </div>`;
+  };
+  document.getElementById('ap-invites').innerHTML  = pendInv.length ? pendInv.map(r => card(r, 'inv')).join('') : '<div class="empty-msg">No pending invite requests.</div>';
+  document.getElementById('ap-plusones').innerHTML = pendP1.length  ? pendP1.map(r => card(r, 'p1')).join('')  : '<div class="empty-msg">No pending +1 requests.</div>';
+  document.getElementById('ap-decided').innerHTML = decided.length ? decided.map(r => {
+    const kind = r.list_type.endsWith('-plus-one-request') ? '+1' : 'Invite';
+    return `<div class="ap-row"><span class="ap-pill ap-${r.status}">${r.status}</span> ${kind}: ${apEsc(r.first_name + ' ' + r.last_name)}${r.assigned_code ? ` · code ${apEsc(r.assigned_code)}` : ''} <span class="ap-sub">${apDate(r.decided_at)}</span></div>`;
+  }).join('') : '<div class="empty-msg">Nothing decided yet.</div>';
+}
+
+async function approveRequest(id, kind, btn) {
+  const r = (approvalsData?.requests || []).find(x => x.id === id);
+  const who = r ? `${r.first_name} ${r.last_name}` : 'this request';
+  const msg = kind === 'p1'
+    ? `Approve ${who} as a +1? The guest will get an email confirming their +1 with the address.`
+    : `Approve ${who}? A code from the approval bank will be emailed to ${r?.email || 'them'}.`;
+  if (!confirm(msg)) return;
+  apShowError('');
+  btn.disabled = true; btn.textContent = 'sending…';
+  try {
+    const res = await approvalsCall({ action: kind === 'p1' ? 'approve_plus_one' : 'approve_invite', id });
+    toast('admin-toast', kind === 'p1' ? `+1 approved. ${who}'s guest has been emailed.` : `Approved. Code ${res.code} emailed to ${who}.`, 'success');
+    await loadApprovals();
+  } catch (e) {
+    apShowError(e.message); btn.disabled = false; btn.textContent = kind === 'p1' ? 'Approve +1' : 'Approve & send code';
+  }
+}
+async function declineRequest(id, btn) {
+  if (!confirm('Decline this request? No email is sent.')) return;
+  btn.disabled = true;
+  try { await approvalsCall({ action: 'decline', id }); await loadApprovals(); }
+  catch (e) { apShowError(e.message); btn.disabled = false; }
 }
 
 // ── NOTIFY LIST ADMIN ────────────────────────────────────────────
@@ -8152,10 +8356,19 @@ async function checkSessionCode() {
   if (!raw) { errEl.textContent = 'Please enter your invitation code.'; return; }
   btn.disabled = true; btn.textContent = 'checking…';
   try {
-    const rows = await sbGet(`session_codes?code=eq.${encodeURIComponent(raw)}&session_id=eq.sessions-01&select=code,used`);
-    if (!rows || rows.length === 0) {
+    let status = null;
+    const rpc = await fetch(`${SUPABASE_URL}/rest/v1/rpc/check_session_code`, {
+      method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_code: raw, p_session_id: 'sessions-01' })
+    });
+    if (rpc.ok) status = await rpc.json();
+    else {
+      const rows = await sbGet(`session_codes?code=eq.${encodeURIComponent(raw)}&session_id=eq.sessions-01&select=code,used`);
+      status = !rows || !rows.length ? 'invalid' : rows[0].used ? 'used' : 'ok';
+    }
+    if (status === 'invalid') {
       errEl.textContent = 'Code not recognised. Check your invitation and try again.';
-    } else if (rows[0].used) {
+    } else if (status === 'used') {
       errEl.textContent = 'This code has already been used.';
     } else {
       activeSessionCode = raw;
@@ -8181,6 +8394,7 @@ async function submitSessionsRSVP() {
   const last  = document.getElementById('sess-last').value.trim();
   const email = document.getElementById('sess-email').value.trim();
   const phone = document.getElementById('sess-phone').value.trim();
+  logSmsConsent('sess', 'sessions-01-rsvp');
   const ig    = document.getElementById('sess-instagram').value.trim();
   const src   = document.getElementById('sess-source').value;
   const errEl = document.getElementById('sessions-inline-error');
@@ -8203,18 +8417,33 @@ async function submitSessionsRSVP() {
   const btn = document.querySelector('#sessions-form-wrap .btn-primary');
   if (btn) btn.disabled = true;
   try {
+    // Claim the code first, in one step, so two people can never use the same code.
+    // (Falls back to the old direct update until sessions-approvals-step1.sql is run.)
+    const rd = await fetch(`${SUPABASE_URL}/rest/v1/rpc/redeem_session_code`, {
+      method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_code: activeSessionCode, p_session_id: 'sessions-01', p_email: email })
+    });
+    if (rd.ok) {
+      const claimed = await rd.json();
+      if (claimed !== true) {
+        errEl.textContent = 'This code has already been used. If you think that is a mistake, email us at info@lifethrufood.com.';
+        errEl.style.display = '';
+        if (btn) btn.disabled = false;
+        return;
+      }
+    } else {
+      await fetch(`${SUPABASE_URL}/rest/v1/session_codes?code=eq.${encodeURIComponent(activeSessionCode)}`, {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
+      });
+    }
     // Save the RSVP
     await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: 'sessions-01', notes: `code:${activeSessionCode}` + (wantsPlusOne ? ` | +1 requested: ${p1Name} (${p1Phone})` : '') });
     // Save the +1 request as its own row so it is easy to review and approve
     if (wantsPlusOne) {
       await sbPost('waitlist', { first_name: p1First, last_name: p1Last, email, phone: p1Phone, list_type: 'sessions-01-plus-one-request', notes: `requested by ${first} ${last} (${email}) | code:${activeSessionCode}` });
     }
-    // Mark code as used
-    await fetch(`${SUPABASE_URL}/rest/v1/session_codes?code=eq.${encodeURIComponent(activeSessionCode)}`, {
-      method: 'PATCH',
-      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-      body: JSON.stringify({ used: true, used_by_email: email, used_at: new Date().toISOString() })
-    });
     sendFormConfirmation('session_seat', { session_id: 'sessions-01', first_name: first, last_name: last, email, phone, instagram: ig, code: activeSessionCode, plus_one_name: wantsPlusOne ? p1Name : '', plus_one_phone: wantsPlusOne ? p1Phone : '' });
     document.getElementById('sessions-form-wrap').style.display = 'none';
     document.getElementById('sessions-success').style.display = '';
@@ -8232,6 +8461,7 @@ async function submitSessionsWaitlist() {
   const last  = document.getElementById('wl-last').value.trim();
   const email = document.getElementById('wl-email').value.trim();
   const phone = document.getElementById('wl-phone').value.trim();
+  logSmsConsent('wl', 'sessions-01-invite-request');
   const ig    = document.getElementById('wl-instagram').value.trim();
   const src   = document.getElementById('wl-source').value;
   const errEl = document.getElementById('sessions-wl-error');
