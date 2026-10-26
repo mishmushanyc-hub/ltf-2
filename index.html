@@ -2997,6 +2997,23 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Guest directory (Records) */
+.dir-stats { margin-bottom:1.5rem; }
+.dir-stat-word { font-size:1.35rem !important; letter-spacing:0 !important; line-height:1.15 !important; overflow-wrap:break-word; }
+.dir-scroll { max-height:70vh; overflow:auto; border:1px solid var(--rule); }
+.dir-table thead th { position:sticky; top:0; z-index:1; cursor:pointer; user-select:none; white-space:nowrap; }
+.dir-table thead th:hover { color:var(--ink); }
+.dir-table thead th.dir-sorted { color:var(--ink); }
+.dir-table thead th::after { content:attr(data-dir); margin-left:4px; }
+.dir-table td { white-space:normal; overflow-wrap:anywhere; max-width:240px; }
+.dir-table td a { color:inherit; }
+.dir-row { cursor:pointer; }
+.dir-row.open { background:var(--paper); }
+.dir-num { font-family:'Crimson Pro',serif; font-size:1rem; color:var(--ink); text-align:center; }
+.dir-detail td { background:var(--paper); padding:0.6rem 1rem 0.9rem; }
+.dir-detail ul { list-style:none; margin:0; padding:0; display:grid; gap:4px; font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink); }
+.dir-note { font-family:'Crimson Pro',serif; font-size:12.5px; color:var(--ink-low); margin-top:0.6rem; }
+@media (max-width:600px) { .dir-stats { grid-template-columns:repeat(2,1fr); } }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -4342,6 +4359,53 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
       <div id="admin-pw-error" style="font-family:'Crimson Pro',serif;font-size: 13px;color:var(--danger);margin-top:0.75rem;min-height:1rem"></div>
     </div>
     <div id="admin-panel-inner" style="display:none">
+    <!-- GUEST DIRECTORY -->
+    <div id="directory-section" style="margin-bottom:2.5rem">
+      <div class="admin-section-toggle" onclick="toggleDirectory()"><span>Guest directory <span id="dir-count" class="ap-sub"></span></span> <span id="dir-toggle-icon">&minus;</span></div>
+      <div id="directory-panel" style="margin-top:1rem">
+        <div class="stat-strip dir-stats">
+          <div class="stat-block"><div class="n" id="dir-stat-people">—</div><div class="l">People</div></div>
+          <div class="stat-block"><div class="n" id="dir-stat-attended">—</div><div class="l">Attended 1+</div></div>
+          <div class="stat-block"><div class="n" id="dir-stat-repeat">—</div><div class="l">Repeat guests</div></div>
+          <div class="stat-block"><div class="n" id="dir-stat-upcoming">—</div><div class="l">Upcoming seats</div></div>
+          <div class="stat-block"><div class="n dir-stat-word" id="dir-stat-source">—</div><div class="l">Top source</div></div>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="dir-search" placeholder="Search name, email, phone, Instagram..." oninput="renderDirectory()">
+          <select id="dir-filter" onchange="renderDirectory()" style="width:auto">
+            <option value="all">Everyone</option>
+            <option value="attended">Attended 1+</option>
+            <option value="repeat">Repeat guests (2+)</option>
+            <option value="upcoming">Has an upcoming seat</option>
+            <option value="never">Never attended</option>
+            <option value="newsletter">Newsletter</option>
+            <option value="inquiry">Inquiries (private, sponsor, artist)</option>
+          </select>
+          <select id="dir-heard" onchange="renderDirectory()" style="width:auto"><option value="all">Any source</option></select>
+          <button class="btn-ghost" onclick="loadDirectory()">refresh</button>
+          <button class="btn-ghost" onclick="exportDirectoryCSV()">export csv</button>
+        </div>
+        <div id="dir-error" class="ap-error" style="display:none"></div>
+        <div class="table-scroll dir-scroll">
+          <table class="dir-table">
+            <thead><tr>
+              <th data-k="name" onclick="sortDirectory('name')">Name</th>
+              <th data-k="email" onclick="sortDirectory('email')">Email</th>
+              <th data-k="phone" onclick="sortDirectory('phone')">Phone</th>
+              <th data-k="instagram" onclick="sortDirectory('instagram')">Instagram</th>
+              <th data-k="heard" onclick="sortDirectory('heard')">How they heard</th>
+              <th data-k="attended" onclick="sortDirectory('attended')">Attended</th>
+              <th data-k="upcoming" onclick="sortDirectory('upcoming')">Upcoming</th>
+              <th data-k="tags" onclick="sortDirectory('tags')">Relationship</th>
+              <th data-k="first_seen" onclick="sortDirectory('first_seen')">First seen</th>
+              <th data-k="last_seen" onclick="sortDirectory('last_seen')">Last activity</th>
+            </tr></thead>
+            <tbody id="dir-body"><tr><td colspan="10"><div class="empty-msg">Loading…</div></td></tr></tbody>
+          </table>
+        </div>
+        <p class="dir-note">Attended counts confirmed seats (paid, comped or Session) at events whose date has passed. Click a row to see their events.</p>
+      </div>
+    </div>
     <div class="admin-section-toggle" onclick="toggleEventAdmin()">Manage events <span id="ev-toggle-icon">+</span></div>
     <div id="event-admin-panel" class="sp-admin" style="margin-bottom:2rem">
       <h3>Events</h3>
@@ -5082,6 +5146,7 @@ function checkAdminPassword() {
     loadGuests();
     approvalsKey = approvalsKey || val;
     loadApprovals();
+    loadDirectory();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -5325,7 +5390,7 @@ async function submitRSVP() {
     if (!plusOne) {
       // Fully free — insert directly, skip Stripe
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('r-source')?.value || null),
           event_id: selectedEvent?.id,
           event_name: selectedEvent?.name,
           full_name: `${first} ${last}`,
@@ -5360,7 +5425,7 @@ async function submitRSVP() {
     } else {
       // Comp holder + paid +1: insert comp record now, charge Stripe for 1
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('r-source')?.value || null),
           event_id: selectedEvent?.id,
           event_name: selectedEvent?.name,
           full_name: `${first} ${last}`,
@@ -5381,7 +5446,7 @@ async function submitRSVP() {
       } catch(e) { console.warn('Comp insert failed silently:', e); }
       // Pre-insert +1 as unpaid so it appears in admin immediately
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('r-source')?.value || null),
           event_id: selectedEvent?.id,
           event_name: selectedEvent?.name,
           full_name: plusOneName,
@@ -6152,7 +6217,7 @@ async function submitRSVP8() {
   // ── FULL COMP PATH ───────────────────────────────────────────
   if (activeCompCode8 && (activeCompCode8.discount_percent || 100) === 100 && !plusOne) {
     try {
-      await sbPost('guests', { event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status: 'comp' });
+      await sbPost('guests', { source: (document.getElementById('v8r-source')?.value || null), event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status: 'comp' });
       await redeemCompCode(activeCompCode8.id, email, activeCompCode8.reusable);
       await sendCompConfirmation({ eventId: selectedEvent8?.id || 8, fullName: `${first} ${last}`, email, eventName: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', eventDate: selectedEvent8?.event_date || '2026-09-27', eventTime: '5:00 pm' });
       if (document.getElementById('v8r-notify')?.checked) {
@@ -6185,7 +6250,7 @@ async function submitRSVP8() {
     const checkoutData = await checkoutRes.json();
     if (!checkoutData.url) throw new Error(checkoutData.error || 'No checkout URL returned');
 
-    await sbPost('guests', { event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name:`${first} ${last}`, email, phone, party_size: numGuests, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status:'pending', stripe_session_id: checkoutData.session_id || null });
+    await sbPost('guests', { source: (document.getElementById('v8r-source')?.value || null), event_id: v8evId, event_name: selectedEvent8?.name || 'Sitting 01 — Nicole Ko', full_name:`${first} ${last}`, email, phone, party_size: numGuests, dietary_restrictions: getDietary8().join(', ') || null, instagram, payment_status:'pending', stripe_session_id: checkoutData.session_id || null });
     if (activeCompCode8) await redeemCompCode(activeCompCode8.id, email, activeCompCode8.reusable).catch(() => {});
     if (document.getElementById('v8r-notify')?.checked) {
       fetch(`${FN_URL}/add-to-list`, { method:'POST', headers:{...SB_HEADERS,'Content-Type':'application/json'}, body: JSON.stringify({ first_name:first, last_name:last, email, phone, instagram, source:'rsvp-vol8' }) }).catch(()=>{});
@@ -6492,7 +6557,7 @@ async function submitRSVP5() {
     if (!plusOne) {
       // Fully free
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('v5r-source')?.value || null),
           event_id: selectedEvent5?.id,
           event_name: selectedEvent5?.name,
           full_name: `${first} ${last}`,
@@ -6527,7 +6592,7 @@ async function submitRSVP5() {
     } else {
       // Comp + paid +1
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('v5r-source')?.value || null),
           event_id: selectedEvent5?.id,
           event_name: selectedEvent5?.name,
           full_name: `${first} ${last}`,
@@ -6548,7 +6613,7 @@ async function submitRSVP5() {
       } catch(e) { console.warn('Comp insert failed silently:', e); }
       // Pre-insert +1 as unpaid so it appears in admin immediately
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('v5r-source')?.value || null),
           event_name: selectedEvent5?.name,
           full_name: plusOneName,
           email, phone, party_size: 1,
@@ -6779,7 +6844,7 @@ async function submitRSVPMay() {
   if (activeCompCodeMay && (activeCompCodeMay.discount_percent || 100) === 100) {
     if (!plusOne) {
       try {
-        await sbPost('guests', {
+        await sbPost('guests', { source: (document.getElementById('mayr-source')?.value || null),
           event_id: selectedEventMay?.id, event_name: selectedEventMay?.name,
           full_name: `${first} ${last}`, email, phone, party_size: 1,
           dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp'
@@ -6805,7 +6870,7 @@ async function submitRSVPMay() {
     } else {
       // Comp + paid +1
       try {
-        await sbPost('guests', { event_id: selectedEventMay?.id, event_name: selectedEventMay?.name, full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp' });
+        await sbPost('guests', { source: (document.getElementById('mayr-source')?.value || null), event_id: selectedEventMay?.id, event_name: selectedEventMay?.name, full_name: `${first} ${last}`, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram, payment_status: 'comp' });
         await redeemCompCode(activeCompCodeMay.id, email, activeCompCodeMay.reusable);
         await sendCompConfirmation({ eventId: selectedEventMay?.id, fullName: `${first} ${last}`, email, eventName: selectedEventMay?.name, eventDate: selectedEventMay?.event_date, eventTime: selectedEventMay?.doors_time || selectedEventMay?.event_time });
         if (document.getElementById('mayr-notify')?.checked) {
@@ -6813,7 +6878,7 @@ async function submitRSVPMay() {
         }
       } catch(e) { console.warn('Comp insert failed:', e); }
       try {
-        await sbPost('guests', { event_name: selectedEventMay?.name, full_name: plusOneName, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram: null, payment_status: 'unpaid' });
+        await sbPost('guests', { source: (document.getElementById('mayr-source')?.value || null), event_name: selectedEventMay?.name, full_name: plusOneName, email, phone, party_size: 1, dietary_restrictions: getDietaryMay().join(', ') || null, instagram: null, payment_status: 'unpaid' });
       } catch(e) { console.warn('Pre-insert +1 failed:', e); }
       sessionStorage.setItem('ltf_last_event', 'may');
       try {
@@ -6850,6 +6915,122 @@ async function submitRSVPMay() {
 // reserved APPROVAL bank (never from codes you hand out yourselves) and emails it.
 // All privileged work happens in the session-approvals edge function, which
 // checks the approvals key against the ADMIN_KEY secret.
+// ── GUEST DIRECTORY (Records) ────────────────────────────────────
+let directoryData = [];
+let dirSort = { k: 'last_seen', dir: -1 };
+let dirOpenRow = null;
+const DIR_INQUIRY = /inquiry|Sponsor|Artist/;
+
+function toggleDirectory() {
+  const panel = document.getElementById('directory-panel');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  document.getElementById('dir-toggle-icon').innerHTML = open ? '&minus;' : '+';
+}
+async function loadDirectory() {
+  const err = document.getElementById('dir-error');
+  err.style.display = 'none';
+  try {
+    const res = await approvalsCall({ action: 'directory' });
+    directoryData = (res.people || []).map(p => ({ ...p, heardText: (p.heard || []).join(', '), tagText: (p.tags || []).join(', ') }));
+    const heard = [...new Set(directoryData.flatMap(p => p.heard || []))].sort((a, b) => a.localeCompare(b));
+    const sel = document.getElementById('dir-heard'); const cur = sel.value;
+    sel.innerHTML = '<option value="all">Any source</option><option value="none">No answer</option>' + heard.map(h => `<option>${apEsc(h)}</option>`).join('');
+    sel.value = [...sel.options].some(o => o.value === cur) ? cur : 'all';
+    renderDirectory();
+  } catch (e) {
+    err.textContent = e.code === 401 ? 'Enter the approvals key below (Sessions approvals) to load the directory.' : ('Could not load the directory: ' + e.message);
+    err.style.display = '';
+    document.getElementById('dir-body').innerHTML = '<tr><td colspan="10"><div class="empty-msg">Not loaded.</div></td></tr>';
+  }
+}
+function sortDirectory(k) {
+  dirSort = dirSort.k === k ? { k, dir: -dirSort.dir } : { k, dir: ['attended', 'upcoming', 'first_seen', 'last_seen'].includes(k) ? -1 : 1 };
+  renderDirectory();
+}
+function dirFiltered() {
+  const q = (document.getElementById('dir-search').value || '').toLowerCase().trim();
+  const f = document.getElementById('dir-filter').value;
+  const h = document.getElementById('dir-heard').value;
+  const qd = q.replace(/\D/g, '');
+  return directoryData.filter(p => {
+    if (q) {
+      const hay = `${p.name} ${p.email} ${p.instagram} ${p.heardText} ${p.tagText}`.toLowerCase();
+      if (!hay.includes(q) && !(qd.length >= 3 && String(p.phone).replace(/\D/g, '').includes(qd))) return false;
+    }
+    if (f === 'attended' && p.attended < 1) return false;
+    if (f === 'repeat' && p.attended < 2) return false;
+    if (f === 'upcoming' && p.upcoming < 1) return false;
+    if (f === 'never' && (p.attended > 0)) return false;
+    if (f === 'newsletter' && !p.tags.includes('Newsletter')) return false;
+    if (f === 'inquiry' && !p.tags.some(t => DIR_INQUIRY.test(t))) return false;
+    if (h === 'none' && p.heard.length) return false;
+    if (h !== 'all' && h !== 'none' && !p.heard.includes(h)) return false;
+    return true;
+  });
+}
+function renderDirectory() {
+  const all = directoryData;
+  const counts = {};
+  all.forEach(p => (p.heard || []).forEach(x => counts[x] = (counts[x] || 0) + 1));
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById('dir-stat-people').textContent = all.length;
+  document.getElementById('dir-stat-attended').textContent = all.filter(p => p.attended > 0).length;
+  document.getElementById('dir-stat-repeat').textContent = all.filter(p => p.attended > 1).length;
+  document.getElementById('dir-stat-upcoming').textContent = all.reduce((n, p) => n + p.upcoming, 0);
+  document.getElementById('dir-stat-source').textContent = top ? top[0] : '—';
+
+  const { k, dir } = dirSort;
+  const val = p => k === 'heard' ? p.heardText : k === 'tags' ? p.tagText : p[k];
+  const rows = dirFiltered().sort((a, b) => {
+    const x = val(a), y = val(b);
+    const ex = x === '' || x == null, ey = y === '' || y == null;
+    if (ex !== ey) return ex ? 1 : -1;            // blanks always last
+    if (typeof x === 'number') return (x - y) * dir || String(a.name).localeCompare(String(b.name));
+    return String(x).localeCompare(String(y), undefined, { sensitivity: 'base' }) * dir;
+  });
+  document.querySelectorAll('.dir-table th').forEach(th => {
+    th.classList.toggle('dir-sorted', th.dataset.k === k);
+    th.setAttribute('data-dir', th.dataset.k === k ? (dir > 0 ? '\u2191' : '\u2193') : '');
+  });
+  document.getElementById('dir-count').textContent = rows.length === all.length ? `(${all.length})` : `(${rows.length} of ${all.length})`;
+
+  const tb = document.getElementById('dir-body');
+  if (!rows.length) { tb.innerHTML = '<tr><td colspan="10"><div class="empty-msg">No one matches.</div></td></tr>'; return; }
+  const d = v => v ? new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '<span class="dim">—</span>';
+  const dash = '<span class="dim">—</span>';
+  tb.innerHTML = rows.map((p, i) => {
+    const id = p.email || p.phone || p.name;
+    const open = dirOpenRow === id;
+    const evs = (p.events || []).map(e => `<li><span class="pill ${e.past ? 'sage' : 'sand'}">${e.past ? 'attended' : 'upcoming'}</span> ${apEsc(e.name)} <span class="dim">${e.date ? new Date(e.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span></li>`).join('');
+    return `<tr class="dir-row${open ? ' open' : ''}" data-id="${apEsc(id)}" onclick="toggleDirRow(this.dataset.id)">
+      <td style="color:var(--ink)">${p.name ? apEsc(p.name) : dash}</td>
+      <td class="dim">${p.email ? `<a href="mailto:${apEsc(p.email)}" onclick="event.stopPropagation()">${apEsc(p.email)}</a>` : dash}</td>
+      <td class="dim">${p.phone ? apEsc(p.phone) : dash}</td>
+      <td class="dim">${p.instagram ? apEsc(p.instagram) : dash}</td>
+      <td>${p.heard.length ? p.heard.map(x => `<span class="pill sand">${apEsc(x)}</span>`).join(' ') : dash}</td>
+      <td class="dir-num">${p.attended || dash}</td>
+      <td class="dir-num">${p.upcoming || dash}</td>
+      <td class="dim">${apEsc(p.tagText)}</td>
+      <td class="dim">${d(p.first_seen)}</td>
+      <td class="dim">${d(p.last_seen)}</td>
+    </tr>${open ? `<tr class="dir-detail"><td colspan="10">${evs ? `<ul>${evs}</ul>` : '<span class="dim">No confirmed seats yet.</span>'}</td></tr>` : ''}`;
+  }).join('');
+}
+function toggleDirRow(id) { dirOpenRow = dirOpenRow === id ? null : id; renderDirectory(); }
+function exportDirectoryCSV() {
+  const rows = dirFiltered();
+  if (!rows.length) return alert('Nothing to export.');
+  const h = ['Name', 'Email', 'Phone', 'Instagram', 'How they heard', 'Events attended', 'Upcoming seats', 'Events', 'Relationship', 'First seen', 'Last activity'];
+  const body = rows.map(p => [p.name, p.email, p.phone, p.instagram, p.heardText, p.attended, p.upcoming,
+    (p.events || []).map(e => `${e.name}${e.date ? ' (' + e.date + ')' : ''}`).join('; '), p.tagText,
+    (p.first_seen || '').slice(0, 10), (p.last_seen || '').slice(0, 10)]
+    .map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','));
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent([h.join(','), ...body].join('\n'));
+  a.download = 'life-thru-food-directory.csv'; a.click();
+}
+
 let approvalsKey = null;
 let approvalsData = null;
 const APPROVALS_SESSION = 'sessions-01';
@@ -6866,6 +7047,7 @@ function setApprovalsKey() {
   if (!v) return;
   approvalsKey = v;
   loadApprovals();
+  loadDirectory();
 }
 async function approvalsCall(body) {
   const r = await fetch(`${FN_URL}/session-approvals`, {
