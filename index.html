@@ -2971,6 +2971,8 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .ap-bar { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem; }
 .ap-bank { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--olive); }
 .ap-bank-low { color:var(--danger); }
+.ap-backlog { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; border:1px solid var(--ink); padding:0.8rem 1rem; margin:0.75rem 0; font-family:'Georgia',serif; font-size:0.92rem; color:var(--ink); }
+.ap-backlog span { flex:1; min-width:200px; overflow-wrap:break-word; }
 .ap-error { font-family:'Crimson Pro',serif; font-size:13px; color:var(--danger); border:1px solid var(--danger); padding:0.7rem 0.9rem; margin:0.75rem 0; }
 .ap-h { font-family:'Crimson Pro',serif; font-weight:600; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink); margin:1.5rem 0 0.6rem; }
 .ap-h span { color:var(--ink-low); font-weight:400; letter-spacing:0.06em; text-transform:none; }
@@ -4397,6 +4399,10 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div class="ap-bar">
           <span id="ap-bank" class="ap-bank">Approval codes: loading…</span>
           <button class="btn-ghost" onclick="loadApprovals()">refresh</button>
+        </div>
+        <div id="ap-backlog" class="ap-backlog" style="display:none">
+          <span id="ap-backlog-text"></span>
+          <button class="btn-primary" id="ap-backlog-btn" onclick="seatBacklog()">Seat them now</button>
         </div>
         <div id="ap-key-wrap" style="display:none;margin:1rem 0;max-width:420px">
           <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.5rem">Enter the approvals key (the ADMIN_KEY secret in Supabase).</p>
@@ -6906,6 +6912,15 @@ function renderApprovals() {
   const decided = reqs.filter(r => r.status !== 'pending').sort((a, b) => String(b.decided_at).localeCompare(String(a.decided_at)));
 
   const b = d.bank || {};
+  const bl = d.backlog || [];
+  const blEl = document.getElementById('ap-backlog');
+  if (blEl) {
+    blEl.style.display = bl.length ? '' : 'none';
+    const names = reqs.filter(r => bl.includes(r.id)).map(r => `${r.first_name} ${r.last_name}`.trim());
+    document.getElementById('ap-backlog-text').textContent = bl.length
+      ? `${bl.length} approved ${bl.length === 1 ? 'person was' : 'people were'} sent a code but ${bl.length === 1 ? 'has' : 'have'} not RSVPed yet: ${names.join(', ')}.`
+      : '';
+  }
   const bankEl = document.getElementById('ap-bank');
   bankEl.textContent = `Approval codes: ${b.available ?? 0} available of ${b.total ?? 0}`;
   bankEl.classList.toggle('ap-bank-low', (b.available ?? 0) < 5);
@@ -6925,7 +6940,7 @@ function renderApprovals() {
         <div class="ap-meta">${[kind === 'p1' ? '' : apEsc(r.email), apEsc(r.phone), apEsc(r.instagram), kind === 'p1' ? '' : apEsc(r.source), apDate(r.created_at)].filter(Boolean).join(' · ')}</div>
       </div>
       <div class="ap-actions">
-        <button class="btn-primary ap-approve" onclick="approveRequest(${r.id}, '${kind}', this)">${kind === 'p1' ? 'Approve +1' : 'Approve &amp; send code'}</button>
+        <button class="btn-primary ap-approve" onclick="approveRequest(${r.id}, '${kind}', this)">${kind === 'p1' ? 'Approve +1' : 'Approve &amp; seat'}</button>
         <button class="btn-ghost ap-decline" onclick="declineRequest(${r.id}, this)">Decline</button>
       </div>
     </div>`;
@@ -6943,17 +6958,31 @@ async function approveRequest(id, kind, btn) {
   const who = r ? `${r.first_name} ${r.last_name}` : 'this request';
   const msg = kind === 'p1'
     ? `Approve ${who} as a +1? The guest will get an email confirming their +1 with the address.`
-    : `Approve ${who}? A code from the approval bank will be emailed to ${r?.email || 'them'}.`;
+    : `Approve ${who} and give them a seat? They will get a seat confirmation email with the address at ${r?.email || 'their email'}.`;
   if (!confirm(msg)) return;
   apShowError('');
-  btn.disabled = true; btn.textContent = 'sending…';
+  btn.disabled = true; btn.textContent = 'seating…';
+  if (kind === 'p1') btn.textContent = 'sending…';
   try {
     const res = await approvalsCall({ action: kind === 'p1' ? 'approve_plus_one' : 'approve_invite', id });
-    toast('admin-toast', kind === 'p1' ? `+1 approved. ${who}'s guest has been emailed.` : `Approved. Code ${res.code} emailed to ${who}.`, 'success');
+    toast('admin-toast', kind === 'p1' ? `+1 approved. ${who}'s guest has been emailed.` : `${who} is seated. Confirmation with the address sent.`, 'success');
     await loadApprovals();
   } catch (e) {
-    apShowError(e.message); btn.disabled = false; btn.textContent = kind === 'p1' ? 'Approve +1' : 'Approve & send code';
+    apShowError(e.message); btn.disabled = false; btn.textContent = kind === 'p1' ? 'Approve +1' : 'Approve & seat';
   }
+}
+async function seatBacklog() {
+  const n = (approvalsData?.backlog || []).length;
+  if (!n || !confirm(`Seat ${n} previously approved ${n === 1 ? 'person' : 'people'}? Each gets a seat confirmation email with the address, and their old code stops working.`)) return;
+  const btn = document.getElementById('ap-backlog-btn');
+  apShowError(''); btn.disabled = true; btn.textContent = 'seating…';
+  try {
+    const res = await approvalsCall({ action: 'seat_backlog', session_id: APPROVALS_SESSION });
+    toast('admin-toast', `Seated ${res.seated.length}${res.seated.length ? ': ' + res.seated.join(', ') : ''}.`, 'success');
+    if (res.failed?.length) apShowError(`Could not seat (email failed): ${res.failed.join(', ')}. Try again.`);
+    await loadApprovals();
+  } catch (e) { apShowError(e.message); }
+  btn.disabled = false; btn.textContent = 'Seat them now';
 }
 async function declineRequest(id, btn) {
   if (!confirm('Decline this request? No email is sent.')) return;
@@ -8387,7 +8416,7 @@ async function checkSessionCode() {
     if (status === 'invalid') {
       errEl.textContent = 'Code not recognised. Check your invitation and try again.';
     } else if (status === 'used') {
-      errEl.textContent = 'This code has already been used.';
+      errEl.textContent = 'This code has already been used. If we approved your invite request, your seat is already confirmed: check your email for the details.';
     } else {
       activeSessionCode = raw;
       document.getElementById('sessions-gate').style.display = 'none';
