@@ -2976,6 +2976,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .ap-bar { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem; }
 .ap-bank { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--olive); }
 .ap-bank-low { color:var(--danger); }
+.ap-full { display:inline-block; font-family:'Crimson Pro',serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#9a6b00; border:1px solid currentColor; padding:1px 7px; margin-bottom:4px; }
 .ap-backlog { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; border:1px solid var(--ink); padding:0.8rem 1rem; margin:0.75rem 0; font-family:'Georgia',serif; font-size:0.92rem; color:var(--ink); }
 .ap-backlog span { flex:1; min-width:200px; overflow-wrap:break-word; }
 .ap-error { font-family:'Crimson Pro',serif; font-size:13px; color:var(--danger); border:1px solid var(--danger); padding:0.7rem 0.9rem; margin:0.75rem 0; }
@@ -3263,6 +3264,12 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
           <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
           <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.5rem">A confirmation with the address, 207 Madison St, is on its way to your inbox.</p>
           <p id="sessions-plusone-confirm" style="display:none;font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.75rem">Your +1 request is in. We will email you once it is confirmed.</p>
+        </div>
+
+        <div id="sessions-full-done" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
+          <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">This Session is full</p>
+          <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">Friendsgiving filled up before your RSVP came through, so you're on the waitlist.</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.5rem">This is not a confirmed seat yet. We sent a note to your inbox and will email you right away if a seat opens up.</p>
         </div>
 
         <!-- Step 1: Code gate -->
@@ -5298,6 +5305,9 @@ function dynSessionHTML(ev) {
         <p class="dyn-done-main">We'll see you ${dynEsc(dynDate(ev))}${ev.doors_time ? '. Doors at ' + dynEsc(ev.doors_time) : ''}.</p>
         <p class="dyn-done-sub">A confirmation with the address is on its way to your inbox.</p>
         <p id="${s}-p1-done" class="dyn-done-sub" style="display:none">Your +1 request is in. We will email you once it is confirmed.</p></div>
+      <div id="${s}-full-done" class="dyn-done" style="display:none"><p class="dyn-box-label" style="color:var(--olive)">This Session is full</p>
+        <p class="dyn-done-main">${dynEsc(ev.subject_name || 'This Session')} filled up before your RSVP came through, so you're on the waitlist.</p>
+        <p class="dyn-done-sub">This is not a confirmed seat yet. We sent a note to your inbox and will email you right away if a seat opens up.</p></div>
       <div id="${s}-gate">
         <p class="form-title">Enter your invitation code</p>
         <p class="dyn-help">You should have received a one-time code with your invitation.</p>
@@ -5491,7 +5501,6 @@ async function dynCheckSessionCode(id) {
     const status = r.ok ? await r.json() : 'invalid';
     if (status === 'invalid') err.textContent = 'Code not recognised. Check your invitation and try again.';
     else if (status === 'used') err.textContent = 'This code has already been used. If we approved your invite request, your seat is already confirmed: check your email for the details.';
-    else if (!(await sessionHasRoom(ev.slug))) err.textContent = SESSION_FULL_MSG;
     else {
       st.code = raw;
       document.getElementById(s + '-gate').style.display = 'none';
@@ -5516,7 +5525,13 @@ async function dynSubmitSessionRSVP(id) {
   logSmsConsent(s, `${ev.slug}-rsvp`);
   const btn = document.getElementById(s + '-submit'); btn.disabled = true;
   try {
-    if (!(await sessionHasRoom(ev.slug))) { dynShowErr(s + '-err', SESSION_FULL_MSG); btn.disabled = false; return; }
+    if (!(await sessionHasRoom(ev.slug))) {
+      const r = await joinFullWaitlist({ sid: ev.slug, code: st.code, first, last, email, phone, ig, src, p1Name: wantsP1 ? p1Name : '', p1Phone: wantsP1 ? p1Phone : '' });
+      if (r === 'used') { dynShowErr(s + '-err', 'This code has already been used. If you think that is a mistake, email us at info@lifethrufood.com.'); btn.disabled = false; return; }
+      document.getElementById(s + '-form').style.display = 'none';
+      document.getElementById(s + '-full-done').style.display = '';
+      return;
+    }
     const rd = await fetch(`${SUPABASE_URL}/rest/v1/rpc/redeem_session_code`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: st.code, p_session_id: ev.slug, p_email: email }) });
     if (!rd.ok || (await rd.json()) !== true) { dynShowErr(s + '-err', 'This code has already been used. If you think that is a mistake, email us at info@lifethrufood.com.'); btn.disabled = false; return; }
     await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: ev.slug, notes: `code:${st.code}` + (wantsP1 ? ` | +1 requested: ${p1Name} (${p1Phone})` : '') });
@@ -7936,8 +7951,12 @@ function renderApprovals() {
     const guest = kind === 'p1' ? apEsc((String(r.notes || '').match(/requested by ([^(|]+)/) || [])[1] || r.email) : '';
     const sid = String(r.list_type).replace(/-(waitlist|plus-one-request)$/, '');
     const sessTag = multi && sessMap[sid] ? `<div class="ap-sub" style="text-transform:uppercase;letter-spacing:0.12em">${apEsc(sessMap[sid].label)}</div>` : '';
+    const notes = String(r.notes || '');
+    const p1Req = (notes.match(/\+1 requested: ([^|]+)/) || [])[1];
+    const fullTag = kind !== 'p1' && /Session was full/.test(notes)
+      ? `<div class="ap-full">Had an invitation code, Session was full${p1Req ? ` &middot; +1 requested: ${apEsc(p1Req.trim())}` : ''}</div>` : '';
     return `<div class="ap-card">
-      <div class="ap-who">${sessTag}
+      <div class="ap-who">${sessTag}${fullTag}
         <div class="ap-name">${name}${kind === 'p1' ? ` <span class="ap-sub">+1 for ${guest.trim()}</span>` : ''}</div>
         <div class="ap-meta">${[kind === 'p1' ? '' : apEsc(r.email), apEsc(r.phone), apEsc(r.instagram), kind === 'p1' ? '' : apEsc(r.source), apDate(r.created_at)].filter(Boolean).join(' · ')}</div>
       </div>
@@ -9535,6 +9554,21 @@ async function sessionHasRoom(sessionId) {
   } catch (e) { return true; }
 }
 
+// A code holder RSVPs after the Session filled up: their code is used up, they go on the
+// waitlist (shows in Records > Sessions approvals) and get a "full, you're on the waitlist" email.
+async function joinFullWaitlist(o) {
+  const rd = await fetch(`${SUPABASE_URL}/rest/v1/rpc/redeem_session_code`, {
+    method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_code: o.code, p_session_id: o.sid, p_email: o.email })
+  });
+  if (rd.ok && (await rd.json()) !== true) return 'used';
+  await sbPost('waitlist', { first_name: o.first, last_name: o.last, email: o.email, phone: o.phone || null, instagram: o.ig || null, source: o.src || null,
+    list_type: `${o.sid}-waitlist`, notes: `Session was full | code:${o.code}` + (o.p1Name ? ` | +1 requested: ${o.p1Name} (${o.p1Phone})` : '') });
+  sendFormConfirmation('session_full_waitlist', { session_id: o.sid, first_name: o.first, last_name: o.last, email: o.email, phone: o.phone, instagram: o.ig, source: o.src,
+    code: o.code, plus_one_name: o.p1Name || '', plus_one_phone: o.p1Phone || '' });
+  return 'ok';
+}
+
 async function checkSessionCode() {
   const raw = document.getElementById('sess-code-input').value.trim().toUpperCase();
   const errEl = document.getElementById('sess-code-error');
@@ -9557,8 +9591,6 @@ async function checkSessionCode() {
       errEl.textContent = 'Code not recognised. Check your invitation and try again.';
     } else if (status === 'used') {
       errEl.textContent = 'This code has already been used. If we approved your invite request, your seat is already confirmed: check your email for the details.';
-    } else if (!(await sessionHasRoom('sessions-01'))) {
-      errEl.textContent = SESSION_FULL_MSG;
     } else {
       activeSessionCode = raw;
       document.getElementById('sessions-gate').style.display = 'none';
@@ -9606,8 +9638,15 @@ async function submitSessionsRSVP() {
   const btn = document.querySelector('#sessions-form-wrap .btn-primary');
   if (btn) btn.disabled = true;
   if (!(await sessionHasRoom('sessions-01'))) {
-    errEl.textContent = SESSION_FULL_MSG; errEl.style.display = '';
-    if (btn) btn.disabled = false;
+    try {
+      const r = await joinFullWaitlist({ sid: 'sessions-01', code: activeSessionCode, first, last, email, phone, ig, src, p1Name: wantsPlusOne ? p1Name : '', p1Phone: wantsPlusOne ? p1Phone : '' });
+      if (r === 'used') { errEl.textContent = 'This code has already been used. If you think that is a mistake, email us at info@lifethrufood.com.'; errEl.style.display = ''; if (btn) btn.disabled = false; return; }
+      document.getElementById('sessions-form-wrap').style.display = 'none';
+      document.getElementById('sessions-full-done').style.display = '';
+    } catch (e) {
+      errEl.textContent = 'Something went wrong. Please try again or email us at info@lifethrufood.com.'; errEl.style.display = '';
+      if (btn) btn.disabled = false;
+    }
     return;
   }
   try {
