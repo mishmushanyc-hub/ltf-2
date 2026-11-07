@@ -1519,17 +1519,22 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 0.2rem;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 0.25rem;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 .hg-ov-name {
   font-family: 'LTF Hand Ink', 'Crimson Pro', serif;
   font-size: 1.05rem;
   color: #fff;
-  line-height: 1.1;
+  line-height: 1.15;
+  white-space: normal;
+  overflow-wrap: break-word;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 .hg-ov-disc {
   font-family: 'Crimson Pro', serif;
@@ -1575,7 +1580,7 @@ main { max-width: none !important; margin: 0 !important; padding: 0 !important; 
     overflow: visible;
     text-overflow: unset;
   }
-  .hg-ov-label { font-size: 7px; }
+  .hg-ov-label { font-size: 7px; letter-spacing: 0.16em; }
   .hg-ov-disc, .hg-ov-cta { display: none; }
   .hg-overlay { padding: 0.5rem 0.55rem; }
 }
@@ -2997,6 +3002,21 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Live events capacity (Records) */
+.lc-row { display:flex; justify-content:space-between; align-items:center; gap:1.25rem; flex-wrap:wrap; padding:0.9rem 1rem; border:1px solid var(--rule-mid); background:var(--canvas); margin-bottom:6px; }
+.lc-info { flex:1; min-width:220px; }
+.lc-name { font-family:'Georgia',serif; font-size:1rem; color:var(--ink); overflow-wrap:break-word; }
+.lc-meta { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-low); margin-top:3px; }
+.lc-meta strong { color:var(--ink); font-weight:600; }
+.lc-bar { height:4px; background:var(--rule); margin-top:8px; max-width:360px; }
+.lc-bar span { display:block; height:100%; background:var(--olive); }
+.lc-bar span.lc-full, .lc-full-t { background:var(--danger); color:var(--danger); }
+.lc-full-t { background:none; }
+.lc-ctrl { display:flex; align-items:center; gap:6px; }
+.lc-ctrl input { width:76px; text-align:center; padding:0.5rem; font-family:'Crimson Pro',serif; font-size:1rem; }
+.lc-step { min-width:38px; min-height:38px; padding:0 !important; font-size:1.1rem !important; }
+.lc-save { min-height:38px; padding:0.5rem 1rem !important; font-size:11px !important; }
+@media (max-width:600px) { .lc-ctrl { width:100%; } .lc-ctrl input { flex:1; } }
 .dir-insights { border:1px solid var(--rule-mid); background:var(--canvas); padding:1.1rem 1.25rem 1.25rem; margin-bottom:1.5rem; }
 .dir-ins-h { font-family:'Crimson Pro',serif; font-weight:600; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink); margin:0 0 0.6rem; }
 .dir-ins-h .dim { font-weight:400; letter-spacing:0.04em; text-transform:none; color:var(--ink-low); }
@@ -4374,6 +4394,16 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
       <div id="admin-pw-error" style="font-family:'Crimson Pro',serif;font-size: 13px;color:var(--danger);margin-top:0.75rem;min-height:1rem"></div>
     </div>
     <div id="admin-panel-inner" style="display:none">
+    <!-- LIVE EVENTS: CAPACITY -->
+    <div id="live-cap-section" style="margin-bottom:2.5rem">
+      <div class="admin-section-toggle" onclick="toggleLiveCap()"><span>Live events: capacity</span> <span id="live-cap-icon">&minus;</span></div>
+      <div id="live-cap-panel" style="margin-top:1rem">
+        <div id="live-cap-error" class="ap-error" style="display:none"></div>
+        <div id="live-cap-toast" class="toast"></div>
+        <div id="live-cap-list"><div class="empty-msg">Loading…</div></div>
+        <p class="dir-note">Seats taken counts confirmed seats (for Sessions, seats plus approved +1s). Capacity can't go below seats already taken. A Session has no limit until you set one; once it is full, code holders see a "full" message and approvals are blocked until you raise it.</p>
+      </div>
+    </div>
     <!-- GUEST DIRECTORY -->
     <div id="directory-section" style="margin-bottom:2.5rem">
       <div class="admin-section-toggle" onclick="toggleDirectory()"><span>Guest directory <span id="dir-count" class="ap-sub"></span></span> <span id="dir-toggle-icon">&minus;</span></div>
@@ -5179,6 +5209,7 @@ function checkAdminPassword() {
     approvalsKey = approvalsKey || val;
     loadApprovals();
     loadDirectory();
+    loadLiveCapacity();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -6947,6 +6978,78 @@ async function submitRSVPMay() {
 // reserved APPROVAL bank (never from codes you hand out yourselves) and emails it.
 // All privileged work happens in the session-approvals edge function, which
 // checks the approvals key against the ADMIN_KEY secret.
+// ── LIVE EVENTS: CAPACITY (Records) ─────────────────────────────
+let liveCapData = [];
+function toggleLiveCap() {
+  const panel = document.getElementById('live-cap-panel');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  document.getElementById('live-cap-icon').innerHTML = open ? '&minus;' : '+';
+}
+async function loadLiveCapacity() {
+  const err = document.getElementById('live-cap-error');
+  err.style.display = 'none';
+  try {
+    liveCapData = (await approvalsCall({ action: 'live_events' })).events || [];
+    renderLiveCapacity();
+  } catch (e) {
+    err.textContent = e.code === 401 ? 'Enter the approvals key below (Sessions approvals) to manage capacity.' : ('Could not load live events: ' + e.message);
+    err.style.display = '';
+    document.getElementById('live-cap-list').innerHTML = '';
+  }
+}
+function renderLiveCapacity() {
+  const el = document.getElementById('live-cap-list');
+  if (!liveCapData.length) { el.innerHTML = '<div class="empty-msg">No live events right now.</div>'; return; }
+  el.innerHTML = liveCapData.map((ev, i) => {
+    const cap = ev.capacity;
+    const left = cap != null ? cap - ev.taken : null;
+    const pct = cap ? Math.min(100, Math.round(ev.taken / cap * 100)) : 0;
+    const status = cap == null ? 'No limit set' : left <= 0 ? 'Full' : `${left} left`;
+    return `<div class="lc-row">
+      <div class="lc-info">
+        <div class="lc-name">${apEsc(ev.name)} <span class="pill ${ev.kind === 'session' ? 'dir-pill-session' : 'sand'}">${ev.kind === 'session' ? 'Session' : 'Sitting'}</span></div>
+        <div class="lc-meta">${ev.date ? dirEvDate(ev.date) : 'No date'}${ev.location ? ' · ' + apEsc(ev.location) : ''}</div>
+        <div class="lc-bar"><span style="width:${pct}%" class="${left !== null && left <= 0 ? 'lc-full' : ''}"></span></div>
+        <div class="lc-meta"><strong>${ev.taken}</strong> taken of <strong>${cap ?? '∞'}</strong> · <span class="${left !== null && left <= 0 ? 'lc-full-t' : ''}">${status}</span></div>
+      </div>
+      <div class="lc-ctrl">
+        <button class="btn-ghost lc-step" onclick="stepLiveCap(${i},-1)" aria-label="Decrease capacity">&minus;</button>
+        <input type="number" min="${Math.max(1, ev.taken)}" max="1000" id="lc-in-${i}" value="${cap ?? ''}" placeholder="${ev.taken || 1}" onkeydown="if(event.key==='Enter')saveLiveCap(${i})">
+        <button class="btn-ghost lc-step" onclick="stepLiveCap(${i},1)" aria-label="Increase capacity">+</button>
+        <button class="btn-primary lc-save" id="lc-save-${i}" onclick="saveLiveCap(${i})">save</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function stepLiveCap(i, d) {
+  const inp = document.getElementById('lc-in-' + i);
+  const ev = liveCapData[i];
+  const cur = parseInt(inp.value) || ev.capacity || ev.taken || 0;
+  inp.value = Math.max(Math.max(1, ev.taken), cur + d);
+}
+async function saveLiveCap(i) {
+  const ev = liveCapData[i];
+  const val = parseInt(document.getElementById('lc-in-' + i).value);
+  const err = document.getElementById('live-cap-error');
+  err.style.display = 'none';
+  if (!val || val < 1) { err.textContent = 'Enter a capacity of at least 1.'; err.style.display = ''; return; }
+  if (val < ev.taken) { err.textContent = `${ev.name} already has ${ev.taken} seats taken. Capacity can't go below that.`; err.style.display = ''; return; }
+  if (val === ev.capacity) return;
+  const btn = document.getElementById('lc-save-' + i);
+  btn.disabled = true; btn.textContent = 'saving…';
+  try {
+    await approvalsCall({ action: 'set_capacity', kind: ev.kind, id: ev.id, capacity: val });
+    toast('live-cap-toast', `${ev.name}: capacity is now ${val}.`, 'success');
+    await loadLiveCapacity();
+    if (typeof loadAdminEvents === 'function') loadAdminEvents();
+    if (typeof loadEvents === 'function') loadEvents();       // refresh the public seat counters
+  } catch (e) {
+    err.textContent = e.message; err.style.display = '';
+    btn.disabled = false; btn.textContent = 'save';
+  }
+}
+
 // ── GUEST DIRECTORY (Records) ────────────────────────────────────
 let directoryData = [];
 let dirSort = { k: 'last_seen', dir: -1 };
@@ -7220,6 +7323,7 @@ function setApprovalsKey() {
   approvalsKey = v;
   loadApprovals();
   loadDirectory();
+  loadLiveCapacity();
 }
 async function approvalsCall(body) {
   const r = await fetch(`${FN_URL}/session-approvals`, {
@@ -8408,9 +8512,9 @@ function renderHomeGallery() {
     return `<div class="hg-item" onclick="openGalleryPreview(${idx})" title="${name}">` +
       `<img decoding="async" ${imgAttrs(p.photo, 640, '(max-width: 600px) 50vw, (max-width: 900px) 33vw, 25vw')} alt="${name}" ${idx < 8 ? 'fetchpriority="' + (idx < 4 ? 'high' : 'auto') + '"' : 'loading="lazy"'}>` +
       `<div class="hg-overlay">` +
-        (label ? `<span class="hg-ov-label">${label}</span>` : '') +
-        (name  ? `<span class="hg-ov-name">${name}</span>` : '') +
-        (disc  ? `<span class="hg-ov-disc">${disc}</span>` : '') +
+        // Small caps line: the artist name. Hand Ink: the volume ("Vol. 05" / "Sitting No. 1").
+        (name && label ? `<span class="hg-ov-label">${name}</span>` : '') +
+        ((label || name) ? `<span class="hg-ov-name">${label || name}</span>` : '') +
         `<span class="hg-ov-cta">View larger</span>` +
       `</div>` +
     `</div>`;
@@ -8749,6 +8853,19 @@ function goHome() {
 
 let activeSessionCode = null;
 
+// Live capacity for Sessions (set in Records > Live events). No limit until one is set.
+const SESSION_FULL_MSG = 'This Session is full right now. Request an invite below and we will let you know if a seat opens up.';
+async function sessionHasRoom(sessionId) {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/session_has_room`, {
+      method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_session_id: sessionId })
+    });
+    if (!r.ok) return true;          // function not installed yet: no limit
+    return (await r.json()) !== false;
+  } catch (e) { return true; }
+}
+
 async function checkSessionCode() {
   const raw = document.getElementById('sess-code-input').value.trim().toUpperCase();
   const errEl = document.getElementById('sess-code-error');
@@ -8771,6 +8888,8 @@ async function checkSessionCode() {
       errEl.textContent = 'Code not recognised. Check your invitation and try again.';
     } else if (status === 'used') {
       errEl.textContent = 'This code has already been used. If we approved your invite request, your seat is already confirmed: check your email for the details.';
+    } else if (!(await sessionHasRoom('sessions-01'))) {
+      errEl.textContent = SESSION_FULL_MSG;
     } else {
       activeSessionCode = raw;
       document.getElementById('sessions-gate').style.display = 'none';
@@ -8817,6 +8936,11 @@ async function submitSessionsRSVP() {
   }
   const btn = document.querySelector('#sessions-form-wrap .btn-primary');
   if (btn) btn.disabled = true;
+  if (!(await sessionHasRoom('sessions-01'))) {
+    errEl.textContent = SESSION_FULL_MSG; errEl.style.display = '';
+    if (btn) btn.disabled = false;
+    return;
+  }
   try {
     // Claim the code first, in one step, so two people can never use the same code.
     // (Falls back to the old direct update until sessions-approvals-step1.sql is run.)
