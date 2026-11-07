@@ -7563,7 +7563,7 @@ function renderLiveCapacity() {
         <div class="lc-name">${apEsc(ev.name)} <span class="pill ${ev.kind === 'session' ? 'dir-pill-session' : 'sand'}">${ev.kind === 'session' ? 'Session' : 'Sitting'}</span></div>
         <div class="lc-meta">${ev.date ? dirEvDate(ev.date) : 'No date'}${ev.location ? ' · ' + apEsc(ev.location) : ''}</div>
         <div class="lc-bar"><span style="width:${pct}%" class="${left !== null && left <= 0 ? 'lc-full' : ''}"></span></div>
-        <div class="lc-meta"><strong>${ev.taken}</strong> taken of <strong>${cap ?? '∞'}</strong> · <span class="${left !== null && left <= 0 ? 'lc-full-t' : ''}">${status}</span></div>
+        <div class="lc-meta"><strong>${ev.taken}</strong> taken of <strong>${cap ?? '∞'}</strong> · <span class="${left !== null && left <= 0 ? 'lc-full-t' : ''}">${status}</span>${ev.pending_plus_ones ? ` · ${ev.pending_plus_ones} +1 request${ev.pending_plus_ones > 1 ? 's' : ''} waiting (not counted until approved)` : ''}${ev.waitlist ? ` · ${ev.waitlist} on the waitlist` : ''}</div>
       </div>
       <div class="lc-ctrl">
         <button class="btn-ghost lc-step" onclick="stepLiveCap(${i},-1)" aria-label="Decrease capacity">&minus;</button>
@@ -7894,6 +7894,13 @@ function apDate(d) { return d ? new Date(d).toLocaleDateString('en-US', { month:
 function apShowError(msg) {
   const el = document.getElementById('ap-error');
   el.textContent = msg || ''; el.style.display = msg ? '' : 'none';
+  if (msg) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+// After any approval, refresh every Records view that counts seats
+function refreshRecordsCounts() {
+  if (typeof loadLiveCapacity === 'function') loadLiveCapacity();
+  if (typeof loadDirectory === 'function') loadDirectory();
+  if (typeof loadAdminEvents === 'function') loadAdminEvents();
 }
 
 async function loadApprovals() {
@@ -7988,6 +7995,7 @@ async function approveRequest(id, kind, btn) {
     const res = await approvalsCall({ action: kind === 'p1' ? 'approve_plus_one' : 'approve_invite', id });
     toast('admin-toast', kind === 'p1' ? `+1 approved. ${who}'s guest has been emailed.` : `${who} is seated. Confirmation with the address sent.`, 'success');
     await loadApprovals();
+    refreshRecordsCounts();
   } catch (e) {
     apShowError(e.message); btn.disabled = false; btn.textContent = kind === 'p1' ? 'Approve +1' : 'Approve & seat';
   }
@@ -8002,13 +8010,14 @@ async function seatBacklog() {
     toast('admin-toast', `Seated ${res.seated.length}${res.seated.length ? ': ' + res.seated.join(', ') : ''}.`, 'success');
     if (res.failed?.length) apShowError(`Could not seat (email failed): ${res.failed.join(', ')}. Try again.`);
     await loadApprovals();
+    refreshRecordsCounts();
   } catch (e) { apShowError(e.message); }
   btn.disabled = false; btn.textContent = 'Seat them now';
 }
 async function declineRequest(id, btn) {
   if (!confirm('Decline this request? No email is sent.')) return;
   btn.disabled = true;
-  try { await approvalsCall({ action: 'decline', id }); await loadApprovals(); }
+  try { await approvalsCall({ action: 'decline', id }); await loadApprovals(); refreshRecordsCounts(); }
   catch (e) { apShowError(e.message); btn.disabled = false; }
 }
 
