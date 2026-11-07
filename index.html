@@ -3002,6 +3002,71 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Event page template (events built in Records) */
+.dyn-summary { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; cursor:pointer; list-style:none; font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink); }
+.dyn-summary::-webkit-details-marker { display:none; }
+.dyn-hand { font-family:'LTF Hand Ink','Crimson Pro',serif; font-weight:normal; letter-spacing:0.02em; font-size:clamp(1.6rem,5vw,2.4rem); overflow-wrap:break-word; }
+.dyn-table-box { margin:2rem 0; padding:1.5rem; background:var(--paper); border:1px solid var(--rule-mid); }
+.dyn-box-label { font-family:'Crimson Pro',serif; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--olive); margin:0 0 0.85rem; }
+.dyn-table-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem 1.5rem; }
+.dyn-table-grid p { font-family:'Georgia',serif; font-size:0.88rem; color:var(--ink-mid); line-height:1.6; margin:0; overflow-wrap:break-word; }
+.dyn-box-foot { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-low); margin:1.25rem 0 0; padding-top:1rem; border-top:1px solid var(--rule-mid); }
+.dyn-comp-wrap { margin-bottom:2rem; padding:1.25rem 1.5rem; background:var(--paper); border:1px solid var(--rule-mid); }
+.dyn-comp-notice { padding:1rem 1.5rem; border:1px solid var(--olive-dim); background:var(--olive-ghost); margin-bottom:1.5rem; font-family:'Crimson Pro',serif; font-size:1rem; color:var(--ink-mid); }
+.dyn-error { font-family:'Crimson Pro',serif; font-size:13px; letter-spacing:0.08em; color:var(--danger); margin:1rem 0; padding:0.85rem 1rem; border:1px solid var(--danger); line-height:1.7; }
+.dyn-done { padding:2rem; border:1px solid var(--rule-mid); background:var(--canvas); text-align:center; }
+.dyn-done-main { font-family:'Georgia',serif; font-size:1rem; color:var(--ink); }
+.dyn-done-sub { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); margin-top:0.5rem; }
+.dyn-help { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); line-height:1.7; margin-bottom:1.25rem; }
+@media (max-width:600px) { .dyn-table-grid { grid-template-columns:1fr; } }
+
+/* Records: Manage events */
+.ev-topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+.ev-new { padding:0.6rem 1rem !important; font-size:11px !important; min-height:38px; }
+.ev-group-h { font-family:'Crimson Pro',serif; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-low); margin:1.25rem 0 0.5rem; }
+.ev-group-h span { letter-spacing:0.04em; }
+.ev-row { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; padding:0.8rem 1rem; border:1px solid var(--rule-mid); background:var(--canvas); margin-bottom:6px; }
+.ev-row-main { flex:1; min-width:240px; }
+.ev-row-name { font-family:'Georgia',serif; font-size:1rem; color:var(--ink); overflow-wrap:break-word; }
+.ev-row-meta { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-low); margin-top:3px; letter-spacing:0.04em; }
+.ev-row-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.ev-needs { font-family:'Crimson Pro',serif; font-size:12.5px; color:var(--danger); margin-top:4px; }
+.ev-st { font-family:'Crimson Pro',serif; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; padding:1px 7px; border:1px solid currentColor; margin-left:2px; }
+.ev-st-live { color:var(--success); } .ev-st-draft { color:#9a6b00; } .ev-st-hidden, .ev-st-past { color:var(--ink-low); }
+.ev-hand { font-family:'Crimson Pro',serif; font-size:11px; color:var(--ink-low); font-style:italic; }
+.rm-btn.ev-pub { color:var(--success); border-color:var(--success); }
+.ev-editor { margin-top:1.5rem; padding:1.25rem 1.25rem 1.5rem; border:1px solid var(--ink); background:var(--canvas); }
+.ev-editor-head { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
+.ev-custom-note { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); border-left:2px solid var(--ink-low); padding:0.4rem 0.8rem; margin-bottom:1rem; }
+.ev-fs { border:none; border-top:1px solid var(--rule-mid); margin:1.25rem 0 0; padding:1rem 0 0; min-width:0; }
+.ev-fs legend { font-family:'Crimson Pro',serif; font-weight:600; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink); padding-right:0.6rem; }
+.ev-hint { font-family:'Crimson Pro',serif; font-size:11px; color:var(--ink-low); letter-spacing:0.02em; text-transform:none; font-style:italic; }
+.ev-static { font-family:'Georgia',serif; font-size:0.88rem; color:var(--ink-mid); line-height:1.6; margin:0.35rem 0 0; }
+.ev-editor textarea { min-height:70px; }
+.ev-editor input[type="date"], .ev-editor input[type="number"], .ev-codes-bar input { background:var(--paper); border:none; border-bottom:1px solid var(--rule-mid); padding:12px 0; font-family:'Crimson Pro',serif; font-size:1rem; color:var(--ink); outline:none; width:100%; border-radius:0; box-sizing:border-box; }
+.ev-codes-bar input { width:80px; text-align:center; }
+.ev-editor [data-f]:disabled, .ev-course :disabled { opacity:0.45; cursor:not-allowed; }
+.ev-course { border:1px solid var(--rule-mid); background:var(--canvas); padding:0.75rem; margin-bottom:8px; display:grid; gap:6px; }
+.ev-course-top { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.ev-course-top input { flex:1; min-width:140px; }
+.ev-course-btns { display:flex; gap:4px; }
+.ev-course input, .ev-course textarea { width:100%; box-sizing:border-box; }
+.ev-msg { font-family:'Crimson Pro',serif; font-size:13.5px; padding:0.7rem 0.9rem; margin-top:1.25rem; border:1px solid var(--rule-mid); color:var(--ink-mid); overflow-wrap:break-word; }
+.ev-msg-ok { border-color:var(--success); color:var(--success); }
+.ev-msg-err { border-color:var(--danger); color:var(--danger); }
+.ev-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:1.25rem; position:sticky; bottom:0; background:var(--canvas); padding:0.75rem 0 0.25rem; }
+.ev-overlay { position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.55); display:none; align-items:flex-start; justify-content:center; padding:4vh 1rem; overflow:auto; }
+.ev-overlay.open { display:flex; }
+.ev-overlay-card { background:var(--canvas); width:100%; max-width:560px; padding:1.25rem 1.5rem 1.5rem; border:1px solid var(--rule-mid); }
+.ev-preview-card { max-width:760px; }
+.ev-overlay-head { display:flex; justify-content:space-between; align-items:center; gap:1rem; font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-low); margin-bottom:1rem; }
+.ev-preview-body .event-block { margin-top:0 !important; }
+.ev-preview-body button, .ev-preview-body input, .ev-preview-body select, .ev-preview-body textarea { pointer-events:none; }
+.ev-codes-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:1rem; }
+.ev-codes-list { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:4px 12px; max-height:50vh; overflow:auto; }
+.ev-code { display:flex; justify-content:space-between; gap:8px; font-family:'Courier New',monospace; font-size:13px; padding:4px 0; border-bottom:1px solid var(--rule); }
+.ev-code .dim { font-family:'Crimson Pro',serif; font-size:12px; color:var(--ink-low); overflow-wrap:anywhere; }
+.ev-code.used span:first-child { text-decoration:line-through; color:var(--ink-low); }
 /* Live events capacity (Records) */
 .lc-row { display:flex; justify-content:space-between; align-items:center; gap:1.25rem; flex-wrap:wrap; padding:0.9rem 1rem; border:1px solid var(--rule-mid); background:var(--canvas); margin-bottom:6px; }
 .lc-info { flex:1; min-width:220px; }
@@ -3279,6 +3344,8 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
       </div>
     </div>
 
+    <div id="dyn-sessions"></div>
+
     <div id="no-upcoming-sessions" style="display:none;padding:2.5rem 0 2rem;text-align:left;border-top:1px solid var(--rule-mid)">
       <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink-mid);line-height:1.8;margin:0 0 1.75rem;max-width:460px">Sessions are the quieter side of LTF. Lower guest count, served family style, and invite only. Each one brings together the creative leaders, influencers, and tastemakers who make up the community.</p>
       <a href="https://www.instagram.com/lifethru___food/" target="_blank" rel="noopener" class="btn-ghost" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none">
@@ -3288,6 +3355,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
     </div>
 
 <div class="events-section-label" style="margin-top:3rem">Sittings</div>
+    <div id="dyn-sittings"></div>
 
     <!-- VOL. 04 — PAST (hidden, preserved for JS compatibility) -->
     <div class="event-block" id="event-block-4" style="display:none">
@@ -4470,31 +4538,86 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
     </div>
     <div class="admin-section-toggle" onclick="toggleEventAdmin()">Manage events <span id="ev-toggle-icon">+</span></div>
     <div id="event-admin-panel" class="sp-admin" style="margin-bottom:2rem">
-      <h3>Events</h3>
-      <div id="event-admin-list"></div>
-      <div style="border-top:1px solid var(--rule-mid);padding-top:1.5rem;margin-top:1rem">
-        <p class="form-title" id="event-form-title" style="margin-bottom:1rem">New event</p>
-        <input type="hidden" id="ev-edit-id">
-        <div class="form-grid">
-          <div class="form-field"><label>Name</label><input type="text" id="ev-name-input" placeholder="May RSVPs"></div>
-          <div class="form-field"><label>Location</label><input type="text" id="ev-location-input" placeholder="Williamsburg, Brooklyn"></div>
+      <div class="ev-topbar">
+        <h3 style="margin:0">Events</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-primary ev-new" onclick="newEvent('sitting')">+ New Sitting</button>
+          <button class="btn-ghost ev-new" onclick="newEvent('session')">+ New Session</button>
         </div>
-        <div class="form-grid">
-          <div class="form-field"><label>Date &amp; time</label><input type="datetime-local" id="ev-date-input"></div>
-          <div class="form-field"><label>Max capacity</label><input type="number" id="ev-capacity-input" placeholder="50" min="1"></div>
-        </div>
-        <div class="form-grid">
-          <div class="form-field"><label>Ticket price ($)</label><input type="number" id="ev-price-input" placeholder="60" min="0" step="1"></div>
-          <div class="form-field"><label>Wine add-on per person ($)</label><input type="number" id="ev-wine-input" placeholder="25" min="0" step="1"></div>
-        </div>
-        <label class="toggle-row" for="ev-active-input" style="margin-top:0.75rem;max-width:320px">
-          <input type="checkbox" id="ev-active-input" checked>
-          <span class="toggle-label">Active (visible on RSVP page)</span>
-        </label>
-        <div style="display:flex;gap:10px;margin-top:1.25rem;align-items:center">
-          <button class="btn-primary" id="ev-save-btn" onclick="saveEvent()">save event</button>
-          <button class="btn-ghost" onclick="clearEventForm()">clear</button>
-          <span id="ev-save-status" style="font-family:'Crimson Pro',serif;font-size: 13px;letter-spacing:0.1em;color:var(--olive);display:none"></span>
+      </div>
+      <p class="dir-note" style="margin:0.4rem 0 1rem">New events start as drafts. Nothing appears on the site until you press publish, and you can preview the full page first.</p>
+      <div id="event-admin-list"><div class="empty-msg">Loading…</div></div>
+
+      <div id="ev-editor" class="ev-editor" style="display:none">
+        <div class="ev-editor-head"><p class="form-title" id="ev-editor-title" style="margin:0">New event</p><button class="rm-btn" onclick="closeEventEditor()">close</button></div>
+        <div id="ev-custom-note" class="ev-custom-note" style="display:none">This event's page is hand-built in the site code, so only the date, doors, neighborhood, address, prices, capacity and visibility can be changed here.</div>
+
+        <fieldset class="ev-fs"><legend>1. The event</legend>
+          <div class="form-grid">
+            <div class="form-field "><label for="ev-kind">Type</label><select id="ev-kind" data-f onchange="onEventKindChange()"><option value="sitting">Sitting (ticketed dinner)</option><option value="session">Session (free, invite only)</option></select></div>
+            <div class="form-field "><label for="ev-label">Label <span class="ev-hint">shown above the title</span></label><input type="text" id="ev-label" data-f placeholder="Sitting No. 2" ></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field"><label for="ev-subject" id="ev-subject-label">Subject name</label><input type="text" id="ev-subject" data-f placeholder="e.g. Nicole Ko" ></div>
+            <div class="form-field ev-sitting-only"><label for="ev-discipline">Discipline</label><input type="text" id="ev-discipline" data-f placeholder="e.g. Floral Artist" ></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field ev-sitting-only"><label for="ev-studio">Studio or brand <span class="ev-hint">optional</span></label><input type="text" id="ev-studio" data-f placeholder="e.g. Ephemera" ></div>
+            <div class="form-field "><label for="ev-instagram">Instagram <span class="ev-hint">optional</span></label><input type="text" id="ev-instagram" data-f placeholder="@handle, @second_handle" ></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="ev-fs"><legend>2. When and where</legend>
+          <div class="form-grid">
+            <div class="form-field "><label for="ev-date">Date</label><input type="date" id="ev-date" data-f placeholder="" ></div>
+            <div class="form-field "><label for="ev-doors">Doors</label><input type="text" id="ev-doors" data-f placeholder="5:00 pm" ></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field "><label for="ev-end">Ends <span class="ev-hint">optional</span></label><input type="text" id="ev-end" data-f placeholder="9:00 pm" ></div>
+            <div class="form-field "><label for="ev-dress">Dress code <span class="ev-hint">optional</span></label><input type="text" id="ev-dress" data-f placeholder="e.g. Come as you are" ></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field "><label for="ev-location">Neighborhood <span class="ev-hint">public</span></label><input type="text" id="ev-location" data-f placeholder="Bushwick, Brooklyn" ></div>
+            <div class="form-field "><label for="ev-address">Full address <span class="ev-hint">private: only sent in seat confirmations</span></label><input type="text" id="ev-address" data-f placeholder="13 Grattan St, Suite 406, Brooklyn, NY 11206" ></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="ev-fs"><legend>3. Seats and tickets</legend>
+          <div class="form-grid">
+            <div class="form-field ev-sitting-only"><label for="ev-rsvp">RSVP type</label><select id="ev-rsvp" data-f onchange="onEventKindChange()"><option value="paid">Paid tickets (Stripe, comp codes work)</option><option value="free">Free RSVP (no payment)</option></select></div>
+            <div class="form-field ev-session-only"><label>RSVP type</label><p class="ev-static">Invite only: guests need a one-time code, or can request an invite. Make codes with the codes button after saving.</p></div>
+            <div class="form-field "><label for="ev-capacity">Capacity <span class="ev-hint">seats</span></label><input type="number" id="ev-capacity" data-f placeholder="40" min="1" max="1000"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field ev-paid-only"><label for="ev-price">Ticket price ($) <span class="ev-hint">per seat</span></label><input type="number" id="ev-price" data-f placeholder="80" min="0" step="1"></div>
+            <div class="form-field"><label class="toggle-row" for="ev-plus" style="margin-top:1.6rem"><input type="checkbox" id="ev-plus" data-f checked><span class="toggle-label">Guests can bring a +1</span></label></div>
+          </div>
+          <div class="form-grid ev-paid-only">
+            <div class="form-field "><label for="ev-drinks-price">Drinks add-on ($ per person) <span class="ev-hint">leave empty for none</span></label><input type="number" id="ev-drinks-price" data-f placeholder="20" min="0" step="1"></div>
+            <div class="form-field "><label for="ev-drinks-label">Drinks add-on name</label><input type="text" id="ev-drinks-label" data-f placeholder="Bottomless drinks (beer, wine &amp; cocktails)" ></div>
+          </div>
+          <label class="toggle-row" for="ev-active" style="margin-top:0.5rem;max-width:360px"><input type="checkbox" id="ev-active" data-f checked><span class="toggle-label">Visible on the site once published</span></label>
+        </fieldset>
+
+        <fieldset class="ev-fs"><legend>4. The page</legend>
+          <div class="form-grid full"><div class="form-field "><label for="ev-desc">Short description</label><textarea id="ev-desc" data-f rows="3" placeholder="Two or three sentences under the title. What is this Sitting about?"></textarea></div></div>
+          <div class="form-grid full"><div class="form-field "><label for="ev-hero">Main image <span class="ev-hint">a file already on the site, or a full link</span></label><input type="text" id="ev-hero" data-f placeholder="images/artist-profiles/sitting02.jpg or https://..." ></div></div>
+          <div class="form-grid full"><div class="form-field "><label for="ev-table">At the table <span class="ev-hint">what to expect, one per line</span></label><textarea id="ev-table" data-f rows="4" placeholder="One line each, e.g. A classic spread, served family style."></textarea></div></div>
+          <div class="form-grid full"><div class="form-field "><label for="ev-closing">Closing line <span class="ev-hint">optional</span></label><input type="text" id="ev-closing" data-f placeholder="All we ask: show up, look good, and enjoy yourselves." ></div></div>
+          <div class="form-grid full ev-sitting-only"><div class="form-field "><label for="ev-bio">Subject Notes <span class="ev-hint">from the Life History interview</span></label><textarea id="ev-bio" data-f rows="7" placeholder="The Subject in their own words first. Separate paragraphs with a blank line."></textarea></div></div>
+        </fieldset>
+
+        <fieldset class="ev-fs"><legend>5. Findings (menu)</legend>
+          <p class="dir-note" style="margin:0 0 0.75rem">Each course: a label, the dish, optional components, and the story that ties it to the Subject's life (Roots, Passage, Present, Horizon).</p>
+          <div id="ev-menu-list"></div>
+          <button class="btn-ghost" onclick="addCourse()" style="margin-top:0.5rem">+ add course</button>
+        </fieldset>
+
+        <div id="ev-msg" class="ev-msg" style="display:none"></div>
+        <div class="ev-actions">
+          <button class="btn-ghost" id="ev-btn-draft" onclick="saveEventForm(false)">save as draft</button>
+          <button class="btn-ghost" id="ev-btn-preview" onclick="previewEvent()">preview page</button>
+          <button class="btn-primary" id="ev-btn-publish" onclick="saveEventForm(true)">save &amp; publish</button>
         </div>
       </div>
     </div>
@@ -4589,6 +4712,25 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
   </div>
 </div>
 
+<!-- Records: event page preview + Session codes -->
+<div id="ev-preview" class="ev-overlay" onclick="if(event.target===this)closeEventPreview()">
+  <div class="ev-overlay-card ev-preview-card">
+    <div class="ev-overlay-head"><span>Preview: how the page will look in Events</span><button class="rm-btn" onclick="closeEventPreview()">close</button></div>
+    <div id="ev-preview-body" class="ev-preview-body"></div>
+  </div>
+</div>
+<div id="ev-codes" class="ev-overlay" onclick="if(event.target===this)closeCodes()">
+  <div class="ev-overlay-card">
+    <div class="ev-overlay-head"><span id="ev-codes-title">Invite codes</span><button class="rm-btn" onclick="closeCodes()">close</button></div>
+    <p id="ev-codes-sum" class="dir-note" style="margin:0 0 1rem"></p>
+    <div class="ev-codes-bar">
+      <input type="number" id="ev-codes-n" value="30" min="1" max="200" style="width:80px">
+      <button class="btn-primary" id="ev-codes-make" onclick="makeCodes()">make codes</button>
+      <button class="btn-ghost" id="ev-codes-copy" onclick="copyCodes()">copy unused</button>
+    </div>
+    <div id="ev-codes-list" class="ev-codes-list"></div>
+  </div>
+</div>
 <div id="gallery-modal">
   <div class="gm-inner" id="gallery-modal-inner"></div>
 </div>
@@ -5019,11 +5161,405 @@ async function sbPost(path, body) {
 }
 
 // ── LOAD EVENTS FROM SUPABASE ───────────────────────────────────
+// ── EVENT PAGE TEMPLATE (events built in Records > Manage events) ─────────
+// Any published event without a hand-built page (custom_page = false) is drawn
+// here from its database row: masthead, Subject Notes, Findings (menu), and the
+// right RSVP flow (paid / free Sitting, or an invite-only Session with codes).
+let dynamicEvents = [];
+const DYN = {};   // per event id: { ev, comp, used, displayUsed, prevUsed }
+const DYN_DIET = [['veg','Vegetarian'],['vegan','Vegan'],['gf','Gluten-free'],['df','Dairy-free'],['nut','Nut allergy'],['shell','Shellfish allergy'],['kosher','Kosher'],['halal','Halal']];
+const dynEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dynMoney = c => '$' + (Math.round(Number(c) || 0) / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
+function dynDate(ev, withYear) {
+  if (!ev.event_date) return '';
+  const d = new Date(String(ev.event_date).slice(0, 10) + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) + (withYear ? ' · ' + d.getFullYear() : '');
+}
+function dynParas(text) { return String(text || '').split(/\n\s*\n/).map(p => p.trim()).filter(Boolean); }
+function dynLines(text) { return String(text || '').split('\n').map(p => p.trim()).filter(Boolean); }
+function dynIg(ev) {
+  const handles = String(ev.instagram || '').split(/[,\s]+/).map(h => h.replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')).filter(Boolean);
+  if (!handles.length) return '';
+  return '<div class="ed-ig-links" style="margin-top:0.6rem">' + handles.map(h =>
+    `<a href="https://www.instagram.com/${encodeURIComponent(h)}/" target="_blank" rel="noopener" class="ig-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>@${dynEsc(h)}</a>`).join(' ') + '</div>';
+}
+function dynDropdown(title, inner) {
+  return `<details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+    <summary class="dyn-summary"><span>${title}</span><span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span></summary>
+    <div style="padding-bottom:1.75rem"><div class="ed-archive-courses">${inner}</div></div></details>`;
+}
+function dynContent(ev) {
+  let h = '';
+  if (ev.short_desc) h += `<div class="event-desc">${dynParas(ev.short_desc).map(p => `<p>${dynEsc(p)}</p>`).join('')}</div>`;
+  if (ev.hero_image_url) h += `<div style="margin:1.75rem 0;line-height:0"><img loading="lazy" decoding="async" src="${dynEsc(ev.hero_image_url)}" alt="${dynEsc(ev.subject_name || '')}" style="width:100%;height:auto;display:block"></div>`;
+  const table = dynLines(ev.at_the_table);
+  if (table.length || ev.closing_note || ev.dress_code) {
+    h += `<div class="dyn-table-box"><p class="dyn-box-label">At the table</p>` +
+      (table.length ? `<div class="dyn-table-grid">${table.map(l => `<p>${dynEsc(l)}</p>`).join('')}</div>` : '') +
+      (ev.dress_code ? `<p class="dyn-box-foot">Dress: ${dynEsc(ev.dress_code)}</p>` : '') +
+      (ev.closing_note ? `<p class="dyn-box-foot">${dynEsc(ev.closing_note)}</p>` : '') + `</div>`;
+  }
+  const bio = dynParas(ev.bio);
+  if (bio.length) h += dynDropdown('Subject Notes', bio.map(p => `<div><p class="ed-course-body">${dynEsc(p)}</p></div>`).join(''));
+  const menu = Array.isArray(ev.menu) ? ev.menu.filter(c => c && (c.name || c.body)) : [];
+  if (menu.length) h += dynDropdown('Findings (Menu)', menu.map((c, i) =>
+    `<div><span class="ed-course-num">${dynEsc(c.label || ('Course ' + String(i + 1).padStart(2, '0')))}</span>` +
+    (c.name ? `<p class="ed-course-name">${dynEsc(c.name)}</p>` : '') +
+    (c.note ? `<p class="ed-course-note">${dynEsc(c.note)}</p>` : '') +
+    (c.body ? `<p class="ed-course-body">${dynEsc(c.body)}</p>` : '') + `</div>`).join(''));
+  return h;
+}
+function dynContactFields(p, phoneOptional) {
+  const sms = `<label class="sms-consent" for="${p}-sms"><input type="checkbox" id="${p}-sms" checked><span><strong class="sms-lead">Text me event updates</strong><em class="sms-benefit">Day-of details, arrival time, and reminders for events I sign up for.</em>I agree to receive event text messages from Life Thru Food at the number provided, sent by an automated system. Consent is not a condition of purchase. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help. <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms" target="_blank" rel="noopener">Terms</a>.</span></label>`;
+  return `<div class="form-grid">
+      <div class="form-field"><label for="${p}-first">First name</label><input type="text" id="${p}-first" placeholder="First"></div>
+      <div class="form-field"><label for="${p}-last">Last name</label><input type="text" id="${p}-last" placeholder="Last"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label for="${p}-email">Email</label><input type="email" id="${p}-email" placeholder="you@example.com"></div>
+      <div class="form-field"><label for="${p}-phone">Phone${phoneOptional ? ' <span style="font-style:normal;opacity:0.6">(optional)</span>' : ''}</label><input type="tel" id="${p}-phone" placeholder="+1 212 555 0100"></div>
+    </div>${sms}
+    <div class="form-grid">
+      <div class="form-field"><label for="${p}-source">How did you hear about us?</label>
+        <select id="${p}-source"><option value="">—</option><option>Word of mouth</option><option>Instagram</option><option>Newsletter</option><option>Friend referral</option><option>Attended an event</option><option>Press / article</option><option>Other</option></select></div>
+      <div class="form-field"><label for="${p}-instagram">Instagram <span style="font-style:normal;opacity:0.6">(optional)</span></label><input type="text" id="${p}-instagram" placeholder="@handle"></div>
+    </div>`;
+}
+function dynErrBox(id) { return `<div id="${id}" class="dyn-error" style="display:none"></div>`; }
+
+function dynSittingHTML(ev) {
+  const id = ev.id, p = `de${id}r`, paid = ev.rsvp_mode !== 'free';
+  const price = ev.price_cents || 0, drinks = ev.wine_addon_cents || 0;
+  return `<div class="event-block dyn-event" id="dyn-block-${id}" style="margin-top:2rem">
+    <div class="event-masthead"><div class="event-masthead-body">
+      <span class="ev-no">${dynEsc(ev.label || '')} &nbsp;&middot;&nbsp; Life Thru Food</span>
+      <span class="ev-date">${dynEsc(dynDate(ev, true))}</span>
+      <h2>${dynEsc(ev.subject_name || ev.name)}</h2>
+      ${(ev.studio || ev.discipline) ? `<p class="ev-discipline">${ev.studio ? `<em>${dynEsc(ev.studio)}</em>` : ''}${ev.studio && ev.discipline ? ' &nbsp;&middot;&nbsp; ' : ''}${dynEsc(ev.discipline || '')}</p>` : ''}
+      ${dynIg(ev)}
+    </div></div>
+    <div class="event-meta-row">
+      <div class="ev-cell"><span class="ev-cell-label">Doors</span><span class="ev-cell-val">${dynEsc(ev.doors_time || 'TBA')}${ev.end_time ? ' to ' + dynEsc(ev.end_time) : ''}</span></div>
+      <div class="ev-cell"><span class="ev-cell-label">Site</span><span class="ev-cell-val">${dynEsc(ev.location || 'New York City')}</span></div>
+      <div class="ev-cell"><span class="ev-cell-label">Per seat</span><span class="ev-cell-val">${paid ? dynMoney(price) : 'No cost'}</span></div>
+    </div>
+    ${dynContent(ev)}
+    <div id="${p}-toast" class="toast"></div>
+    <div id="${p}-form-wrap">
+      <div class="seats-wrap" style="margin-bottom:1.75rem"><div class="seats-row"><span>Seats remaining</span><strong id="${p}-seats">— of —</strong></div>
+        <div class="seats-track"><div class="seats-fill" id="${p}-fill"></div></div></div>
+      ${paid ? `<div id="${p}-comp-wrap" class="dyn-comp-wrap">
+        <div class="dyn-box-label" style="color:var(--ink-low)">Have a comp code?</div>
+        <div class="gate-row"><input type="text" id="${p}-code" placeholder="enter code" autocomplete="off" onkeydown="if(event.key==='Enter')dynApplyComp(${id})"><button class="btn-ghost" id="${p}-code-btn" onclick="dynApplyComp(${id})">apply &rarr;</button></div>
+        <div id="${p}-code-err" class="gate-error"></div></div>` : ''}
+      <p class="form-title">Claim your seat at ${dynEsc(ev.label || 'this Sitting')}</p>
+      ${dynContactFields(p, false)}
+      <div class="form-grid full" style="margin-bottom:0.25rem">
+        ${ev.plus_one_allowed !== false ? `<div class="form-field">
+          <label class="toggle-row" for="${p}-plus"><input type="checkbox" id="${p}-plus" onchange="dynTotals(${id})"><span class="toggle-label">Bring a +1 ${paid ? `<span class="toggle-price">+${dynMoney(price)}</span>` : ''}</span></label>
+          <div id="${p}-plus-row" style="display:none;padding-left:1.5rem;margin-top:0.75rem"><div class="form-grid" style="margin-bottom:0.5rem">
+            <div class="form-field"><label>+1 first name</label><input type="text" id="${p}-p1-first" placeholder="First"></div>
+            <div class="form-field"><label>+1 last name</label><input type="text" id="${p}-p1-last" placeholder="Last"></div></div></div>
+        </div>` : ''}
+        ${paid && drinks ? `<div class="form-field"><label class="toggle-row" for="${p}-drinks"><input type="checkbox" id="${p}-drinks" onchange="dynTotals(${id})"><span class="toggle-label">${dynEsc(ev.drinks_label || 'Add drinks')} <span class="toggle-price">+${dynMoney(drinks)} / person</span></span></label></div>` : ''}
+      </div>
+      <div class="form-grid full"><div class="form-field"><label>Dietary restrictions</label><div class="diet-grid" style="margin-top:8px">
+        ${DYN_DIET.map(([k, l]) => `<div class="check-row"><input type="checkbox" id="${p}-d-${k}"><label for="${p}-d-${k}">${l}</label></div>`).join('')}
+      </div></div></div>
+      <div class="form-grid full"><div class="form-field"><label for="${p}-notes">Anything else we should know?</label><textarea id="${p}-notes" placeholder="Other dietary needs, accessibility, or notes for us..."></textarea></div></div>
+      <div class="form-grid full" style="margin-bottom:1.75rem"><div class="check-row"><input type="checkbox" id="${p}-notify" checked><label for="${p}-notify">Keep me informed of future Sittings</label></div></div>
+      <div id="${p}-comp-notice" class="dyn-comp-notice" style="display:${paid ? 'none' : 'block'}"><div class="dyn-box-label" style="color:var(--olive)">✓ ${paid ? 'Complimentary admission' : 'No cost to attend'}</div><div>${paid ? 'Your seat is covered. No payment required.' : 'Confirm below to claim your seat.'}</div></div>
+      ${paid ? `<div id="${p}-pay" class="payment-block"><div class="payment-header"><span class="payment-label">Payment</span><span><span class="payment-total" id="${p}-total">${dynMoney(price)}</span> <span class="payment-total-sub" id="${p}-breakdown">1 guest × ${dynMoney(price)}</span></span></div>
+        <p class="payment-note">You'll be redirected to a secure Stripe checkout page to complete your payment. Your seat is held for 30 minutes.</p></div>` : ''}
+      ${dynErrBox(p + '-err')}
+      <button class="btn-primary" id="${p}-submit" onclick="dynSubmitSitting(${id})">${paid ? 'continue to payment &rarr;' : 'confirm your seat &rarr;'}</button>
+    </div>
+    <div id="${p}-done" class="confirmation-view" style="display:none">
+      <div class="dyn-done"><p class="dyn-box-label" style="color:var(--olive)">Seat confirmed</p>
+        <p class="dyn-done-main">We'll see you ${dynEsc(dynDate(ev))}${ev.doors_time ? '. Doors at ' + dynEsc(ev.doors_time) : ''}.</p>
+        <p class="dyn-done-sub">A confirmation with the address is on its way to your inbox.</p></div>
+    </div>
+  </div>`;
+}
+
+function dynSessionHTML(ev) {
+  const id = ev.id, s = `de${id}s`, w = `de${id}w`, plus = ev.plus_one_allowed !== false;
+  return `<div class="event-block dyn-event" id="dyn-block-${id}" style="margin-top:1.5rem">
+    <div class="event-masthead"><div class="event-masthead-body">
+      <span class="ev-no">${dynEsc(ev.label || 'Sessions')} &nbsp;&middot;&nbsp; Life Thru Food</span>
+      <span class="ev-date">${dynEsc(dynDate(ev))}${ev.doors_time ? ' &middot; Doors at ' + dynEsc(ev.doors_time) : ''}</span>
+      <h2 class="dyn-hand">${dynEsc(ev.subject_name || ev.name)}</h2>
+      <p class="ev-discipline">No cost &nbsp;&middot;&nbsp; Request an invite &nbsp;&middot;&nbsp; ${dynEsc(ev.location || 'New York City')}</p>
+      ${dynIg(ev)}
+    </div></div>
+    ${dynContent(ev)}
+    <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+      <div id="${s}-done" class="dyn-done" style="display:none"><p class="dyn-box-label" style="color:var(--olive)">Seat confirmed</p>
+        <p class="dyn-done-main">We'll see you ${dynEsc(dynDate(ev))}${ev.doors_time ? '. Doors at ' + dynEsc(ev.doors_time) : ''}.</p>
+        <p class="dyn-done-sub">A confirmation with the address is on its way to your inbox.</p>
+        <p id="${s}-p1-done" class="dyn-done-sub" style="display:none">Your +1 request is in. We will email you once it is confirmed.</p></div>
+      <div id="${s}-gate">
+        <p class="form-title">Enter your invitation code</p>
+        <p class="dyn-help">You should have received a one-time code with your invitation.</p>
+        <div class="dyn-comp-wrap" style="margin-bottom:0"><div class="gate-row">
+          <input type="text" id="${s}-code" placeholder="enter code" autocomplete="off" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')dynCheckSessionCode(${id})">
+          <button class="btn-ghost" id="${s}-code-btn" onclick="dynCheckSessionCode(${id})">confirm &rarr;</button></div>
+          <div id="${s}-code-err" class="gate-error"></div></div>
+      </div>
+      <div id="${w}-wrap" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
+        <p class="form-title">Request an invite</p>
+        <p class="dyn-help">Don't have a code? Leave your details and we'll reach out if a seat opens up.</p>
+        <div id="${w}-done" class="dyn-done" style="display:none"><p class="dyn-box-label" style="color:var(--olive)">You're on the list</p>
+          <p class="dyn-done-sub">This is a request, not a confirmed seat. We sent a confirmation to your inbox and will be in touch if a seat opens.</p></div>
+        <div id="${w}-form">${dynContactFields(w, true)}${dynErrBox(w + '-err')}
+          <div style="margin-top:1rem"><button class="btn-primary" id="${w}-submit" onclick="dynSubmitInvite(${id})">Request an invite</button></div></div>
+      </div>
+      <div id="${s}-form" style="display:none;margin-top:1.5rem">
+        <p class="form-title">Confirm your seat</p>
+        ${dynContactFields(s, true)}
+        ${plus ? `<div class="sess-plusone"><label class="sess-plusone-toggle" for="${s}-plus"><input type="checkbox" id="${s}-plus" onchange="document.getElementById('${s}-plus-row').style.display=this.checked?'':'none'"><span>Request a +1</span></label>
+          <p class="sess-plusone-note">Seats are limited, so a +1 is a request. We will confirm by email.</p>
+          <div id="${s}-plus-row" style="display:none"><div class="form-grid">
+            <div class="form-field"><label for="${s}-p1-name">+1 full name</label><input type="text" id="${s}-p1-name" placeholder="First and last name" autocomplete="off"></div>
+            <div class="form-field"><label for="${s}-p1-phone">+1 phone</label><input type="tel" id="${s}-p1-phone" placeholder="+1 212 555 0100" autocomplete="off"></div></div></div></div>` : ''}
+        ${dynErrBox(s + '-err')}
+        <div style="margin-top:1rem"><button class="btn-primary" id="${s}-submit" onclick="dynSubmitSessionRSVP(${id})">RSVP</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function dynEventHTML(ev) { return ev.kind === 'session' ? dynSessionHTML(ev) : dynSittingHTML(ev); }
+
+function renderDynamicEvents() {
+  const sessBox = document.getElementById('dyn-sessions'), sitBox = document.getElementById('dyn-sittings');
+  if (!sessBox || !sitBox) return;
+  const sessions = dynamicEvents.filter(e => e.kind === 'session');
+  const sittings = dynamicEvents.filter(e => e.kind !== 'session');
+  sessBox.innerHTML = sessions.map(dynEventHTML).join('');
+  sitBox.innerHTML = sittings.map(dynEventHTML).join('');
+  dynamicEvents.forEach(ev => {
+    const st = DYN[ev.id] || (DYN[ev.id] = { comp: null, used: 0, displayUsed: -1, prevUsed: 0 });
+    st.ev = ev; st.used = ev.seats_booked || 0;
+    if (ev.kind !== 'session') { dynSeats(ev.id); dynTotals(ev.id); }
+  });
+  if (sittings.length) { const nu = document.getElementById('no-upcoming-events'); if (nu) nu.style.display = 'none'; }
+  // Back from Stripe checkout: show that event's confirmation
+  if (window.__dynPaidId && DYN[window.__dynPaidId]) {
+    const p = `de${window.__dynPaidId}r`;
+    const fw = document.getElementById(p + '-form-wrap'), cv = document.getElementById(p + '-done');
+    if (fw) fw.style.display = 'none'; if (cv) { cv.style.display = 'block'; cv.scrollIntoView({ block: 'center' }); }
+    window.__dynPaidId = null;
+  }
+}
+
+// Seat counter: shows at least 70% full, counts down with real sales, resets at 3 left
+function dynSeats(id) {
+  const st = DYN[id], ev = st.ev, p = `de${id}r`;
+  const total = ev.total_capacity || 0;
+  const remEl = document.getElementById(p + '-seats'), fillEl = document.getElementById(p + '-fill');
+  if (!remEl) return;
+  if (total <= 0) { remEl.textContent = '— of —'; if (fillEl) fillEl.style.width = '0%'; return; }
+  const floor = Math.max(st.used, Math.round(0.7 * total));
+  if (total - floor <= 3 || st.displayUsed < 0) st.displayUsed = floor;
+  else { const delta = st.used - st.prevUsed; if (delta > 0) st.displayUsed += delta; if (total - st.displayUsed <= 3) st.displayUsed = floor; }
+  st.prevUsed = st.used;
+  const shown = Math.min(st.displayUsed, total);
+  remEl.textContent = (total - shown) + ' of ' + total;
+  if (fillEl) fillEl.style.width = (shown / total * 100) + '%';
+}
+async function dynRefreshSeats(id) {
+  try { const r = await sbGet(`events?select=seats_booked&id=eq.${id}`); if (r && r[0]) { DYN[id].used = r[0].seats_booked || 0; dynSeats(id); } } catch (e) {}
+}
+
+function dynTotals(id) {
+  const st = DYN[id], ev = st.ev, p = `de${id}r`;
+  const plus = !!document.getElementById(p + '-plus')?.checked;
+  const row = document.getElementById(p + '-plus-row'); if (row) row.style.display = plus ? 'block' : 'none';
+  if (ev.rsvp_mode === 'free') return;
+  const price = ev.price_cents || 0, drinkP = ev.wine_addon_cents || 0;
+  const drinks = !!document.getElementById(p + '-drinks')?.checked;
+  const n = plus ? 2 : 1;
+  const pct = st.comp ? (st.comp.discount_percent || 100) : 0;
+  const mine = pct ? Math.round(price * (1 - pct / 100)) : price;
+  const total = mine + (plus ? price : 0) + (drinks ? drinkP * n : 0);
+  const free = pct === 100 && !plus && !drinks;
+  document.getElementById(p + '-comp-notice').style.display = free ? 'block' : 'none';
+  document.getElementById(p + '-pay').style.display = free ? 'none' : '';
+  document.getElementById(p + '-submit').innerHTML = free ? 'confirm your seat &rarr;' : 'continue to payment &rarr;';
+  const parts = [pct ? `1 ticket × ${dynMoney(mine)} (${pct}% off)` : `${plus ? 2 : 1} guest${plus ? 's' : ''} × ${dynMoney(price)}`];
+  if (pct && plus) parts.push('+1 × ' + dynMoney(price));
+  if (drinks) parts.push(`drinks × ${n} × ${dynMoney(drinkP)}`);
+  document.getElementById(p + '-total').textContent = dynMoney(total);
+  document.getElementById(p + '-breakdown').textContent = parts.join(' + ');
+}
+
+async function dynApplyComp(id) {
+  const p = `de${id}r`, st = DYN[id];
+  const val = document.getElementById(p + '-code').value.trim();
+  const err = document.getElementById(p + '-code-err'), btn = document.getElementById(p + '-code-btn');
+  if (!val) return;
+  err.textContent = ''; err.classList.remove('visible'); btn.disabled = true; btn.textContent = 'checking…';
+  try {
+    const comp = await lookupCompCode(val);
+    if (!comp || (comp.event_id && String(comp.event_id) !== String(id))) {
+      err.textContent = comp ? 'That code is for a different event.' : 'That code wasn’t found or has already been used. Double-check and try again.';
+      err.classList.add('visible'); btn.disabled = false; btn.innerHTML = 'apply &rarr;'; return;
+    }
+    st.comp = comp;
+    const pct = comp.discount_percent || 100;
+    document.getElementById(p + '-comp-wrap').innerHTML = `<div class="gate-success-banner"><div><div class="gsb-label">✓ ${pct === 100 ? 'Comp code applied' : pct + '% discount applied'}</div><div class="gsb-msg">${pct === 100 ? 'Your ticket is complimentary.' : 'Discount applied to your ticket.'}</div></div></div>`;
+    dynTotals(id);
+  } catch (e) {
+    err.textContent = 'Something went wrong. Check your connection and try again.'; err.classList.add('visible');
+    btn.disabled = false; btn.innerHTML = 'apply &rarr;';
+  }
+}
+
+function dynVal(id) { return (document.getElementById(id)?.value || '').trim(); }
+function dynShowErr(id, html) { const e = document.getElementById(id); e.innerHTML = html; e.style.display = 'block'; e.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+async function dynSubmitSitting(id) {
+  const st = DYN[id], ev = st.ev, p = `de${id}r`;
+  const first = dynVal(p + '-first'), last = dynVal(p + '-last'), email = dynVal(p + '-email'), phone = dynVal(p + '-phone');
+  const source = dynVal(p + '-source'), instagram = dynVal(p + '-instagram') || null;
+  const plus = !!document.getElementById(p + '-plus')?.checked, drinks = !!document.getElementById(p + '-drinks')?.checked;
+  const p1 = plus ? `${dynVal(p + '-p1-first')} ${dynVal(p + '-p1-last')}`.trim() : '';
+  const n = plus ? 2 : 1;
+  const missing = [];
+  if (!first || !last) missing.push('Full name');
+  if (!email || !email.includes('@')) missing.push('Valid email address');
+  if (!phone) missing.push('Phone number');
+  if (!source) missing.push('How you heard about us');
+  if (plus && !p1) missing.push('Your +1’s name');
+  if (missing.length) return dynShowErr(p + '-err', 'Please complete the following before continuing:<br>' + missing.map(m => '&nbsp;· ' + m).join('<br>'));
+  document.getElementById(p + '-err').style.display = 'none';
+  logSmsConsent(p, `rsvp-${ev.slug || 'event-' + id}`);
+  await dynRefreshSeats(id);
+  if (ev.total_capacity > 0 && st.used + n > ev.total_capacity) return dynShowErr(p + '-err', 'Not enough seats remaining for your party size.');
+
+  const btn = document.getElementById(p + '-submit');
+  btn.disabled = true; btn.textContent = 'processing…';
+  // Notes ride along with dietary needs so they reach the guest list and the checkout
+  const notes = dynVal(p + '-notes');
+  const dietary = [...DYN_DIET.filter(([k]) => document.getElementById(`${p}-d-${k}`)?.checked).map(([, l]) => l), notes ? 'Note: ' + notes : ''].filter(Boolean).join(', ') || null;
+  const base = { source: source || null, event_id: id, event_name: ev.name, email, phone, dietary_restrictions: dietary, instagram };
+  const notify = () => { if (document.getElementById(p + '-notify')?.checked) fetch(`${FN_URL}/add-to-list`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ first_name: first, last_name: last, email, phone, instagram, source: `rsvp-${ev.slug || 'event-' + id}` }) }).catch(() => {}); };
+  const pct = st.comp ? (st.comp.discount_percent || 100) : 0;
+  const freePath = ev.rsvp_mode === 'free' || (pct === 100 && !plus && !drinks);
+
+  try {
+    if (freePath) {
+      await sbPost('guests', { ...base, full_name: `${first} ${last}`, party_size: 1, payment_status: 'comp' });
+      if (plus) await sbPost('guests', { ...base, full_name: p1, party_size: 1, payment_status: 'comp', instagram: null });
+      if (st.comp) await redeemCompCode(st.comp.id, email, st.comp.reusable);
+      await sendCompConfirmation({ eventId: id, fullName: `${first} ${last}`, email, eventName: ev.name, eventDate: String(ev.event_date).slice(0, 10), eventTime: ev.doors_time || '', partySize: n });
+      notify();
+      document.getElementById(p + '-form-wrap').style.display = 'none';
+      document.getElementById(p + '-done').style.display = 'block';
+      dynRefreshSeats(id);
+      return;
+    }
+    const price = ev.price_cents || 0;
+    const unitPrice = pct ? Math.round(price * (1 - pct / 100)) : price;
+    const res = await fetch(`${FN_URL}/stripe-checkout`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventId: id, eventName: ev.name, eventDate: String(ev.event_date).slice(0, 10), eventTime: ev.doors_time || '', fullName: `${first} ${last}`, email, phone,
+        partySize: n, plusOne: plus, unitPrice, compCodeId: st.comp ? st.comp.id : null, drinkAddon: drinks, drinkAddonPlusOne: drinks && plus, drinkPrice: ev.wine_addon_cents || 0, source, dietary: dietary || '' }) });
+    const data = await res.json();
+    if (!data.url) throw new Error(data.error || 'No checkout URL returned');
+    await sbPost('guests', { ...base, full_name: `${first} ${last}`, party_size: n, payment_status: 'pending', stripe_session_id: data.session_id || null });
+    if (st.comp) await redeemCompCode(st.comp.id, email, st.comp.reusable).catch(() => {});
+    notify();
+    sessionStorage.setItem('ltf_last_event', 'dyn:' + id);
+    window.location.href = data.url;
+  } catch (err) {
+    dynShowErr(p + '-err', 'Could not complete your RSVP: ' + dynEsc(err.message || 'unknown error') + '. Please try again or email info@lifethrufood.com.');
+    btn.disabled = false; btn.innerHTML = freePath ? 'confirm your seat &rarr;' : 'continue to payment &rarr;';
+  }
+}
+
+// ── Sessions built in Records ──
+async function dynCheckSessionCode(id) {
+  const st = DYN[id], ev = st.ev, s = `de${id}s`;
+  const raw = dynVal(s + '-code').toUpperCase();
+  const err = document.getElementById(s + '-code-err'), btn = document.getElementById(s + '-code-btn');
+  err.textContent = ''; err.classList.remove('visible');
+  if (!raw) { err.textContent = 'Please enter your invitation code.'; err.classList.add('visible'); return; }
+  btn.disabled = true; btn.textContent = 'checking…';
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/check_session_code`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: raw, p_session_id: ev.slug }) });
+    const status = r.ok ? await r.json() : 'invalid';
+    if (status === 'invalid') err.textContent = 'Code not recognised. Check your invitation and try again.';
+    else if (status === 'used') err.textContent = 'This code has already been used. If we approved your invite request, your seat is already confirmed: check your email for the details.';
+    else if (!(await sessionHasRoom(ev.slug))) err.textContent = SESSION_FULL_MSG;
+    else {
+      st.code = raw;
+      document.getElementById(s + '-gate').style.display = 'none';
+      document.getElementById(`de${id}w-wrap`).style.display = 'none';
+      document.getElementById(s + '-form').style.display = '';
+      return;
+    }
+    err.classList.add('visible');
+  } catch (e) { err.textContent = 'Something went wrong. Please try again.'; err.classList.add('visible'); }
+  btn.disabled = false; btn.innerHTML = 'confirm &rarr;';
+}
+
+async function dynSubmitSessionRSVP(id) {
+  const st = DYN[id], ev = st.ev, s = `de${id}s`;
+  const first = dynVal(s + '-first'), last = dynVal(s + '-last'), email = dynVal(s + '-email'), phone = dynVal(s + '-phone');
+  const ig = dynVal(s + '-instagram'), src = dynVal(s + '-source');
+  const wantsP1 = !!document.getElementById(s + '-plus')?.checked;
+  const p1Name = dynVal(s + '-p1-name').replace(/\s+/g, ' '), p1Phone = dynVal(s + '-p1-phone');
+  if (!first || !last || !email) return dynShowErr(s + '-err', 'Please fill in your name and email.');
+  if (wantsP1 && (!p1Name || !p1Phone)) return dynShowErr(s + '-err', 'Please add your +1’s name and phone number, or untick the +1 request.');
+  document.getElementById(s + '-err').style.display = 'none';
+  logSmsConsent(s, `${ev.slug}-rsvp`);
+  const btn = document.getElementById(s + '-submit'); btn.disabled = true;
+  try {
+    if (!(await sessionHasRoom(ev.slug))) { dynShowErr(s + '-err', SESSION_FULL_MSG); btn.disabled = false; return; }
+    const rd = await fetch(`${SUPABASE_URL}/rest/v1/rpc/redeem_session_code`, { method: 'POST', headers: { ...SB_HEADERS, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: st.code, p_session_id: ev.slug, p_email: email }) });
+    if (!rd.ok || (await rd.json()) !== true) { dynShowErr(s + '-err', 'This code has already been used. If you think that is a mistake, email us at info@lifethrufood.com.'); btn.disabled = false; return; }
+    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: ev.slug, notes: `code:${st.code}` + (wantsP1 ? ` | +1 requested: ${p1Name} (${p1Phone})` : '') });
+    if (wantsP1) await sbPost('waitlist', { first_name: p1Name.split(' ')[0] || '', last_name: p1Name.split(' ').slice(1).join(' '), email, phone: p1Phone, list_type: `${ev.slug}-plus-one-request`, notes: `requested by ${first} ${last} (${email}) | code:${st.code}` });
+    sendFormConfirmation('session_seat', { session_id: ev.slug, first_name: first, last_name: last, email, phone, instagram: ig, code: st.code, plus_one_name: wantsP1 ? p1Name : '', plus_one_phone: wantsP1 ? p1Phone : '' });
+    document.getElementById(s + '-form').style.display = 'none';
+    document.getElementById(s + '-done').style.display = '';
+    document.getElementById(s + '-p1-done').style.display = wantsP1 ? '' : 'none';
+  } catch (e) {
+    btn.disabled = false;
+    dynShowErr(s + '-err', 'Something went wrong. Please try again or email us at info@lifethrufood.com.');
+  }
+}
+
+async function dynSubmitInvite(id) {
+  const ev = DYN[id].ev, w = `de${id}w`;
+  const first = dynVal(w + '-first'), last = dynVal(w + '-last'), email = dynVal(w + '-email'), phone = dynVal(w + '-phone');
+  const ig = dynVal(w + '-instagram'), src = dynVal(w + '-source');
+  if (!first || !last || !email) return dynShowErr(w + '-err', 'Please fill in your name and email.');
+  document.getElementById(w + '-err').style.display = 'none';
+  logSmsConsent(w, `${ev.slug}-invite-request`);
+  const btn = document.getElementById(w + '-submit'); btn.disabled = true;
+  try {
+    await sbPost('waitlist', { first_name: first, last_name: last, email, phone: phone || null, instagram: ig || null, source: src || null, list_type: `${ev.slug}-waitlist` });
+    sendFormConfirmation('session_invite_request', { session_id: ev.slug, first_name: first, last_name: last, email, phone, instagram: ig, source: src });
+    document.getElementById(w + '-form').style.display = 'none';
+    document.getElementById(w + '-done').style.display = '';
+  } catch (e) {
+    btn.disabled = false;
+    dynShowErr(w + '-err', 'Something went wrong. Please try again or email us at info@lifethrufood.com.');
+  }
+}
+
 async function loadEvents() {
   try {
     const today = new Date().toISOString().split('T')[0];
     const data = await sbGet(`events?event_date=gte.${today}&select=*&order=event_date.asc`);
-    activeEvents = Array.isArray(data) ? data : [];
+    const all = (Array.isArray(data) ? data : []).filter(e => (e.status || 'published') === 'published' && e.is_active !== false);
+    // Hand-built Sitting pages below match events by date, so they only see their own rows.
+    // Everything built in Records gets drawn from the template instead.
+    activeEvents = all.filter(e => e.custom_page !== false && (e.kind || 'sitting') === 'sitting');
+    dynamicEvents = all.filter(e => e.custom_page === false);
+    renderDynamicEvents();
 
     renderEventSelector();
 
@@ -5210,6 +5746,7 @@ function checkAdminPassword() {
     loadApprovals();
     loadDirectory();
     loadLiveCapacity();
+    loadAdminEvents();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -5968,7 +6505,7 @@ async function sendCompConfirmation({ fullName, email, eventName, eventDate, eve
   try {
     console.log('sendCompConfirmation called:', { fullName, email, eventName });
     // Match the event so the email includes its address (server also looks it up by id/name)
-    const ev = (typeof activeEvents !== 'undefined' && activeEvents || []).find(e => (eventId && e.id == eventId) || (eventName && e.name === eventName)) || {};
+    const ev = [...(typeof activeEvents !== 'undefined' && activeEvents || []), ...(typeof dynamicEvents !== 'undefined' ? dynamicEvents : [])].find(e => (eventId && e.id == eventId) || (eventName && e.name === eventName)) || {};
     const res = await fetch(`${FN_URL}/send-confirmation`, {
       method: 'POST',
       headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
@@ -7308,7 +7845,7 @@ function exportDirectoryCSV() {
 
 let approvalsKey = null;
 let approvalsData = null;
-const APPROVALS_SESSION = 'sessions-01';
+const APPROVALS_SESSION = 'all';   // every Session, including ones built in Records
 
 function toggleApprovals() {
   const panel = document.getElementById('approvals-panel');
@@ -7324,6 +7861,7 @@ function setApprovalsKey() {
   loadApprovals();
   loadDirectory();
   loadLiveCapacity();
+  loadAdminEvents();
 }
 async function approvalsCall(body) {
   const r = await fetch(`${FN_URL}/session-approvals`, {
@@ -7380,7 +7918,11 @@ function renderApprovals() {
       : '';
   }
   const bankEl = document.getElementById('ap-bank');
-  bankEl.textContent = `Approval codes: ${b.available ?? 0} available of ${b.total ?? 0}`;
+  const sessMap = d.sessions || {};
+  const multi = Object.keys(sessMap).length > 1;
+  bankEl.textContent = multi
+    ? 'Approval codes left: ' + Object.values(sessMap).map(x => `${x.label} ${x.available} of ${x.total}`).join(' \u00b7 ')
+    : `Approval codes: ${b.available ?? 0} available of ${b.total ?? 0}`;
   bankEl.classList.toggle('ap-bank-low', (b.available ?? 0) < 5);
 
   const pending = pendInv.length + pendP1.length;
@@ -7392,8 +7934,10 @@ function renderApprovals() {
   const card = (r, kind) => {
     const name = apEsc(`${r.first_name} ${r.last_name}`.trim());
     const guest = kind === 'p1' ? apEsc((String(r.notes || '').match(/requested by ([^(|]+)/) || [])[1] || r.email) : '';
+    const sid = String(r.list_type).replace(/-(waitlist|plus-one-request)$/, '');
+    const sessTag = multi && sessMap[sid] ? `<div class="ap-sub" style="text-transform:uppercase;letter-spacing:0.12em">${apEsc(sessMap[sid].label)}</div>` : '';
     return `<div class="ap-card">
-      <div class="ap-who">
+      <div class="ap-who">${sessTag}
         <div class="ap-name">${name}${kind === 'p1' ? ` <span class="ap-sub">+1 for ${guest.trim()}</span>` : ''}</div>
         <div class="ap-meta">${[kind === 'p1' ? '' : apEsc(r.email), apEsc(r.phone), apEsc(r.instagram), kind === 'p1' ? '' : apEsc(r.source), apDate(r.created_at)].filter(Boolean).join(' · ')}</div>
       </div>
@@ -7507,6 +8051,13 @@ function exportNotifyCSV() {
 }
 
 // ── ADMIN EVENTS ─────────────────────────────────────────────────
+// ── MANAGE EVENTS (Records) ─────────────────────────────────────
+// Every Sitting and Session, drafts included. New events get a full page from the
+// template above; nothing goes live until Publish is pressed.
+let evEditing = null;      // event row being edited (null = new)
+let evMenu = [];           // menu courses in the editor
+const EV_CUSTOM_EDITABLE = ['ev-date', 'ev-doors', 'ev-location', 'ev-address', 'ev-price', 'ev-drinks-price', 'ev-capacity', 'ev-active'];
+
 function toggleEventAdmin() {
   const panel = document.getElementById('event-admin-panel');
   const icon = document.getElementById('ev-toggle-icon');
@@ -7514,127 +8065,242 @@ function toggleEventAdmin() {
   icon.textContent = open ? '−' : '+';
   if (open) loadAdminEvents();
 }
-
-async function loadAdminEvents() {
-  try {
-    adminEvents = await sbGet('events?select=*&order=event_date.asc');
-    renderAdminEvents();
-  } catch(e) { console.warn('Could not load admin events:', e); }
+function evMsg(text, kind) {
+  const el = document.getElementById('ev-msg');
+  if (!el) return;
+  el.textContent = text || ''; el.className = 'ev-msg' + (kind ? ' ev-msg-' + kind : '');
+  el.style.display = text ? '' : 'none';
 }
-
+async function loadAdminEvents() {
+  const list = document.getElementById('event-admin-list');
+  try {
+    adminEvents = (await approvalsCall({ action: 'events_list' })).events || [];
+    renderAdminEvents();
+  } catch (e) {
+    list.innerHTML = `<div class="ap-error">${e.code === 401 ? 'Enter the approvals key (Sessions approvals section) to manage events.' : 'Could not load events: ' + dynEsc(e.message)}</div>`;
+  }
+}
+function evStatus(ev) {
+  const today = new Date().toISOString().slice(0, 10);
+  const past = ev.event_date && String(ev.event_date).slice(0, 10) < today;
+  if (ev.status === 'draft') return ['Draft', 'ev-st-draft'];
+  if (ev.is_active === false) return ['Hidden', 'ev-st-hidden'];
+  if (past) return ['Past', 'ev-st-past'];
+  return ['Live', 'ev-st-live'];
+}
 function renderAdminEvents() {
   const el = document.getElementById('event-admin-list');
-  if (!el) return;
-  if (!adminEvents.length) { el.innerHTML = '<p style="font-size:0.9rem;color:var(--ink-mid);font-style:normal;padding:0.5rem 0">No events yet.</p>'; return; }
-  el.innerHTML = adminEvents.map(ev => {
-    const d = ev.event_date ? new Date(ev.event_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'No date';
-    const price = ev.price_cents ? `$${ev.price_cents/100}` : '—';
-    const rem = (ev.total_capacity || 0) - (ev.seats_booked || 0);
-    const statusColor = ev.is_active ? 'var(--success)' : 'var(--ink-low)';
-    return `<div class="sp-admin-row">
-      <div style="flex:1">
-        <div style="font-style:normal;color:var(--ink)">${ev.name}</div>
-        <div style="font-family:'Crimson Pro',serif;font-size: 13px;color:var(--ink-low);margin-top:3px;letter-spacing:0.06em">${d} &middot; ${ev.location||'No location'} &middot; ${price}/person &middot; ${rem}/${ev.total_capacity||0} seats &middot; <span style="color:${statusColor}">${ev.is_active?'active':'inactive'}</span></div>
+  if (!adminEvents.length) { el.innerHTML = '<div class="empty-msg">No events yet. Start one with New Sitting or New Session.</div>'; return; }
+  const today = new Date().toISOString().slice(0, 10);
+  const groups = [
+    ['Drafts', adminEvents.filter(e => e.status === 'draft')],
+    ['Upcoming', adminEvents.filter(e => e.status !== 'draft' && (!e.event_date || String(e.event_date).slice(0, 10) >= today)).reverse()],
+    ['Past', adminEvents.filter(e => e.status !== 'draft' && e.event_date && String(e.event_date).slice(0, 10) < today)],
+  ];
+  el.innerHTML = groups.filter(([, rows]) => rows.length).map(([title, rows]) => `<div class="ev-group-h">${title} <span>(${rows.length})</span></div>` + rows.map(ev => {
+    const [st, cls] = evStatus(ev);
+    const isSession = ev.kind === 'session';
+    const d = ev.event_date ? new Date(String(ev.event_date).slice(0, 10) + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No date';
+    const price = isSession ? 'Invite only' : ev.rsvp_mode === 'free' ? 'Free' : ev.price_cents ? dynMoney(ev.price_cents) + ' / seat' : 'No price';
+    const seats = `${ev.taken || 0} of ${ev.total_capacity > 0 ? ev.total_capacity : '∞'} seats`;
+    const codes = isSession && ev.codes ? ` &middot; ${ev.codes.manual_unused} of ${ev.codes.manual} codes unused` : '';
+    const needs = ev.status === 'draft' && ev.problems?.length ? `<div class="ev-needs">To publish, add: ${dynEsc(ev.problems.join(', '))}</div>` : '';
+    return `<div class="ev-row">
+      <div class="ev-row-main">
+        <div class="ev-row-name">${dynEsc(ev.name)} <span class="pill ${isSession ? 'dir-pill-session' : 'sand'}">${isSession ? 'Session' : 'Sitting'}</span> <span class="ev-st ${cls}">${st}</span>${ev.custom_page ? ' <span class="ev-hand" title="This page is hand-built in the site code">hand-built page</span>' : ''}</div>
+        <div class="ev-row-meta">${d} &middot; ${dynEsc(ev.location || 'No neighborhood')} &middot; ${price} &middot; ${seats}${codes}</div>${needs}
       </div>
-      <button class="rm-btn" onclick="editEvent('${ev.id}')">edit</button>
-      <button class="rm-btn" onclick="toggleEventActive('${ev.id}',${!ev.is_active})">${ev.is_active?'deactivate':'activate'}</button>
+      <div class="ev-row-actions">
+        <button class="rm-btn" onclick="editEvent('${ev.id}')">edit</button>
+        ${ev.custom_page ? '' : `<button class="rm-btn" onclick="previewEvent('${ev.id}')">preview</button>`}
+        ${isSession && ev.slug ? `<button class="rm-btn" onclick="openCodes('${ev.slug}')">codes</button>` : ''}
+        ${ev.custom_page
+          ? `<button class="rm-btn" onclick="toggleEventActive('${ev.id}', ${ev.is_active === false})">${ev.is_active === false ? 'show' : 'hide'}</button>`
+          : ev.status === 'draft'
+            ? `<button class="rm-btn ev-pub" onclick="setEventStatus('${ev.id}','published')">publish</button>`
+            : `<button class="rm-btn" onclick="setEventStatus('${ev.id}','draft')">unpublish</button>`}
+      </div>
     </div>`;
-  }).join('');
+  }).join('')).join('');
 }
 
+// ── Editor ──
+function newEvent(kind) {
+  evEditing = null;
+  evMenu = kind === 'session' ? [] : [{ label: 'Course 01' }, { label: 'Course 02' }, { label: 'Course 03' }, { label: 'Dessert' }];
+  fillEventForm({ kind, rsvp_mode: kind === 'session' ? 'invite' : 'paid', plus_one_allowed: true, is_active: true, doors_time: kind === 'session' ? '3:00 pm' : '5:00 pm' });
+}
 function editEvent(id) {
   const ev = adminEvents.find(e => String(e.id) === String(id));
   if (!ev) return;
-  document.getElementById('ev-edit-id').value = ev.id;
-  document.getElementById('ev-name-input').value = ev.name || '';
-  document.getElementById('ev-location-input').value = ev.location || '';
-  document.getElementById('ev-date-input').value = ev.event_date ? new Date(ev.event_date).toISOString().slice(0,16) : '';
-  document.getElementById('ev-capacity-input').value = ev.total_capacity || '';
-  document.getElementById('ev-price-input').value = ev.price_cents ? ev.price_cents/100 : '';
-  document.getElementById('ev-wine-input').value = ev.wine_addon_cents ? ev.wine_addon_cents/100 : '';
-  document.getElementById('ev-active-input').checked = ev.is_active !== false;
-  document.getElementById('event-form-title').textContent = 'Edit event';
-  document.getElementById('event-admin-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  evEditing = ev;
+  evMenu = Array.isArray(ev.menu) ? ev.menu.map(c => ({ ...c })) : [];
+  fillEventForm(ev);
 }
-
-function clearEventForm() {
-  document.getElementById('ev-edit-id').value = '';
-  ['ev-name-input','ev-location-input','ev-date-input','ev-capacity-input','ev-price-input','ev-wine-input'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('ev-active-input').checked = true;
-  document.getElementById('event-form-title').textContent = 'New event';
+function setVal(id, v) { const el = document.getElementById(id); if (!el) return; if (el.type === 'checkbox') el.checked = !!v; else el.value = v == null ? '' : v; }
+function fillEventForm(ev) {
+  const ed = document.getElementById('ev-editor');
+  ed.style.display = '';
+  evMsg('');
+  setVal('ev-kind', ev.kind || 'sitting');
+  setVal('ev-label', ev.label); setVal('ev-subject', ev.subject_name || (ev.custom_page ? ev.name : ''));
+  setVal('ev-discipline', ev.discipline); setVal('ev-studio', ev.studio); setVal('ev-instagram', ev.instagram);
+  setVal('ev-date', ev.event_date ? String(ev.event_date).slice(0, 10) : ''); setVal('ev-doors', ev.doors_time); setVal('ev-end', ev.end_time);
+  setVal('ev-location', ev.location); setVal('ev-address', ev.address); setVal('ev-dress', ev.dress_code);
+  setVal('ev-rsvp', ev.rsvp_mode === 'free' ? 'free' : 'paid');
+  setVal('ev-price', ev.price_cents ? ev.price_cents / 100 : ''); setVal('ev-capacity', ev.total_capacity > 0 ? ev.total_capacity : '');
+  setVal('ev-plus', ev.plus_one_allowed !== false); setVal('ev-drinks-price', ev.wine_addon_cents ? ev.wine_addon_cents / 100 : ''); setVal('ev-drinks-label', ev.drinks_label);
+  setVal('ev-desc', ev.short_desc); setVal('ev-hero', ev.hero_image_url); setVal('ev-table', ev.at_the_table); setVal('ev-closing', ev.closing_note); setVal('ev-bio', ev.bio);
+  setVal('ev-active', ev.is_active !== false);
+  const custom = !!ev.custom_page;
+  document.querySelectorAll('#ev-editor [data-f]').forEach(inp => { inp.disabled = custom && !EV_CUSTOM_EDITABLE.includes(inp.id); });
+  document.getElementById('ev-custom-note').style.display = custom ? '' : 'none';
+  document.getElementById('ev-editor-title').textContent = evEditing ? 'Edit: ' + (evEditing.name || 'event') : (ev.kind === 'session' ? 'New Session' : 'New Sitting');
+  const live = evEditing && evEditing.status === 'published';
+  document.getElementById('ev-btn-draft').textContent = custom ? 'save changes' : live ? 'save & unpublish' : 'save as draft';
+  document.getElementById('ev-btn-publish').textContent = live ? 'save changes' : 'save & publish';
+  document.getElementById('ev-btn-publish').style.display = custom ? 'none' : '';
+  document.getElementById('ev-btn-preview').style.display = custom ? 'none' : '';
+  onEventKindChange();
+  renderMenuEditor();
+  ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+function onEventKindChange() {
+  const session = document.getElementById('ev-kind').value === 'session';
+  document.querySelectorAll('#ev-editor .ev-sitting-only').forEach(el => el.style.display = session ? 'none' : '');
+  document.querySelectorAll('#ev-editor .ev-session-only').forEach(el => el.style.display = session ? '' : 'none');
+  document.getElementById('ev-subject-label').textContent = session ? 'Session title (e.g. Friendsgiving)' : 'Subject name';
+  const paid = document.getElementById('ev-rsvp').value === 'paid';
+  document.querySelectorAll('#ev-editor .ev-paid-only').forEach(el => el.style.display = (!session && paid) ? '' : 'none');
+}
+function closeEventEditor() { document.getElementById('ev-editor').style.display = 'none'; evEditing = null; }
 
-async function saveEvent() {
-  const id = document.getElementById('ev-edit-id').value;
-  const name = document.getElementById('ev-name-input').value.trim();
-  const location = document.getElementById('ev-location-input').value.trim();
-  const dateVal = document.getElementById('ev-date-input').value;
-  const capacity = parseInt(document.getElementById('ev-capacity-input').value);
-  const price = parseFloat(document.getElementById('ev-price-input').value);
-  const wine = parseFloat(document.getElementById('ev-wine-input').value);
-  const is_active = document.getElementById('ev-active-input').checked;
+function renderMenuEditor() {
+  const box = document.getElementById('ev-menu-list');
+  const disabled = evEditing && evEditing.custom_page ? 'disabled' : '';
+  box.innerHTML = evMenu.length ? evMenu.map((c, i) => `<div class="ev-course">
+      <div class="ev-course-top">
+        <input type="text" value="${dynEsc(c.label || '')}" placeholder="Course 0${i + 1}" oninput="evMenu[${i}].label=this.value" ${disabled} style="max-width:150px">
+        <input type="text" value="${dynEsc(c.name || '')}" placeholder="Dish name" oninput="evMenu[${i}].name=this.value" ${disabled}>
+        <span class="ev-course-btns">
+          <button class="rm-btn" onclick="moveCourse(${i},-1)" ${i === 0 || disabled ? 'disabled' : ''} aria-label="Move up">&uarr;</button>
+          <button class="rm-btn" onclick="moveCourse(${i},1)" ${i === evMenu.length - 1 || disabled ? 'disabled' : ''} aria-label="Move down">&darr;</button>
+          <button class="rm-btn" onclick="removeCourse(${i})" ${disabled} aria-label="Remove course">remove</button>
+        </span>
+      </div>
+      <input type="text" value="${dynEsc(c.note || '')}" placeholder="Components or note (optional)" oninput="evMenu[${i}].note=this.value" ${disabled}>
+      <textarea placeholder="The story behind this course: how it connects to the Subject's life" oninput="evMenu[${i}].body=this.value" ${disabled}>${dynEsc(c.body || '')}</textarea>
+    </div>`).join('') : '<div class="empty-msg" style="padding:0.5rem 0">No courses yet.</div>';
+}
+function addCourse() { evMenu.push({ label: 'Course ' + String(evMenu.length + 1).padStart(2, '0') }); renderMenuEditor(); }
+function removeCourse(i) { evMenu.splice(i, 1); renderMenuEditor(); }
+function moveCourse(i, d) { const j = i + d; if (j < 0 || j >= evMenu.length) return; [evMenu[i], evMenu[j]] = [evMenu[j], evMenu[i]]; renderMenuEditor(); }
 
-  if (!name) return alert('Event name is required.');
-  if (!capacity || capacity < 1) return alert('Please enter a valid capacity.');
-
-  const btn = document.getElementById('ev-save-btn');
-  const status = document.getElementById('ev-save-status');
-  btn.disabled = true; btn.textContent = 'saving\u2026';
-  if (status) { status.style.display = 'none'; }
-
-  const payload = {
-    name,
-    location: location || null,
-    event_date: dateVal ? new Date(dateVal).toISOString() : null,
-    total_capacity: capacity,
-    price_cents: price ? Math.round(price * 100) : null,
-    wine_addon_cents: wine ? Math.round(wine * 100) : null,
-    is_active,
+function readEventForm() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const kind = v('ev-kind');
+  const dollars = id => v(id) === '' ? null : Math.round(parseFloat(v(id)) * 100);
+  return {
+    id: evEditing ? evEditing.id : undefined, kind,
+    label: v('ev-label'), subject_name: v('ev-subject'), discipline: v('ev-discipline'), studio: v('ev-studio'), instagram: v('ev-instagram'),
+    event_date: v('ev-date') || null, doors_time: v('ev-doors'), end_time: v('ev-end'), location: v('ev-location'), address: v('ev-address'), dress_code: v('ev-dress'),
+    rsvp_mode: kind === 'session' ? 'invite' : v('ev-rsvp'), price_cents: kind === 'session' || v('ev-rsvp') === 'free' ? 0 : dollars('ev-price'),
+    total_capacity: v('ev-capacity') === '' ? 0 : parseInt(v('ev-capacity'), 10),
+    plus_one_allowed: document.getElementById('ev-plus').checked,
+    wine_addon_cents: kind === 'session' ? null : dollars('ev-drinks-price'), drinks_label: v('ev-drinks-label'),
+    short_desc: v('ev-desc'), hero_image_url: v('ev-hero'), at_the_table: v('ev-table'), closing_note: v('ev-closing'), bio: v('ev-bio'),
+    menu: evMenu.filter(c => (c.name || c.body || c.note)).map(c => ({ label: c.label || '', name: c.name || '', note: c.note || '', body: c.body || '' })),
+    is_active: document.getElementById('ev-active').checked,
   };
-
-  try {
-    let res;
-    if (id) {
-      res = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${encodeURIComponent(id)}`, {
-        method: 'PATCH',
-        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-        body: JSON.stringify(payload)
-      });
-    } else {
-      res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
-        method: 'POST',
-        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-        body: JSON.stringify(payload)
-      });
-    }
-    if (!res.ok) {
-      const msg = await res.text().catch(() => String(res.status));
-      btn.disabled = false; btn.textContent = 'save event';
-      if (status) { status.textContent = 'Error: ' + msg; status.style.color = 'var(--danger)'; status.style.display = 'inline'; }
-      return;
-    }
-    btn.disabled = false; btn.textContent = 'save event';
-    if (status) { status.textContent = '\u2713 saved'; status.style.color = 'var(--olive)'; status.style.display = 'inline'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
-    clearEventForm();
-    await loadAdminEvents();
-    await loadEvents();
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'save event';
-    if (status) { status.textContent = 'Error: ' + e.message; status.style.color = 'var(--danger)'; status.style.display = 'inline'; }
-  }
 }
-
+async function saveEventForm(publish) {
+  const data = readEventForm();
+  if (!data.label && !data.subject_name) return evMsg('Give it at least a label or a name before saving.', 'err');
+  if (/[—–]/.test(JSON.stringify(data))) evMsg('Note: dashes were swapped for commas (house style: no em dashes).', '');
+  const btns = ['ev-btn-draft', 'ev-btn-publish'].map(id => document.getElementById(id));
+  btns.forEach(b => b.disabled = true);
+  try {
+    const res = await approvalsCall({ action: 'event_save', event: data, publish: !!publish });
+    const saved = res.event;
+    evMsg(saved.status === 'published' && !saved.custom_page ? 'Published. It is live in Events now.' : saved.custom_page ? 'Saved.' : 'Saved as a draft. Only you can see it until you publish.', 'ok');
+    await loadAdminEvents();
+    evEditing = adminEvents.find(e => String(e.id) === String(saved.id)) || saved;
+    fillEventForm(evEditing);
+    evMsg(saved.status === 'published' && !saved.custom_page ? 'Published. It is live in Events now.' : saved.custom_page ? 'Saved.' : 'Saved as a draft. Only you can see it until you publish.', 'ok');
+    if (typeof loadEvents === 'function') loadEvents();
+    if (typeof loadLiveCapacity === 'function') loadLiveCapacity();
+  } catch (e) {
+    evMsg(e.message, 'err');
+  }
+  btns.forEach(b => b.disabled = false);
+}
+async function setEventStatus(id, status) {
+  const ev = adminEvents.find(e => String(e.id) === String(id));
+  if (status === 'published' && !confirm(`Publish ${ev ? ev.name : 'this event'}? It goes live in Events and people can RSVP.`)) return;
+  if (status === 'draft' && !confirm(`Unpublish ${ev ? ev.name : 'this event'}? It disappears from the site. RSVPs already made are kept.`)) return;
+  try {
+    await approvalsCall({ action: 'event_status', id, status });
+    await loadAdminEvents();
+    if (typeof loadEvents === 'function') loadEvents();
+    if (typeof loadLiveCapacity === 'function') loadLiveCapacity();
+  } catch (e) { alert(e.message); }
+}
 async function toggleEventActive(id, is_active) {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${encodeURIComponent(id)}`, {
-      method: 'PATCH',
-      headers: { ...SB_HEADERS, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-      body: JSON.stringify({ is_active })
-    });
-    if (!res.ok) { const msg = await res.text(); console.warn('Toggle failed:', msg); return; }
+    await approvalsCall({ action: 'event_save', event: { id, is_active } });
     await loadAdminEvents();
-    await loadEvents();
-  } catch(e) { console.warn('Toggle failed:', e); }
+    if (typeof loadEvents === 'function') loadEvents();
+  } catch (e) { alert(e.message); }
+}
+
+// ── Preview: the real page template, drawn from the form (or a saved draft) ──
+function previewEvent(id) {
+  const ev = id != null ? adminEvents.find(e => String(e.id) === String(id)) : { ...(evEditing || {}), ...readEventForm() };
+  if (!ev) return;
+  const body = document.getElementById('ev-preview-body');
+  body.innerHTML = dynEventHTML({ ...ev, id: 0, name: ev.name || [ev.label, ev.subject_name].filter(Boolean).join(': ') });
+  body.querySelectorAll('details').forEach(d => d.open = true);
+  const fill = body.querySelector('#de0r-fill'), rem = body.querySelector('#de0r-seats');
+  if (fill && ev.total_capacity > 0) { const shown = Math.max(ev.taken || 0, Math.round(0.7 * ev.total_capacity)); fill.style.width = (shown / ev.total_capacity * 100) + '%'; rem.textContent = (ev.total_capacity - shown) + ' of ' + ev.total_capacity; }
+  document.getElementById('ev-preview').classList.add('open');
+}
+function closeEventPreview() { document.getElementById('ev-preview').classList.remove('open'); }
+
+// ── Session codes ──
+let codesSession = null;
+async function openCodes(slug) {
+  codesSession = slug;
+  document.getElementById('ev-codes').classList.add('open');
+  document.getElementById('ev-codes-title').textContent = 'Invite codes: ' + ((adminEvents.find(e => e.slug === slug) || {}).name || slug);
+  await loadCodes();
+}
+function closeCodes() { document.getElementById('ev-codes').classList.remove('open'); }
+async function loadCodes() {
+  const box = document.getElementById('ev-codes-list');
+  box.innerHTML = '<div class="empty-msg">Loading…</div>';
+  try {
+    const rows = (await approvalsCall({ action: 'codes_list', session_id: codesSession })).codes || [];
+    const manual = rows.filter(c => c.pool !== 'approval'), approval = rows.filter(c => c.pool === 'approval');
+    const unused = manual.filter(c => !c.used);
+    document.getElementById('ev-codes-sum').textContent =
+      `${unused.length} of ${manual.length} codes to hand out are unused. ${approval.filter(c => !c.used && !c.assigned_to_email).length} of ${approval.length} codes are held back for approvals.`;
+    box.innerHTML = manual.length ? manual.map(c => `<div class="ev-code${c.used ? ' used' : ''}"><span>${dynEsc(c.code)}</span><span class="dim">${c.used ? 'used' + (c.used_by_email ? ' by ' + dynEsc(c.used_by_email) : '') : 'unused'}</span></div>`).join('')
+      : '<div class="empty-msg">No codes yet. Make some below.</div>';
+    window.__codesUnused = unused.map(c => c.code);
+  } catch (e) { box.innerHTML = `<div class="ap-error">${dynEsc(e.message)}</div>`; }
+}
+async function makeCodes() {
+  const n = parseInt(document.getElementById('ev-codes-n').value, 10);
+  if (!n || n < 1) return;
+  const btn = document.getElementById('ev-codes-make'); btn.disabled = true;
+  try { await approvalsCall({ action: 'codes_generate', session_id: codesSession, count: n, pool: 'manual' }); await loadCodes(); loadAdminEvents(); }
+  catch (e) { alert(e.message); }
+  btn.disabled = false;
+}
+function copyCodes() {
+  const list = (window.__codesUnused || []).join('\n');
+  if (!list) return;
+  navigator.clipboard?.writeText(list).then(() => { const b = document.getElementById('ev-codes-copy'); b.textContent = 'copied'; setTimeout(() => b.textContent = 'copy unused', 1500); });
 }
 
 // ── ADMIN ────────────────────────────────────────────────────────
@@ -8570,7 +9236,10 @@ if (window.innerWidth > 600) setInterval(() => {
     const lastEvent = sessionStorage.getItem('ltf_last_event');
     sessionStorage.removeItem('ltf_last_event');
     openPanel('current');
-    if (lastEvent === '8') {
+    if (lastEvent && lastEvent.startsWith('dyn:')) {
+      window.__dynPaidId = lastEvent.slice(4);
+      if (typeof DYN !== 'undefined' && DYN[window.__dynPaidId]) renderDynamicEvents();
+    } else if (lastEvent === '8') {
       const fw = document.getElementById('v8-rsvp-form-wrap');
       const cv = document.getElementById('confirmation-view-8');
       if (fw) fw.style.display = 'none';
