@@ -2976,6 +2976,16 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .ap-bar { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem; }
 .ap-bank { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--olive); }
 .ap-bank-low { color:var(--danger); }
+.ap-venue { border:1px solid var(--ink); background:var(--canvas); padding:1rem 1.1rem; margin-bottom:1rem; }
+.ap-venue blockquote { font-family:'Georgia',serif; font-size:0.95rem; color:var(--ink); border-left:2px solid var(--rule-mid); margin:0.6rem 0; padding:0.2rem 0 0.2rem 0.9rem; overflow-wrap:break-word; }
+.ap-venue-sub { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-mid); overflow-wrap:break-word; }
+.ap-venue-btn { padding:0.45rem 0.8rem !important; font-size:11px !important; min-height:34px; }
+.ap-guests-head { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin:1.5rem 0 0.6rem; }
+.ap-guest-p1 { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-mid); margin-top:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.ap-remove-choice { flex-basis:100%; display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:0.6rem 0.75rem; margin-top:0.5rem; border:1px solid var(--danger); background:var(--paper); }
+.ap-remove-choice span { font-family:'Crimson Pro',serif; font-size:13px; color:var(--danger); margin-right:4px; }
+.ap-remove-choice button { padding:0.45rem 0.8rem !important; font-size:11px !important; min-height:34px; }
+
 .ap-full { display:inline-block; font-family:'Crimson Pro',serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#9a6b00; border:1px solid currentColor; padding:1px 7px; margin-bottom:4px; }
 .ap-backlog { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; border:1px solid var(--ink); padding:0.8rem 1rem; margin:0.75rem 0; font-family:'Georgia',serif; font-size:0.92rem; color:var(--ink); }
 .ap-backlog span { flex:1; min-width:200px; overflow-wrap:break-word; }
@@ -3262,7 +3272,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
           <p style="font-family:'Crimson Pro',serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--olive);margin-bottom:0.75rem">Seat confirmed</p>
           <p style="font-family:'Georgia',serif;font-size:1rem;color:var(--ink)">We'll see you Sunday, November 15. Doors at 3pm.</p>
-          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.5rem">A confirmation with the address, 207 Madison St, is on its way to your inbox.</p>
+          <p style="font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.5rem">A confirmation with the address, 90 Spring St, is on its way to your inbox.</p>
           <p id="sessions-plusone-confirm" style="display:none;font-family:'Georgia',serif;font-size:0.9rem;color:var(--ink-mid);margin-top:0.75rem">Your +1 request is in. We will email you once it is confirmed.</p>
         </div>
 
@@ -4670,6 +4680,15 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div id="ap-invites"><div class="empty-msg">Loading…</div></div>
         <h4 class="ap-h">+1 requests <span id="ap-p1-count"></span></h4>
         <div id="ap-plusones"><div class="empty-msg">Loading…</div></div>
+        <div class="ap-guests-head">
+          <h4 class="ap-h" style="margin:0">Confirmed guests <span id="ap-guests-count"></span></h4>
+          <span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="ap-guests-session" onchange="loadSessionGuests()" style="width:auto"></select>
+            <button class="btn-ghost ap-venue-btn" onclick="previewVenueUpdate()">email new address</button>
+          </span>
+        </div>
+        <div id="ap-venue" class="ap-venue" style="display:none"></div>
+        <div id="ap-guests"><div class="empty-msg">Loading…</div></div>
         <details class="ap-history"><summary>Decided requests</summary><div id="ap-decided"></div></details>
       </div>
     </div>
@@ -7909,6 +7928,8 @@ async function loadApprovals() {
     approvalsData = await approvalsCall({ action: 'list', session_id: APPROVALS_SESSION });
     document.getElementById('ap-key-wrap').style.display = 'none';
     renderApprovals();
+    fillGuestSessionPicker();
+    loadSessionGuests();
   } catch (e) {
     if (e.code === 401) {
       document.getElementById('ap-key-wrap').style.display = '';
@@ -7979,6 +8000,101 @@ function renderApprovals() {
     const kind = r.list_type.endsWith('-plus-one-request') ? '+1' : 'Invite';
     return `<div class="ap-row"><span class="ap-pill ap-${r.status}">${r.status}</span> ${kind}: ${apEsc(r.first_name + ' ' + r.last_name)}${r.assigned_code ? ` · code ${apEsc(r.assigned_code)}` : ''} <span class="ap-sub">${apDate(r.decided_at)}</span></div>`;
   }).join('') : '<div class="empty-msg">Nothing decided yet.</div>';
+}
+
+// ── Venue change email (Records > Confirmed guests). Nothing sends until "send" is clicked. ──
+async function previewVenueUpdate() {
+  const box = document.getElementById('ap-venue');
+  const sid = document.getElementById('ap-guests-session')?.value || 'sessions-01';
+  box.style.display = ''; box.innerHTML = '<div class="empty-msg">Loading…</div>';
+  try {
+    const d = await approvalsCall({ action: 'venue_update', session_id: sid, send: false });
+    box.innerHTML = `<p class="ap-h" style="margin:0 0 0.5rem">Venue change email: ${apEsc(d.session)}</p>
+      <p class="ap-venue-sub">Subject: ${apEsc(d.subject)}</p>
+      <blockquote>${apEsc(d.preview)}</blockquote>
+      <p class="ap-venue-sub">${d.to_send ? `Goes to <strong>${d.to_send}</strong> confirmed guest${d.to_send > 1 ? 's' : ''}: ${apEsc(d.recipients.join(', '))}.` : 'Everyone confirmed has already been sent this.'}${d.already_sent ? ` ${d.already_sent} already received it and will be skipped.` : ''} Guests with an approved +1 are asked to pass it on.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:0.75rem">
+        ${d.to_send ? `<button class="btn-primary" id="ap-venue-send" onclick="sendVenueUpdate('${apEsc(sid)}', ${d.to_send})">send to ${d.to_send}</button>` : ''}
+        <button class="btn-ghost" onclick="document.getElementById('ap-venue').style.display='none'">close</button>
+      </div>`;
+  } catch (e) { box.innerHTML = `<div class="ap-error">${apEsc(e.message)}</div>`; }
+}
+async function sendVenueUpdate(sid, n) {
+  if (!confirm(`Email the new address to ${n} confirmed guest${n > 1 ? 's' : ''} now?`)) return;
+  const btn = document.getElementById('ap-venue-send'); btn.disabled = true; btn.textContent = 'sending…';
+  try {
+    const r = await approvalsCall({ action: 'venue_update', session_id: sid, send: true });
+    document.getElementById('ap-venue').innerHTML = `<p class="ap-venue-sub">Sent to ${r.sent.length}.${r.failed.length ? ` Could not send to: ${apEsc(r.failed.join(', '))}. Click email new address again to retry them.` : ''}</p>
+      <button class="btn-ghost" onclick="document.getElementById('ap-venue').style.display='none'">close</button>`;
+    toast('admin-toast', `New address sent to ${r.sent.length} guests.`, 'success');
+  } catch (e) { apShowError(e.message); btn.disabled = false; btn.textContent = `send to ${n}`; }
+}
+
+// ── Confirmed Session guests: remove a seat (Records > Sessions approvals) ──
+let sessionGuestsData = null;
+let guestRemoving = null;   // id of the row showing the remove choices
+function fillGuestSessionPicker() {
+  const sel = document.getElementById('ap-guests-session');
+  if (!sel) return;
+  const ids = new Set(['sessions-01']);
+  Object.keys(approvalsData?.sessions || {}).forEach(k => ids.add(k));
+  (typeof liveCapData !== 'undefined' ? liveCapData : []).filter(e => e.kind === 'session').forEach(e => ids.add(e.id));
+  const label = id => approvalsData?.sessions?.[id]?.label || (liveCapData || []).find(e => e.id === id)?.name || id;
+  const cur = sel.value || 'sessions-01';
+  sel.innerHTML = [...ids].sort().map(id => `<option value="${apEsc(id)}">${apEsc(label(id))}</option>`).join('');
+  sel.value = [...ids].includes(cur) ? cur : 'sessions-01';
+  sel.style.display = ids.size > 1 ? '' : 'none';
+}
+async function loadSessionGuests() {
+  const box = document.getElementById('ap-guests');
+  const sid = document.getElementById('ap-guests-session')?.value || 'sessions-01';
+  try {
+    sessionGuestsData = await approvalsCall({ action: 'session_guests', session_id: sid });
+    renderSessionGuests();
+  } catch (e) {
+    box.innerHTML = `<div class="empty-msg">${e.code === 401 ? 'Enter the approvals key to see confirmed guests.' : 'Could not load guests: ' + apEsc(e.message)}</div>`;
+  }
+}
+function renderSessionGuests() {
+  const d = sessionGuestsData || { guests: [], orphan_plus_ones: [] };
+  const box = document.getElementById('ap-guests');
+  document.getElementById('ap-guests-count').textContent = `(${d.taken || 0} seats)`;
+  const choice = id => guestRemoving === id ? `<div class="ap-remove-choice">
+      <span>Remove this seat?</span>
+      <button class="btn-primary" onclick="removeSessionGuest(${id}, true, this)">remove &amp; email them</button>
+      <button class="btn-ghost" onclick="removeSessionGuest(${id}, false, this)">remove quietly</button>
+      <button class="btn-ghost" onclick="guestRemoving=null;renderSessionGuests()">cancel</button>
+    </div>` : '';
+  const rows = d.guests.map(g => {
+    const p1 = (g.plus_ones || []).map(p => `<div class="ap-guest-p1">+1: ${apEsc(`${p.first_name} ${p.last_name}`.trim())}${p.phone ? ' &middot; ' + apEsc(p.phone) : ''}
+        <button class="rm-btn" onclick="guestRemoving=${p.id};renderSessionGuests()">remove +1</button></div>${choice(p.id)}`).join('');
+    return `<div class="ap-card ap-guest">
+      <div class="ap-who">
+        <div class="ap-name">${apEsc(`${g.first_name} ${g.last_name}`.trim())}</div>
+        <div class="ap-meta">${[apEsc(g.email), apEsc(g.phone), apEsc(g.instagram), g.how, apDate(g.created_at)].filter(Boolean).join(' &middot; ')}</div>
+        ${p1}
+      </div>
+      <div class="ap-actions"><button class="btn-ghost ap-decline" onclick="guestRemoving=${g.id};renderSessionGuests()">remove</button></div>
+      ${choice(g.id)}
+    </div>`;
+  }).join('') + (d.orphan_plus_ones || []).map(p => `<div class="ap-card ap-guest"><div class="ap-who"><div class="ap-name">${apEsc(`${p.first_name} ${p.last_name}`.trim())} <span class="ap-sub">+1 for ${apEsc(p.email)}</span></div></div>
+      <div class="ap-actions"><button class="btn-ghost ap-decline" onclick="guestRemoving=${p.id};renderSessionGuests()">remove +1</button></div>${choice(p.id)}</div>`).join('');
+  box.innerHTML = rows || '<div class="empty-msg">No confirmed guests yet.</div>';
+}
+async function removeSessionGuest(id, notify, btn) {
+  btn.closest('.ap-remove-choice').querySelectorAll('button').forEach(b => b.disabled = true);
+  btn.textContent = 'removing…';
+  try {
+    const res = await approvalsCall({ action: 'remove_guest', id, notify });
+    guestRemoving = null;
+    toast('admin-toast', `Removed: ${res.removed.join(', ')}.${notify ? (res.emailed ? ' They were emailed.' : ' The email did not send.') : ''}`, 'success');
+    await loadSessionGuests();
+    await loadApprovals();
+    refreshRecordsCounts();
+  } catch (e) {
+    apShowError(e.message);
+    guestRemoving = null; renderSessionGuests();
+  }
 }
 
 async function approveRequest(id, kind, btn) {
@@ -9346,7 +9462,7 @@ function initMap() {
     { num:'01', lat:40.7116, lng:-73.9960, upcoming:false },
   ];
 
-  // Sessions pin — Friendsgiving, Lower East Side
+  // Sessions pin: Friendsgiving, SoHo (90 Spring St)
   (function() {
     var sessIcon = L.divIcon({
       className: '',
@@ -9355,13 +9471,13 @@ function initMap() {
       iconAnchor: [12, 12],
       tooltipAnchor: [0, -14]
     });
-    var sessMarker = L.marker([40.71295, -73.98954], { icon: sessIcon }).addTo(ltfMap);
-    ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.71295, lng: -73.98954 };
+    var sessMarker = L.marker([40.72355, -73.99815], { icon: sessIcon }).addTo(ltfMap);
+    ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.72355, lng: -73.99815 };
     sessMarker.on('click', function() {
       openUpcomingOverlay({
         breadcrumb: 'Sessions No. 1',
         title: 'Friendsgiving',
-        meta: '207 Madison St · Lower East Side',
+        meta: '90 Spring St · SoHo',
         desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
         ctaText: 'Get Invited',
         ctaAction: "openPanel('current')"
@@ -9371,7 +9487,7 @@ function initMap() {
       '<div class="pt-inner"><div class="pt-text">' +
         '<div class="pt-vol" style="color:#F2BE4B">SESSIONS No. 1</div>' +
         '<div class="pt-name">Friendsgiving</div>' +
-        '<div class="pt-disc">Lower East Side · Upcoming</div>' +
+        '<div class="pt-disc">SoHo · Upcoming</div>' +
       '</div></div>',
       { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false }
     );
@@ -9847,7 +9963,7 @@ function openSessionsDrawer() {
   openUpcomingOverlay({
     breadcrumb: 'Sessions No. 1',
     title: 'Friendsgiving',
-    meta: '207 Madison St · Lower East Side',
+    meta: '90 Spring St · SoHo',
     desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
     ctaText: 'Get Invited',
     ctaAction: "openPanel('current')"
