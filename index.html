@@ -3013,6 +3013,11 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Friendsgiving menu */
+.fg-menu .ed-course-name { margin-top:0.9rem; }
+.fg-menu .ed-course-num + .ed-course-name { margin-top:0; }
+.fg-note { font-style:italic !important; color:var(--ink-mid) !important; }
+.fg-hosts { font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-low); margin:1.75rem 0 0; }
 /* Event page template (events built in Records) */
 .dyn-summary { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; cursor:pointer; list-style:none; font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink); }
 .dyn-summary::-webkit-details-marker { display:none; }
@@ -3267,6 +3272,49 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         </div>
         <p style="font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-low);margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--rule-mid)">All we ask: Show up, look good, and enjoy yourself and the company we curate.</p>
       </div>
+
+      <!-- FRIENDSGIVING MENU -->
+      <details class="menu-dropdown" style="margin:1.75rem 0;border-top:1px solid var(--rule-mid);border-bottom:1px solid var(--rule-mid)">
+        <summary style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;list-style:none;font-family:'Crimson Pro',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink)">
+          <span>Friendsgiving Menu</span>
+          <span class="menu-dropdown-arrow" style="font-size:10px;color:var(--ink-low);transition:transform 0.2s">&#9660;</span>
+        </summary>
+        <div style="padding-bottom:1.75rem">
+        <div class="ed-archive-courses fg-menu">
+          <div>
+            <span class="ed-course-num">The Spread</span>
+            <p class="ed-course-name">Corn Bread</p>
+            <p class="ed-course-note fg-note">classic served with honey butter</p>
+            <p class="ed-course-name">Green Bean Casserole</p>
+            <p class="ed-course-note fg-note">caramelized onions, cremini and oyster mushrooms</p>
+            <p class="ed-course-name">Mac n Cheese.</p>
+            <p class="ed-course-name">Caesar Salad Elote</p>
+            <p class="ed-course-note fg-note">butter beans, anchovy, breadcrumbs, a <u>mountain</u> of parm</p>
+            <p class="ed-course-name">Chorizo Dressing</p>
+            <p class="ed-course-note fg-note">cubed sourdough, celery, red pepper flakes, chorizo</p>
+            <p class="ed-course-name">Michelin Potatoes</p>
+            <p class="ed-course-note fg-note">mashed potatoes, lots of butter</p>
+            <p class="ed-course-name">Turkey Schnitzel</p>
+            <p class="ed-course-note fg-note">a Hanna family tradition.</p>
+          </div>
+          <div>
+            <span class="ed-course-num">Dessert</span>
+            <p class="ed-course-name">Cheap Shitty Grocery Store Pumpkin Pie</p>
+            <p class="ed-course-note fg-note">the way God intended</p>
+          </div>
+          <div>
+            <span class="ed-course-num">Drinks</span>
+            <p class="ed-course-name">La Vieille Ferme Rouge</p>
+            <p class="ed-course-note fg-note">Rhone, France, medium-body, pepper</p>
+            <p class="ed-course-name">La Vieille Ferme Blanc</p>
+            <p class="ed-course-note fg-note">Rhone, France, crisp, floral, spice</p>
+            <p class="ed-course-name">Hard Apple Cider</p>
+            <p class="ed-course-note fg-note">warm, fuzzy, and very boozy</p>
+          </div>
+        </div>
+        <p class="fg-hosts">Hosted by Micho Hanna &amp; Zachary Amato</p>
+        </div>
+      </details>
 
       <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule-mid)">
         <div id="sessions-success" style="display:none;padding:2rem;border:1px solid var(--rule-mid);background:var(--canvas);text-align:center">
