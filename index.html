@@ -3013,6 +3013,18 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Records: finances */
+.fin-table td, .fin-table th { white-space:nowrap; }
+.fin-table td.dim { white-space:normal; max-width:240px; overflow-wrap:break-word; }
+.fin-num { font-family:'Crimson Pro',serif; font-size:1rem; color:var(--ink); text-align:right; }
+.fin-pos { color:var(--success); } .fin-neg { color:var(--danger); }
+.fin-total td { border-top:1px solid var(--ink); font-weight:600; color:var(--ink); }
+.fin-form { margin-top:1.25rem; padding:1rem 1.1rem; border:1px solid var(--rule-mid); background:var(--canvas); }
+.fin-form-row { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+.fin-form-row label { display:flex; flex-direction:column; gap:4px; font-family:'Crimson Pro',serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-low); }
+.fin-form-row input { background:var(--paper); border:none; border-bottom:1px solid var(--rule-mid); padding:10px 0; font-family:'Crimson Pro',serif; font-size:1rem; color:var(--ink); width:150px; border-radius:0; }
+.fin-form-row .fin-notes input { width:260px; }
+.fin-form-row button { min-height:40px; }
 /* Friendsgiving menu */
 .fg-menu .ed-course-name { margin-top:0.9rem; }
 .fg-menu .ed-course-num + .ed-course-name { margin-top:0; }
@@ -4537,6 +4549,29 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <p class="dir-note">Seats taken counts confirmed seats (for Sessions, seats plus approved +1s). Capacity can't go below seats already taken. A Session has no limit until you set one; once it is full, code holders see a "full" message and approvals are blocked until you raise it.</p>
       </div>
     </div>
+    <!-- FINANCES -->
+    <div id="fin-section" style="margin-bottom:2.5rem">
+      <div class="admin-section-toggle" onclick="toggleFinances()"><span>Finances</span> <span id="fin-toggle-icon">&minus;</span></div>
+      <div id="fin-panel" style="margin-top:1rem">
+        <div id="fin-error" class="ap-error" style="display:none"></div>
+        <div id="fin-summary" class="dir-insights"></div>
+        <div class="table-scroll"><table class="fin-table">
+          <thead><tr><th>Month</th><th>Dinners</th><th>Revenue</th><th>Expenses</th><th>Net</th><th>Running total</th><th>Notes</th><th></th></tr></thead>
+          <tbody id="fin-body"><tr><td colspan="8"><div class="empty-msg">Loading…</div></td></tr></tbody>
+        </table></div>
+        <div class="fin-form">
+          <p class="ap-h" style="margin:0 0 0.5rem" id="fin-form-title">Add or update a month</p>
+          <div class="fin-form-row">
+            <label>Month<input type="month" id="fin-month"></label>
+            <label>Revenue ($)<input type="number" id="fin-rev" min="0" step="0.01" placeholder="0.00"></label>
+            <label>Expenses ($)<input type="number" id="fin-exp" min="0" step="0.01" placeholder="0.00"></label>
+            <label class="fin-notes">Notes<input type="text" id="fin-notes" placeholder="optional, e.g. Vol. 3 food + design"></label>
+            <button class="btn-primary" id="fin-save" onclick="saveFinanceMonth()">save month</button>
+          </div>
+          <p class="dir-note">Saving a month that already exists replaces its numbers.</p>
+        </div>
+      </div>
+    </div>
     <!-- GUEST DIRECTORY -->
     <div id="directory-section" style="margin-bottom:2.5rem">
       <div class="admin-section-toggle" onclick="toggleDirectory()"><span>Guest directory <span id="dir-count" class="ap-sub"></span></span> <span id="dir-toggle-icon">&minus;</span></div>
@@ -5829,6 +5864,7 @@ function checkAdminPassword() {
     loadDirectory();
     loadLiveCapacity();
     loadAdminEvents();
+    loadFinances();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -7669,8 +7705,90 @@ async function saveLiveCap(i) {
   }
 }
 
+// ── FINANCES (Records) ──────────────────────────────────────────
+let finData = null;
+function toggleFinances() {
+  const panel = document.getElementById('fin-panel');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  document.getElementById('fin-toggle-icon').innerHTML = open ? '&minus;' : '+';
+}
+const finMonthName = m => new Date(m + '-15T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const finSigned = c => (c > 0 ? '+' : c < 0 ? '−' : '') + dirMoney(Math.abs(c));
+async function loadFinances() {
+  const err = document.getElementById('fin-error'); err.style.display = 'none';
+  try { finData = await approvalsCall({ action: 'finances_list' }); renderFinances(); }
+  catch (e) {
+    err.textContent = e.code === 401 ? 'Enter the approvals key (Sessions approvals) to see finances.' : 'Could not load finances: ' + e.message;
+    err.style.display = '';
+    document.getElementById('fin-body').innerHTML = '<tr><td colspan="8"><div class="empty-msg">Not loaded.</div></td></tr>';
+  }
+}
+function renderFinances() {
+  const d = finData || { months: [], stripe_by_month: {}, events: [] };
+  const months = d.months.map(r => ({ m: String(r.month).slice(0, 7), rev: r.revenue_cents || 0, exp: r.expenses_cents || 0, notes: r.notes || '' }));
+  const evByMonth = {};
+  d.events.forEach(e => { if (e.month) (evByMonth[e.month] = evByMonth[e.month] || []).push(e.name); });
+  let run = 0;
+  const rows = months.map(r => { run += r.rev - r.exp; return { ...r, net: r.rev - r.exp, run }; });
+  const tot = rows.reduce((a, r) => ({ rev: a.rev + r.rev, exp: a.exp + r.exp }), { rev: 0, exp: 0 });
+  const body = document.getElementById('fin-body');
+  body.innerHTML = rows.length ? rows.map(r => `<tr>
+      <td style="color:var(--ink);white-space:nowrap">${finMonthName(r.m)}</td>
+      <td class="dim">${(evByMonth[r.m] || []).map(apEsc).join(', ') || '<span class="dim">—</span>'}</td>
+      <td class="fin-num">${dirMoney(r.rev)}</td><td class="fin-num">${dirMoney(r.exp)}</td>
+      <td class="fin-num ${r.net < 0 ? 'fin-neg' : r.net > 0 ? 'fin-pos' : ''}">${finSigned(r.net)}</td>
+      <td class="fin-num ${r.run < 0 ? 'fin-neg' : 'fin-pos'}">${finSigned(r.run)}</td>
+      <td class="dim">${apEsc(r.notes)}</td>
+      <td><button class="rm-btn" onclick="editFinanceMonth('${r.m}')">edit</button></td></tr>`).join('') +
+    `<tr class="fin-total"><td>Total</td><td></td><td class="fin-num">${dirMoney(tot.rev)}</td><td class="fin-num">${dirMoney(tot.exp)}</td><td class="fin-num ${tot.rev - tot.exp < 0 ? 'fin-neg' : 'fin-pos'}">${finSigned(tot.rev - tot.exp)}</td><td></td><td></td><td></td></tr>`
+    : '<tr><td colspan="8"><div class="empty-msg">No months entered yet.</div></td></tr>';
+
+  // Plain-English read
+  const lines = [];
+  if (rows.length) {
+    const first = finMonthName(rows[0].m), last = finMonthName(rows[rows.length - 1].m);
+    lines.push(`From ${first} to ${last}, LTF brought in <strong>${dirMoney(tot.rev)}</strong> and spent <strong>${dirMoney(tot.exp)}</strong>, so overall you are <strong>${tot.rev - tot.exp >= 0 ? 'up ' : 'down '}${dirMoney(Math.abs(tot.rev - tot.exp))}</strong>.`);
+    const best = [...rows].sort((a, b) => b.net - a.net)[0], worst = [...rows].sort((a, b) => a.net - b.net)[0];
+    if (best.net > 0) lines.push(`Best month: <strong>${finMonthName(best.m)}</strong> (${finSigned(best.net)})${(evByMonth[best.m] || []).length ? ', the month of ' + apEsc(evByMonth[best.m].join(' and ')) : ''}.`);
+    if (worst.net < 0) lines.push(`Biggest loss: <strong>${finMonthName(worst.m)}</strong> (${finSigned(worst.net)}).`);
+    const firstProfit = rows.find(r => r.net > 0);
+    const losing = rows.filter(r => r.net < 0).length;
+    if (firstProfit) lines.push(`${losing} of ${rows.length} months lost money. ${finMonthName(firstProfit.m)} was the first month in the black, and the running total ${rows[rows.length - 1].run >= 0 ? 'has stayed positive since it turned' : 'is still below zero'}.`);
+  }
+  // Months with ticket sales in Stripe but no numbers entered
+  const entered = new Set(rows.map(r => r.m));
+  const missing = Object.entries(d.stripe_by_month || {}).filter(([m, c]) => c > 0 && !entered.has(m)).sort();
+  if (missing.length) lines.push(`Not entered yet: ${missing.map(([m, c]) => `${finMonthName(m)} (${dirMoney(c)} in Stripe ticket sales)`).join(', ')}. Add those months' expenses to see the full picture.`);
+  document.getElementById('fin-summary').innerHTML = `<div class="dir-ins-h">What the numbers say</div><ul class="dir-ins-list">${lines.map(l => `<li>${l}</li>`).join('') || '<li>Add your first month below.</li>'}</ul>`;
+}
+function editFinanceMonth(m) {
+  const r = (finData?.months || []).find(x => String(x.month).slice(0, 7) === m) || {};
+  document.getElementById('fin-month').value = m;
+  document.getElementById('fin-rev').value = ((r.revenue_cents || 0) / 100).toFixed(2);
+  document.getElementById('fin-exp').value = ((r.expenses_cents || 0) / 100).toFixed(2);
+  document.getElementById('fin-notes').value = r.notes || '';
+  document.getElementById('fin-form-title').textContent = 'Update ' + finMonthName(m);
+  document.querySelector('.fin-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+async function saveFinanceMonth() {
+  const m = document.getElementById('fin-month').value;
+  const rev = parseFloat(document.getElementById('fin-rev').value || '0'), exp = parseFloat(document.getElementById('fin-exp').value || '0');
+  const err = document.getElementById('fin-error'); err.style.display = 'none';
+  if (!m) { err.textContent = 'Pick a month.'; err.style.display = ''; return; }
+  const btn = document.getElementById('fin-save'); btn.disabled = true;
+  try {
+    await approvalsCall({ action: 'finance_save', month: m, revenue_cents: Math.round(rev * 100), expenses_cents: Math.round(exp * 100), notes: document.getElementById('fin-notes').value.trim() });
+    ['fin-month', 'fin-rev', 'fin-exp', 'fin-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fin-form-title').textContent = 'Add or update a month';
+    await loadFinances();
+  } catch (e) { err.textContent = e.message; err.style.display = ''; }
+  btn.disabled = false;
+}
+
 // ── GUEST DIRECTORY (Records) ────────────────────────────────────
 let directoryData = [];
+let dirTickets = {};   // official ticket totals per event (early dinners where the list doesn't say who paid)
 let dirSort = { k: 'last_seen', dir: -1 };
 let dirOpenRow = null;
 const DIR_INQUIRY = /inquiry|Sponsor|Artist/;
@@ -7693,6 +7811,7 @@ async function loadDirectory() {
   err.style.display = 'none';
   try {
     const res = await approvalsCall({ action: 'directory' });
+    dirTickets = {}; (res.event_tickets || []).forEach(t => dirTickets[t.key] = t);
     directoryData = (res.people || []).map(p => ({ ...p, events: p.events || [], heard: p.heard || [], tags: p.tags || [],
       heardText: (p.heard || []).join(', '), tagText: (p.tags || []).join(', ') }));
     // "How they heard" options
@@ -7719,6 +7838,16 @@ async function loadDirectory() {
 function sortDirectory(k) {
   dirSort = dirSort.k === k ? { k, dir: -dirSort.dir } : { k, dir: DIR_NUMERIC.includes(k) ? -1 : 1 };
   renderDirectory();
+}
+// Official totals minus what the per-guest guesses add up to, for events that have official totals
+function dirTicketCorrection(evKey) {
+  let c = 0;
+  Object.values(dirTickets).forEach(t => {
+    if (evKey !== 'all' && evKey !== t.key) return;
+    const guessed = directoryData.reduce((n, p) => n + p.events.filter(e => e.key === t.key).reduce((m, e) => m + (e.paid_cents || 0), 0), 0);
+    c += (t.revenue_cents || 0) - guessed;
+  });
+  return c;
 }
 // Numbers for one person, scoped to the selected event (or all events)
 function dirView(p, evKey) {
@@ -7777,7 +7906,7 @@ function renderDirectory() {
   set('dir-stat-attended', scoped.filter(v => v.attended > 0).length);
   set('dir-stat-repeat', scoped.filter(v => v.p.attended > 1).length);
   set('dir-stat-upcoming', scoped.reduce((n, v) => n + v.upcoming, 0));
-  set('dir-stat-revenue', dirMoney(scoped.reduce((n, v) => n + v.total, 0)));
+  set('dir-stat-revenue', dirMoney(scoped.reduce((n, v) => n + v.total, 0) + dirTicketCorrection(ev)));
   set('dir-stat-revenue-l', ev === 'all' ? 'Total paid' : 'Paid for this event');
   set('dir-stat-comps', scoped.reduce((n, v) => n + v.evs.filter(e => e.kinds.includes('comp')).length, 0));
   set('dir-stat-source', top ? top[0] : '—');
@@ -7802,7 +7931,7 @@ function renderDirectory() {
   if (!rows.length) { tb.innerHTML = '<tr><td colspan="13"><div class="empty-msg">No one matches.</div></td></tr>'; return; }
   const d = x => x ? new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '<span class="dim">—</span>';
   const dash = '<span class="dim">—</span>';
-  const kindPill = e => e.kinds.map(kd => `<span class="pill ${kd === 'paid' ? 'paid' : kd === 'comp' ? 'sage' : 'dir-pill-session'}">${kd === 'free' ? 'session' : kd}</span>`).join(' ');
+  const kindPill = e => e.kinds.map(kd => `<span class="pill ${kd === 'paid' ? 'paid' : kd === 'comp' ? 'sage' : 'dir-pill-session'}">${kd === 'free' ? 'session' : kd === 'unknown' ? 'early dinner' : kd}</span>`).join(' ');
   tb.innerHTML = rows.map(v => {
     const p = v.p;
     const id = p.email || p.phone || p.name;
@@ -7852,7 +7981,7 @@ function renderInsights() {
   const guests = D.filter(p => p.attended > 0);
   const repeat = guests.filter(p => p.attended > 1);
   const paidPeople = D.filter(p => p.total_paid_cents > 0);
-  const revenue = D.reduce((n, p) => n + (p.total_paid_cents || 0), 0);
+  const revenue = D.reduce((n, p) => n + (p.total_paid_cents || 0), 0) + dirTicketCorrection('all');
   const unknownPaid = D.filter(p => p.unknown_paid).length;
   const compPeople = D.filter(p => p.comp_events > 0);
   const compThenPaid = compPeople.filter(p => {           // comped first, paid at a later event
@@ -7888,6 +8017,8 @@ function renderInsights() {
       if (firstKey === e.key) r.fresh++;
     });
   });
+  // Where official totals exist (Vol. 1 to 3), they replace the per-guest guesses
+  evMap.forEach(r => { const t = dirTickets[r.key]; if (t) { r.paid = t.paid; r.comp = t.comp; r.revenue = t.revenue_cents; r.note = t.note; r.official = true; } });
   const evRows = [...evMap.values()].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
 
   const lines = [];
@@ -7899,14 +8030,15 @@ function renderInsights() {
   if (leads.length) lines.push(`<strong>${leads.length}</strong> ${leads.length === 1 ? 'person has' : 'people have'} shown interest (newsletter, invite request, inquiry or a checkout they didn't finish) but never had a seat. These are warm leads. <a onclick="dirShow('leads')">See who</a>`);
 
   const evTable = evRows.length ? `<div class="table-scroll"><table class="dir-ev-table"><thead><tr><th>Event</th><th>Date</th><th>Guests</th><th>Seats</th><th>Paid</th><th>Comped</th><th>Revenue</th><th>First timers</th></tr></thead><tbody>${evRows.map(r => `<tr data-k="${apEsc(r.key)}" onclick="dirShow('all','all',this.dataset.k)" title="Show this event's guests">
-      <td style="color:var(--ink)">${apEsc(r.name)}${r.past ? '' : ' <span class="pill sand">upcoming</span>'}</td>
+      <td style="color:var(--ink)"${r.note ? ` title="${apEsc(r.note)}"` : ''}>${apEsc(r.name)}${r.past ? '' : ' <span class="pill sand">upcoming</span>'}${r.official ? ' <span class="dim">*</span>' : ''}</td>
       <td class="dim">${dirEvDate(r.date)}</td><td class="dir-num">${r.people}</td><td class="dir-num">${r.seats}</td>
       <td class="dir-num">${r.free ? '<span class="dim">free</span>' : r.paid}</td><td class="dir-num">${r.comp || '<span class="dim">—</span>'}</td>
       <td class="dir-num dir-money">${r.revenue ? dirMoney(r.revenue) : '<span class="dim">—</span>'}</td>
       <td class="dir-num">${dirPct(r.fresh, r.people)}</td></tr>`).join('')}</tbody></table></div>` : '';
 
   box.innerHTML = `<div class="dir-ins-h">What the numbers say</div><ul class="dir-ins-list">${lines.map(l => `<li>${l}</li>`).join('')}</ul>` +
-    (evTable ? `<div class="dir-ins-h">Event by event <span class="dim">(click an event to see its guests)</span></div>${evTable}` : '');
+    (evTable ? `<div class="dir-ins-h">Event by event <span class="dim">(click an event to see its guests)</span></div>${evTable}` +
+      (evRows.some(r => r.official) ? '<p class="dir-note">* Early dinners: paid and comped counts come from the ticket totals, because the RSVP lists don\'t say who paid. Hover the name for the breakdown.</p>' : '') : '');
 }
 function toggleDirRow(id) { dirOpenRow = dirOpenRow === id ? null : id; renderDirectory(); }
 function exportDirectoryCSV() {
@@ -7944,6 +8076,7 @@ function setApprovalsKey() {
   loadDirectory();
   loadLiveCapacity();
   loadAdminEvents();
+  loadFinances();
 }
 async function approvalsCall(body) {
   const r = await fetch(`${FN_URL}/session-approvals`, {
