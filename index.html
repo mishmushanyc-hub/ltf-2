@@ -3013,6 +3013,19 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 .sms-consent .sms-lead { display:block; font-family:'Georgia',serif; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:1px; }
 .sms-consent .sms-benefit { display:block; font-style:normal; font-size:13.5px; color:var(--ink-mid); margin-bottom:4px; }
 .sms-consent input { width:18px; height:18px; margin-top:3px; }
+/* Records: event records */
+.er-tabs { display:flex; gap:0; border-bottom:1px solid var(--rule-mid); margin-bottom:1rem; }
+.er-tab { background:none; border:none; border-bottom:2px solid transparent; padding:0.6rem 1rem; font-family:'Crimson Pro',serif; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-low); cursor:pointer; margin-bottom:-1px; }
+.er-tab.active { color:var(--ink); border-bottom-color:var(--ink); }
+.er-item { border:1px solid var(--rule-mid); background:var(--canvas); padding:0.75rem 1rem; margin-bottom:6px; }
+.er-item summary { cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.er-item summary::-webkit-details-marker { display:none; }
+.er-name { font-family:'Georgia',serif; font-size:1rem; color:var(--ink); }
+.er-meta { font-family:'Crimson Pro',serif; font-size:13px; color:var(--ink-low); flex-basis:100%; }
+.er-h { font-family:'Crimson Pro',serif; font-weight:600; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink); margin:1rem 0 0.4rem; }
+.er-table td { white-space:normal; overflow-wrap:anywhere; max-width:220px; }
+.er-line { font-family:'Georgia',serif; font-size:0.9rem; color:var(--ink-mid); margin:0; overflow-wrap:break-word; }
+.ap-pill.ap-pending { color:#9a6b00; } .ap-pill.ap-removed { color:var(--danger); }
 /* Records: finances */
 .fin-table td, .fin-table th { white-space:nowrap; }
 .fin-table td.dim { white-space:normal; max-width:240px; overflow-wrap:break-word; }
@@ -3262,7 +3275,7 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
 
     <div class="events-section-label" style="margin-top:2rem">Sessions</div>
 
-    <div class="event-block" style="margin-top:1.5rem">
+    <div class="event-block" id="fg-event-block" style="margin-top:1.5rem">
       <div class="event-masthead">
         <div class="event-masthead-body">
         <span class="ev-no">Sessions No. 01 &nbsp;&middot;&nbsp; Life Thru Food</span>
@@ -4721,25 +4734,6 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         </div>
       </div>
     </div>
-    <div class="stat-strip">
-      <div class="stat-block"><div class="n" id="stat-total">—</div><div class="l">Total guests</div></div>
-      <div class="stat-block"><div class="n" id="stat-capacity">—</div><div class="l">Capacity</div></div>
-      <div class="stat-block"><div class="n" id="stat-upcoming">—</div><div class="l">April RSVPs</div></div>
-    </div>
-    <div class="toolbar">
-      <input type="text" id="admin-search" placeholder="Search guests..." oninput="renderAdmin()">
-      <select id="admin-filter" onchange="renderAdmin()" style="width:auto">
-        <option value="all">All events</option>
-        <option value="April RSVPs">April RSVPs</option>
-      </select>
-      <button class="btn-ghost" onclick="exportCSV()">export csv</button>
-    </div>
-    <div class="table-scroll">
-      <table>
-        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Event</th><th>Party</th><th>Dietary</th><th>Status</th><th>Date</th><th></th></tr></thead>
-        <tbody id="admin-table-body"><tr><td colspan="8"><div class="empty-msg">Loading…</div></td></tr></tbody>
-      </table>
-    </div>
 
     <!-- SESSIONS APPROVALS -->
     <div style="margin-top:2.5rem" id="approvals-section">
@@ -4773,6 +4767,20 @@ body[data-x]:not([data-x="landing"]):not([data-x="gallery"]) #rsvp-popup { opaci
         <div id="ap-venue" class="ap-venue" style="display:none"></div>
         <div id="ap-guests"><div class="empty-msg">Loading…</div></div>
         <details class="ap-history"><summary>Decided requests</summary><div id="ap-decided"></div></details>
+      </div>
+    </div>
+
+    <!-- EVENT RECORDS (Sessions / Sittings, archived and upcoming) -->
+    <div id="er-section" style="margin-top:2.5rem">
+      <div class="admin-section-toggle" onclick="toggleEventRecords()"><span>Event records</span> <span id="er-toggle-icon">&minus;</span></div>
+      <div id="er-panel" style="margin-top:1rem">
+        <div class="er-tabs" role="tablist">
+          <button class="er-tab active" data-tab="sessions" onclick="setEventRecordsTab('sessions')">Sessions</button>
+          <button class="er-tab" data-tab="sittings" onclick="setEventRecordsTab('sittings')">Sittings</button>
+        </div>
+        <div id="er-error" class="ap-error" style="display:none"></div>
+        <div id="er-body"><div class="empty-msg">Loading…</div></div>
+        <p class="dir-note">Events archive automatically the day after their date: the map pin stops pulsing, they leave Upcoming, and their guests become read-only here.</p>
       </div>
     </div>
 
@@ -5087,6 +5095,42 @@ let contentFilter = 'all';
 const RSVP_PASSWORD = 'cannon-stylist';
 const RSVP_PASSWORD_5 = 'real-vuhlet-fantasy';
 const RSVP_PASSWORD_7 = 'quell-rooftop';
+
+// ── Auto-archive: events flip to archived the day after their date (New York time) ──
+function ltfToday() { return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); }
+function ltfIsPast(ymd) { return !!ymd && String(ymd).slice(0, 10) < ltfToday(); }
+const LTF_FRIENDSGIVING = { date: '2026-11-15', label: 'Sessions No. 1', title: 'Friendsgiving', meta: '90 Spring St \u00b7 SoHo', area: 'SoHo' };
+function friendsgivingOverlay() {
+  const past = ltfIsPast(LTF_FRIENDSGIVING.date);
+  return past ? {
+    breadcrumb: LTF_FRIENDSGIVING.label + ' \u00b7 Archived',
+    title: LTF_FRIENDSGIVING.title,
+    meta: 'November 15, 2026 \u00b7 ' + LTF_FRIENDSGIVING.area,
+    desc: 'Our first Session has wrapped. Thank you to everyone who sat down with us. Follow along for the next one.'
+  } : {
+    breadcrumb: LTF_FRIENDSGIVING.label,
+    title: LTF_FRIENDSGIVING.title,
+    meta: LTF_FRIENDSGIVING.meta,
+    desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
+    ctaText: 'Get Invited',
+    ctaAction: "openPanel('current')"
+  };
+}
+// Hide the hand-built Friendsgiving block (and its archive-guide pulse) once the date has passed
+function applyFriendsgivingArchive() {
+  if (!ltfIsPast(LTF_FRIENDSGIVING.date)) return;
+  const block = document.getElementById('fg-event-block');
+  if (block) block.style.display = 'none';
+  const anyDyn = document.querySelector('#dyn-sessions .event-block');
+  const none = document.getElementById('no-upcoming-sessions');
+  if (none) none.style.display = anyDyn ? 'none' : '';
+  const guide = document.querySelector('.arc-guide-sessions');
+  if (guide) {
+    const dot = guide.querySelector('.arc-guide-pulse-dot'); if (dot) dot.className = 'arc-guide-dot';
+    const sub = guide.querySelector('.arc-guide-item-sub'); if (sub) sub.innerHTML = 'Friendsgiving &middot; Nov 15, 2026';
+  }
+}
+document.addEventListener('DOMContentLoaded', applyFriendsgivingArchive);
 
 const EDITIONS = {
   '05': {
@@ -5456,6 +5500,7 @@ function renderDynamicEvents() {
     if (ev.kind !== 'session') { dynSeats(ev.id); dynTotals(ev.id); }
   });
   if (sittings.length) { const nu = document.getElementById('no-upcoming-events'); if (nu) nu.style.display = 'none'; }
+  if (typeof applyFriendsgivingArchive === 'function') applyFriendsgivingArchive();
   // Back from Stripe checkout: show that event's confirmation
   if (window.__dynPaidId && DYN[window.__dynPaidId]) {
     const p = `de${window.__dynPaidId}r`;
@@ -5839,14 +5884,8 @@ function renderEventSelector() {
 
 // ── LOAD GUESTS FROM SUPABASE ───────────────────────────────────
 async function loadGuests() {
-  try {
-    const data = await sbGet('guests?select=*&order=created_at.desc');
-    guests = data;
-    renderAdmin();
-  } catch(e) {
-    console.warn('Could not load guests:', e);
-    document.getElementById('admin-table-body').innerHTML = '<tr><td colspan="8"><div class="empty-msg">Could not load guests.</div></td></tr>';
-  }
+  // The old public guest table is gone: guest lists now load privately through the Guest directory.
+  return;
 }
 
 // ── NAV ─────────────────────────────────────────────────────────
@@ -5858,13 +5897,14 @@ function checkAdminPassword() {
   if (val === 'ltf-admin') {
     document.getElementById('admin-pw-gate').style.display = 'none';
     document.getElementById('admin-panel-inner').style.display = 'block';
-    loadGuests();
     approvalsKey = approvalsKey || val;
     loadApprovals();
     loadDirectory();
     loadLiveCapacity();
     loadAdminEvents();
     loadFinances();
+    loadEventRecords();
+    startRecordsAutoRefresh();
   } else {
     document.getElementById('admin-pw-error').textContent = 'Incorrect password.';
     document.getElementById('admin-pw-input').value = '';
@@ -7786,6 +7826,82 @@ async function saveFinanceMonth() {
   btn.disabled = false;
 }
 
+// ── EVENT RECORDS (Records): every Session and Sitting, archived or upcoming ──
+let erData = null, erTab = 'sessions';
+function toggleEventRecords() {
+  const panel = document.getElementById('er-panel');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  document.getElementById('er-toggle-icon').innerHTML = open ? '&minus;' : '+';
+}
+function setEventRecordsTab(t) {
+  erTab = t;
+  document.querySelectorAll('.er-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+  renderEventRecords();
+}
+async function loadEventRecords() {
+  const err = document.getElementById('er-error'); err.style.display = 'none';
+  try { erData = await approvalsCall({ action: 'archive_view' }); renderEventRecords(); }
+  catch (e) { err.textContent = e.code === 401 ? 'Enter the approvals key (Sessions approvals) to see event records.' : 'Could not load event records: ' + e.message; err.style.display = ''; }
+}
+function erStatus(x) { return x.archived ? '<span class="ev-st ev-st-past">Archived</span>' : '<span class="ev-st ev-st-live">Upcoming</span>'; }
+function erDate(d) { return d ? new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No date'; }
+function renderEventRecords() {
+  const box = document.getElementById('er-body');
+  if (!erData) return;
+  const dash = '<span class="dim">—</span>';
+  if (erTab === 'sessions') {
+    const list = erData.sessions || [];
+    box.innerHTML = list.length ? list.map((x, i) => {
+      const pend = x.requests.filter(r => r.status === 'pending').length;
+      const guests = x.confirmed.length + x.confirmed.reduce((n, g) => n + g.plus_ones.length, 0);
+      return `<details class="er-item" ${i === 0 ? 'open' : ''}>
+        <summary><span class="er-name">${apEsc(x.label)}</span> ${erStatus(x)} <span class="er-meta">${erDate(x.date)}${x.area ? ' &middot; ' + apEsc(x.area) : ''} &middot; ${guests} confirmed &middot; ${x.requests.length} invite request${x.requests.length === 1 ? '' : 's'}</span></summary>
+        ${!x.archived && pend ? `<p class="dir-note" style="margin:0.5rem 0">${pend} request${pend > 1 ? 's are' : ' is'} waiting in Sessions approvals above.</p>` : ''}
+        <div class="er-h">Confirmed guests (${guests})</div>
+        ${x.confirmed.length ? `<div class="table-scroll"><table class="er-table"><thead><tr><th>Name</th><th>+1</th><th>Email</th><th>Phone</th><th>How</th><th>Confirmed</th></tr></thead><tbody>${x.confirmed.map(g => `<tr>
+          <td style="color:var(--ink)">${apEsc(g.name)}</td><td>${g.plus_ones.length ? apEsc(g.plus_ones.join(', ')) : dash}</td>
+          <td class="dim">${apEsc(g.email || '')}</td><td class="dim">${apEsc(g.phone || '')}</td><td class="dim">${apEsc(g.how)}</td><td class="dim">${apDate(g.at)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty-msg">No confirmed guests.</div>'}
+        <div class="er-h">Invite requests (${x.requests.length})</div>
+        ${x.requests.length ? `<div class="table-scroll"><table class="er-table"><thead><tr><th>Name</th><th>Outcome</th><th>Email</th><th>Phone</th><th>How they heard</th><th>Requested</th></tr></thead><tbody>${x.requests.map(r => `<tr>
+          <td style="color:var(--ink)">${apEsc(r.name)}${r.full ? ' <span class="dim">(had a code, Session was full)</span>' : ''}</td>
+          <td><span class="ap-pill ap-${apEsc(r.status)}">${apEsc(x.archived && r.status === 'pending' ? 'not approved' : r.status)}</span></td>
+          <td class="dim">${apEsc(r.email || '')}</td><td class="dim">${apEsc(r.phone || '')}</td><td class="dim">${apEsc(r.source || '')}</td><td class="dim">${apDate(r.at)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty-msg">No invite requests.</div>'}
+        ${x.plus_one_requests.length ? `<div class="er-h">+1 requests (${x.plus_one_requests.length})</div><p class="er-line">${x.plus_one_requests.map(p => `${apEsc(p.name)} <span class="dim">for ${apEsc(p.for)}, ${apEsc(x.archived && p.status === 'pending' ? 'not approved' : p.status)}</span>`).join(' &middot; ')}</p>` : ''}
+        ${x.removed.length ? `<div class="er-h">Removed (${x.removed.length})</div><p class="er-line">${x.removed.map(r => apEsc(r.name)).join(', ')}</p>` : ''}
+      </details>`;
+    }).join('') : '<div class="empty-msg">No Sessions yet.</div>';
+  } else {
+    const list = erData.sittings || [];
+    box.innerHTML = list.length ? list.map(x => `<details class="er-item">
+        <summary><span class="er-name">${apEsc(x.label)}</span> ${erStatus(x)} <span class="er-meta">${erDate(x.date)}${x.area ? ' &middot; ' + apEsc(x.area) : ''} &middot; ${x.seats} seats${x.capacity ? ' of ' + x.capacity : ''} &middot; ${x.waitlist.length} waitlisted</span></summary>
+        <div class="er-h">Waitlist (${x.waitlist.length})</div>
+        ${x.waitlist.length ? `<div class="table-scroll"><table class="er-table"><thead><tr><th>Name</th><th>Status</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead><tbody>${x.waitlist.map(w => `<tr>
+          <td style="color:var(--ink)">${apEsc(w.name)}</td><td><span class="ap-pill">${apEsc(w.status)}</span></td><td class="dim">${apEsc(w.email || '')}</td><td class="dim">${apEsc(w.phone || '')}</td><td class="dim">${apDate(w.at)}</td></tr>`).join('')}</tbody></table></div>`
+          : '<div class="empty-msg">No waitlist for this Sitting.</div>'}
+        <p class="dir-note">Guest lists and payments for this Sitting are in the Guest directory (pick it in the event filter).</p>
+      </details>`).join('') : '<div class="empty-msg">No Sittings yet.</div>';
+  }
+}
+
+// ── Keep Records live: everything (and "What the numbers say") refreshes every minute while Records is open ──
+let recordsTimer = null;
+function recordsRefreshAll() {
+  if (document.hidden) return;
+  const panel = document.getElementById('admin-panel-inner');
+  if (!panel || panel.style.display === 'none' || !document.getElementById('tab-admin')?.classList.contains('open')) return;
+  if (typeof loadApprovals === 'function') loadApprovals();
+  if (typeof loadDirectory === 'function') loadDirectory();
+  if (typeof loadFinances === 'function') loadFinances();
+  if (typeof loadLiveCapacity === 'function') loadLiveCapacity();
+  if (typeof loadEventRecords === 'function') loadEventRecords();
+}
+function startRecordsAutoRefresh() {
+  if (recordsTimer) return;
+  recordsTimer = setInterval(recordsRefreshAll, 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) recordsRefreshAll(); });
+}
+
 // ── GUEST DIRECTORY (Records) ────────────────────────────────────
 let directoryData = [];
 let dirTickets = {};   // official ticket totals per event (early dinners where the list doesn't say who paid)
@@ -8077,6 +8193,8 @@ function setApprovalsKey() {
   loadLiveCapacity();
   loadAdminEvents();
   loadFinances();
+  loadEventRecords();
+  startRecordsAutoRefresh();
 }
 async function approvalsCall(body) {
   const r = await fetch(`${FN_URL}/session-approvals`, {
@@ -8101,6 +8219,7 @@ function refreshRecordsCounts() {
   if (typeof loadLiveCapacity === 'function') loadLiveCapacity();
   if (typeof loadDirectory === 'function') loadDirectory();
   if (typeof loadAdminEvents === 'function') loadAdminEvents();
+  if (typeof loadEventRecords === 'function') loadEventRecords();
 }
 
 async function loadApprovals() {
@@ -8124,7 +8243,10 @@ async function loadApprovals() {
 
 function renderApprovals() {
   const d = approvalsData || { requests: [], bank: {} };
-  const reqs = d.requests || [];
+  // Archived Sessions (date passed) are read-only: their requests live under Event records > Sessions
+  const archivedIds = new Set(Object.entries(d.sessions || {}).filter(([, v]) => v.archived).map(([k]) => k));
+  const sidOf = r => String(r.list_type).replace(/-(waitlist|plus-one-request)$/, '');
+  const reqs = (d.requests || []).filter(r => !archivedIds.has(sidOf(r)));
   const inv = reqs.filter(r => r.list_type.endsWith('-waitlist'));
   const p1  = reqs.filter(r => r.list_type.endsWith('-plus-one-request'));
   const pendInv = inv.filter(r => r.status === 'pending');
@@ -8132,7 +8254,7 @@ function renderApprovals() {
   const decided = reqs.filter(r => r.status !== 'pending').sort((a, b) => String(b.decided_at).localeCompare(String(a.decided_at)));
 
   const b = d.bank || {};
-  const bl = d.backlog || [];
+  const bl = (d.backlog || []).filter(id => reqs.some(r => r.id === id));
   const blEl = document.getElementById('ap-backlog');
   if (blEl) {
     blEl.style.display = bl.length ? '' : 'none';
@@ -8142,7 +8264,7 @@ function renderApprovals() {
       : '';
   }
   const bankEl = document.getElementById('ap-bank');
-  const sessMap = d.sessions || {};
+  const sessMap = Object.fromEntries(Object.entries(d.sessions || {}).filter(([, v]) => !v.archived));
   const multi = Object.keys(sessMap).length > 1;
   bankEl.textContent = multi
     ? 'Approval codes left: ' + Object.values(sessMap).map(x => `${x.label} ${x.available} of ${x.total}`).join(' \u00b7 ')
@@ -8217,18 +8339,26 @@ let guestRemoving = null;   // id of the row showing the remove choices
 function fillGuestSessionPicker() {
   const sel = document.getElementById('ap-guests-session');
   if (!sel) return;
-  const ids = new Set(['sessions-01']);
-  Object.keys(approvalsData?.sessions || {}).forEach(k => ids.add(k));
+  const ids = new Set(ltfIsPast(LTF_FRIENDSGIVING.date) ? [] : ['sessions-01']);
+  Object.entries(approvalsData?.sessions || {}).forEach(([k, v]) => { if (!v.archived) ids.add(k); });
+  if (approvalsData?.sessions?.['sessions-01']?.archived) ids.delete('sessions-01');
   (typeof liveCapData !== 'undefined' ? liveCapData : []).filter(e => e.kind === 'session').forEach(e => ids.add(e.id));
   const label = id => approvalsData?.sessions?.[id]?.label || (liveCapData || []).find(e => e.id === id)?.name || id;
-  const cur = sel.value || 'sessions-01';
+  const cur = sel.value;
   sel.innerHTML = [...ids].sort().map(id => `<option value="${apEsc(id)}">${apEsc(label(id))}</option>`).join('');
-  sel.value = [...ids].includes(cur) ? cur : 'sessions-01';
+  sel.value = [...ids].includes(cur) ? cur : ([...ids].sort()[0] || '');
   sel.style.display = ids.size > 1 ? '' : 'none';
+  const noneLive = !ids.size;
+  document.querySelector('.ap-venue-btn')?.style.setProperty('display', noneLive ? 'none' : '');
 }
 async function loadSessionGuests() {
   const box = document.getElementById('ap-guests');
-  const sid = document.getElementById('ap-guests-session')?.value || 'sessions-01';
+  const sid = document.getElementById('ap-guests-session')?.value;
+  if (!sid) {
+    box.innerHTML = '<div class="empty-msg">No upcoming Sessions. Past guest lists are saved under Event records &gt; Sessions.</div>';
+    document.getElementById('ap-guests-count').textContent = '';
+    return;
+  }
   try {
     sessionGuestsData = await approvalsCall({ action: 'session_guests', session_id: sid });
     renderSessionGuests();
@@ -8630,6 +8760,7 @@ function copyCodes() {
 
 // ── ADMIN ────────────────────────────────────────────────────────
 function renderAdmin() {
+  if (!document.getElementById('admin-table-body')) return;   // old guest table removed; the Guest directory replaces it
   const q = (document.getElementById('admin-search').value || '').toLowerCase();
   const f = document.getElementById('admin-filter').value;
   const rows = guests.filter(g =>
@@ -9647,28 +9778,21 @@ function initMap() {
   (function() {
     var sessIcon = L.divIcon({
       className: '',
-      html: '<div class="ltf-pin ltf-pin-upcoming ltf-pin-sessions"><div class="ltf-pin-dot"></div><div class="ltf-pin-pulse"></div></div>',
+      html: ltfIsPast(LTF_FRIENDSGIVING.date)
+        ? '<div class="ltf-pin ltf-pin-sessions"><div class="ltf-pin-dot"></div></div>'
+        : '<div class="ltf-pin ltf-pin-upcoming ltf-pin-sessions"><div class="ltf-pin-dot"></div><div class="ltf-pin-pulse"></div></div>',
       iconSize: [24, 24],
       iconAnchor: [12, 12],
       tooltipAnchor: [0, -14]
     });
     var sessMarker = L.marker([40.72355, -73.99815], { icon: sessIcon }).addTo(ltfMap);
     ltfMarkers['sessions'] = { marker: sessMarker, lat: 40.72355, lng: -73.99815 };
-    sessMarker.on('click', function() {
-      openUpcomingOverlay({
-        breadcrumb: 'Sessions No. 1',
-        title: 'Friendsgiving',
-        meta: '90 Spring St · SoHo',
-        desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
-        ctaText: 'Get Invited',
-        ctaAction: "openPanel('current')"
-      });
-    });
+    sessMarker.on('click', function() { openUpcomingOverlay(friendsgivingOverlay()); });
     sessMarker.bindTooltip(
       '<div class="pt-inner"><div class="pt-text">' +
         '<div class="pt-vol" style="color:#F2BE4B">SESSIONS No. 1</div>' +
         '<div class="pt-name">Friendsgiving</div>' +
-        '<div class="pt-disc">SoHo · Upcoming</div>' +
+        '<div class="pt-disc">SoHo · ' + (ltfIsPast(LTF_FRIENDSGIVING.date) ? 'Nov 15, 2026' : 'Upcoming') + '</div>' +
       '</div></div>',
       { className: 'ltf-tooltip', direction: 'top', offset: [0, -14], sticky: false }
     );
@@ -9676,6 +9800,7 @@ function initMap() {
 
   EVENT_PINS.forEach(p => {
     const ed = EDITIONS[p.num] || {};
+    if (p.upcoming && ed.eventDate && ltfIsPast(ed.eventDate)) p = { ...p, upcoming: false };   // auto-archive
     const icon = L.divIcon({
       className: '',
       html: '<div class="ltf-pin' + (p.upcoming ? ' ltf-pin-upcoming' : '') + '"><div class="ltf-pin-dot"></div>' + (p.upcoming ? '<div class="ltf-pin-pulse"></div>' : '') + '</div>',
@@ -10141,14 +10266,7 @@ function openSessionsDrawer() {
   drawerSource = 'map';
   // Same overlay as the Sessions pin. (This used to overwrite #drawer-body,
   // which wiped the Bio/Menu/Gallery view for every event opened afterwards.)
-  openUpcomingOverlay({
-    breadcrumb: 'Sessions No. 1',
-    title: 'Friendsgiving',
-    meta: '90 Spring St · SoHo',
-    desc: 'Each Session brings together the creative leaders, influencers and tastemakers who make up our community. Our first is Friendsgiving. We would like you at the table.',
-    ctaText: 'Get Invited',
-    ctaAction: "openPanel('current')"
-  });
+  openUpcomingOverlay(friendsgivingOverlay());
 
   // Fly map to Sessions pin
   setTimeout(function() {
